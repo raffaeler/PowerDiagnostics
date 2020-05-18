@@ -1,0 +1,3899 @@
+﻿# The following word-list has been assembled from a number of sources in the
+# course of translation and with the aid of several contributors. Particular
+# thanks to Willis Johnson, who ensured that the thousand most common Latin 
+# words were included. The word-list presently consists of about 5000 entries, 
+# with a number of words with a large number of possible translations having
+# multiple entries. The file is about 215K.
+# updated: 10 May 1995
+# Lynn Nelson
+# lhnelson@ukanaix.cc.ukans.edu
+#
+abalienato: transfer of property, alienation
+abavus: great-great-grandfather
+abbatia: abbey, monastery.
+abdico: to renounce, reject, abdicate, disapprove of
+abdo: put away, remove, hide, conceal.
+abdomen: belly, gluttony.
+abduco: to lead, or take away, detach, withdraw.
+abeo: to digress, change, vanish, disappear.
+aberro: to wander, deviate, escape.
+abhinc: ago, back from now.
+abicio: to thrown down, dispense with, get rid of, dishearten, weaken.
+abiego: to send away, send off.
+abigo: to drive off, drive away, rustle cattle, steal.
+abiungo: to unharnass, separate, detach.
+abiuro: to deny by oath.
+abluo: to wash clean.
+abnego: to deny, refuse.
+abnepos: great-great-grandson.
+abnocto: to spend the night out, to stay away all night.
+aboleo: to destroy, abolish, annul, do away with, obliterate.
+abolesco: to die, perish, vanish.
+aborior: to set (as in "the sun sets").
+abortio: miscarriage.
+abortivus: one prematurely born.
+abrogo: to repeal, annul, remove, take away.
+abrumpo: to break off, sever, remove, dissociate, separate.
+abruptio: separation, divorce.
+abscido: to cut off, to separate, take away.
+absconditus: hidden, concealed.
+abscondo: to hide, conceal, secrete.
+absisto: to go away, desist.
+absit: "god forbid, "let it be far from the hearts of the faithful"
+absorbeo: to swallow, gulp down, carry away, engross.
+abstergo: to wipe off, clean away.
+abstulo: to take away, withdraw.
+absum: to be absent, be away, be missing.
+abundans: abundant, overflowing, abounding in.
+abundantia: abundance, bounty, plenty
+abutor: to make full use of, to abuse.
+accedo: to approach, come near, (things) to be added.
+accelero: to quicken, hasten, speed, accelerate.
+accendo: to kindle, illuminate, inflame.
+acceptius: suitable for receiving
+acceptus: welcome, pleasant, agreeable.
+accido: to fall down, to happen, occur, to hack, hew, to ruin, destroy
+accipio: to consider oneself indebted, receive, learn, take.
+accommodo: to adjust, adapt, accommodate oneself.
+accusator: accusor, plaintiff.
+accuso: to accuse, blame, find fault with.
+acer: sharp, keen, eager, severe, fierce.
+acerbitas: harshness, bitterness.
+acerbus: bitter, gloomy, dark.
+acervus: a heap, mass.
+acidus: sharp, sour.
+acies: keeness, edge, sharpness, battle-line, battlefield.
+acquiro: to acquire, gain, get, obtain.
+acsi: as if,  (Herimann p. 283, 293).
+adamo: to fall in love with, find pleasure in.
+adapto: adapt, adjust, make ready, or fit.
+adaugeo: to make greater, add, increase.
+addo: to give, bring, place,, inspire, cause,, add, join.
+adduco: to lead, induce, persuade.
+ademptio: a taking away.
+adeo: to approach, visit, come to, undertake.
+adeptio: attainment, obtaining, achievement.
+adepto: to obtain, get, acquire.
+adficio: to affect, afflict, weaken, sap, exhaust, drain.
+adhaero: to hang to, stick to, adhere.
+adhuc: till then, till now, still, even now, besides, also, yet.
+adicio: to direct, address, apply, to throw to.
+adimpleo: to fulfill, perform.
+adipiscor: to come up to, overtake, obtain.
+adiuvo: to help, aid, assist.
+adjungo: to join connect
+administratio: giving of help, administration, government.
+admiratio: wonder, astonishment, surprise, admiration.
+admiror: to wonder at, admire, marvel at.
+admitto: to admit, receive.
+admoneo: admonish, advise.
+admonitio: warning, reminder. (insult: Herimann, p. 282).
+admoveo: to move to, bring up, apply.
+adnuo: to nod assent.
+adopto: to wish for oneself, adopt, select, pick out.
+adservio: to aid, help, assist. 
+adstringo: to draw together, tighten, compress, compact, 
+adsuetudo: custom, habit.
+adsum: to assist, be present, be near, be in attendance,
+aduentus: arrival
+adulatio: fawning, flattery, sycophancy, buttering up.
+adulescens: young man, youth, lad.
+adulescentia: youth
+adultus: (adj.) grown up, mature, adult, of age.
+advenio: to come, arrive, reach.
+adversor: to oppose, resist, fight back. 
+adverto: to turn towards, direct one's attention to, attract.
+advoco: to summon, call, call in an advisor.
+aegrus: ill, diseased, unwell.
+aetas: an age, stage, period of life, time, era.
+ager: land, countryside, fields.
+aggero: to make a mound, heap up, increase.
+aggredior: to go to, approach, address, attack.
+agito: to put in motion, move, rouse
+agnitio: recognition, knowledge.
+agnosco: acknowledge.
+ait: he says.
+aiunt: they say.
+alibi: else where, in other respects
+alienus: somebody else's, foreign, alien, strange, different.
+alioquin: (adv.) otherwise, in some respects, in general.
+aliqua: some.
+aliquando: at any time, sometimes, occasionally, at last.
+aliquanta: (adj.) moderate, or some size.
+aliquanto: somewhat, considerably.
+aliquantum: (noun) a good deal.
+aliquantus: (adj.) of some size, moderate.
+aliqui: some.
+aliquid: someone, somebody, something.
+aliquis: someone, anyone, anything, (adv.) in any respect.
+aliquo: (adv.) in some direction.
+aliquot: some, several.
+aliquotiens: some times.
+aliquoties: [sic](adverb) several times
+alius: other, another, someone else, something else.
+allec: herrings
+alquod: some.
+alter: (adv.) otherwise.
+altus: high, deep.
+alumno: nurseling, student, disciple
+alveus: hollow, basket, bed (of a river).
+amaritudo: bitterness.
+ambitus: border, edge, extent, going around, circuit.
+ambulo: to walk.
+amicitia: friendship
+amiculum: cloak, cape.
+amicus: friend, comrade.
+amissio: loss.
+amita: father's sister, paternal aunt.
+amitto: to dismiss, send away, lose, let slip away.
+amo: to love, like, be fond of, cherish.
+amoenitas: pleasantness [of a place].
+amoena: pleasant [of a place].
+amor: love, affection, infatuation, passion.
+amotio: removal
+amoveo: to move away, remove, take out, shift.
+amplector: to embrace, surround.
+amplexus: an embracing, surrounding, loving embrace, [euphemism]
+amplio: to enlarge, increase, improve.
+amplitudo: size, breadth, dignity, grandeur, greatness.
+amplus: large, spacious, ample, great important, honorable.
+ancilla: maidservant, also used by nuns to decribe themselves.
+andron: corridor, aisle.
+anethum: dill, anise.
+angelus: angel.
+angulus: corner, niche.
+angustus: narrow, limited, strait, tight, constricted.
+animadverto: to turn the mind to, take notice of, see, perceive.
+animi: at heart.
+animosus: -a,-um  courageous, ardent, passionate, furious
+animus: courage, vivacity, bravery, will, spirit, soul.
+annona: yearly produce, grain crop, price of grain, cost of living
+annullo: to obliterate, destroy, annihilate.
+annuo: to allow, grant, promise, designate.
+annus: year
+ansa: a handle
+anser: goose.
+ante: (prep. + acc.) before, in front of, (adv.) before, previously.
+antea: (adv.) before, previously, formerly.
+antepono: (+ dat.) put before, prefer, favor, promote.
+antequam: before (in time)
+antiquus: ancient, old, hoary,
+aperio: to uncover, lay bare, reveal, make clear.
+aperito: F, an opening
+aperte: openly, frankly.
+apertio: f, an opening
+apostolus: (legal) notice sent to a higher tribunal, ecc. Apostle.
+apparatus: equipment, gear, machinery, splendor, magnificence.
+appareo: to become visible, appear, manifest
+appello: to call, name, summon.
+appono: to appoint a person, to add something.
+appositus: placed near, approaching, appropriate, appositively.
+approbo: to approve
+appropinquo: (+ dat.) to near, drawn near, come close, approach.
+apto: to fit, approve.
+aptus: suitable, appropriate, fitting.
+aptus: fitted, connected, fastened, prepared, fitted out.
+apud: (prep. + acc.) among, in the presence of, at, at the house of.
+aqua: water.
+aquila: eagle.
+aquilo: the north wind.
+aquilus: dark colored, swarthy.
+ara: altar, refuge, protection.
+aranea: spider's web.
+arator: plowman, cultivator.
+aratrum: plow
+arbor: tree.
+arbustum: a vineyard planted with trees.
+arbustus: planted with trees.
+arceo: to shut up, enclose.
+arcus: bow (BOW and arrows), arch, bend, arc.
+argentum: silver, money.
+argumentum: proof, evidence.
+arguo: to show, make clear, attempt to show, censure, reprove
+arista: the point of the ear, the beard on an ear of wheat
+arma: arms, weapons.
+armarium: cupboard, chest, safe (for food, clothing, money).
+armiger:    arms-bearer
+armo: to provide arms, arm, equip, fit out.
+aro: to plow.
+articulus: (of time) a moment, crisis.
+artificiose: skillfuly.
+artificiosus: skillful, accomplished, skillfuly made.
+arto: to press together, reduce, abrdiged.
+ascia: carpenter's axe, mason's trowel.
+ascio: to take up, adopt as one's own.
+ascisco: to receive, admit, adopt, take up, approve.
+asper: rough, harsh, severe.
+asperitas: roughness, severity, harshness, fierceness.
+aspernatio: contempt
+aspicio: to look at, behold, gaze at, see.
+asporto: to carry off, take away.
+assentator: flatterer, sycophant, yes-man.
+asser: a stake, pole.
+assus: dried, roasted, grilled.
+assero: claim, defend
+assimilares: 5 adj, similar
+assimulo: simulate, immatate, represent
+assuesco: (-sueui, -suetum) to accustom, to accustom oneself
+astrum: star, constellation.
+astus: m, cunning
+atavus: great-great-great grandfather, ancestor.
+atqui: (conj.) and yet, still.
+atrocitas: hashness, cruelty, frightfulness, barbarity, horror.
+atrox: terrible, cruel, horror.
+attentus: attentive, careful of one's property
+attero: to weaken, ruin, rub against, rub away, erode.
+attollo: to raise, lifet up, elevate, excite, exalt.
+attonbitus: frantic, inspired, thunder-struck, stunned.
+auarca: leather sandal worn by pyrenean peasants
+auctor: author, originator.
+auctorita: authority, power
+auctoritas: authority
+auctus: growth, enlargement, increase.
+audax: bold
+audentia: boldness, courage.
+audeo:  to dare.  (part. ausus )
+audio: to hear, hearken, listen to.
+auditor: hearer, listener.
+aufero: to carry away, remove, steal, carry off, make away with.
+augeo: to increase, strengthen
+augeo: increase, enlarge
+aureus: golden.
+auris: ear.
+aurum: gold.
+austerus: strict, rigid, stern
+autem: moreover, however, but, also.
+autus: increase, enlargement, growth.
+auxilium: aid, help, assistance, support.
+avaritia: avarice, greed.
+avarus: greedy, avaricious.
+aveho: to carry away, remove  (avexi  avectum )
+averto: to turn away, avert, avoid. turn back.
+avoco: to call away, divert.
+baiulus: porter, pall-bearer, carrier of a burden, steward.
+balaena: whale.
+balanus: acorn, chestnut, date.
+balatro: fool, buffoon, jester.
+balbus: stammering, stuttering, fumbling.
+balbutio: to stutter, stammer, speak obscurely.
+balnearius: pertaining to the bathhouse, bathhouse.
+balneator: keeper of a bathhouse.
+balo: to bleat
+balsamam: balsam tree, balsam gum.
+barathrum: pit, abyss, the underworld.
+barba: beard, whiskers.
+bardus: stupid, slow, dull.
+basium: kiss.
+beatus: blessed, fortunate, sometimes "saint".
+bellicus: martial, military, war-like.
+bellum: war.
+bellus: beautiful, pretty, charming, handsome.
+bene: well 
+beneficium: benefit, favor, service, privilege, right.
+benevolentia: benevolence, kindness, good will.
+benigne: kindly, generously.
+bestia: animal, beast.
+bibo: to drink, quaff.
+bis: twice.
+blandior: to flatter, caress, (+ dat.) coax.
+blanditia: blandishments, attractions, allurement, charm.
+bonus: good 
+brevis: short, small, brief.
+brevitas: shortness, brevity.
+breviter: briefly.
+cado: to fall, drop, plummet, topple.
+caecus: blind, sightless.
+caedo: to fall, kill
+caelestis: heavenly, celestial, noun, a god, dweller in heaven.
+caelum: sky, heaven.
+caetera: the rest, that remaining
+calamitas: calamity, misfortune, disaster.
+calamus: anything made or reed -- pen, arrow, pipe, etc.
+calco: to tread, trample upon.
+calculus: pebble, stone.
+caligo: to make dizzy
+calix: a vessel for drinking.
+callide: skilfully, cleverly, cunningly, slyly, subtly.
+callidus: clever, dextrous, experienced, skilful, cunning, sly.
+caltha: marigold
+calumnior: to accuse falsely.
+calvus: bald.
+calx: the heel, stone, pebble, lime, goal, aim.
+camera: vault, vaulted room, small boat.
+caminus: a forge, large hearth.
+campana: bell.
+campus: level place, field, plain.
+camur: curved, bent, hooked.
+canalis: channel, canal, pipe.
+cancer: crab, the direction south, heat of summer, disease of cancer.
+candela: taper, candle.
+candeo: to shine, glow, grow brilliant, sparkle.
+candide: openly, clearly, candidly.
+canis: dog.
+canities: grey hair, old age.
+canonus: canon, member of a cathedral chapter or canonry, Augustinian.
+canto: to sing.
+capillus: hair.
+capio: to seize, take, choose, attack, injure, comprehend.
+capistro: to halter, put a halter on a horse.
+capistrum: halter, harness, mazzle.
+capitagium: poll tax.
+capitulus: chapter, chapter meeting, chapter house.
+capitale: cattle, possessions, chattels. 
+captivas: captivity.
+capto: to grab, try to get, grab at.
+capulatio: decapitation.
+caput: head, top, summit, chief.
+carbo: carbon, coal, charcoal.
+carcer: prison, cell, jail, dungeon.
+careo: (+ abl. of sep.) be without, be deprived of, lack, want.
+caries: rottennes, corruption, decay.
+cariosus: rotten, decayed.
+caritas: dearness, affection, charity.
+carmen: song, poem.
+carpo: to pluck, seize, grab, lay hold of, hold on to.
+carus: dear, beloved, costly, high-priced, expensive.
+casso: to bring to naught, destroy, annul, make void.
+caste: purely, spotlessly, purely, uprightly, chastely.
+casus: accident, chance, fortune.
+catena: chain, fetters.
+caterva: crowd, troop, flock.
+catervatim: in troops, in masses.
+cattus: cat.
+cauda: the tail of an animal.
+causa: case at law, case, law-suit, situation, condition.
+cautela: caution, precaution, security.
+cautus: [persons] careful, cautious, [things] secure, made safe, protected.
+caveo: [cavi cautum] beware, avoid, look out for, give security. mortgage.
+cavus: hole, pit.
+cedo: to go, proceed, turn out, happen, go away, withdraw.
+celebratio: large crowd, audience, assembly.
+celebrer: adj, renowned, well known, popular, famous.
+celer: quick, swift, rapid, speedy, fast.
+celeritas: speed, swiftness, rapidity, quickness.
+celo: to hide, conceal, keep secret.
+cella: room, store-room, garret
+celox: -ocis fast, rapid, swift, fleet.
+celsus: elevated, lofty, arrogant, proud, haughty.
+cellarius: adj. relating to a store-room, n. cellarer
+cena: dinner, meal.
+cenaculum: garret, attic.
+censura: judgement.
+census: -us, wealth, property, census
+centum: one hundred, 100 (undeclinable).
+cerno: to separate, sift, distinguish, decide, resolve, determine.
+cernuus: faling headlong.
+certamen: contest, contention, rivalry of any kind
+certo: to contend, settle, dispute, to settle by combat.
+certus: undoubted, certain, sure, settled, resolved, decided, definite
+cervus: stag. deer
+cesso: to leave off, cease, linger, delay
+cetera: for the rest, otherwise
+ceterum: (adv.) otherwise, moreover, but.
+ceterus: the other, the rest.
+charisma: gift, present.
+chirographum: autograph, person's own handwriting, written charter.
+cibo: food for animals
+cibus: food for men and animals.
+cicuta: hemlock.
+ciminatio: accusation, calumny, charge.
+ciminosus: reproachful, slanderous.
+circumvenio: to come around, surround, cheat, defraud.
+citatio:  summons, call
+cito: quickly, rapidly, speedily.
+citara: a harp.
+citatus: summons, citation.
+cito: to be moved, aroused.
+citivolus: swiftly flying.
+civilis: civil, civic.
+civis: citizen, townsman, bourgeois, burgess.
+clam: secretly, in secret.
+clamo: to call, shout, cry aloud, proclaim, declare.
+clamor: loud shouting, cry.
+claro: to make bright or clear, make clear in the mind.
+claudeo: to limp, halt, be lame, to hobble.
+claudus: lame.
+claustrum: bolt, bar, prison, den, pen, enclosure, cloister.
+clementia: indulgence, forbearance, humanity, mercy, gentleness, etc.
+clibanus: oven, furnace, tray for bread making.
+coactum: force, compulsion, coercement.
+coadunatio: a gathering together, a summing up, a uniting.
+coaegresco: to become sick at the same time.
+coepto: to begin, undertake,
+coerceo: surround, enclose, restrain, confine.
+cogito: to think, ruminate, ponder, consider, plan.
+cognatus: (adj.) related by blood  (noun) a relative, kinsman.
+cognomen: surname, family name, nick-name.
+cognosco: to examine, inquire, learn.
+cohaereo: to cling to, correspond to
+cohibeo: confine, restrain, hold back, repress.
+cohors: a yard, enclosure, troop, 1/10 of a legion.
+cohortor: to encourage, incite, exhort.
+colligo: legi, lectum, to collect, gather together, assemble
+colloco: to place, put, arrange.
+collum: neck.
+color: color.
+coloratus: colored, dark-complexioned.
+coma: hair of the head, leaves, rays of light.
+combibo: to drink up, suck in.
+comburo: to burn up, to ruin, consume.
+cometes: comet
+comis: courteous, kind, friendly.
+comitatus: train, retinue, following, war band.
+comiter: courteously, in a kindly, friendly manner.
+comito: to accompany
+comitto: to entrust, commit.
+commemoro: to remind, relate, mention, to keep in mind.
+commeo: To go up and down, back and forth, in and out.
+comminor: to threaten.
+comminuo: to scatter, weaken, damage.
+comminus: hand to hand, in close combat.
+commisceo: to intermingle, join, mix.
+commissum: undertaking, that which is entrusted.
+commodo: to make fit, adapt, please, oblige, serve.
+commodum: suitable time, opportunity, convenience, use.
+commodus: proper, fit, commodius
+commoneo: to remember, recollect.
+commoror: remain, stay, abide, linger.
+commoveo: to move violently, disturb, shake, excite, upset.
+communis: common, general, run of the mill.
+comparo: to compare.
+compater: the godfather of a man's child.
+compatior: to suffer with one, feel pity, have compassion.
+comperio: to learn, find out.
+comperte: on good authority.
+compescor: to fasten together, hold in check, restrain, curb
+competo: to be appropriate, suitable, fit.
+complectus: embrace, grasp.
+compleo: to finish.
+complexo: encompass, embrace
+complico: to fold together
+compono: to put together, compose.
+compositio: composition, agreement, pact, arrangement.
+compositus: orderly, matching, made up of pieces.
+comprehendo: to embrace, take firmly, include, seize.
+comprobo: to approve fully, to confirm, prove, establish.
+compromitto: to agree to refer to arbitration, or an arbitrator.
+comprovincialis: born in the same province.
+comptus: a head-dress, a hairband.
+conatus: exertion, effort, undertaking, impulse, inclination.
+concavo: to hollow out
+concedo: to concede, yield, allow, grant, withdraw, give up.
+concepta: measures, capacity.
+concero: connect join, twine, join in conflict.
+concido: to fall down, sink, perish, (wind) subside.
+concilium: council
+concipio: to take or lay hold of, receive, take in.
+concisus: cut up, broken, brief, concise.
+concito: to move violently, stir up, excite, arouse.
+conculco: to tread under foot, despise, oppress, suppress.
+concupiscentia: avarice, covetousness.
+concurro: to concur.
+concutio: to shake together, agitate, alarm, disturb, shatter.
+condico: to agree, fix, settle, make arrangements.
+condo: erect, establish, build
+conduco: hire, employ for wages, among many other meanings.
+confero: discuss, debate, confer, betake oneself, devote.
+confestim: speedily, rapidly, immediately, without delay.
+confido: have confidence in, be confident of, rely upon.
+confingo: to fabricate, make up
+confirmo: to confirm
+conforto: to strengthen much.
+confundo: to pour together, mix, blend, confound, confuse, trouble.
+confusim: in a confused way, fumbling.
+confusio: mingling, mixture, confounding, confusion, disorder
+confusus: confused, disorderly, embarassed, troubled, confounded.
+confugo: to flee, have recourse to, take refuge.
+confuto: to check, repress, stop, halt, turn back, silence
+congelo: to congeal, harden, freeze.
+congregatio: assembly, society, union.
+congressus: a meeting, association.
+congruo: coinside, agree, conform
+conicio: to hurl, throw, put together, conjecture.
+coniecto: to throw together, infer, guess, conclude.
+conitor: to press upon, to struggle to reach
+coniuratus: conspirator, plotter.
+coniuro: to take an oath together, plot, conspire.
+conor: to undertake, try, venture, presume, attempt, presume.
+conqueror: to complain loudly.
+conscendo: to ascend, mount, go up.
+conscientia: conscience, consciouness, knowledge
+conscindo: to tear in pieces.
+conscius: conscious of, aware of.
+conseco: to dismember, cut into pieces, chop up.
+consecro: to dedicate, consecrate, sanctify, to curse, deify
+consectatio: striving, pursuit
+consenesco: to grow old, weak, feeble, infirm
+consensio: agreement, harmony, cooperation, plot, conspiracy
+consequentia: f, consequential, relating
+conservo: to preserve, conserve, maintain, keep, hold to.
+considero: to look at, regard carefully,
+consido: to set down, settle.
+consilio: intentionally, on purpose, designedly.
+consilium: advice, suggestion, wisdom, plan, purpose, judgment.
+consimilis: adj, similar
+consisto: to take one's stand, stand still, stop, be posted.
+consitor: sower, planter.
+consolatio: encouragement, amelioration, consolation
+consonum: adj, n, harmonious
+conspergo: to sprinkle, bestrew.
+conspicio: to catch sight of, perceive, behold, understand.
+constans: steady, firm, unchanging, constant, unwavering.
+constanter: steadily,  firmly.
+constituo: to set up, place, establish, post, station.
+constrictio: to bind together, draw together
+constupator: ravisher, debaucher.
+consuasor: advisor, counselor.
+consuefacio: to accustom, acclimate, become used to.
+consuesco: to accustom, inure, habituate
+consueta: customary, usual.
+consuetudo: custom, usage, habit, intimacy, familiar acquaintance.
+consulatio: deliberation, inquiry, full consideration.
+consulo: to reflect, consider, ponder, reflect.
+consulto: to consider carefully, weigh, ponder.
+consultum: decree.
+consummatio: completion, summing up, adding up.
+consummo: to add together, sum up, make perfect, complete.
+consurgo: to stand up, rise up, to arise, break out.
+contabesco: to waste slowly away, decline in health.
+contages: a touch, contact.
+contamino: to pollute, infect.
+contego: to cover, shield, protect, defend.
+contemno: to think meanly of, despise, condemn, hate.
+contemplatio: survey, contemplation.
+contemplor: to mark out, regard, consider carefully, survey.
+contemptio: scorn, disdain, contempt.
+contemptus: despised, despicable, contemptible.
+contendo: to contend, strive, struggle, hasten.
+contente: eagerly, earnestly.
+contentus: contented, satisfied
+contigo: (with dat.), to happen, befall.
+contineo: hold together, keep together, connect, join.
+continuo: to join (together), to be after
+contra: (+ acc.) against.
+contradictio: a speaking against, contradiction.
+contradico: to speak against, oppose verbally, gainsay
+contraho: to gather together, assemble, draw up, unite
+contrarius: contrary, opposed
+contrecto: to touch, handle, feel
+contremisco: to tremble, shake, quake, be afraid of
+contremo: to tremble, shake
+contristo: to make sad or gloomy
+conturbo: to confuse, scatter, throw into confusion, distress.
+conventus: coming tohether, assembly, union, congress.
+conversatio: way, manner of life, monastic life.
+converto: to convert
+convinco: to overcome, to demonstrate
+convoco: to call together, convene.
+copia: abundance, supply.
+copiose: fully, at length, copiously.
+copiosus: wealthy, rich, abundantly provided, well-equipped.
+cornu: horn.
+corona: crown, diadem.
+correptius: more shortly.
+corrigo: (correctum) to make correct, make right.
+corripio: to seize, snatch up, steal, (of a disease) attack
+corroboro: to strengthen.
+corrumpo: to break up, destroy, annihilate, spoil, weaken.
+corruo: to fall to the ground, sink down, be ruined, destroyed.
+coruscus: (a) flashing, twinkling, shaking, trembling.
+cotidie: daily, every day.
+Courtacum: Courtrai.
+crapula: wine-drinking, intoxication, drunkenness.
+cras: (adv.) tomorrow, on the morrow.
+crastinus: of the morrow, the morrow.
+creator: creator, founder.
+creatura: creature, servant.
+creber: thick, frequent, numerous.
+credo: to believe, trust, commit, trust in, rely on, think.
+creo: to create, make
+crepido: (-inis) foundation, base, pedestal, pier, quay, dam
+crepitaculum: a rattle
+creptio: taking by force, seizure.
+crepundia: a toy, rattle, plaything
+crepusculum: dusk, twilight.
+cresco: (cretum) to grow, increase, expand, spring forth, arise
+creta: chalk, fuller's earth
+cribro: to sift.
+cribrum: sieve.
+crimen: an accusation, charge, fault, guilt, crime, cause of a crime
+criminator: accuser
+criminor: to accuse, complain of
+criminose: reproachfully
+criminosus: slanderous, reproachful
+crinis: hair.
+crinitus: long haired
+crispans: wavy, curly
+crispus: curly-haired, curly, trembling, quivering, shaking
+crista: crest, plume, rooster's comb
+cristatus: crested, plumed
+croceus: yellow, golden, saffron-colored, of saffron
+crocinus: yellow, saffron-colored, saffron oil
+crocodilus: crocodile
+crocotula: saffron-colored robe
+crocus: crocus, saffron, yellow, saffron-colored
+crotalia: ear-rings
+cruciamentum: torture, torment
+cruciatus: torture, torment
+crucio: to torture, torment
+crudelis: cruel
+crudeliter: cruely
+crudesco: to become violent, become hard
+cruditas: an overly full stomach
+crudus: green, fresh, immature, untimely, undigested, harsh
+cruentus: bloody, bloodthirsty, blood-red
+crumens: bag, purse, funds, store of cash
+crusta: rind, peel, bark, shell, inlay, embossing
+crustulum: pastery, cookie
+crustum: bread, cake
+crypta: vault, grotto, covered gallery
+crystallinus: of crystal
+crystalus: a crystal, crystal drinking cup
+cubans: sloping
+cubicularius: bed-chamber servant, chamberlain.
+cubiculum: bedroom, sleeping chamber.
+cubile: bed, (marriage bed), lair, den, nest, hive of bees, seat
+cubitalis: a cubit long
+cubito: to lie down often
+cubitum: the elbow, a cubit
+cubo: to lie down, recline, be ill in bed
+cuiusmodi: of what kind.
+culpa: fault, blame, (esp. aginst chastity).
+cultellus: a little knife.
+cultor: cultivator, planter, with gen.= resident, inhabitant.
+cultura: cultivation
+cunabula: cradle.
+cunae: nest for young birds.
+cunctatio: delay.
+cunctator: delayer, procrastinator,
+cunctor: to delay, impede, hold up.
+cunctus: all, all collectively, the whole.
+cupiditas: ambition, avarice, party spirit, eager desire.
+cupido: passion, desire, wantining, yearning, longing.
+cupio: to desire, wish, long for, desire.
+cuppedia: delicacies, candies, sweetmeats.
+cupressus: cypress, cyrpess wood, a cypress-wood casket.
+cur: why, wherefore.
+cura: management, administration, care, concern, charge.
+curatio: attention, medical attention, healing, curing.
+curator: guardian, overseer
+curia: court
+curiositas: curiosity, inquisitiveness, nosiness.
+curiosus: careful, attentive, curious, inquisitive, worn out by cares.
+curo: to care for, trouble about, pay attention to.
+curriculum: a running, race, lap around the track, course.
+currus: cart, a plow with wheels.
+cursim: hastily, quickly, rapidly.
+cursito: to run up and down.
+curso: to run back and forth.
+cursor: runner, carrier, messenger.
+cursus: a race, a running, race course, race track, course.
+curto: to shorten, abbreviate.
+curtus: shortened, mutilated, defective, gelded.
+curvo: to bend, arch, curve, influence.
+cuspis: point, the pointed end, spear, javelin, cooking spit.
+custodia: protection, custody.
+custos: (custodis) guardian, keeper, watchman, attendant,, guard, spy.
+damnatio: condemnation.
+damno: to condemn, damn.
+damnum: loss, damage, injury, a fine:
+dapifer: senescal.
+debello: cnquer, vanquish, end a war
+debeo: to owe, to be morally bound to, to be bound by.
+debilito: to weaken, ennervate, sap, exhaust.
+debitum: debt
+decentia: propriety, decency of behavior
+decerno: to decide, determine, settle, to decide to do something
+decerpo: to pluck off, to gather, take away
+decertatio: a contest, contention
+decerto: to contend, fight to the finish
+decessio: a retreat, withdrawal, departure, leaving, decrease, diminution
+decessus: retirement, withdrawal, departure, death
+decet: it is seemly, comely, suitable, proper
+decido: to fall down, fall dead, die, sink, fall
+decimus: tenth
+decipio: (deceptus) ensnare, trap, beguile, deceive, cheat.
+declamatio: loud or violent speech, declamation, practice in oratory
+declamo: to declaim, orate, speak loudly
+declaratio: a clarification
+declinatio: a turning aside, declining, avoiding, inflection, declension
+declino: to turn aside, deflect, turn away, avoid, deviate, swerve, digress
+declive: (-is) a slope, decline
+decoctor: a spendthrift, bankrupt, a fool parted from his money
+decollo: (-are) to behead
+decolo: (-are) to trickle away
+decolor: (adj.) pale, without color
+decoloratio: discoloration
+decoquo: (-ere, -coxi, -coctum) to boil down, boil away, (metals) melt away
+decor: beauty, grace
+decorus: beautiful, graceful, charming, proper, fit, becoming
+decrepitus: infirm, decrepit
+decresco: to decrease, grow smaller
+decretum: decree, judgment, edict, order
+decumbo: to fall, fall into, lie down
+decurro: to sail downstream
+decursio: (milit.) a charge, manoeuver
+decursus: a running down, charge, manoeuver, attack, completion of a course
+dedecor: unseemly, shameful, disgraceful, dishonorable.
+dedecus: shame, dishonor, disgrace, crime, dishonorable act.
+dedico: to dedicate.
+deduco: to lad out colonists, found a colony.
+defaeco: to cleanse, purify, purge.
+defendo: to defend, ward off, protect, shelter.
+defero: to hand over, carry down, communicate, offer, refer.
+defessus: weary, tired.
+deficio: weaken, to be in want.
+defigo: fasten down, secure, fix firmly, concentrate, fix upon.
+defleo: to bewail, weep for.
+defluo: to flow away, disappear, be lost.
+defungo: to discharge one's duties, quit, retire, die, finish
+degenero: to be unlike one's kind, fall off, degenerate.
+degero: to pass time, live.
+degusto: to taste.
+deinde: next, then, thereafter, from that place.
+delectatio: delight, pleasure, enjoyment.
+delecto: to attract, delight, (pass + abl) take delight in.
+delego: to transfer, commit, assign, impute, attribute, ascribe.
+deleo: blot out, erase, annihilate, destroy.
+delibero: to consider, deliberate.
+delicate: luxuriously, delicately, slowly.
+deliciae: allurements, charms, delights, fancies, sweetheart
+delinquo: to fail, be wanting, fail in duty, commit a crime.
+deludo: to mock, cheat.
+demens: (dementis ) insane, mad, out of one's mind, foolish.
+demergo: to sink, plunge into, dip under, go into debt.
+demitto: set dowwn, let fall (to offer payment to the church).
+demo: to take away, subtract.
+demonstro: to indicate, show, describe, explain.
+demoror: to loiter, linger, tarry, belay.
+demulceo: to stroke down, caress by stroking.
+demum: at length at las, finally.
+denego: to refuse, deny, reject.
+denique: at last, finally, again, in short.
+dens: (dentis ) tooth.
+denuncio: declare, give notice, announce.
+denuo: anew, again, a second time, afresh.
+deorsum: downwards.
+depereo: to perish, be utterly ruined.
+depono: to put down, lay aside.
+depopulo: to lay waste, ravage, devastate.
+deporto: to carry off, to take away.
+deprecator: intercessor, one who pleads on behalf.
+deprecor: to entreat for, beg for, intercede, curse.
+deprecor: to beg by entreaty, to excuse oneself, curse.
+deprehensio: detection.
+depromo: to take down, produce, fetch out.
+depulso: push aside, thrust away.
+deputo: to count, estimate, prune, cut off.
+derelinquo: to forsake, desert, abandon.
+derideo: to laugh at, mock, deride.
+derigo: [-rexi, -rectum] to set straight, put in order.
+deripio: to tear down, snatch away.
+deruptus: broken off.
+desero: to leave, abandon, foresake.
+desiderium: wish, longing, regret, grief, want, need.
+desidero: to long for, wish for greatly, to miss.
+desidiosus: lazy, unmotivated.
+designo: designate, define, describe, mark out
+desino: leave off, give over, cease, stop, end, desist.
+desipio: to act foolishly, play the fool, make an ass of one's self.
+desolo: to leave desolate, abandoned, to forsake.
+desparatus: given up on, desparate.
+despecto: overlook, dispise, look down upon.
+despero: to have no hope, despair, give up.
+despiciens: contemptuous.
+despicio: to look down, regard from above, despise.
+desposco: to demand.
+destinatus: resolute, firm, determined, with one's mind made up.
+destino: to fasten down, make fast, fix, determine settle, appoint
+destituo: to place, leave in the lurch, abandon,
+desum: to fail, err, fall short, be missing, absent.
+desumo: to select, elect, choose, take out.
+desuper: from above.
+detego: to uncover, lay bare, disclose.
+determino: to fix the limits of, set boundaries to, delimit.
+detineo: hold off, hold back, detain.
+detrimentum: damage, loss, detriment.
+deus: god.
+devenio: to come to, arrive at, reach.
+devito: to avoid.
+devoco: to call away, call down, call aside.
+devotio: (Christian) piety, devotion, zeal.
+devoveo: to consecrate, sacrifice, devote, curse, execrate.
+dexter: right, on the right.
+dextera: the right hand.
+diabolus: devil, Satan.
+dico: (dictum ) to say, tell, speak, name, call, pronounce.
+dictata: things dictated, lessons, presents.
+dictator: dictator.
+dictito: to say often, reiterate.
+dicto: to say often, dictate, get written down.
+didico: to be told (Herimann cap. 39, 44).
+diffama: spread around, made known.
+differo: to spread news, delay, defer, postpone.
+differtus: stuffed full, crammed, jammed.
+difficilis: difficult, hard, troublesome.
+difficultas: difficulty, need, trouble, distress.
+digestor: arranger, composer, one who makes a pattern.
+dignitas: merit, worth, prestige, dignity.
+dignus: worthy
+dignus: (+ abl.) worthy, worthy of, meritorious.
+digressio: separation, departure, digression.
+digressus: separation, departure, digression.
+dilato: to spread out, extend, expand, increase.
+dilgenter: attentively, earnestly, carefully, diligently.
+diligens: diligent, careful.
+diligentia: diligence, industry, perseverance, persistence.
+diligo: to choose out, esteem highly, prize, love.
+diluculo: dawn, daybreak.
+diluo: (of troubles) to remove, resolve.
+dimidium: half.
+dimitto: to break up, dismiss, leave, abandon, leave behind.
+directus: plain, simple, direct, open, straightforward.
+diripio: to separate, tear apart, pillage, devastate, lay waste. 
+dirunitas: long duration.
+diruo: to demolish, destroy, ruin.
+dis: rich, possessing wealth or worth.
+discedo: to depart from, deviate, leave
+discerpo: to dismember, disjoint, sever, divide, break up.
+discessio: f, management, ordering, direction
+discidium: separation, division, disagreement, tearing apart.
+discipulus: disciple, student, learner, pupil.
+disco: to learn, become acquainted with.
+discrepo: to differ, to be diifferent, vary, disagree.
+dispono: to arrange, put in order, draw up (troops).
+disputatio: debate, dispute, discussion.
+disputo: discuss.
+dissero: to examine, treat of, discuss.
+dissimilis: unlike, different, disparate, dissimilar, distinct.
+dissimulo: to conceal, disguise, keep secret.
+dissolutus: lax, weak, wanting in energy, dissolute, profligate.  distinguo :
+distraho: (persons) estrange, distract, (property) sell up, alienate.
+distribuo: to distribute, divide.
+dito: to enrich, endow, make wealthy
+diu: by day, for a long time, a long time ago.
+diutinus: lasting a long time, enduring, long-lived.
+diutius: longer, too long (a period of time).
+diuturnus: lasting a long time, of long duration.
+diversus: different, unlike, opposed, hostile.
+dives: rich, opulent, wealthy.
+divinatio: prediction, divination
+divinitus: divine influence, admirably, nobly, by inspiration.
+divinus: divine, sacred.
+doctor: teacher.
+doctrina: doctrine, teaching, instruction, learning.
+doctus: taught, instructed, learned, tutored.
+dolens: painfully.
+doleo: to suffer pain, to be pained, grieve.
+dolor: pain, grief. misery, pain, suffering.
+dolose: slyly, deceitfuly.
+dolosus: crafty, cunning, sly, deceitful.
+dolus: fraud, deceit, guile, treachery, a trap.
+domesticus: domestic, civil.
+dominatus: rule, mastery, tyranny, domination.
+dominica: demesne.
+domito: to tame, subdue, break in.
+domus: house, home, residence.
+donec: up to the time when, until, as long as, while.
+donum: gift, present, donation.
+dormio: to sleep, slumber, siesta, nap.
+dubito: to doubt, hesitate.
+duco: to lead, draw, esteem, consider.
+dudum: for a long while, a long while ago, some time ago
+dulcedo: sweetness, pleasantness, charm.
+dulcidine: sweetly, pleasantly, charmingly.
+dulcis: sweet, pleasant, agreeable.
+dum: while, as long as, until.
+dummodo: (conj. + subj.) provided
+dumtaxat: at least, not less than, at most, not more than.
+duo: two
+duro: to harden, last, endure.
+durus: hard, harsh, tough, strong,enduring,, rough, rude, uncouth.
+eatenus: so far, thus far, up to then.
+ebullio: to boil up, bubble up, to appear, produce in abundance.
+ecce: Lo! Behold! See!
+ecclesia: church.
+econtra: the same as contra: against, opposite, etc.
+ecquando: at any time? ever?
+edico: to announce, declare.
+editio: the publishing of a book, an announcement.
+edo: put forth, give out.
+edoceo: to inform fully, instruct thoroughly.
+educo: to draw out, lead out, march out, bring up, rear, issue.
+edulis: edible.
+eduro: to last endure, persist.
+edurus: hard.
+effector: producer, someone who causes something.
+effectus: doing, execution, performance, effect, result.
+effercio: to cram, stuff, fill.
+effertus: stuffed, jammed, crammed.
+effero: to carry out, bury, lift up, exalt.
+effervo: to boil up, swarm out (like bees).
+efferus: savage, wild, untamed, undomesticated.
+efficax: effective, efficient.
+efficaciter: effectively, efficiently.
+efficens: efficient, effective.
+efficenter: efficiently, effectively, powerfully.
+efficio: to do, produce, effect, make, bring about, cause, prove.
+effigies: effigy, idol, likeness, ghost, appartition, ideal
+efflagito: to plead urgently.
+effligo: to wipe out, obliterate, destroy.
+efflo: to breathe out, blow out.
+effloresco: to blossom, bloom, break out.
+effluo: to vanish, be forgotten, pour out, leak, seep, become known.
+effluvium: an outlet, seepage.
+effodio: to dig out, excavate, to gut
+effor: to speak, express, state, declare.
+effreno: to let go without reins.
+effrenus: wild, unrestrained, unchecked, unbridled.
+effringo: to break, break open.
+effugio: flee from, escape, elude, run away.
+effundo: to pour out, pour forth, shed, utter.
+effusio: a pouring form, effusion,, exhilaration, upwelling of emotion.
+effutio: to gab, chatter.
+egelidus: thawed, lukewarm, tepid.
+egenus: in want of, in need of, destitute.
+egeo: to need, lack, want, be without.
+ego: I, self.
+effingo: to form, fashion, make, duplicate, copy.
+egredior: to go out, leave, depart, exit.
+eicio: to throw out, eject, drive out.
+elatus: puff-up, proud of oneself, arrogant.
+electus: chosen, select.
+elementum: first principle, element, basic constituent.
+elemosina: alms
+elemosinarius: almoner, person in charge of providing charity.
+eligo: to pick out, select, choose.
+eloquens: eloquent, persuasive, fluent.
+eloquentia: eloquence, readiness of speech, fluency, persuasiveness.
+eloquor: to speak out, express oneself, declare, speak eloquently.
+eluo: to wash out, rinse cleanse, squander, waste.
+eluvies: a flowing over, flood, innundation.
+eluvio: inundation.
+emanio: to flow out, spread, arise, emanate, originate.
+emendo: to amend, correct
+emercor: to buy up.
+emergo: to arise, come up, rise up, occur.
+emerio: to obtain by service, earn completely, deserve well.
+emineo: to stand out, project, be remarkable, conspicuous.
+eminor: to threaten, menace.
+eminus: at a distance, from a distance.
+emiror: to wonder at exceedingly.
+emoveo: to move away, remove, take away.
+emptio: a buying, a purchase.
+enim: in fact, truly, indeed
+enumero: to count, count up, enumerate.
+episcopalis: episcopal
+episcopus: bishop
+epistula: letter, epistle, missive, message
+epitaphium: funeral oration
+epithalamium: wedding song
+epitome: abridgement, summary
+epops: the hoopoe (a bird)
+epos: epic poem
+epotus: drunk up, drained, swallowed up
+eptheca: an addition
+epulae: a banquet, feast, food, dishes, courses of a meal
+epulo: sumptuous food, banquet, feast.
+epulor: to feast, feast on
+epulum: a banquet, feast
+equa: a mare
+equester: (-stris, stre)  equestrian, relating to cavalry
+equidem: (adv) indeed, truly, for my part.
+equinus: equine, relating to horses
+equitatus: cavalry, horsemen (classical)
+equito: (-are) to ride on horseback
+equus: horse, steed, mount
+era: mistress, lady
+eradico: to root out, destroy, obliterate, get rid of
+erado: to scratch out, erase, destroy
+erectus: upright, standing, resolute, proud, alert, anxious, cheerful
+erepo: to creep out, creep over, creep up.
+ereptio: seizure, taking by force, confiscation
+ereptor: thief, robber
+erga: (+ acc.) toward, about
+ergastulum: a workhouse for slaves
+ergo: (adv.) accordingly, then, therefore
+ericius: (mil.) hedgehog, chevaux de frise
+erilis: relating to a master or mistress
+eripio: to snatch away, take away, rescue, free
+erogatio: payment, expenditure
+erogo: to ask for, to pay out, expend, disburse
+errabundus: wandering
+erratio: a wandering, straying
+erratum: fault, error, mistake
+erratus: wandering, straying
+erro: to wander, stray, rove, be mistaken, err, go astray.
+error: error, mistake, going astray, uncertainty, deception
+erubesco: (+ inf.) to blush to, (+acc.) blush for, respect
+erubescundus: something to be ashamed of, worth blushing over
+eruca: a colewort (plant)
+eructo: (-are) to vomit, throw up, to cast out, throw out, eject, belch
+erudio: to polish, smooth, instruct, teach, educate.
+eruditio: instruction, teaching, knowledge, learning
+eruo: to dig up, pull out, raze, demolish
+eruptio: an eruption, bursting forth, sally, attack, assault
+erus: master, owner, lord
+ervum: a bitter weed, vetch
+esca: food, bait
+escendo: to ascend, go up, climb, to go inland
+escensio: a movement inland, milit. marching inland
+esculentus: succulent, delicious, ripe
+esito: (-are) to continue eating
+essedarius: one who fight from a chariot
+esuritio: hunger
+etenim: for indeed
+ethologus: a mimic
+etiam: as yet, still, even, also, besides
+etiamnun: yet, still, until now
+etiamsi: even if, although
+etiamtum: even then, until then
+etsi: (acsi) even if, although, nothwithstanding
+eunuchus: eunuch
+evado: (-ere, -vasi, -vasum) to go out, set out, get off, escape, result
+evagor: to wander out, stray off
+evalesco: (evalui) to grow strong, become fashionable, prevail, be able
+evanesco: (evanui) to vanish, disappear, pass away
+evangelium: the gospel
+evanidus: vanishing, disappearing, passing away
+evasto: (-are) to lay waste, devastate
+eveho: (-vexi, vectum) to carry out (+ relexive) sail away, ride away
+evello: (-ere, velli, vulsum) to tear out, pluck out, turn out, result
+evenio: to come to pass, happen, befall.
+eventus: consequence, issue, result, occurrence, experience
+everbero: to strike violently, to hit hard
+everriculum: a fishing net, seine, a clean sweep
+everro: (-verri, -versus) to sweep out, plunder, pillage
+eversio: an overturning, destruction, ruin
+eversor: a destroyer
+everto: (vertin, -versum) to destroy, ruin, demolish, raise, overthrow
+evestigatus: found out, discovered. tracked down
+evidens: clear, distinct, plain, visible, evident.
+evidenter: clearly, distinctly, plainly.
+evigilo: to awaken, be alert, be watchful, [trans.] work hard at.
+evincio: [vinxi, victum] to tie up, bind.
+evinco: to conquer, subjugate, enthrall, defeat.
+eviscero: to disembowel. 
+evito: to shuun, avoid; also, to kill
+evoco: to draw out, draw on, produce, recall to the colors.
+evolo: to flee, escape, fly away, rush out. 
+evolutio: unrolling and reading of a scroll, reading of a book.
+evolvo: to untangle, extricate, detach, disclose, explain.
+evomo: to vomit forth.
+evulgo: to publish.
+exaresco: to become dry, arid
+exaro: to plow up, dig up, write on a wax tablet.
+exaudio: to listen to, hear plainly, hear favorably
+excedo: (trans.) to exceed, leave, pass beyond.
+excellentia: excellence, merit, worth.
+excessum: departure, death, digression.
+excipio: (excepi exceptum ) to take out, except, take, capture.
+excito: call forth, bring about, wake, raise up.
+exclamo: to shout, cry aloud, exclaim, call someone by name.
+excludo: to shut out, exclude.
+excolo: to honor (a deity), polish, adorn, refine, serve.
+excorio: to shave, scalp, flay, oppress, peel
+excrucio: to torment, torture, cause great pain.
+excusatio: excuse.
+excuso: to exempt from blame, excuse, make excuses, plead.
+executio: to seize, recover.
+executor: adminstrator, executive officer. 
+exemplar: model, pattern, original, prototype, book to copy.
+exemplum: pattern, model, example .
+exempoator: m, model, example
+exerceo: to train, cultivate, keep at work, exercise, practice.
+exercitus: army.
+exertus: tested, tried, approved, experienced.
+exesto: extra esto.
+exheredo: to disinherit.
+exheres: disinherited.
+exhilaro: to make cheerful.
+exhorresco: to be horrified, to shake, shudder, dread, tremble at.
+exigo: complete, finish, determine, decide, settle.
+exilis: thin, slender, meager.
+eximietate: uncommonness, excellence.
+eximius: extraordinary, excellent, fine, superb.
+eximo: to free, release, take out, remove, waste.
+exinde: thence, furthermore
+exitium: destruction, ruin.
+exitus: going out, going forth, exit, end, finish.
+exordium: the beginning (especially of a speech).
+exorior: to rise, spring up, issue, appear, come forward.
+exoro: to prevail upon a person, entreat successfully.
+exorno: to furnish, provide, supply.
+exorsus: begun.
+exosus: loathing, fiercely hating, despising.
+expalpo: to lure out, coax out.
+expedio: to free from a snare, disentangle, ready, settled, arranged.
+expedite: freely, easily.
+expeditione: military operation, military force, expedition.
+expeditus: unimpeded, unchecked, (mil.) light-armed
+expers: wanting, destitute of, not sharing in.
+expetens: desirous, eager.
+expeto: to demand, require, desire, strive after, make for.
+expilatio: plundering, taking booty.
+expiscor: to fish out, find out, discover.
+expleo: to make losses good, fulfil, discharge (duties).
+expletio: satifying.
+expletus: (part.) perfect, complete.
+explicatus: explanation, exposition.
+explico: to unfold, unroll, disentangle, explain, expound.
+expositus: open, accessible, exposed.
+expostulo: to demand earnestly, to make a claim.
+expugno: to capture, overcome, subdue, take by storm, gain.
+exquisitus: sought after, exquisite,excellent, fine, delicate.
+exsequor: to execute, avenge, punish, relate, describe, explain.
+exsilium: exile, banishment.
+exsisto: to emerge, appear, exist, be
+exspecto: to look for, expect, await, wait for.
+exsto: to stand out, be extant, appear, project, show itself.
+extermino: exussum, burn down, burn, set on fire.
+externus: outer, foreign, outside, external.
+extollo: to praise exaggerate, decorate, adorn.
+extorqueo: to twist, wrench, dislocate, extort by force.
+extra: (prep. + acc.) beyond, outside.
+extraho: prolong, protract, bring forward.
+extraneus: outside, exraneous, foreign, strange, a foreigner, stranger.
+extrarius: outward, external, strange, unrelated, foreign.
+extremitas: end, farthest part.
+extremus: outermost, last, extreme.
+extrico: disentangle, free, extricate, clear up, unravel.
+extrinsecus: outwardly, externally, from the outside.
+extundo: drive away, repel violently, extort.
+exturbo: to drive away, thrust out.
+exubero: to grow thickly, abound.
+exulcero: to aggravate, exacerbate, irritate, make worse, embitter.
+exulto: to exult, be joyful.
+exululo: to howl loudly
+exundo: to overflow, abound,
+exuo: to lay aside, put away, store, strip, deprive.
+exustio: burning up, conflagration.
+exuviae: (anything taken off) dress, clothing, spoils, booty, hides pelt.
+faba: broad bean,
+faber: craftsman, artisan.
+fabre: skillfully, ingeniously.
+fabrica: manufacture, craft, trade, art, trick, device
+fabula: fable, story, tale, play.
+facesso: to work zealously, do, accomplish.
+facies: face, visage, countenance, aspect, appearance, look, condition.
+facile: easily, without difficulty
+facilis: easy, agreeable, affable, pleasant.
+facillimus: easiest, most agreeable, pleasantest
+facinarose: viciously, scandalously.
+facio: to sacrifice, suit, help, be of service.
+facis: a bundle, packet.
+facticius: artificial, man-made. 
+factum: deed, accomplishment, work, act, achievement.
+facultas: power, means, opportunity, capacity, ability, stock.
+facunde: eloquently, fluently.
+facundia: fertile, productive, profitable.
+facunditas: fertility, qickness or readiness of speech.
+facundus: eloquent, fluent, ready of speech.
+faenum: hay.
+falsus: false, deceptive.
+fama: talk, report, rumor, gossip, tradition.
+familia: family, household.
+familiaris: belonging to a household, friendly, intimate.
+familiaritas: confidential friendship, intimacy.
+famosus: much spoken of, renowned, notorious, infamous, libellous
+famulatus: servitude, slavery, service, an extablishment of slaves.
+famulor: to be a servant, to serve.
+famulus: servant.
+fanaticus: enthusiastic, inspired, frenzied.
+fanum: a temple or church with the land around it, a holy place.
+farina: meal or flour.
+farrago: mixed fodder for cattle, mash, mishmash, medley, mixture.
+farratus: provided with grain.
+fartim: stuffing, filling.
+fartor: one who fattens fowls.
+fas: divine law or command, fate, destiny, lawful, allowed.
+fascia: bandage, band, girdle, girth.
+fascino: to bewitch, envy.
+fastidio: to dislike, have an aversion to, loathe.
+fastidiosus: squeamish, dainty, fastidious.
+fastidium: disgust, dislike, sqeamishness, scorn, disdain, haughtiness.
+fastigate: slantingly.
+fastigatus: pointed down, sloping down.
+fastosus: pride, haughtiness
+fateor: to confess, admit, allow, reveal, make known.
+fatigo: worry, fatigue, vex, harass, tease.
+fatua: foolish
+fatum: fate, destiny, doom, lot, weird.
+fautor: favorer, promoter, patron, partisan, supporter.
+faveo: (+ inf.) To be inclined to do.
+feculentia: dregs, lees, impurities, filth.
+fefello: to be failed by, disappointed by something.
+feliciter: happily.
+femina: woman
+fenestra: window.
+fere: almost, near;y, not quite, generally.
+feretrum: bier, litter.
+feritas: wildness, savageness.
+ferocia: high spirit, courage, arrogance, ferocity.
+ferocitas: courage, untamed spirit, arogance.
+ferociter: with spirit, courageously, arrogantly, forciously.
+ferox: spirited, courageous, warlike, wild, arrogant, unbridled.
+ferramenta: tools made of iron, or shod with iron.
+ferrarius: of iron, a blacksmith, iron mines.
+ferratilis: in chains (slaves and prisoners).
+ferratus: a soldier in armor, in chains (as a slave), furnished with iron.
+ferreus: made of iron, hard, unfeeliing, cruel, unbending.
+ferrugineus: rust colored, dusky.
+ferrugo: the color of rust.
+ferrum: iron, sword.
+fertilis: fruitful, fertile, productive
+fertilitas: fertility, fruitfulness.
+ferula: the herb fennel, a rad to beat children with.
+ferus: fierce, wild, savage, untamed.
+fervefacio: to heat, boil, melt.
+fervens: glowing, hot, heated, (character) heated, fiery.
+ferventer: hotly, warmly.
+ferveo: to be boiling hot, boil, seethe, glow, be excited by passion, rage.
+fervesco: to become hot, begin to glow or boil.
+fervidus: boiling, seething, foaming, fiery, passionate, excited.
+festinatio: speed, haste.
+festino: to hasten, hurry, speed.
+festinus: hastening, hasty.
+feteo: to have a bad odor, stink.
+ficus: fig tree.
+fidelis: faithful, loyal, true
+fidelitas: fidelity, loyalty, homage.
+fidens: confident, without fear, courageous.
+fides: promise, assurance, word of honor, engagement.
+fides: trust, confidence, reliance, belief, faith.
+fiducia: confidence, trust, assurance.
+fiendo: f.p.p, same as faciendo, the making, it will be made
+filia: daughter
+filius: son
+fimus: dung, dirt, filth, manure.
+finis: end, limit, boundary, purpose.
+firmo: to assert, maintain, strengthen, make firm, encourage.
+firmus: firm, strong, reliable, solid.
+flamma: flame, fire.
+flatus: blowing, blast, breathing, arrogance, haughtiness.
+fleo: to weep, cry, shed tears, sob.
+flere: to cry, shed tears
+fluctus: billow, wave.
+flumen: river.
+fluo: to flow, pour, stream.
+fodio: to prick, sting, jab.
+foede: fouly, in a filty manner
+foedus: compact, covenant, agreement, law
+foeteo: to smell bad
+foetidus: smelly, stinking
+foetor: a bad smell, a stink
+foliatus: leafy
+folium: leaf
+folliculus: small bag, small purse, little sack
+follis: a leather bag, purse, bellows, puffed-out cheeks
+fomentum: poultice, alleviation
+fomes: tinder
+fomeus: smoky, smoke-filled
+fons: fountain, spring, fresh water, source, origin
+fonticulus: small spring, little fountain
+forabilis: penetrable
+foramen: hole, opening, aperture
+foras: outside, without, out of doors, + dare = to publish
+forca: pitfall, snare, trap
+forceps: pincers, tongs
+forda: a cow with calf
+forensis: relating to the forum, relating to legal business
+forfex: scissors, shears
+foris: a door, opening, entrance
+forix: arch, vault, arcade, an arched sallyport
+forma: forma, shape, beauty.
+formalis: having a set or standard form,, formal
+formamentum: conformation
+formator: a former, fashioner, maker
+formatura: forming, fashioning, shaping
+formica: ant
+formidilose: dreadfully, teribly
+formidilosus: causing dread, fear, terror
+formido: dread, terror, dreadfulness, scarecrow
+formo: to shape, form, fashion.
+formose: beautifully
+formositas: beauty
+formosus: beautiful, well-shaped
+formula: physical beauty, formula, rule, principle
+fornacalis: relating to an oven
+fornacula: a small oven
+fornax: oven, furnace, kiln
+fornicatus: arched, vaulted
+foro: to bore, pierce, make a hole, penetrate
+fortasse: perhaps.
+forte: by chance, by luck, accidentally.
+fortis: strong, brave, powerful, robust, steadfast, courageous
+fortiter: strongly, bravely.
+fortitudo: physical strength, courage, moral bravery.
+fortuito: (used as adverb) accidentally, by chance
+fortuitus: accidentally, by luck, casual
+fortuna: fortune, luck, fate, chance.
+fortunate: fortunately, happily
+fortunatus: fortunate, lucky, happy.
+fortuno: to make happy, to bless, to prosper
+foruli: book-case
+forum: market place, town square.
+forus: gangway of a ship
+fossa: ditch, trench, channel, moat
+fossio: an excavation
+fossor: a digger, ditcher, sapper, fool, boor, clown
+fossura: digging, delving, sapping, ditching
+fovea: a pit, trap for game, pitfall
+foveo: to cherish, to warm, keep warm, caress.
+fraga: strawberries
+fragilis: fragile, easily broken, fleeting, transitory, weak, feeble
+fragilitas: frailness, weakness, fragility, frailty
+fragmen: a breaking, fragments, remains, ruins
+fragor: a crash, crack.
+fragosus: roaring, crashing, rough, broken.
+fragro: to smell, be odiferous, redolent.
+frango: to break in pieces, shatter.
+frater: brother.
+fraudatio: fraud, deceit, trickery.
+frendo: to gnash one's teeth, bruise, crush, grind.
+freno: curb, restrain, hold back, restrain.
+frenum: reins, bridle, bit, restraint.
+frequentatio: frequency, crowding.
+frequentia: a large concourse, population, numerous assembly.
+frequento: to crowd, collect in large number, visit.
+fretus: + abl.  relying upon, depending on, banking on.
+frigus: cold, coolness, cold of winter, dullness, indolence.
+frons: forehead, brow, front.
+fructuarius: fruitful, fertile.
+frugalitas: frugality, economy, pinching pennies.
+frumentum: grain.
+fruor: to have the benefit of, to enjoy.
+frustra: in vain, mistakenly, wantonly, without reason.
+frustro: to deceive, dupe, trick, disappoint.
+fuga: flight, escape,
+fugio: to flee, escape, runa aaway, avoid, shun.
+fugitivus: deserter, runaway slave.
+fugo: to put to flight, chase away, drive into exile, pursue.
+fulcio: to support, strengthen, uphold, to besiege, oppress.
+fultus: supporter.
+fumidus: smoky, smoke-filled
+fumo: to smoke, steam, reek
+fundator: m, founder
+funditus: totally
+fundo: to pour, pour out (like molten metal), melt, cast.
+fungor: to occupy oneself.
+funiculus: a thin rope, cord, string
+funis: rope, cord, line
+furax: inclined to steal,
+furca: a fork, pitchfork, narrow pass
+furcillo: to act as a support
+furor: madness, rage, frenzy.
+furs: thief.
+furtificus: thievish.
+furtim: by stealth, stealthily.
+fusus: (from fundo) spread out, extended, wide, copious.
+futurus: -a, -um, absurd
+galactinus: the Milky Way.
+galbinus: a greenish-yellow color
+galea: helmet.
+gallina: hen
+gallo: cock
+garum: a fermented fish sauce
+garrio: to chatter, babble
+garrulus: noising, talkative
+gaudeo: (gavisus) to rejoice, take delight
+gaudium: joy, delight, happiness.
+gauisus: (< gaudeo) rejoicing, joyous, glad, happy
+gelamen: assembly, gathering
+gelide: coldly, weakly, feebly
+gelidus: cold, frosty, icy, freezing
+gelo: to freeze
+gelu: frost, chill, cold
+gemino: to double
+geminus: twinned, double, paired, half and half
+gemo: to sigh, groan, wail.
+generasco: to be produced, to be born
+generatim: by kinds, according to classes, generally, in general
+genero: to beget, engender, produce, create
+generose: nobly
+generosus: of noble birth, aristocratic, well-bred
+gens: clan, race, nation, people, tribe.
+genus: kind, sort, class, category.
+gero: to have, bear
+gesto: to carry, bear about.
+glacialis: icy, frozen, full of ice.
+gladius: sword.
+gloria: fame, renown, glory.
+glorifico: to glorify, adorn, exalt.
+glorificus: glorious, full of glory.
+glorior: to glory, boast, pride oneself.
+gluten: glue
+gluto: glutton
+gluttio: to swallow, gulp down
+gnaritas: knowledge
+gnarus: knowing, acquainted with, expert
+grassor: go about, go ahead, proceed, attack.
+grate: freely, willingly, happily
+gratia: in order to, for the sake of, to.
+gratulor: to wish a person joy, congratulate (+dat.),give thanks  gratus :
+gravatus: sick, oppressed, ill.
+gravis: heavy, weighty, serious, important, severe, grievous.
+gravitas: weight, seriousness, dignity, importance.
+graviter: heavily, seriously.
+gravo: to oppress, burden, make suffer.
+gregatim: adv., in flocks, herds, troops, crowds.
+gusto: to taste.
+gutter: neck, throat, gullet
+habito: to have frequently, dwell, reside, take possession
+habitus: disposed, in a certain condition.
+hac: this side, this way, here.
+hactenus: hitherto, up to this point, so far.
+haereticum: n, heretical
+hanc: (fem. sing. acc.) She wasted THIS (her youth).
+harum: (fem. plur. gen.) The city wall had four OF THESE (gates).
+has: (fem. plur. acc.) They gave THESE (their lives) for the Faith.
+haud: no, not at all, by no means.
+hereditas: inheritance, often simply "property."
+hic: (adv.) here.
+hilaris: cheerful, merry, gay.
+hinc: from this place, hence.
+hodie: today.
+hodiernus: of today.
+honestus: honorable, respectable, fine, beautiful, proper.
+honeste: respectfully, properly, suitably, appropriately.
+honor: honor, esteem, public office.
+honorabilis: respectful.
+hora: hour, time.
+hordeum: barley.
+horrendus: horrible, dreadful.
+hortor: exhort, incite, encourage.
+horum: (masc. plur. gen.) The horses OF THESE (soldiers) are spent.
+hospes: guest, host, stranger.
+hospitium: hospitality, guest chambers, inn.
+hostis: an enemy of the state.
+huic: (neut sing. dat.) i'd give my right arm FOR THIS (cookie).
+huius: (masc. fem. neut. gen. sing.) Go ahead, eat some OF THIS.
+humanitas: kindness, culture, refinement.
+humanus: pertaining to man, humane, humane, cultured, refined.
+humilis: lowly, humble.
+humo: cover with earth, bury,
+humus: ground, earth, soil, land, country.
+hunc: (masc. sing. acc.) He ate THIS (fruit).
+Hunnam: Bunna.
+hypocrita: hypocrite
+iaceo: to lie, lie prostrate, lie dead.
+iacio: to throw, cast, hurl, lay, scatter, diffuse.
+iaculator: a thrower, javelin man, spear thrower.
+iaculum: dart, javelin, short spear.
+iactantia: bragging, boasting.
+iam: moreover, henceforth, indeed, just, further.
+iamdiu: now for a long time.
+iamdudum: now for a long time.
+ianitor: -oris doorkeeper, porter.
+ianua: door.
+ianus: arcade, covered passage.
+ibi: there
+ibidem: in the same place, at the moment, in that matter.
+ictus: blow, wound, stabbing, thrust
+idcirco: on that account, for that reason, for that purpose.
+identidem: again and again, repeatedly.
+iento: to eat breakfast
+ideo: for that reason, on that account, therefore.
+idoneus: proper, worthy, fitting, deserving, capable.
+iecur: the liver.
+ieiunitas: hunger, emptiness, meagerness, poverty.
+ieiunium: fast, abstinence, hunger, leanness, thinness.
+ientaculum: breakfast.
+iento: to eat breakfast.
+igitur: therefore, consequently, for this reason.
+ignarus: ignorant, not knowing.
+ignavus: lazy, listless, inert, sluggish cowardly, a coward.
+igneus: fiery, ardent, burning,
+ignis: fire.
+ignoro: to be ignorant of, not know, rarely: neglect, overlook.  ignosco: (+
+ignotus: unknown, obscure, ignorant, ignoble.
+ile:   guts, intestines.
+ilicet: it is finished, right away, immediately.
+ilico: on the spot, immediately.
+illarum: (fem. plur. gen.) The city wall had four OF THOSE (gates).
+illas: (fem. plur. acc.) They gave THOSE (their lives) for the Faith.
+illata: from infero to cause, occasion, etc.
+illaturos: they would cause.
+imago: image, likeness.
+imber: rain shower, rain storm, pelting rain
+imbibo: imbibe, drink in, think up, conceive.
+imbrium: of rain.
+imbuo: to soak, steep, saturate, to stain, dye, to become used to.
+imcomposite: adv from incompositus; also incompositione
+imitabilis: that which can be imitated,
+imitor: to imitate.
+impeto: to attack, head for.
+impervius: unpassable.
+impetus: attack, rush, assault, impulse, sudden passion.
+immanitas: savagery, frightfulness.
+immerito: adv. undeservingly, without merit, unjustifiably.
+immineo: to hang over, be imminent, threaten.
+immo: by all means, by no means, on the contrary.
+immodicus: immoderate, excessive, beyond measure.
+immortalis: immortal.
+immotus: unmoved.
+immunda: unclean, impure, dirty, foul.
+immundus: foul, impure.
+impedimentum: hindrance, impediment, obstacle, difficulty.
+impedio: entangle, ensnare, obstruct, surround, hinder, prevent.
+impedo: to entangle, ensnare, hinder, prevent, obstruct.
+impeditus: entagles, hindered, embarassed, prevented, obstructed,
+impello: to drive against, strike upon.
+impendeo: to hang over, threaten, menace, be imminent.
+impendo: to lay out, expend, weigh out.
+impenetrabiilis: impenetrable.
+impensa: expense, outlay.
+imperator: commander in chief, general, emperor.
+imperceptus: unperceived, unknown,
+imperiosus: imperious, dominering, powerful.
+imperium: power to command, authority, command, rule, control.
+impero: to give orders, command, to rule, hold sway.
+impetro: to get, accomplish, effect, obtain (by asking).
+impetus: attack, onset, rapid motion, impulse, passion, force.
+impiger: diligent, active.
+impigre: diligently, actively.
+impingo: to hurl against, strike.
+impius: without respect, irreverent, unpatriotic, wicked.
+impleo: to fill up, content, satisfy.
+impono: to place, set, stow, embark, cheat, deceive.
+importunus: unsuitable, unfavorable, troublesome, inconsiderate. 
+impraesentiarum: for the present, in present cirumstances.
+imprimis: especially, particularly, specifically.
+improbus: inferior, bad, wicked, persistent, perverse, bold.
+improvidus: improvident, negligent, thoughtless, feckless.
+improviso: unexpected, (ex improviso) suddenly.
+impudens: impudent, shameless, insolent, presumptuous.
+impudenter: impudently, insolently, presumptuously.
+impugnatio: attack.
+impugno: to attack, assault.
+impunitus: unpunished, unrestrained, safe.
+imputo: to lay to a charge, enter in an account, impute to.
+inanis: empty, vain, inane.
+inasnum: n, foolish, insane
+incassum: in vain.
+incedo: to awake, march, go, enter into
+inceptor: beginner.
+inceptum: beginning, attempt, enterprise.
+incertus: uncertain, doubtful, unsure, hesitant.
+inchoatus: unfinished, only begun
+incido: to fall in or on, fall in with, happen, occur.
+incipio: to take in hand, begin, commence.
+incito: to excite, spur, inspire, increase, hasten, urge on.
+inclino: to bend, incline, turn, change, fall back, waver.
+includo: to shut in, enclose, establish a siege, surround.
+incogitania: thoughtlessness
+incogitatus: thoughtless, inconsiderate, spontaneous
+incogito: to plan, arrange, contrive, think out
+incognitus: unknown, unexamined, unrecognized, unclaimed
+incoho: incohare: to begin, start upon, turn to, start
+incolo: to inhabit, reside somewhere, dwell (in)
+incolumis: uninjured, safe, scatheless, unharmed
+incolumitas: safety
+incomitatus: alone, unaccompanied, without followers
+incommendatus: without a protector, without a lord
+incommode: inconveniently
+incommoditas: inconvenience, uncomfortable, disadvantage
+incommodo: (-are) to be troublesome, unpleasant, annoying
+incommodus: inconvenient, troublesome, irksome, disagreeable, unpleasant
+incomparabilis: without compare, peerless, incomparable
+incompertus: unknown
+incomposite: irregularly, in a disorderly manner
+incompositus: disorder, lack of regularity
+incomprehensibilis: impossible to catch, incomprehensible
+incomptus: unkempt, untrimmed, rude, rough
+inconcessus: forbidden, prohibited, not allowed
+inconcinnus: awkward, clumsy, without elegance, absurd, laughable
+inconcussus: firm, unshaken, stable
+inconditus: disorderly, not arranged, unplanned, confused
+incongruens: not agreeing, inconsistent, out of place
+inconsiderate: thoughtlessly, without consideration
+inconsideratus: without thought, inconsiderate, reckless, unadvised
+inconsolabilis: inconsolable, uncurable
+inconstans: inconsistent, changeable, fickle, unreliable, faithless
+inconstanter: inconstantly, changeably, inconsistently
+inconstantia: changeability, inconsistency, faithlessness
+inconsulte: indiscreetly
+inconsultus: without asking advise, precipately, imprudent, rash
+inconsumptus: unconsumed, undiminished, not depleted
+incontaminatus: pure, unadulterated, unpolluted
+incontentus: unstretched, not extended, unstrained, untuned
+incontinencia: lack of restraint, incontinence.
+incontinens: incontinent
+inconveniens: not suiting, dissimilar
+incoquo: to dye
+incorrectus: unimproved, uncorrected, not emended
+incorruptus: uncorrupted, genuine, pure, untainted
+increbresco: (-ere) to grow strong, prevail, increase, wax
+incredibilis: incredible, unbelievable
+incredulus: incredulous
+incrementum: growth, increase, offspring
+increpito: (-are) to call out to, to rebuke
+increpo: (of persons) to chide, rebuke.
+incresco: (-ere) to grow in, or upon
+incruentatus: bloodless
+incruente: without bloodshed
+incubo: to hang over, lie heavily upon, dwell in, watch over
+inculco: to crowd in, press in, trample in, impress upon
+inculpatus: innocent, without blame, guiltless
+inculta: waste, desert
+incultus: neglect, lack of cultivation
+incumbo: (-ere) to lie or lean upon, lean over, overhang
+incunabula: swddling clothes, infancy, birthplace, source, origin
+incuratus: unhealed, uncured, untended
+incuria: carelessness, neglect
+incuriose: negligently, carelessly
+incuriosus: neglect, careless, negligent
+incurro: to run into, assail, attack, raid into, come upon.
+incursio: clash, collision, attack, raid, foray, invasion
+incurso: to collide with, strike against, attack
+incursus: an attack, assault, efforts, impulses
+incurvo: (-are) to bend, curve, make crooked
+indagatio: investigation.
+inde: thence, from there, for that reason, thereafter, then.
+indebitus: not owed, not due.
+indicium: data, information, evidence.
+indico: to proclaim, make publicly known, announce, disclose.
+indifferens: neither good nor bad.
+indifferente: indifferently
+indigeo: to require, need, stand in need of.
+indignatio: indignation.
+indignus: unworthy, lacking in merit, unfit.
+indomitus: untamed, wild.
+induco: bring in, introduce, induce, persuade, decide.
+induco: cover, put on clothing, erase writing, revoke, anull.
+induco: to bring, lead, conduct
+industrius: industrious, diligent, assiduous, hard-working.
+indutiae: truce, armistice, suspension of hostilities.
+induviae: clothes, clothing, garb.
+inedicabilis: unexplainable, inexplicable.
+inefficax: ineffectual, unproductive, profitless, weak.
+inefficaciter: ineffectually, vainly, in vain,
+ineo: to enter, go in, begin, commence, undertake, start
+ineptio: to play the fool, to trifle.
+inexpugnabilis: impregnable, unconquerable, not to be taken by force.
+infamo: to put to shame, disgrace.
+infantia: infancy, babyhood.
+infector: dyer.
+infectus: unworked, not done, unfinished, incomplete.
+infecunditas: barrenness, sterility.
+infecundus: barren, sterile.
+infelicitas: bad luck, misfortune,
+infeliciter: unhappily.
+infelix: unfruitful, barren, unproductive, infertile.
+infenso: to attack, avenge.
+infensus: hostile, agressive, (arms) aimed, ready, (spirit) dangerous.
+inferi: those down below, the dead.
+inferne: on the lower side, below.
+infero: to carry in, put or place on.
+inferus: below, under, southern.
+infervesco: to come to a boil, become hot.
+infeste: in a hostile manner, belligerently.
+infesto: to attack, disquiet.
+infestus: aggressive, hostile, dangerous.
+infidelis: unfaithful, disloyal, untrue.
+infidelitas: faithlessnes, disloyalty.
+infideliter: faithlessly, disloyally.
+infidus: untru, disloyal.
+infigo: to fix, fasten, to imprint, impress.
+infinitus: unlimited, infinite, without bounds, boundless, limitless.
+infirmatio: weakening, refusing, invalidating.
+infirme: weakly, faintly.
+infirmitas: weakness, feebkeness, instability, fickleness.
+infirmo: to weaken, shake, invalidate, annull, disprove.
+infirmus: not strong, weak, feeble, (sometimes) sick, ill.
+infit: he, she, or it begins, begins to speak.
+infitialis: negative, containing a no, rejection.
+infitior: to deny, deny a debt, refuse to return something.
+inflammatio: setting afire, (people) inflaming, (souls) inspiring.
+inflammo: to set on fire, inflame, to torch, kindle.
+inflatio: inflation, flatulence.
+inflatius: too pompous, on a grander scale.
+inflatus: pompous, swollen, puffed up, inflated.
+inflecto: to warp, change, sway, affect.
+infletus: unwept, unmourned, unlamented.
+inflexio: a bending, swaying.
+inflexus: bending, curving.
+inflo: to blow
+informatio: concept, idea.
+informis: formless, shapeless, deformed, hideous.
+infortunatus: unfortunate, unhappy, unlucky.
+infortunium: misfortune, bad luck, punishment.
+infra: (adv.) below, underneath , to the south, in the underworld.
+infractio: a breaking, infractio aninimi dejection.
+infractus: broken, weakened, impaired.
+infragilis: unbreakable, strong.
+infremo: to growl.
+infrenatus: without a bridle.
+infrendeo: to gnash the teetch.
+infreno: to bridle, check, restrain, break in.
+infrequens: scanty, thin, uncrowded, infrequent, thinly populated.
+infrequentia: scantiness, emptiness, loneliness.
+infructuosus: unproduction, infertile, unfruitful.
+infucatus: colored.
+infula: insignia of office, headband, fillet.
+infula: headband (worn by a priest), insignia.
+infusco: to make dark, blacken.
+ingemino: to redouble, repeat, be redoubled, increase.
+ingemisco: to groan, sigh over.
+ingemo: (+ dat.) to groan, sigh over.
+ingenero: to plant, implant, generate.
+ingeniose: cleverly.
+ingeniosus: able, talented, neturally fit, adapted.
+ingenium: innate character, talent, nature.
+ingens: of immoderate size, vast, huge, monstrous, remarkable.
+ingenuitas: free birth, noble-mindedness, frankness, openness.
+ingenuus: free-born, noble-minded, upright, honorable.
+ingero: to go off to, betake oneself to, pour forth, inflict.
+inglorius: without fame, unddistinguished, inglorious.
+ingluvies: (of an animal) crop, maw.
+ingratus: ungrateful, unpleasant, disagreeable.
+ingravesco: to become: heavy, a burden, weary, pregnant.
+ingravo: to weight down, aggravate, afflict.
+ingredior: to enter upon, begin on, (with inf.) to begin to.
+ingressio: an entering, beginning.
+ingressus: entering, going in, inroad, movement.
+ingruo: to fall upon, assail, attack, assault.
+inguen: the groin.
+ingurgito: to glut oneself, gorge.
+ingustatus: untasted.
+inhabilis: unmanageable, ill-fit, poorly adapted, unsuiited.
+inhabitabilis: uninhabitable, unfit for man or beast.
+inhabito: to inhabit.
+inhalo: to breathe upon.
+inhibeo: to hold in, check, restrian, back water, practice, use, employ.
+inhio: to gape, yearn for, desire, want, covet.
+inhoneste: dishonorably.
+inhonesto: to disgrace, dishonor.
+inhonestus: degraded, dishonored, dishonorable, shameful, ugly.
+inhonoratus: unrewarded, not honored.
+inhonorus: dishonored.
+inhorreo: to bristle.
+inhorresco: to begin to bristle, shudder, quiver, shake.
+inhospitalis: inhospitable.
+inhospitalitas: lack of hospitality.
+inhospitus: inhospitable.
+inhumane: inhumanly.
+inhumanitas: curelty, inhumanity, incivility, discourtesy, stinginess.
+inhumaniter: discourteously.
+inhumanus: cruel, savage, barbarous, inhuman, uncivil, uncivilized.
+inhumatus: unburied.
+inibi: therein, in that place, (time) near at hand.
+inimicus: personal enemy, foe, opponent.
+iniquus: unequal, unjust, unfair.
+initium: beginning, start, commencement, origin.
+iniuria: injury, damage, hurt, injustice, wrong.
+iniustus: unjust, inequitable, unfair.
+innotesco: to become know, noted.
+innuo: to give a nod to, give a sign to.
+innuo: to hint at, suggest, mean
+inolesco: to grow in or on.
+inops: poor, helpless, in need
+inquam: I say.
+inquis: you say.
+inquisitor: [med] juror, member of an inquest, trustee.
+inquit: he, she, it says.
+inreto: ensnared, entrapped, entangled.
+inrideo: to laugh at, mock, ridicule.
+insania: insanity, irrationality, madness, folly.
+insanum: foolish
+insciens: unknowing, unaware, ignorant.
+inscribo: inscribe, entitle, enlist.
+insensatus: irrational.
+insequor: to follow, pursue, assail, reproach, rebuke, attack.
+inservio: to be a slave, serve, be devoted to.
+insideo: sit upon something, be firmly placed.
+insidiae: (plural) treachery, ambush, plot, conspiracy.
+insignio: to put a mark upon, adorn, distinguish
+insinuo: to insinuate, work one's way in, intimate.
+insisto: to enter upon [a journey] tread; (with d.) follow.
+insolita: unaccustomed, unusual.
+insolitus: unaccustomed, unusual, strange, uncommon.
+insperatus: unexpected, unlooked for, unanticipated.
+insquequo: until
+instabilitas: constant motion, restlessness
+instanter: urgently.
+instar: a form, figure, after the fashion of, like.
+instigo: to goad, incite, stimulate, urge
+instituo: to establish, found, institute.
+insto: to pursue eagerly, devote oneself to.
+instructus: trained, taught.
+instruo: to built in, set up, construct, furnish, train
+insuadibilis: adamant, immovable, not to be persuaded
+insudo: (with ablative) exert oneself in, busy oneself with
+insula: island.
+insulto: to leap at or on, revile, insult, deride, heap scorn upon
+insultus: attack, assault
+insum: [inesse, infuit] to be in or on, contained in, within.
+insumo: get one's wish, obtain one's desire
+insumptuosus: inexpensive, cheap, economical
+insuper: as mentioned above
+integer: whole, untouched, unhurt, undamaged, complete, entire
+intempestivus: intelligendo: f.p.p., understanding, being understood
+intemporaliter: eternally, without end
+intendo: to extend, aim, direct, direct one's course, aim at.
+intendo: to stretch, strain, try to prove
+intenta: earnestness, seriousness
+intentio: effort, exertion, attention, intent, attack, accusation
+intentor: informant
+intentus: thorough, tense, anxious, strict.
+inter: approximately, about, around, roughly
+interdico: to forbid, prohibit, outlaw, gain an injunction.
+interdico: to place an interdict.
+interdum: sometimes, now and then, at times.
+intereo: to perish, die.
+interfixus: paved, made firm
+interpono: to place between, interpose, intervene
+interrogatio: interrogation, inquiry
+intertio: arrest, seize, take into custody
+intervigilium: a nap, a doze, forty winks
+intolerabiliter: unsupportably
+intorqueo: twist, distort
+intrepidus: eager, hot-blooded
+intro: to walk into, enter, make one's way into.
+introduco: to lead in, introduce.
+intueor: to look at attentively, gaze at, consider.
+intumesco: to swell up, increase, swell with anger.
+intus: within.
+inultus: unavenged, unpunished
+inundantia: flood, overflowing, inundation
+invado: to undertake, go in, enter, get in.
+invado: to assail, usurp, seize, attack, fall upon.
+invalesco: to gather strength, become stronger.
+invenio: to come upon, find, discover.
+inventor: inventor, discoverer.
+investigo: to track down, investigate.
+inveteratus: hardened by age, of long-standing.
+invetero: to give duration, to render old
+invicem: one after the other, by turns, mutually, each other.
+invictus: unconquer, unconquerable, undefeated.
+invideo: to envy, be jealous of, look upon with envy.
+invidia: envy, jealousy, hatred, censure
+inviso: to go to see, visit, inspect, look at.
+invisus: hated, hateful.
+invito: to invite, summon.
+invitus: unwilling, against one's will.
+invocatio: invocation, an invoking
+iocus: joke, jest, jape, gag.
+ipsemet: his own very self.
+ira: anger, wrath.
+iratus: angry, wrathful.
+irrito: to irritate, exasperate, excite.
+irritum: nothingness, worthlessness, vanity.
+irritus: undecided, void, unfixed, of no effect.
+irritus: vain, useless, ineffectual, of not effect.
+irruo: to rush into, rush upon, attack
+ita: so, thus.
+itaque: (adv.) and, so, therefore.
+item: adv, likewise, moreover
+itero: to repeat, say again, iterate.
+iterum: again, a second time, once more.
+iucunditas: pleasure, charm.
+iucundus: agreeable, pleasant, gratifying.
+iudex: judge, juror.
+iudicium: judgment, decision, opinion, trial
+iudico: to judge, consider
+iugo: to bind together, connect, couple.
+iugosus: mountainous.
+iugum: crossbar, beam of scales, crest, ridge.
+iugum: yoke, a team of oxen, a pair, bond, union, slavery
+iuguolo: to cut the throat, butcher, kill, destroy.
+iumentum: beast of burden.
+iunceus: made of rushes.
+iunctio: connection, joining.
+iunctura: a joining, joint, rekationship, combination.
+iunctus: -a,-um  united, connected, joined together
+iuncus: the rush.
+iuniperus: the juniper tree.
+iuratus: under oath
+iureiuro: to swear an oath.
+iurgium: quarrel, altercation, brawl
+iurisdictio: administration of justice, extent of competence.
+iuro: to swear, to make an oath.
+iussu: (abl.) at the command of, by order of.
+iusta: due forms, funereal rites.
+iuste: fairly, justly, rightly.
+iustitia: justice, fairness, equity.
+iustum: what is right.
+iustus: just, right, equitable, fair, lawful, proper
+iuvenesco: to reach the prime of life.
+iuventus: youth (between 20 and 45).
+iuvo: to help, aid, assist, to please, delight, gratify.
+iuxta: just short of.
+iuxtim: equally.
+ivi: past tense of eo
+jaculum: dart, javelin.
+jaculum: dart, javelin.
+judicium: trial, legal investigation, judgement, decision.
+judico: to condemn, judge, try
+jugis: continual, ceaseless, perennial, constant.
+jugiter: continually, perpetually, constantly, instantly.
+jumentum: draft animal.
+juvenis: young man, youth.
+juventus: the age of youth (20-40 years).
+juxta: adv, in a like manner, likewise
+labasco: to give way, totter.
+labecula: a slight stain, minor disgrace.
+labefacto: to weaken, disturb, shake violently.
+labellum: a little lip, a small washing vessel.
+labiosus: having large lips.
+labo: to totter, sink, begin to fall.
+labor: hardip, fatigue, distress.
+laboriose: laboriously, with great effort
+laboriosus: toilsome, laborious, (persons) industrious, toiling.  laboro :
+laboro: (intrans.) to work, toil, suffer, be afflicted, be troubled.
+labrum: lip, edge, rim, bathing tub.
+labrusca: wild grape vine.
+labruscum: the wild grape.
+lacer: torn, mangled, cut to pieces.
+laceratio: a tearing, mangling.
+lacero: to tear to pieces, mangle, squander money, slander someone.
+lacerta: lizard.
+lacertosus: muscular, powerful.
+lacertus: the upper arm, strength.
+lacesso: to harass, attack.
+lacrima: tears, exudations from some plants.
+lacrimabilis: lamentable, deplorable, woeful.
+lacrimo: to weep, shed tears, exude, drip.
+lacrimosus: tearful, mournful, shedding tears,
+lactans: giving milk.
+lactatio: enticement, come-on.
+lacteus: milky, of milk, milk-white.
+lacto: to allure, entice, wheedle.
+lactuca: lettuce.
+lacuna: missing letters, words, or phrases in a manuscript.
+lacunar: panelled ceiling.
+lacus: a hollow, lake, pool, pond, troough, tank, tub.
+laetans: rejoicing, joyous.
+laetitia: joy, gladness, delight
+laganum: a cake.
+lama: bog, slough.
+lambo: to lick, (of rivers) to wash.
+lamentabilis: lamentable, mournful.
+lamentatio: weeping, wailing, lamenting.
+lamentor: to weep, wail, lament, (trans.) to bewail.
+lamia: witch, vampire.
+laniatus: a tearing, ripping, mangling, mutilating
+lanx: dish, platter, plate
+lapsus: fall, fault, error, sliding, gradual movement.
+laqueum: noose, halter, snare, trap.
+laqueus: snare, trap, noose.
+largior: lavish, bestow, grant, give abindantly.
+lascivio: to run riot, play, be wanton.
+lasesco: to become tired, grow weary
+late: broadly, widely, extensively
+latenter: secretly, in a concealed manner
+latito: to lie hidden, be concealed
+latrator: a barker (such as a dog)
+latratus: barking
+latro: (-are) to bark, bay, rant, runble, roar
+latrocinor: (dep) serve as a mercenary, to rob, steal
+latrunculus: highwayman, robber, brigand, bandit, mercenary soldier
+latus: broad, wide, extensive
+laudabilis: praiseworthy, laudable
+laudabiliter: (adv) in a laudable fashion
+laudatio: praise, commendation
+laudator: praiser.
+laudo: to praise, extoll, commend, name, mention, cite, quote.
+laureatus: crowned with laurel, laureate
+laureola: a laurel branch, crown of laurel, victory, triumph, success
+laurifer: carrying laurel, crowned with laurel, tiumphant, victorious
+laurus: the laurel, bay tree, triumph, victory, success
+laus: praise, glory, fame
+lautitia: splendor, elegance
+lautumiae: stone quarry
+lautus: washed, bathed, cleaned, fine, elegant, refined
+lauvabrum: a bath
+lavatio: washing, bathing
+lavo: to wash, bathe, moisten, get wet, wash away
+laxamentum: a widening, expansion, rest, respite
+laxe: widely, loosely, unrestrained
+laxitas: wideness, expansiveness, roominess
+laxo: sell formally, give up, loosen, widen, extend, enlarge, undo, relax
+laxo: to relieve, release, set free, liberate, yield up
+laxus: wide, spacious, later, postponed, lax, loose, relaxed
+lea: lioness
+lebes: copper kettle, basin, cauldron.
+lectica: litter, bier
+lectio: selection, picking out, reading, perusal
+lector: reader
+lectulus: a small bed, cot
+lectus: bed, couch
+legatarius: legatee
+legatio: office of legate, office of ambassador, embassy  commander
+legatus: deputy, ambassador, envoy, commander of a legion
+legens:  (-entis) a reader.
+legio: a selection, chosen body, legion
+legitiums: lawful, licit, right, proper, legitimate
+lego: to gather, choose, collect, pass through, read, appoint, select
+legumen: a bean, pea, legume
+lemiscus: a ribbon.
+lemma: theme, title, epigram.
+lemures: (pl. only) ghosts, phantoms.
+lenimentus: alleviation, impreovement, mitigation.
+lenio: to mitigate, relieve, make better.
+lenis: smooth, gentle, kind, mild.
+lenitas: smoothness, gentleness, mildness.
+leno: procurer, go-between.
+lenocinium: enticement, allurement.
+lenocinor: to pander, flatter, make up to, to promote, advance.
+lens: lentil
+lente: slowly, calmly, cooly, deliberately.
+lentesco: to become soft, flexible, sticky, to weaken, slacken.
+lentitudo: slowness, sluggishness, apathy
+lento: to bend.
+lentulus: rather slow, a little slow.
+lentus: tough, resistant, tenacious, supple, pliant, 
+leo: lion
+lepide: charminly, wittily, elegantly, pleasantly.
+lepidus: charming, witty, pleasant, elegant.
+lepus: hare, rabbit.
+letalis: mortal, deadly, fatal.
+letaliter: mortally, fatally.
+letanie: litany
+lethargus: drowsiness, apathy, sleepiness, coma.
+letifer: deadly, mortal.
+leto: to kill, slay.
+letum: death, ruin, annihilation.
+levamen: alleviation, mitigation, solace, refreshment.
+levamentum: comfort, easing, alleviation, consolation.
+levatio: alleviation, mitigation, solace.
+leviculus: empty-headed, vain, silly.
+levidensis: thin, slight, poor.
+levis: rapid, swift, unimpotant, fickle, inconstant, unstable.
+levitas: lightness, levity, fickleness, inconstancy, groundlesness.
+leviter: lightly, softly, slightly.
+evo: to smooth, polish.
+libatio: libation.
+libellus: little book.
+libenter: willingly, with pleasure.
+liber: child, offspring.
+liberalis: courteous, generous, gentlemanly.
+liberaliter: courteously, generously, honorably.
+liberatio: release, liberation, aquittal, setting free.
+libere: freely, openly, frankly.
+libero: to set free, deliver, liberate, release, exempt
+libertas: freedom, liberty, independence, frankness, candor.
+libido: whim, caprice, violent desire, passionate longing.
+liceo: to be valued at, be for sale.
+liceor: to offer a price, to offer to buy, bid, proffer, tender.
+licens: unimpeded, free, unrestrained, unchecked.
+licentia: license, leave, authorization, freedom, liberty, licentiousness.
+licentio: to authorize, permit, dismiss.
+licet: granted that, although, it is allowed, one may or can.
+licitus: permitted, allowed.
+ligamen: string, thread.
+ligatio: imprisonment, bondage, captivity, servitude.
+lignarius: carpenter.
+lignator: wood-cutter.
+ligo: to bind, tie.
+lima: file, polishing, revision.
+lingua: language, tongue, speech.
+lino: to smear, befoul, dirty.
+linteum: linnen, napkin.
+liquidus: fluid, flowing, liquid, clear, evident, certain.
+litigo: to quarrel, dispute.
+littera: letter (of the alphabet).
+litterae: (pl.) letter, epistle, missive, note, literature.
+loci: (pl.) passages in literary works.
+loco: to place, put, position.
+locupleto: to enrich, make wealthy.
+locus: place, location, situation, spot. [monastery]
+loginquitas: distance, remoteness, isolation.
+longe: far.
+longus: long
+loquax: talkative, loquacious, garrulous.
+loquor: to say, speak, tell, declare.
+lorica: hauberk [a coat of chain mail], a knight's service.
+loricatus: wearing armor, armored.
+lubricus: oily, slippery, slick.
+lucerna: lamp.
+lucidus: -a-um, shining, bright, clear.
+lucinaria: lamp.
+lucror: to gain, profit, win.
+lucrosus: profitable, gainful.
+lucrum: gain, profit.
+luctisonus: sad-sounding, mournful, baleful.
+luctus: lamentation, mourning, grief.
+ludio: actor,  player
+ludo: to play, sport, imitate, banter, delude, deceive.
+ludus: game, sport, school.
+lues: plague, pestilence, calamity.
+lugeo: to mourn, be in mourning, grieve, (tans,) to lament, bewail.
+lumen: light, lamp, lantern, light of day, the eye, clearness , understanding.
+luminare: window shutter.
+luminarium: light, lamp.
+luminosus: bright.
+luna: moon.
+lunatus: crescent-shaped.
+lupus: wolf.
+luxuria: luxury, extravagance, opulence.
+macellarius: butcher, slaughter-house.
+macer: thin, lean.
+macero: to soften, weaken, reduce, torment.
+macies: thiness, gauntness, poverty barrenness
+macresco: to become lean, skinny, thin.
+mactabilis: deadly, lethal.
+macto: to magnify, glorify, honor, slay, fight, punish, afflict.  macula :
+macula: stain, mark, spot, blemish, fault, flaw.
+maculo: to stain, blemish, defile, pollute.
+maculosus: spotted, speckled, poluted.
+madesco: to get wet.
+madide: drunkenly.
+madidus: wet, moist, soaked, boiled, soft, drunk, dyed, steeped.
+magis: more, to a greater extent, rather, for preference
+magister: master, canon, master of a school, professor.
+magus: magical.
+maiestas: majesty, dignity, greatness.
+maiores: (pl.) ancestors.
+malens: preferring.
+malo: to choose, prefer.
+malum: evil, misfortune, misdeed, crime, injury, damage.
+mandatum: order, decree, mandate, instruction.
+mando: to commit, entrust, order, command.
+mane: morning, early in the morning, early.
+manentia: permanency.
+maneo: to remain, stay, stay the night, last, endure, abide by.  mansuetus :
+mano: to flow
+mansuetus: mild, soft, gentle.
+mara: marl [an earth rich in CaC, added to lime-deficient soils].
+marmoreus: like marble.
+maro: to apply marl to the soil 
+maritus: husband.
+martyrium: n, martyrdom
+materia: material, substance, matter.
+matertera: maternal aunt.
+matrimonium: marriage.
+maxime: especially, particularly, principally.
+medicor: to heal, cure.
+medicus: doctor, physician.
+mediocris: ordinary, average, fair, moderate, mediocre.
+meditatio: practice, preparation, getting ready, consideration, pondering.
+meditor: to reflect upon, consider, ponder, practice.
+medium: everyday life, the common good, the public eye.
+medius: middle, the middle of, central, midst.
+medie: moderately.
+mei: my, mine, MY heart belongs to daddy. that old gang of MINE.
+melior: better.
+mellitus: honeyed, sweet as honey.
+membrana: thin skin, film, parchment, membrane, prepared skin.
+memor: mindful, remembering, grateful, thoughful, prudent.
+memoratus: mentioned.
+memoria: memory, remembrance, recall, recollection.
+mendiosus: full of mistakes, shot with errors
+mendosus: faulty, full of faults.
+mensa: table.
+mereo: deserve, gain, obtain, serve as a soldier.
+meridianus: midday, afternoon, south.
+messis: the harvest, in-bringing, crop.
+messor: reaper, harvester.
+mestitia: misfortune?
+metuo: to fear, dread, be frightened.
+metus: fear, dread, anxiety.
+meus: my.
+mica: crumb, morsel, grain, small loaf.
+micans: twinkling, sparkling, shining, gleaming, flashing, glowing.
+michina: nostril. 
+mico: glitter, gleam, shine, sparkle, flash, be bright.
+mihi: (dat.) me, give ME land, lots of land.
+milia: (pl.) thousands.
+militus: ground, milled (of grain).
+mille: a thousand.
+minae: battlements, parapets, threats, menaces.
+minagium: duty of the sale of grain.
+miniatus: damaged, diminished, lessened, decreased.
+minime: in the least degree, very little, not at all, by no means
+minimus: least, smallest, slightest.
+ministro: to serve, wait upon, provide, supply.
+minor: smaller, less, slighter.
+minuo: to draw blood, let blood, to bleed (someone).
+minutor: miner
+miracula: a miracle play.
+miraculose: miraculously.
+mire: wonderfully, mervellously, uncommonly.
+mirifice: wonderfuly, marvelously, extraordinarily
+miro: to wonder.
+miror: to marvel at, admire, wonder.
+mirus: wonderful, astonishing, extraordinary.
+misceo: to mix, mingle, blend.
+miser: wretched, unfortunate, miserable.
+miserabile: sadly, mournfully, wretchedly
+miserabilis: sad, wretched, mournful, plaintive
+misere: wretchedly, miserably.
+misericordia: pity, mercy.
+missa: holy mass
+mitesco: to grow mild, ameliorate.
+mitigo: to make mild or ripe, make smooth, pacify, appease.
+mitis: mild, gentle, ripe, mature.
+mitto: to send, dispatch.
+modestus: orderly, within bounds, moderate, restrained.
+modica: moderate, within bounds, limited, undistinguished.
+modicus: ordinary, undistinguished, within bounds.
+modio: a grain measure, a bushel basket.
+modo: now, just now, only.
+modus: measure, bound, limit, manner, method, mode, way.
+moenia: walls, fortifications of a city, ramparts, castle, fortress
+moleste: take annoyance, moleste fero  I take annoyance.
+molestia: annoyalce, troublesomeness, stiffness, affectation.
+molestus: troublesome, disagreeable, annoying.
+molior: to build, erect, construct, contrive, toil, struggle.
+mollio: to soften, make pliant.
+mollis: soft, pliant, flexible, easily moved, gentle.
+monachus: monk.
+monasterium: monastery, abbey, convent.
+moneo: to warn, admonish, remind, advise, instruct.
+monitio: admonition, warning.
+monstro: to show, appoint, point out, ordain, appoint, nominate.
+monstrum: portent, omen, monster.
+mora: delay
+moratlis: mortal.
+morbus: sickness, disease, illness.
+morior: to die, wither away, decay.
+morsus: a biting, bite, also, sting, pain.
+mortalitas: the state of being mortal, death, a dying
+mortifera: deadly things
+mortuus: dead, deceased, passed away, gone West, departed.
+mos: moris,  will, inclination, custom, wont, usage, rule.
+mox: soon, presently, then, thereupon.
+mucro: a sharp point, edge, dagger point.
+mugio: to groan, bellow, roar, low.
+mulier: woman.
+multi: many, numerous, the common herd.
+multiplex: manifold, many-fold, many times, tortuous
+multipliciter: in many ways, in various ways
+multo: by much, by far, by a great deal, by a lot.
+multum: much, greatly.
+multus: much, great
+mundo: to clean.
+mundus: world, universe.
+munimentum: fortification, protection, defenses.
+munio: to fortify, defend, protect, build a road.
+munitio: fortifying, defense works, bridging, fortification.
+munus: service, office, function, duty, gift.
+mussito: to grumble, mutter.
+mutatio: change, alteration, transformation.
+muto: punish, fine, mulct.
+muto: to change, alter, exchange.
+mutuo: borrowed, lend,
+mutuus: a loan. dare to make a loan.
+mutuus: interchanged, mutually, reciprocal, reciprocity.
+nam: but now, on the other hand, surely, for it is certain
+narro: to make known, say, speak, narrate.
+natio: nation, people.
+natu: (ab,sing.) by birth.
+natura: nature
+nauta: sailor.
+navale: ship's station, dockyard.
+navigatio: voyage, navigation.
+navigo: to sail, navigate.
+navitas: energy, get up and go.
+nebulosus: misty, foggy.
+necessarius: necessary, needed, essential, necessary.
+necesse: (adj.) necessary, unavoidable, indispensable.
+necne: or not.
+necnon: and also.
+neco: to kill, slay, put to death.
+necto: to tie up, bind, fasten
+nefas: wrong, sin.
+nego: to deny, refuse a request, deny something to someone
+negotium: employment, business, task, occupation, pains.
+nemo: no one, nobody.
+nemorosus: wooded, covered with trees, forested
+neo: to spin, interweave. (to spin thread and yarn).
+nequam: worthless, good for nothing, bad.
+nequaquam: by no means, not at all.
+nequeo: not to be able, to be impossible.
+nequequam: by no means, not at all
+nequiter: wretchedly
+nescio: to be ignorant, be unaware, not know, be unkowing.
+nichilominus: nevertheless.
+nidor: vapor, smell, reek, odor.
+niger: black.
+nihil: (undeclinable) nothing
+nihildom: nothing as yet
+nihilominus: nevertheless
+nihilum: nothing.
+nimirum: of course, undoubtedly, certainly (sometimes ironical).
+nimis: adv. too much, overmuch, excessively
+nimium: (adv.) too much, overmuch, excessively.
+nisi: if not, unless, except.
+niteo: to shine, glitter, be bright, glow, be sleek, flourish.
+nitesco: to begin to shine, grow sleek.
+nitidus: bright, shining, fat, sleek, flowering
+nitor: splendor, glow, elegance, brilliance, brightness.
+niveus: white, snowy.
+nixor: to lean against, strive, strain, labor, struggle.
+nixus: strain, effort.
+nobis: (abl.) us, there'll be no one as happy as US.
+nocens: bad, wicked, injurious, culpable, evil.
+noceo: do harm, inflict injury.
+nomen: name.
+nominatim: by name, expressly.
+non: not.
+nondum: not yet
+nonnisi: not? not unless? 
+nonnullus: some, pl. several.
+nonnumquam: sometimes.
+nonus: ninth.
+nos: us, they tried to tell US we're too young.
+nosco: to become acquainted with, get to know.
+nota: mark, token, note, sign.
+notabilis: -e, noteworthy, notable, notorious
+notarius: stenographer (class.), notary, legal scribe.
+novem: nine.
+novitas: newness, novelty, strangeness.
+novo: to make anew, refresh, revive, change, alter, invent.
+novus: new, fresh, young, inexperienced, revived, refreshed.
+nullus: not any, no, none.
+numerus: total, category, class, number.
+numquam: at no time, never.
+nunc: now, at the present time, soon, at this time.
+nuncupo: to call, proclaim
+nunquam: never.
+nuntio: to announce, report, relate.
+nuntius: messenger, message.
+nuper: newly, recently, not long ago.
+nusquam: nowhere, in no place, nothing, for nothing, never.
+nutrimens: food, nourishment.
+nutrimentus: nourishment.
+nutrio: to suckle, nourish, bring up, rear.
+nutus: a nodding, nod, command, will.
+obdormio: to fall asleep.
+obduco: to draw over, cover, lead against, pass, spend
+obduro: to be hard, persist, endure, last, hold out.
+obligatus: bound, under an obligation.
+obliquo: to turn sideways, turn aside.
+oblittero: to cancel, blot out.
+oblivio: forgetfulness, oblivion.
+obruo: to overwhelm, destroy.
+obsequium: indulgence, pliancy, submission.
+obses: (obsidis) hostage, security, pledge, surety
+obsideo: to sit near, haunt, frequent, besiege, invest
+obsido: blockage, besiege, invest
+obstinatus: firm, resolved, staunch.
+obtestor: to implore, entreat, beg, call as a witness.
+obtineo: to hold, keep, possess, maintain, to continue.
+obviam: on the way, in the way, (+ dat.) towards, against.
+obvius: on the way, in the way, (in dat.) open, accessible.
+obvolvo: to wrap up, cover,
+occasio: favorable moment, opportunity.
+occasus: setting (of the sun, etc), the west, fall, destruction.
+occatio: harrowing.
+occidio: slaughter, massacre.
+occido: to fall, fall down, (for the sun) to set.
+occisor: murderer.
+occludo: to close, shut up, close off.
+occulco: to trample (down).
+occulte: secretly, in secret, by stealth.
+occulto: to hide, conceal, cover.
+occultus: hidden, concealed, secretly.
+occumbo: to fall, topple, drop, fall dead.
+occupo: to take possession, grasp, seize, enjoy, get a start on.  
+occurro: to occur, run to meet, attack, oppose, work against 
+occuro: to occur, come about, happen.
+occursus: a meeting. 
+ocius: quick. fleet, sooner, faster.
+oculus: eye.
+odio: to hate, despite, hold in contempt, dislike strongly.
+odium: hatred.
+odorus: keen scenter, sharp nosed.
+oestrus: horse-fly, frenzy.
+offa: lump, swelling, pellet, shot, mass of something.
+offendo: to knock, hit, strike, shock, offend, displease, stumble, lurch.
+offensio: striking, knocking, hitting against, blow.
+offensus: collision, shock, dislike, displeasure.
+offero: to bring forward, place before, present, offer, expose.
+officina: workshop, factor.
+officiosus: respectful, attentive.
+officium: duty, service, job.
+olim: at that time, formerly, once, for a long time now.
+omitto: to let slip, lose, pardon
+omnigenus: of all kinds.
+omnino: altogether, entirely, wholly, certainly, completely.
+omnipotens: all-powerful, almighty, omnipotent
+omnis: all, every.
+onero: to load, burden, oppress, fil up.
+onus: load, burden, weight, trouble, charge, public road tax.
+opera: work, pains, labor.
+operor: to work, labor, toil, take pains.
+opes: (pl.) means, wealth, abundance, riches, resources.
+opinio: opinion, report, rumor, conjecture, report.
+opinor: -atus, 1, dep. v, to be of the opinion of
+opisthotonos: A disease where the body is curved backward.
+oporotheca: place for keeping fruit
+oportet: it is  proper, one should, one ought
+oportunitas: convenience, fitness, advantage, opportunity.
+opportune: (adv) opportunely, conveniently.
+opportunitas: fitness, suitability, convenience, advantage.
+opportunus: opportune, fit, convenient, suitable.
+opprobrium: reproach, disgrace.
+oppugno: to fight against, attack, assault, assail.
+ops: singular: power, poer to aid, power to help
+optimates: the aristocratic party.
+optimus: one of the best, aristocrat, noble.
+opto: to desire, wish for, want.
+opulens: rich, wealthy, powerful, mighty, splendid, sumptuous
+opulente: richly, wealthily
+opulentia: riches, wealth, power, might, opulence, splendor
+opusculus: a little or small work, a small book
+ora: region, clime, district, country, residents of a district
+ora: edge, rim, border, boundary, coast, coast-line
+oraculum: a solemn statement, oracle, prophecy, words of a god
+oratio: speech, address, oration.
+orator: orator, speaker. spokesman, envoy, ambassador
+oratorie: oratorically
+oratorius: oratorical, oratory
+oratu: (abl.sing.m.) by request
+orbis: circle, orb, ring, disk, orbit, coil, round, rotation
+orbita: a wheel rut
+orbitas: bereavement, loss of children, loss of parents
+orbus: deprived of children or parents, orphan, deprived, destitute
+orca: a pot or jar
+orchas: a type of olive
+orchestra: theater space reserved for the Senate, senators
+ordinarius: according to order, regular, ordinary
+ordinatim: regularly, ordinarily
+ordinatio: rule, government, order, arrangment, regulation
+ordinatus: arranged, orderly
+ordino: (-are) to set in order, regulate, arrange, appoint, govern
+ordior: to begin, start (esp. of speaking)
+ordo: rank, class, order
+orexis: appetite, desire
+organum: instrument, musical instrument.
+orgia: a festival of mysteries, orgy
+orichalcum: copper ore, brass
+oriens: rising, the rising sun, east, morning
+origo: origin, start, source, beginning, ancestor
+orior: rise, become visible, appear
+oriundus: arising from, springing from, coming from
+ornamentum: weapons, honor, distinction
+ornate: splendidly, ornately, elegantly
+ornatus: dress, attire, equipment, ornament, embellishment.
+orno: to equip, furnish, supply, decorate, adorn
+ornus: mountain ash
+oro: to speak, argue, plead, orate, beg, entreat
+orsa: beginning, start, undertaking, first few words
+orsus: a beginning, undertaking, initiative
+ortus: -us, m, birth, origin, rising, origin, source
+oryx: gazelle, wild goat
+oryza: rice
+ostendo: show, reveal, present, make plain, declare.
+ostium: entrance, door.
+otium: free time, leisure, ease, peace, repose.
+paciscor: to make an agreement, covenant, pact.
+pactum: treaty, pact, contract.
+pactus: agreed-upon, stipulated, betrothed.
+paecipio: to warn, admonish, teach, instruct
+paganus: countryman, peasant, pagan
+pagatim: in vilages, in a village manner, in a rusticway
+pala: spade, peel for putting bread in the oven
+palam: openly, publicly, (+abl.) in the presence of
+palea: chaff
+palestra: gymnasium, wrestling school
+paliurus: a plant, Christ's thorn
+pallens: pale, wan, pale yellow, pale green, weak, drooping
+palleo: be pale, be yellow
+pallesco: (+ acc.) grow pale at
+pallidus: pale, wan; causing paleness
+pallium: coverlet, mantle, cloak.
+pallor: paleness, fading
+palma: palm
+palmarium: excellent, splendid, outstanding
+palmula: blade of an oar
+palor:  (dep.) to wander, stray, err
+palpito: throb, tremble, shake
+palpo: carress, stroke, coax, cajole, flatter
+paludosus: swampy, marshy, boggy
+palus: pale, stake, swamp, bog, marsh
+paluster: marshy, swampy, boggy
+pando: to stretch out, spread out, extend
+pandus: curved, crooked, arched, bowed
+pango: to fix, hammer in, drive in, fasten
+panis: (-is) bread
+pannus: rag, patch, piece of cloth
+panthera: leopard, panther
+papas: tutor
+papaver: poppy
+papilla: teat, breast, nipple
+pappo: -are; to eat
+papula: a pimple
+par: equal, like
+paratus: preparation, fitting out, equipment.
+parce: moderately, economically
+parco: (+inf.: to forebear to), avoid, spare, keep oneself from.
+parcus: sparing, thrifty, economical, moderate
+pardus: panther, leopard
+parens: parent.
+pareo: (+ dat.) to be obedient to, obey.
+parilis: similar, like, equal
+pariter: equally, in like manner, as well.
+paro: to prepare, get ready, set, put, furnish, supply, buy.
+partim: partly, some.
+parum: too little, too few, not enough
+parumper: for a short time, for a little while, for a bit
+parvulus: child, infant, young, little, very small, tiny
+pasco: to graze, forage, browse.
+passer: sparrow.
+passim: adv. far and wide, everywhere, scattered about, indiscriminately.
+patefacio: to disclose, expose, open, make open
+patella: dish, platter, plate
+pateo: to be open, be exposed
+paternus: of a father, paternal, native
+patesco: to be laid open, bare, exposed, to be revealed
+patibilis: endurable, bearable, sufferable
+patiens: patient, (+ gen.) capable of enduring.
+patientia: patience, suffering, endurance
+patina: a dish
+patior: to suffer, endure, permit.
+patria: fatherland, one's native country, homeland
+patricius: a nobleman
+patrocinor: to protect, defend, support, patronize.
+patronus: patron, protector.
+patruus: paternal uncle.
+pauci: few, a few, some.
+paulatim: gradually, litle by little.
+paulisper: for a little while, for a short time.
+paululum: very small, very little
+pauper: beggar, person without means.
+pauper: poor, with few means, poverty-stricken.
+paupertas: beggardry, poverty, humble circumstances.
+peccamen: sin, fault, error
+peccatus: sin.
+pecco: to do wrong, err, sin, go astray.
+pecto: to comb, card, thrash (to card wool).
+pectus: heart, breast
+peculium: a bit of money, a small property
+pecunia: money.
+pecuniosus: rich, wealthy \profitable, lucrative
+pecus: a single head of cattle, especially a sheep, a herd
+pedes: going on foot, walking, foot-soldier, infantryman
+peior: worse (see malus).
+peloris: a clam
+pelvis: font
+pendeo: to hang, depend, be suspended, be uncertain, undecided.
+pendo: to weigh, value, consider, judge, esteem
+penetrabilis: capable of being penetrated, penetrating, piercing
+penetralis: passing through, penetrating, internal, inner, 
+penetranter: deeply, penetratingly, searchingly
+penetro: to put into, pass through, penetrate
+penicullus: a painter's brush, pencil, stylus
+peniculus: a sponge, brush
+penis: tail
+penitens: (penitentis) a penitent
+penitentia: penance
+penintentiarius: confessor, penintentiary
+penitio: to do penance
+penitus: inward, inner, internal, interior
+penna: feather, wing
+pennatus: winged, with feathers
+penniger: winged, with feathers
+pennipes: wing-footed, swift, fleet
+pennipotens: capable of flight
+pennipotenti: birds
+pensilis: hanging
+pensio: a weighing out, paying, payment, rent, day of payment
+pensito: to weigh carefully, weigh out, pay, ponder, consider, think over
+penso: (-are) to weigh out, estimate, ponder, consider, pay, purchase
+penuria: penurium :lack, want, penury
+penuriosus: penurious, poor, poverty-stricken.
+peplum: robe of state
+per: (prefix to an adjective) very, excessively, quite
+pera: wallet, purse, bag
+peractio: completion, finishing, end
+peracto: to carry through, complete, accomplish
+peraeque: quite equally
+peragito: (-are) to harass, push around
+perago: (-ere) to harass, disturb, mention, complete, accomplish
+peragro: to wander through, travel through.
+perculsus: a shock.
+perdignus: very worthy.
+perditio: loss, destruction
+perdo: to lose, destroy
+perduco: to lead through, conduct, carry through.
+peregrinus: wanderer, foreigner, stranger, pilgrim, crusader.
+pereo: to pass away, be destroyed, perish.
+perfectus: complete, finished, done, perfect, without flaw.
+perfero: to bear, suffer, endure.
+perfidia: treachery, faithlessness.
+perfidiosus: treacherous, faithless
+perfringo: to break through, penetrate, shatter.
+perfruor: to execute completely, enjoy to the full.
+perfusus: steeped, soaked, drenched.
+pergo: to continue, proceed, go on with.
+periclitatus: put in peril, endangered.
+periclitor: to test make a trial, put in peril, endanger.
+periculosus: hazardous, dangerous.
+periculum: danger, risk.
+peritus: skilled, expert.
+periurium: perjury, oath-breaking, foreswearing an oath.
+perlustro: to pass through, survey, look, examine.
+permaximum: the very greatest.
+permeo: to pass through.
+permoveo: to excite, agitate, stir up, move.
+perniciosus: pernicious, destructive.
+perperam: wrongly, falsely.
+perpetro: to complete, accomplish, perform.
+perpetuus: perpetual, lasting, continuous, uninterrupted.
+perscitus: very clever, exceedingly sharp.
+perscribo: to write out, write down, place on record.
+perseco: to cut through, dissect, cut away.
+persequor: to persecute, hunt down, track, trail.
+perseverantia: perseverence, persistence.
+persevero: to persist, persevere, continue.
+persisto: to persist, persevere.
+persolvo: to unloose, explain, expound, pay off a debt, pay.
+persona: actor's mask, part, role, character, personality.
+persona: [medieval] one holding an honor, official, magnate.
+perspicuus: transparent, bright, clear, evident.
+persto: to persist, remain firm.
+persuadeo: to persuade.
+perterreo: to terrify.
+pertimesco: to become very much afraid.
+pertinacia: firmness, obstinacy, stubborness.
+pertinaciter: stubbornly, obstinately.
+pertinax: persistent, firm, mean, stubborn, obstinate
+pertineo: to pertain to, relate to, concern.
+pertingo: to stretch out, extend.
+pertorqueo: to twist, distort.
+pertraho: to drag, forcibly conduct, entice, allure.
+perturbo: to disturb, trouble, perturb, disrupt.
+perturpis: very disgraceful.
+pervalidus: very strong.
+pervenio: (+ acc.) to reach, attain, reach, be passed to.
+pessimus: worst (see malus)
+pessum: to the ground, to the bottom, downward.
+pestifer: pestilential, injurious, damaging, plaguey,
+pestifere: destructively, injurously.
+pestilencia: pestilence, plague
+petitus: inclining toward
+peto: to ask for, beg, request, demand, to sue for.
+pharetra: a quiver.
+philologus: scholar, learned man, adj. learned, literary.
+phthisis: consumption, tuberculosus.
+physiologus: a natural science.
+piaculum: a victim, sacrifice, atonement, punishment, a sin, crime.
+pica: jay, magpie.
+picea: the spruce tree
+pictor: painter
+picturatus: painted, of cloth, embroidered.
+picus: woodpecker.
+pie: adv, piously, religiously
+pietas: dutifulness, dutiful comduct, piety, devotion, kindness.
+pignus: pawn, pledge, token, (in pl.) persons in pledges of
+pilo: to shave, sut the hair.
+pilosus: hairy, covered with hair
+pilum: heavy javelin
+pilus: a single hair, a trifle.
+pinetum: pine wood.
+pingo: to paint, embroider, draw, stain, dye, decorate.
+pinguesco: to grow fat, sleek.
+pinguis: fat, oily, rich, sleek,, fertile.
+pinguitudo: fatness, rotundity.
+pipio: to chirp, tweet, pipe.
+pirum: pear.
+pirus: pear tree.
+piscator: fisherman.
+pius: dutiful, godly, holy, upright, kind, honest, affectionate.
+placeo: (+ dat.) to please, be agreeble to
+placet: it is agreed, it is resolved, it seems good.
+placide: quitely, gently.
+placidus: quiet, still, gentle.
+placitum: accord, agreement, pact, assembly for judgment.
+placo: to placate, appease.
+plaga: a blow, stroke, wound, buffet,
+plagiarius: kidnapper, plagiarist
+plane: plainly, clearly.
+platea: street, courtyard.
+plaustrum: wagon, cart, Charles' Wain, the Big Dipper.
+plecto: to punish.
+plector: to be punished.
+plene: (adv.) completely, wholly, fully.
+plenus: full, complete, full, satisfied, rich, mature, plump.
+plerumque: for the  most part, generally, commonly, mostly.
+plerusque: very many, a great number, a large part, the greater part.
+plico: to fold.
+plorabilis: deplorable.
+ploratio: lamentation, mourning, weeping.
+plorator: a lamenter.
+ploratus: weeping, lamenting.
+ploro: to lamen, weep, weep over.
+pluit: it is raining, a shower is falling.
+pluma: feather, featherbed, pen.
+plumbeus: leaden, made of lead, dull, stupid, heavy, opressive, bad.
+plumbum: lead, a bullet, lead pipe.
+pluo: to rain, shower, sprinkle.
+plura: more numerous, several, many.
+plures: more numerous, several, many.
+pluries: often, frequently
+plurimi: at the highest price, of the highest worth.
+plurimus: most, very many.
+pluris: (gen.) at a higher price, of a great value
+plus: more.
+plusculus: somewhat more, rather more.
+pluvia: rain, shower.
+pluvialis: pertaining to rain, of rain.
+poena: pain, punishment, penalty, to pay the penalty.
+poeta: (masc.) poet.
+polenta: pearl barley, barley groats.
+pollen: fine flour, fine meal. (also pollis )
+polleo: to be strong, powerful, able.
+pollex: thumb, big toe.
+polliceor: to promise, offer.
+pollicitus: promised, a promise.
+pomum: fruit, apple.
+pondera: balance, equilibrium.
+pondero: to weigh, consider, reflect.
+pondus: a pound's weight, weight, mass, load, heavy body.
+poposco: see posco;  Herimann, cap. 28, 69.
+populatio: devastation, wasting, population
+populus: people, the people, nation, crowd, multitude, host.
+porro: forward, further, next, in turn, (of time) long ago.
+porta: gate, entrance.
+posco: to call upon, ask ernestly, request.
+positus: position, place, arrangment.
+possessio: possession, property.
+post: (+ acc.) after, behind.
+postea: afterwards.
+posteri: posterity.
+posthabeo: to put after, consider of less account, [posthabito].
+postpono: to put after, consider secondary.
+postquam: (conj.) after.
+postulatio: a demand, request, desire, complaint.
+postulator: plaintiff, complainant.
+postulo: to ask, demand, require, summon, prosecute, impeach, try
+potens: able, mighty, powerful, strong.
+potentia: might, power, authority
+potestas: power, ability, authority, opportunity.
+potior: (+ gen. or dat.) to possess, hold, get possession of.
+potissimum: (adv.) chiefly, most of all.
+potissimus: best of all, chief, principal.
+potius: rather, preferably
+prae: (prep. with abl.) before, in front of.
+praebeo: to offer, hold out, supply, provide, allow.
+praecedo: to precede, go before, surpass, excell.
+praecelsus: exceedingly high.
+praecepio: precept, preconception.
+praeceptum: precept.
+praecido: to cut short, lop, mutilate.
+praeparo: to prepare, ready, make ready, arrange.
+praecipio: to instruct, advise, warn, anticipate.
+praecipue: especially, chiefly
+praeclarus: excellent, famous, beautiful, striking.
+praeconor: to be a public crier, to herald, proclaim.
+praecox: ripe beforehand, premature.
+praeda: plunder, booty, spoils of war, loot, gain, prey.
+praedicare: to preach
+praedicatio: preaching (s), foretelling (s), condemning
+praedico: to warn, admonish, instruct, foretell.
+praeeo: to go before, precede, to say in advance, to order.
+praefero: to carry in front, display, prefer.
+praeficio: put in charge of
+praefinio: to appoint ahead of time
+praefoco: to choke, suffocate.
+praegravo: to press heavily upon, weigh down, oppress.
+praeire: to go before
+praemitto: to send forward, dispatch, send in advance.
+praemium: reward, prize.
+praemo: to press down, strike down.
+praenuntio: to foretell, announce before hand.
+praenuntius: foretelling, harbinger, omen, token.
+praepono: to set over, prefer.
+praesto: to stand before, be outstanding, excell, surpass, show.
+praesum: v, to be before
+praeter: adj., except; prep. + acc., besides, beyond, more than.
+praeterea: besides, further, hereafter.
+praetereo: to pass over, pass by, omit.
+praeteritus: past.
+praetermissio: neglect, passing over, omission.
+praetorgredior: to pass betond, go beyond.
+praevenio: get the start of.
+praevius: previous, former.
+pravitas: crookedness, depravity, deformity, perversity.
+pravus: depraved, wicked, evil, perverse
+precipio: to anticipate, instruct, advise, warn.
+precipue: chiefly, especially, particularly.
+precipuus: excellent, distinguished, special, extraordinary.
+precipue: especially, particularly, chiefly.
+precor: to pray, beg, entreat, invoke.
+prehendo: to seize, snatch, grasp, detain, arrest.
+premo: squeeze, press down, strike down.
+prenda: booty, loot, stolen goods.
+prepositus: reeve, steward, provost, prior, abbot
+pretereo: to go by, pass by, escape.
+pretium: price, vaue, reward.
+prevenire: to come to, go before hand, attend.
+primitus: first, for the first time.
+primo: first, at first, at the beginning, at the start.
+primordia: atoms
+primordium: first beginning, origin
+primoris: first, foremost, at the top, uppermost
+primum: as soon as possible.
+princeps: chief, prince.
+principatus: rule, dominion, pre-eminence, first place.
+principium: beginning.
+prior: former, prior.
+priores: forefathers, ancestors.
+priscus: ancient, antique, former, old days, venerable.
+pristinus: former, venerable, ancient.
+prius: before, formerely.
+priusquam: (conj.) before.
+privatus: private, unofficial, a private person.
+privigna: step-daughter.
+privo: to deprive
+privus: (with gen.) deprived of.
+pro: (+ abl.) in front of, before, on behalf of, for.
+probatur: from probo-are, to judge, test, examine
+probitas: probity, uprightness, honesty.
+probo: to show, prove, demonstrate, approve, find good, judge.
+procedo: to go ahead, proceed, advance, continue.
+procella: storm, tempest, gale; (milit) charge, onset, wave.
+procer: chief noble, prince.
+procinctu: prepared or ready for battle.
+procul: far, at, to, from a distance.
+procuratio: management, administration, diretion, supervision.
+procurator: manager, bailiff, agent.
+procuro: to take care of, manage
+prodeo: advance, go forward, appear, go forth, sally forth.
+prodico: to put off, delay.
+prodigentia: profusion, prodigiality.
+prodigialiter: amazingly, wonderfully.
+prodigiosus: unnatural, wonderful, miraculous, amazing.
+prodigium: prodigy, portent, monster, unnatural thing.
+prodigo: drive forth, waste, spend, expend.
+prodigus: rich, extravagant, abound in, profuse.
+proditio: betrayal, treason
+proditor: traitor, betrayer.
+prodo: deliver, transmit, hand over.
+prodoceo: teach, inculcate, indoctrinate.
+prodromus: forerunner
+proeliator: warrior.
+proelium: battle.
+profano: profane, desecrate.
+profanus: not sacred, uninitiated, ordinary, common, impious.
+profectio: departure, source, origin.
+profecto: truly, really, indeed.
+profero: to carry out, bring forth, advance, impell, cite, mention.
+professio: declaration, profession, trade, art, craft, profession.
+professor: authority, expert.
+professorius: authoritative.
+proficio: to make progress, advance.
+proficiscor: to depart, set out, to start forward, to arise.
+proficuus: start forward, set out, depart, arise.
+profiteor: to acknowledge, confess, offer, promise.
+profugus: fleeing, fugitive, banished, migratory.
+profundum: a depth, abyss, chasm, the sea.
+profundus: deep, profound, high, thick, dense, boundless.
+progener: husband of a grand-daughter.
+progenero: to produce, engender.
+progenies: descent, lineage, progeny, offspring, descendants.
+progenitor: founder of a family, ancestor.
+prognatus: born, sprung from, son.
+progredior: to go forth, advance, proceed, go out.
+progressio: advance, progress, increase.
+progressus: advance, going forward, increase, a royal circuit.
+prohibeo: to prevent, hinder, restrain, prohibit, forbid.
+prohibitio: prohibition, restrain, forbidding.
+proicio: to throw forth, fling, abandon.
+proinde: consequently, therefore, as a result.
+prolabor: to slide forward, slip forward, fall forward, fall down.
+prolapsio: a slipping or sliding.
+prolatio: a bringing forward, mentioning, extension, deferring.
+prolato: to enlarge, lengthen, extend, put off, defer.
+prolecto: to entice, allure.
+proles: offspring, descendants, posterity, (plants fruit).
+proletarius: a citizen of the lowest rank.
+prolix: long, stretching.
+prolixus: wide, broad, long, willing, obliging, favorable.
+proloquor: to speak out, declare openly.
+prolusio: preliminary exercise, prelude.
+proluvier: innundation, scouring, discharge.
+promereo: to deserve, merit
+promeritum: desserts, merit, a promise.
+prominens: jutting out, standing out, a projection.
+promineo: to stand out, jut, extend.
+promisce:  indiscrimately.
+promissio: a promise
+promissor: a promiser, suretor, guarantor.
+promitto: to let go, send forth, undertake, promise.
+promontorium: peak, mountain crest, ridge, promontory.
+prompte: promptly, resolutely, readily.
+promptu: to be ready, to be easy, to be clear.
+promptus: ready at hand, visible, apparent.
+promulgatio: publication, promulgation (of a law).
+promus: steward, butler.
+promutuus: (cash) advanced, prepaid, arragned beforehand.
+pronuntio: to proclaim, announce, declaim.
+prope: near, nearly, not far from, just now, closely.
+propello: to drive before one, drive away.
+propero: to hasten, speed, move rapidly, come quickly.
+propinquo: (intrans) to come near, draw near, approach.
+propinquus: near, close, similar, nearly related.
+propitius: favorable, gracious.
+propono: display, publish, relate, tell, propose, promise.
+propositum: a design, purpose, scheme, theme of discourse.
+proprie: exclusively, particularly, peculiarly. properly.
+proprius: one's own, permanent, special, peculiar.
+propter: (+ acc.) near, close, on account of, because of.
+propugnaculum: fortification, rampart, defense.
+prorsus: forward, straight ahead, to sum up, utterly, wholly.
+prosper: favorable, fortunate, lucky, prosperous.
+prosperitas: propserity, good fortune.
+prospicio: to look into the distance, contemplate.
+prosterno: to knock down, cast down, destroy, ruin.
+prosum: (with dat.) to be useful, do good, benefit.
+prothonotario: protonotary
+protinus: forward, further on, continuously, immediately.
+prout: as, just as, according to.
+provectus: aged, old, advanced in years
+proveho: to carry on, carry forward, advance, promote,
+proventus: a growing up, increase, crop, yield, or issue.
+provideo: to foresee, provide, make provision for.
+provisor: one who provides for, or against.
+proximus: nearest, closest, next.
+prudens: prudent, wise.
+prudenter: wisely, discreetly.
+prudentia: foresight, wisdom, discretion.
+publicus: of the people, public, open to all.
+puchre: beautifully, finely, handsomely.
+pudendus: shameful, disgraceful.
+pudeo: to be ashamed,
+pudicus: modest. chaste.
+pudor: modesty, bashfulness.
+puella: girl.
+puer: boy.
+puerilis: childish, boyish, folish, foolish.
+pueriliter: boyishly, childishly, foolishly.
+pugna: fight, battle, conflict, set-to.
+pugnacitas: the desire to fight, pugnacity.
+pugnaculum: fortress.
+pugnax: fond of fighting, combative, stubborn, contntious.
+pugno: to fight.
+pugnus: the fist.
+pulchellus: pretty.
+pulex: the flea.
+pullulo: shoot up, sprout, burgeon.
+pullus: dark-clorored, blackish, sad, gloomy, a dark garment.
+pullus: young animal, chicken, chick.
+pulmentum: anything eaten with bread, sauce or relish.
+pulmo: the lung.
+pulpa: flesh.
+pulpitum: platform, stage.
+pulso: to strike (the hours)
+pulsus: beating, blow, push, impulse, influence.
+pulvis: dust, powder, arena, scene of action.
+punctum: a prick, little hole, puncture, a point, spot, place.
+puniceus: purple, red.
+punio: to punish, avenge, gave vengeance.
+punitor: punisher, avenger.
+pupa: doll, little girl.
+puppis: stern of a ship, the poop.
+pupula: pupil of the eye.
+purgamentum: rubbish, trash, filth, sweepings.
+purgatio: cleaning out, cleansing, excsuing, justification.
+purgo: to clean, cleanse, purify, clear away, wash off, justify.
+purpura: purple dye, purple cloth, high rank, emperorship.
+purus: pure, free from, spotless, without stain.
+pusillus: tiny, puny, petty, mean.
+putator: pruner.
+puteo: to stink, be redolent, smell bad.
+puter: rotten, decayed, putrid, loose, crumbling, flabby.
+putesco: to putrefy, day, rot.
+puteus: well, pit.
+puto: to clear, settle up, consider, think, believe, suppose, judge.
+putus: pure, unmixed, unadulterated.
+pyropus: bronze.
+qua: (adv.) by which route, where.
+quadraginta: forty (Indecl.)
+quadratus: square, a square.
+quadrigae: four-horse team.
+quadrivium: crossroads, place where four roads meet.
+quadrum: a square
+quadruplator: an exaggerator, informer
+quadruplor: to be an informant.
+quaero: to seek, search for, get, obtain
+qualis: of what kind? of the kind that.
+qualiscumque: of any kind whatever, any whatever.
+qualislibet: of what sort you will.
+qualitas: quality, property, nature.
+qualiter: just as, in whatever manner, way
+quamdiu: such a long time.
+quamobrem: for which reason, on which account, why
+quamquam: nevertheless, and yet (beginning a sentence), though.
+quamtotius: ? completely, all.
+quamvis: (conj) however much, although, as much as you like.
+quando: if ever.
+quandoque: adv, of one time or another
+quandoquidem: since, because.
+quanti: for how much, at what price.
+quanto: by how much (+ comp. adj. or adv.)
+quantum: how much?, how much!, as much as.
+quantus: how great, as great as
+quantuslibet: as much as you will, as great as you will.
+quantuvis: as great as you please, however great.
+quapropter: wherefore.
+quare: wherefore, why, because of which thing.
+quartus: fourth.
+quarum: (fem. pl. gen.) their envy and jealousy, OF WHICH we know.
+quas: (fem. pl. acc.)  the fates, against whom he struggled
+quasi: as if, just as, just as if, as it were, a sort of
+quassatio: a shaking.
+quasso: to shake violently, shake to pieces, break, shatter..
+quater: four times, again and again.
+quattuor: four (indecl.)
+quem: (masc. sing. acc.) (the man), WHOM the king struck.
+quemadmodum: how, in what manner.
+quendam: a certain (one, thing, someone)
+queo: to be able.
+quercetum: an oak grove, and oak forest.
+quercus: oak tree.
+queribundus: complaining, plaintive, whining.
+querimonia: complaint, a charge in court.
+queritor: to complain excessively, whine, gripe.
+quernus: oaken.
+queror: to complain, lament, bewail (dogs) whine, whimper.
+querulus: complaining, whining, lamenting.
+questus: complaint, lament
+quia: because.
+quianam: why?
+quiane: why?
+quibus: (neut. pl. abl.) the arms WITH WHICH he won Rome.
+quicquid: whoever, whatever, whatsoever, anything at all
+quicum: with whom, with which
+quicumque: whatsoever, anthing that, all that
+quid: (question) what (thing)?
+quidem: indeed, certainly, at least
+quidne: (question) why not?
+quiesco: to rest, sleep, be at ease, stop (doing something)
+quiete: quietly, calmly
+quietus: resting, sleeping, undisturbed, neutral, quiet, calm
+quilibet: anyone, anything, whatever (or whomever) you like
+quin: but come now, rather, indeed,
+quindeciens: fifteen times
+quingenti: five hundred.
+quinquagesimus: fiftieth, a fiftieth part
+quinque: five
+quinquennis: five years old.
+quinquiplico: (-are) to multiply by five
+quippe: certainly, to be sure, indeed, of course
+quiris: a spear
+quiritatio: a scream, cry, shriek
+quirito: (-are) to scream, cry out
+quis: anyone, anybody, anything
+quislibet: anybody, whom you will, all, any
+quispiam: anyone, anything, someone, something
+quisquam: anyone, anything.
+quisque: each one, each person
+quisquiliae: rubbish, trash, garbage, refuse
+quisquis: whoever, whatever, whatsoever, anything at all.
+quo: to which place, to what place, whither, where.
+quod: (beginning sentence) and, but, now.
+quodammodo: in a certain way, in a certain measure.
+quomodo: in what manner, how, in whatever way, somehow.
+quoniam: since, whereas, because.
+quoque: also, too.
+quorum: (neut. pl. gen.) dangers, OF WHICH there were not a few.
+quos: (masc. pl. acc.) those WHOM he accused of treachery.
+quot: how many, as many (indecl.).
+quotiens: often.
+quotienscumque: however often.
+quovis: to whatever place you will.
+rabidus: raging, crazy.
+rabies: madness, fury, frenzy.
+rabiose: savagely, furiously.
+radicitus: by the roots, utterly.
+rare: thinly, rarely, uncommonly.
+rarus: rare, uncommon, far apart, thin, scanty.
+ratio: reckoning, account, reason, judgment, consideration.
+recedentia: retreat, ebbing, disappearance, distant, far.
+recedo: to go back, retreat, retire, disappear.
+recessus: a going back, retreat, place of retreat, quiet place.
+recito: to read aloud, recite.
+recognosco: to recognize, recollect, recall.
+recolligo: gather, regather, flock together
+recolo: reflect upon, consider, recall.
+reconcilio: to restore, repair, (of persons) unite, reconcile.
+recondo: lay up, store, hoard.
+recordatio: recollection, memory, recall.
+recordor: to remember, think of, recollect, ponder over.
+recro: to recreate, restore, revive.
+rector: guider, leader, director, ruler, master
+rectum: virtue, right
+rectus: right, correct, proper, upright, natural, plain.
+recuperatio: recovery, recuperation.
+recupero: to regain, recoup, recover.
+recuso: to refuse, decline, reject, be unwilling
+redarguo: disprove, refute. with gen. prove guilty, convict.
+reddo: to give back, restore, return, answer, translate, render.
+redemptio: ransoming, redemption, buying back, farming taxes.
+redemptor: redeemer (Christ).
+redeo: to be reduced to, fall back upon.
+redigo: to bring or reduce to a condition, lessen.
+redimio: to crown, bind around.
+redimo: to redeem, ransom, buy back, hire, buy, procure
+redintegro: to repair, fix, restore.
+reditus: return, income, revenue, reward.
+redivivus: rennovated, reconstructed, rebuilt, recycled.
+redono: to give back, give up.
+reduco: to lead back, bring back, return.
+redundantia: overflowing, redundancy.
+redundo: to overflow, stream over, overflow, excess, flood.
+refectorium: refectory, monastic mess hall.
+refercio: to stuff, cram.
+refero: to carry back, bring back, return.
+refero: to bring again, restore, repeat, echo, reproduce, recall.
+refertus: stuffed, crammed.
+reformo: to form again, mould anew.
+refugium: refuge
+regalis: of a king, royal, regal.
+regina: queen.
+regius: royal, regal.
+regnum: rule, authority, kingdom, realm.
+regula: rule, monastic rule.
+relaxo: to loosen, enlarge, relax, ease, lighten.
+relevo: to lift again, lighten, alleviate, relieve.
+relictus: (fr. relinquo) having inherited, been bequeathed.
+relinquo: to leave behind, bequeath, abandon, forsake.
+reliquum: remainder, what is left, leavings.
+relucesco: to become bright again.
+reluctor: to struggle against, resist.
+remando: to send back word.
+remaneo: to remain behind, stay, continue.
+rememdium: cure, remedy, nostrum, medicine.
+removeo: to draw back, set aside, take away.
+remuneror: to repay, reward.
+renovo: to revive, renew, restore, repair, repeat.
+renovatio: renewal, renovation, restoration.
+renuntio: to declare, announce, report, give notice.
+renuo: to deny, refuse, reject.
+reor: to think, suppose, decide
+reparo: to restore, renew, make good, buy, purchase, obtain in trade
+repecto: to comb back
+repello: to drive back, repel
+rependo: to ransom, pay back, requite.
+repens: sudden, unexpected, fresh, recent.
+repente: suddenly, unexpectedly.
+repere: to crawl.
+reperio: to get again, find, ascertain, dicover, invent.
+repetitio: repetition.
+repeto: to return to, begin again, deduce, recall, recollect.
+repleo: to replenish, fill up, fill up again, fill, satisfy.
+repletus: filled, full.
+repono: to deposit, lay up, store, requite.
+reprehendo: to blame, reprove, refute, hold back, check, catch. 
+reproba: false
+reprobo: reject, disaprove, condemn
+reputo: to consider, judge
+requietum: to rest.
+requiro: to ask for, look for, demand, desire, miss.
+resarcio: to repair, mend, patch.
+reseco: to cut back, cut short, diminish
+reservo: keep back, hold back, reserve, keep, preserve.
+resisto: to resist, make a stand, oppose.
+respergo: [resperi, respersum] to sprinkle, splash.
+respicio: to look back, provide for, respect, have regard for.
+respiratio: respiration, exhalation.
+respiro: to breathe, breathe again, recover, decline, diminish, ebb.
+responsal: deputy, representative.
+responsiva: a written reply, answering letter.
+repuo: to reject
+restio: rope-maker.
+restituo: restore, put back, replace, reinstate, repair.
+resurrectio: f, resurection, awakening, renewal
+retardo: to impede, slow down, obstruct
+retendo: to slacken, unbend, become flexible.
+retineo: to hold back, restrain, detain, keep, maintain.
+retraho: to draw back, pull back.
+retribuo: to give again, give as due.
+reus: defendant, accused, answerable, bound.
+revenio: to come back, return.
+reverto: to go back, return, revert.
+revoco: to call back, recover, refer, revoke.
+revolvo: to unroll a book, go over again, repeat.
+rhetor: rhetorician, teacher of rhetoric.
+rhetoricus: rhetorical.
+ridiculum: n, ridiculous
+riginta: (indecl.) thirty.
+rigor: stiffness, hardness, sterness.
+ritus: usage, ceremony, rite.
+rogo: to ask, ask for.
+rostrum: bill of a bird, beak.
+rota: wheel.
+rotundus: wheel-shaped, round.
+rubor: redeness, blush, modesty, shame, disgrace.
+rudimentum: trial, attempt, essay.
+rudis: rude, raw, rough, uncultivated.
+rudo: to bellow, roar.
+rufus: red, ruddy.
+ruga: a wrinkle.
+ruinosus: falling down, going to ruin.
+rumex: sorrel
+rumino: to chew the cud, ruminate.
+rumor: rumor, gossip.
+rumpo: to break, shatter, interrupt, annull, violate.
+runa: a dart.
+runco: to thin out, weed, cull.
+rursus: on the other hand, in return, back, again.
+rus: country, countryside, rural area.
+rustice: (adv) boorishly, in a peasant manner.
+rusticus: rustic, rural, peasant.
+ruta: bitterness, unpleasantness, the herb rue.
+rutila: a spade, shovel.
+rutilus: red, golden, auburn.
+sabbatum: sabbath.
+sacculus: purse, little bag, little sack.
+sacrificum: sacrifice.
+sacrilegus: sacrilegious, impious.
+saepenumero: repeated, again and again.
+saeta: hair.
+saevio: to rage, be furious, take violent action.
+sal: salt, wit.
+salsus: salty, witty.
+saltem: at least, at all events.
+salus: health, safety, well-being, salvation, salutation.
+saluto: to wish well, greet, visit, reverence, pay respect to.
+salutor: visitor, caller.
+salveo: to be well, be in good health.
+salvus: safe, sound.
+sanctifico: to sanctify, make holy.
+sanctimonia: purity, charity, virtue, sanctity, sacredness.
+sanctimonialis: nun, sister.
+sanctus: holy, sacred,, saint.
+sane: rationally, sensibly, really, indeed, to be sure.
+sanitas: health, soundness of mend, sanity.
+sano: to heal.
+sanus: sound, healthy, sane.
+sapiens: wise, judicious.
+sapienter: wisely, judiciously.
+sapientia: wisdom.
+sarcina: bundle, pack, burden, load.
+satago: have one's hands full, have enough to do.
+satio: to satisfy, sate.
+satis: enough, sufficient, sufficiently.
+sato: to sow, plant.
+satura: satire.
+saturo: to fill, satisfy.
+satus: origin, start, beginning, planting, sowing.
+scaber: scabby, rough.
+scabies: the itch, mange, a rash.
+scaccarium: chessboard, game of chess. 
+Scaldus: Scheldt.
+scamnum: bench, stool.
+scapulare: sword-belt.
+scapulus: the shoulder.
+scelestus: wicked, accurse, infamous, criminal.
+schola: school, elite troop of soldiers.
+scientia: knowledge, science, skill.
+scilicet: evidently, certainly, of course, no doubt, assuredly.
+scindo: to cut, rend, split, divide, separate
+scio: to know, understand.
+scisco: investigate, ask, inquire, vote, ordain, resolve.
+scrinium: bookcase, case for papers.
+scriptor: writer, author, scribe.
+secedo: to go apart, withdraw.
+seco: to settle (as to settle an argument).
+secundum: accordingly, in an accordance with
+secundus: second.
+securis: axe, hatchet, battle-axe.
+securus: safe, secure, free from care, unworried, unconcerned.
+secus: wrongly, badly, not as one would wish.
+secuutus: follower, pursuer.
+sed: but, and indeed, what is more.
+seditio: dissension, quarrel, insurrection, mutiny, rising.
+sedo: to settle, smooth, calm, allay.
+seductor: seducer.
+seges: wheatfield, wheat crop, field of wheat.
+semel: a single time, for the first time, even once, once, ever.
+semper: always, ever.
+senectus: old age, dotage.
+sensus: feeling, sense.
+sententia: opinion, thought, way of thinking, meaning, purpose.
+sentio: to judge, suppose, vote.
+seorsum: apart, separately.
+sepelio: to ruin, destroy, bury.
+septem: seven.
+sepulchrum: grave, tomb, sepulcher.
+seputus: buried, sunk, immersed.
+sequax: following, attending, pursuing.
+serio: seriously.
+serius: serious, grave, solemn.
+sermo: discussion, talk, common talk, conversation, rumor.
+sero: to sow, plant.  Also, late, at a late hour.
+servio: (+ dat.) to be a slave to, serve.
+servitus: serviude, slavery.
+servo: to watch over, keep, protect, observe, save, reserve.
+servus: slave, serf.
+sese: himself, herself, itself, =se
+sesqui: one and a half times
+sesquimellesimus: 1500th
+sessio: sitting down, loitering, hanging around, chair, seat.
+severitas: severity, rigor, sternness, strictness.
+sibimet: to them themselves.
+sic: so, thus, yes, that is so, that is right.
+sicco: -are, to dry up, out
+siccus: dry, thirsty, sober, temperate.
+sicut: as, just as, as it were, (+verb in subj.) just as if.
+sidus: constellation, star.
+signum: sign, seal, indication, sign, mark, token.
+silens: silent, still
+silentium: silence, stillness, quiet, repose, obscurity.
+sileo: to be still, silent, (+ acc.) be silent about, rest.
+siligo: wheat, wheat flour.
+silva: woods, forest.
+similis: similar, like, resembling.
+similitudo: likeness, resemblance, uniformity.
+simplex: simple, unaffected.
+simul: at once, at the same time, together.
+simulatio: pretense,
+sine: (+ abl.) without.
+singularis: alone of its kind, solitary, machless, unique. 
+singulariter: adv, one by one, exceedingly, especialy
+singuli: one each, one apiece, single, separate.
+singultim: stammeringly.
+singultus: sobbing, gasping, death rattle.
+singulus: single, separate, one at a time, one each.
+sino: allow, suffer, permit, let.
+sinus: curve, fold, bend, pocket, lap, bay, gulf, inner feeling, secret heart.
+siquidem: since, indeed
+sis: (2nd person present subjunctive of sum) you may be.
+sitio: to be thirsty.
+sitis: thirst, dryness, drought, eager desire.
+sive: conj, on the one hand, but if, if...or if.
+socer: father in law.
+socius: partner, comrade, associate, ally, fellow.
+socus: plowshare
+sodalitas: fellowship, companionship, secret society.
+soleo: to be accustomed, be used to.
+solitas: lonliness, solitude, being alone.
+solito: to be accustomed, to have the habit of, the make a practice of.
+solitudo: loneliness, solitude.
+solitus: accustomed, usual, habitual, ordinary, customary.
+solium: chair of state, throne, bath-tub.
+sollers: clever, skillful.
+sollicite: anxiously, worriedly.
+sollicito: to stir up, incite, arouse.
+sollicitudo: concern, anxiety, solicitude, worry.
+sollicitus: troubled, anxious, concerned, worried.
+solum: land, country, soil, ground, bottom, floor, foundation.
+solus: alone, only, the only.
+solutio: loosening, payment, solution, explanation.
+somniculose: sleepily, drowsily.
+somniculosus: sleepy, drowsy
+somnio: to dream, (+ acc.) to dream of, imagine foolishly.
+somnium: dream, fancy, day-dream, foolishness, nonsense.
+somnus: sleep.
+sonitus: noise, sound.
+sono: to make a noise, sing, celebrate, (of words) to mean.
+sophismata: falso conclusions, logical fallacies.
+sopor: deep sleep.
+sordeo: to be dirty, appear vile.
+sordes: filth, meanness, stinginess.
+sordesco: to become dirty.
+sortitus: casting lots, deciding by lot.
+spatior: to stoll, walk around, take a walk, amble.
+specialis: secret, confidential, initimate or special friend.
+specialissimus: very strange, peculiar, individual.
+specialitas: special friendship, peculiarity, special quality, speciality.
+speciosus: beautiful, handsome, imposing, specious plausible.
+spectaculum: spectacle, show.
+specto: to look at, watch, see, aim at, tend towards.
+speculum: mirror.
+specus: cave, cavern, grotto, den.
+spensa: storehouse
+spera: (n.pl.) hopes
+spero: to hope for, hope.
+spes: hope.
+spiculum: sharp point, sting, spear, dart.
+spiritus: breath, breathing, life, spirit.
+spoliatio: plundering, looting, stripping, robbing.
+spolio: to strip, plunder, despoil, rob, loot
+spolium: spoils, plunder, booty.
+sponte: willingly, of one's own accord, unaided.
+stabilis: firm, stable, steadfast.
+stabilitas: firmness, stability, durability.
+statim: firmly, steadfastly, on the spot, at once, immediately.
+statua: statue, image.
+statuo: to cause to stand, establish, place, set up.
+status: stage.
+stella: star.
+sterilis: barren, useless, unproductive, vain, + gen., deprived of.
+stilla: a drop (of liquid).
+stillicidium: dripping moisture, rainwater from the eaves.
+stilus: a pike, pale, a stylus for writing, writing.
+stipatio: a crowd of attendants, a following.
+stipator: an attendant of a nobleman.
+stipatores: following, retinue, attendants, bodguard.
+stipes: log, stump, tree trunk, branch, post, club.
+stipo: to compress, to press around, gather around, attend (a person).
+stips: small coin, gift.
+stolidus: dull, obtuse, dull-witted, dumb.
+stolide: stupidly.
+strages: massacre, bloodbath, carnage, debris.
+strenuus: brisk, active, vigorous, turbulent, restive.
+strues: piles, heaps, masses.
+studio:  (+ dat.) to study, pursue eagerly, be eager for.
+studiose: eagerly.
+studium: eagerness, zeal.
+stultus: foolish, a fool.
+suadeo: to recommend, advise (a person)
+suasoria: persuasive discourse.
+subcriptio: subscription, signature, register.
+subdo: to subject to.
+subiecto: to put down, to put under.
+subito: adv. suddenly, unexpectedly.
+subitus: sudden, unexpected.
+subiungo: to yoke beneath, join, attach, subdue, subjugate.
+subjectio: forgery, falsehood
+subjungo: to join, yoke
+subligo: to bind below, bind on.
+sublime: on high, aloft.
+sublimis: lofty, raised, elevated, sublime.
+sublimitas: loftiness, height, elevation, sublimity.
+subluceo: to gleam faintly, glimmer, glow.
+subluo: to wash beneath, (rivers) flow beneath.
+sublustris: faintly glimmering, faintly gleaming.
+subnascor: to grow out of.
+subnecto: to bind on beneath, to tie.
+subnego: faintly deny, partially refuse.
+subnoto: to mark beneath, notice secretly, write underneath.
+subnuba: a rival.
+subnubilus: partly cloudy, somewhat cloudy.
+subo: to be in heat.
+subobscenus: risque, faintly obscene.
+subobscurus: somewhat obscure.
+subodiosus: rather unpleasant.
+suboleo: (3 persons only) to give off a smell, to make onself noticed.
+suboles: shoot, sprout, offspring, progeny.
+subolesco: to grow up, mature.
+suborior: to arise in succession.
+suborno: to furnish, equip, provide, instigate secretly, suborn.
+subringor: to make a face.
+subseco: to cut away, pare.
+subsentio: to notice secretly.
+subsequens: P.A.P. of sequor, ensuing, following
+subsequor: to follow after
+subservio: to be subject to, comply with.
+subsidarius: in reserve.
+subsidium: reserve troops, auxiliary troops, support, help, assistance.
+subsido: to crouch down, settle, sink, subside, stay remain, lie in ambush
+subsilio: toleap up, spring up.
+subsisto: to stand, withstand, stop, halt, cease, stay, remain.
+substantia: substance, essence, means of subsistence, property.
+substerno: to spread out beneath, lay under, set out, provide.
+substo: to stand form.
+substrictus: narrow, contracted, small.
+substringo: to draw together, bind up.
+substructio: base, foundation.
+substruo: to build beneath, lay a foundation.
+subsulto: to spring up, leap up.
+subterfugio: to escape.
+subterlabor: to glide away, flow under, slip away, escape.
+subvenio: to come to the aid, succor, relieve, help, assist.
+subvenio: to come up to aid, relieve.
+subvertio: to destroy, overthrow
+succedo: to approach, submit, etc. etc.
+succendo: to kindle, set afire from below.
+successio: succeeding, succession, descent, descendant.
+succurro: to run up under, aid, assist, help.
+sufficio: to be sufficient, suffice, be enough.
+suffoco: to strangle, choke, suffocate.
+suffragium: vote, franchise, approval support, aid, assistance.
+suggero: to bring up, supply, provide, add, attach. place next.
+sui: himself, herself, itself.
+sulum: each, every.
+summa: the highest part, whole, sum.
+summisse: humbly, softly, calmly, modestly.
+summissus: let down, lowered, gentle, mild.
+summitto: to let down, lower, subject, subordinate
+summopere: very much, exceedingly.
+sumo: to take, choose, obtain, buy., take for granted, assume.
+sumptus: expense, cost.
+super: (adv.) over, above, besides, beyond, moreover, remaining.
+superbia: pride, arrogance.
+superbus: overbearing, arrogant, haughty, proud.
+superficies: surface, top.
+superfluo: flow over, overflow, be superfluous.
+superna: northeast by north wind.
+superne: from above, above.
+supernus: above, superior.
+supero: to be above, have the upper hand, surpass, conquer, overcome.
+superstes: survivor of another's death
+supersum: to be superfluous, to remain.
+supervacuus: superfluous, unnecessary, extra :
+supervenio: to arrive, come up, arrive unexpectedly.
+supplanto: to trip up.
+supplex: kneeling, entreating, suppliant.
+supplicium: punishment.
+supra: (+ acc.) above.
+surculus: shoot, sprout.
+sursum: upwards.
+suscipio: to raise up, maintain, support, accept, receive, undertake.
+suscitatio: rekindling, awakening
+suscito: to stir up, arouse, excite.
+suscriptor: the signer of a document.
+susicivus: left over, to spare, extra, superfluous.
+suspectus: suspected
+suspicio: to look upward at, esteem, respect, to suspect.
+suspiro: to sigh, draw a deep breath, long for, yearn after.
+sustento: to maintain, sustain
+sustineo: to hold up, sustain, endure.
+sustituo: to put next, put under, put in place of.
+synagoga: synagogue.
+tabella: writing tablet.
+tabellae: letter, document.
+tabernus: booth, hut, cottage, hove, small shop, inn, tavern.
+tabesco: to melt, waste away, pine, be spoiled.
+tabula: board, plank, gaming board, painted panel.
+taceo: to be silent, say nothing, pass over
+tactus: sense of feeling, touch.
+talarius: having to do with dice or dice-playing.
+talea: rod, stick, stake, bar, cutting, slip.
+talis: of such a kind, such.
+talus: the ankle, ankle bone,.
+tam: to such a degree, so, so far.
+tamdiu: for such a long time.
+tamen: however, but.
+tamen: nothwithstanding, nevertheless, yet, still, for all that.
+tametsi: even if, although.
+tamisium: sieve,  sifter (Herman, p. 308).
+tandem: at last, finally.
+tanquam: adv, just as, as if, like as
+tantillus: so little, so small.
+tantum: only.
+tantummodo: only just, just so long as.
+tantundem: adv, just so much, just as far as
+tantus: so large, so great, of such a size.
+tardus: slow, late, tardy.
+tela: a web, that which is woven, cloth, tissue
+telum: javelin, spear, arrow, bolt, dart
+temerarus: -a-um, rash, imprudent, heedless
+temeritas: rashness, temerity.
+temperantia: moderation, self-control, temprance.
+tempero: to mix properly, temper, regulate, mitigate.
+tempestas: storm, weather.
+templum: sacred precinct, temple, sometimes church.
+temptatio: trial, temptation.
+tenax: grasping, stingy, cligning, frugal, obstinate.
+tendo: to direct, try, attempt, stretch, extend, present, give.
+tenuis: thin, slight, feeble, slim, slender.
+tenura: holding, tenure, feudal holding, by feudal tenure.
+tenus: (prep. with abl) as far as, up to, to, down to.
+tepesco: to cool, grow lukewarm, decrease.
+tepidus: warm, luke-warm, tepid
+ter: three times, thrice.
+terebro: to bore through, perforate.
+teres: rounded, polished, smooth, fine, elegant.
+tergiversatio: backwardness, reulctance, evasion.
+tergum: skin, hide
+tergus: the back, skin, hide, leather.
+termes: a tree branch (especially olive).
+terminatio: termination, determination, setting of boundaries.
+termino: restrict, define, close, set a limit to.
+terminus: a boundary mark, limit, end, border.
+terra: earth, ground, land, country, soil.
+terreo: to frighten, terrify, scare away, deter.
+territo: to fighten, terrify, intimidate
+terror: fright, fear, terror.
+tersus: clean, neat, correct.
+tertius: third.
+testimonium: proof, evidence, witness, indication.
+testis: one who gives evidence, witness, spectator, testicle.
+texo: to weave, twine together, plait, construct, build.
+textilis: woven fabric, piece of cloth.
+textus: woven cloth, web.
+thalassinus: sea-green.
+theatrum: theater.
+theca: case, envelope, covering.
+thema: subject, topic, theme.
+theologus: theologian.
+thermae: warm springs, warm baths.
+thesaurus: treasure, horde, store-room, treasury.
+thesis: proposition, thesis.
+thorax: breastplate
+thymbra: the herb savory.
+thymum: the herb thyme.
+tibi: (dat.) you, i can't give YOU anything but love, baby.
+timeo: to fear, be afraid, dread.
+timidus: fearful, timid.
+timor: fear, dread, object causing fear.
+titulus: label, title, placard.
+tolero: to tolerate, bear, endure, sustain.
+tonsor: barber.
+torpeo: to be sluggish, inert, numb, inactive, immoveable
+torqueo: to twist, curl, rack, torture, torment, distort, test.
+tot: so many.
+totidem: just as many.
+toto: all togther, completely towards
+totus: whole, entire, complete, all.
+traba: a beam of wood, a timber, tree-trunk, ship, table.
+tractare: to handle, manage, perform.
+tracto: to drag, handle, treat, discuss, deal with.
+tractus: a dragging, drawing, pulling, territory, tract.
+traho: to drag, pull, derive, get.
+trans: (+ acc.) across.
+transeo: to go over, pass over, cross over, go past.
+transitus: crossing, passing over, transit, changing, alteration.
+transmitto: to send, carry, or convey across.
+transporto: send, carry, or convey across.
+tredecim: (indecl.) thirteen
+tremo: to tremble, shake, shudder.
+trepide: with trepidation, in confusion,
+tribuo: to give out, divide, allot, assign, grant, give, allow.
+tricesimus: lasting three days.
+triduana: lasting three days.
+triduanus: three days' duration, lasting three days.
+triduum: a period of three days
+trilustralis: lasting for fifteen years
+tripudio: to leap, jump, dance (as in a religious procession).
+tripudium: joy, rejoicing
+tristifico: to make sad, cause sadness, sadden
+tristis: sad, mournful, sowerful
+tritico: thresh
+triticeus: sown in wheat
+triticus: wheat
+triumphus: triumphal procession, triumph.
+trucido: to kill cruelly, slay, butcher, massacre, slaughter.
+truculenter: (adv.) wildly, savagely, fiercely, cruelly, roughly
+trunco: maim, mutilate, mangle, imperfect, not whole, missing a part.
+tubineus: cone shaped
+tui: your, yours, I read YOUR letter that said, dear john.
+tum: at that time, then, thereupon, in the next place.
+tumbus: tomb
+tumbarius: keeper of a tomb.
+tumeo: to puff up, swell, to be pompous.
+tumesco: to swell up with anger, swell, swell up.
+tumultus: uprising, disturbance, riot, tumult.
+tumulo: to bury, inter.
+tumulosus: hilly.
+tumulus: mound, grave, heap of earth.
+tunc: then, at that time, next, and then
+turba: uproar, disturbance, mob, crowd, multitude.
+turbatio: disturbance, confusion.
+turbatus: angered, exasperated, disturbed, restless, troubled.
+turbo: to disturb, upset, throw into disorder, confuse, unsettle.
+turpe: a disgrace.
+turpis: foul, ugly, disgraceful, morally corrupt.
+tussio: to cough.
+tussis: a cough.
+tutamen: defense, protection.
+tutela: protection, guard, charge, guardianship, tutelage, 
+tutis: protected, safe, secure.
+tyrannus: tyrant, absolute ruler.
+ualeo: to be able to, to succeed in (doing something)
+uber: productive, fertile, abundant, rich.
+ubertas: bounty, plenty, abundance.
+uberte: abundantly, 
+uberrime: most luxuriantly, most abundantly, most fruitfully.
+ubi: when, as soon as, wherein, whereby, whereas.
+ueraciter: more veracious, more truly
+ueratius: more true
+ulciscor: to take vengeance for, avenge, take vengeance on.
+ullus: any.
+ulterius: farther, more advanced, more remote.
+ultra: (+ acc.) beyond, on the far side of.
+ultrix: avenging.
+umbra: shade, shadow.
+umquam: ever, at any time.
+una: (adv.) in one, together.
+uncia: a twelfth, an ounce.
+unciatim: little by little.
+unde: whence, from where, how, from whom.
+undique: from all sides, everywhere, on all sides, altogether.
+undisonus: resounding, loud with waves.
+undo: to surge, wave, undulate, to flood.
+unguentum: salve, balm, ointment.
+universe: generally, in general.
+universi: all together.
+universitas: the whole, total, universe, world, university.
+universum: universe, the world.
+universus: combined in one, whole, entire.
+unus: one, only one, at the same time, single, alone.
+urbanus: urban, urbane, pertaining to the city.
+uredo: a plant blight.
+urino: to dive.
+urinor: a diver.
+usitas: customary, usual.
+usque: all the way, up (to), even (to).
+usquequaque: always.
+usura: using, enjoying, profiting, using money lent, interest
+usurpo: to obtain, acquire, get possession of.
+usus: use, experience, skill, advantage, profit.
+uter: either of the two
+utercumque: whichever of the two
+uterlibet: whichever of the two you wish
+uterque: (gen. utriusque) both, each side, each party.
+uterus: womb, belly, lower stomach.
+utilis: useful, advantageous, helpful.
+utilitas: utility, usefulness.
+utinam: If only that were true! Would that it were the case!
+utique: at any rate, certainly, at least.
+utpote: seeing that, inasmuch as, inasmuch as, since, namely.
+utrimque: from both sides, on both sides.
+utroque: to both sides, in both directions, at each point.
+utrum: whether. utrum...an: whether ... or.
+uxor: wife, spouse.
+vaco: to be free from work, of a master, of property.
+vacuus: empty, devoid of, free from.
+vado: go, hasten, rush.
+vae: (interj.), woe, alas, woe to.
+valde: intensely, very much, extremely, greatly
+valens: stong, powerful, healthy, able, worthwhile.
+valeo: to be strong, have power, be well.
+valetudo: health. good health, bad health.
+validus: strong, mighty, powerful, exceeding.
+vallum: palisade, earthen wall, entrenchment, rampart.
+vapulus: flogged, beaten, knocked about.
+varietas: variety, differences, diversity.
+varius: various, varied.
+vastatio: devastation, ravaging
+vegetus: lively, fresh, vigorous.
+vegrandis: diminutive, small, tiny.
+vehemens: violent, furious, impetuous.
+vehementer: violently, forcefully, strongly, exceedingly.
+vehiculum: conveyance, vehicle.
+veho: (in the passive) to sail, ride, drive, etc.
+vel: or, (adv.) even, actually, for example.
+velamen: covering, garment.
+veles: light-armed troops.
+velico: to pluck, twitch, criticize, taunt.
+velitatio: skirmish, bickering, dispute, wrangling
+velius: fleece, skin.
+vello: to pull, pluck out.
+velociter: quickly, rapidly, swiftly.
+velox: quick, rapid, swift, fast.
+velum: sail, covering, awning, curtain.
+velut: adv. just as, like, even as.
+vena: vein, stream, vein of ore, streak
+venalia: venial sins, supplies
+venalicium: market
+venalis: to be sold, up for sale, a slave
+venaliter: by bribery, corruption
+venatio: hunting, game, the chase
+venator: hunter, huntsman
+venditio: sale, closing of a bargain
+vendo: to sell, offer for sale, advertise, betray
+veneficus: poisonous, magical, witch, wizard, caster of spells
+venenum: drug, poison, potion.
+venenifer: poisonous
+veneratio: respect, reverence, honor, veneration.
+venia: grace, indulgence, favor, pardon, forgiveness.
+venio: to get into a certain state, to fall into.
+veno: [dative] for sale.
+venor: to hunt,
+ventagium: winnowing.
+venter: the stomach, belly, abdomen.
+ventilo: to fan, to wave something.
+ventio: a coming.
+ventito: to come often, to visit frequently.
+ventorium: winnowing fan. 
+ventosus: full of wind, windy, breezy.
+ventulus: breeze, soft wind.
+venum: [acc] for sale.
+ventus: wind, rumor, favor.
+venustas: loveliness, charm, attractiveness, beauty.
+vepres: thorn-bush, briar.
+ver: spring, the production of spring.
+verbera: (in pl.) blows, a beating, thrashing
+verberantia: a flogging
+verbum: word.
+vere: in fact, real, true.
+verecundia: feeling of shame, shame, bashfulness.
+vercundus: bashful, modest
+vereor: to respect, fear, be in dread of, to be afraid.
+vergo: to bend, incline, verge, to draw to an end.
+veritas: truth..
+Vernandense: Vermandois.
+vero: in truth, indeed, to be sure, however.
+versus: line, verse.
+verto: to turn, turn around, turn up, to put to flight, rout.
+verus: true, real, proper, right.
+vesica: bladder, bladder-like tumor.
+vesper: evening star, evening.
+vespera: eening prayer, vespers.
+vespillo: undertaker.
+vestigium: footstep, trace, mark.
+vestis: clothing, garment, covering, blanket, carpet, tapestry.
+vetus: old.
+vexamen: shake-up, upheaval. 
+vexillum: flag, banner, standard, troop, company, small unit.
+vexo: to vex, annoy, irritate, shake, toss.
+via: road, way, street.
+viaticus: pertaining to a journey , a journey, money, prize-money.
+viator: traveller, messenger.
+vicinus: neighbor, (med.) resident.
+vicissitudo: change, alteration.
+victor: victor, winner
+victoria: victory
+victualia: supplies, foodstuffs, provisions
+victus: living, manner of life, nourishment, food.
+videlicet: it is clear, (adv.) clearly, plainly, namely.
+videor: to be seen, seem, appear.
+viduata: deprived, widowed, bereft.
+viduatus: widowhood.
+viduo: to deprive.
+vieo: to weave together, stitch, plait.
+vietus: shriveled, withered, shrunken.
+vigilo: to be awake, watch, be vigilant, to keep vigil.
+vigor: vigor, liveliness.
+vilis: cheap, worth little.
+vilitas: cheapness, low-price, worthlessness.
+villa: country house, country estate, (med.) manor, village.
+vinco: conquer, overcome, master, win, surpass, excel.
+vinculum: bond, fetter, tie.
+vindico: to avenge, punish, liberate, deliver, protect.
+vinitor: vine-dresser (a man who prunes grape vines).
+vinum: wine.
+vir: man, hero, man of courage.
+virga: a green twig, rod, stick, wand, broom, streak, stripe.
+virgo: maiden, virgin, young girl.
+viridis: green.
+viriliter: manfully.
+virtus: manliness, excellence, character, worth, courage.
+vis: (sing.) violence, a large number, quantity, a force, nature
+viscus: flesh, internal organs, bowels, entrails, heart
+visio: likeness, face, visage
+vita: life, way of life.
+vitiosus: vicious, full of vice, corrupt.
+vitium: fault, vice, crime.
+vito: to avoid, shun.
+vituperium: insult
+vivificus: live-giving, life-restoring
+vix: scarcely, hardly, with difficulty, barely.
+vobis: (abl.) you, who knows more than YOU? i do!
+vociferor: to cry aloud, shout.
+voco: to call, summon, name invite.
+volaticus: winged, flying, inconstant, unreliable, flighty.
+volatilis: winged, flying, swift, rapid, fleeting, transitory.
+volens: willing, favorable.
+volito: to rush back and forth, flutter, flit about, hurry, hasten.
+volo: to wish, want, will, ordain, suppose, maintain that, be willing.
+volubilis: rolling, revolving, turning around, changeable, inconstant.
+volubiliter: fluently.
+voluntarius: voluntary.
+voluntas: wish, will, inclination, good will.
+volup: agreeably, pleasantly.
+voluptarius: pleasant, one devoted to pleasure.
+voluptas: pleasure.
+voluptuosus: delightful, pleasurable.
+volutabrum: pigsty, slough.
+volva: womb (particularly that of a sow).
+vomer: plowshare.
+vomica: ulcer, sore, boil, plague, curse.
+vomito: to vomit, vomit forth, throw up.
+vorago: chasm, pit, abyss.
+vorax: gluttonous, voracious.
+voro: to eat greedily, swallow up, consume, gorge oneself.
+vos: you (pl), YOU can't catch me, i'm the gingerbread man.
+votum: prayer, wish, desire, vow, promise to God.
+vulgaris: common, ordinary, usual.
+vulgariter: in the common way, ordinary manner.
+vulgivagus: wandering, vagrant, intinerant.
+vulgo: to spread, publish, impart, make accessible.
+vulgus: the common people, mob, rabble.
+vulnero: to wound, injure, hurt, harm.
+vulnus: wound.
+vulticulus: look, aspect, appearance.
+vultuosus: grimacing, affected.
+vultur: vulture.
+vultus: expression of the face, countenance, look, aspect.
+vultus: the face.
+xiphias: sword-fish.
+ymber: rain shower, rain storm, pelting rain.
