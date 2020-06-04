@@ -9,9 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{35
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticMemoryLeaks", "StaticMemoryLeaks\StaticMemoryLeaks.csproj", "{4DCCBE2B-A4FB-43B1-A0DE-CBC88EE8361B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAllocation", "TestAllocation\TestAllocation.csproj", "{230D3F01-0E73-4DA1-8EB3-6A01FAC7E1FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAllocation", "TestAllocation\TestAllocation.csproj", "{230D3F01-0E73-4DA1-8EB3-6A01FAC7E1FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestExceptions", "TestExceptions\TestExceptions.csproj", "{04EB49A9-284F-4978-B3FB-EC1F90AC22E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestExceptions", "TestExceptions\TestExceptions.csproj", "{04EB49A9-284F-4978-B3FB-EC1F90AC22E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp", "TestWebApp\TestWebApp.csproj", "{E20C15F7-F731-4474-82E1-1EDA29AE2AA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StressTestWebApp", "StressTestWebApp\StressTestWebApp.csproj", "{70AADF90-6DF6-49A0-B148-6097E93789FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +39,14 @@ Global
 		{04EB49A9-284F-4978-B3FB-EC1F90AC22E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04EB49A9-284F-4978-B3FB-EC1F90AC22E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04EB49A9-284F-4978-B3FB-EC1F90AC22E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E20C15F7-F731-4474-82E1-1EDA29AE2AA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E20C15F7-F731-4474-82E1-1EDA29AE2AA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E20C15F7-F731-4474-82E1-1EDA29AE2AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E20C15F7-F731-4474-82E1-1EDA29AE2AA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70AADF90-6DF6-49A0-B148-6097E93789FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70AADF90-6DF6-49A0-B148-6097E93789FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70AADF90-6DF6-49A0-B148-6097E93789FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70AADF90-6DF6-49A0-B148-6097E93789FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +55,8 @@ Global
 		{4DCCBE2B-A4FB-43B1-A0DE-CBC88EE8361B} = {350220BD-D3A4-4ED4-BB79-A75BB1C33537}
 		{230D3F01-0E73-4DA1-8EB3-6A01FAC7E1FA} = {350220BD-D3A4-4ED4-BB79-A75BB1C33537}
 		{04EB49A9-284F-4978-B3FB-EC1F90AC22E4} = {350220BD-D3A4-4ED4-BB79-A75BB1C33537}
+		{E20C15F7-F731-4474-82E1-1EDA29AE2AA3} = {350220BD-D3A4-4ED4-BB79-A75BB1C33537}
+		{70AADF90-6DF6-49A0-B148-6097E93789FB} = {350220BD-D3A4-4ED4-BB79-A75BB1C33537}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E464F9B-0796-4380-9D20-3C55C01CB5DA}
