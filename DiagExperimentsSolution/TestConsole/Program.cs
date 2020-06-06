@@ -22,13 +22,15 @@ namespace TestConsole
             //var ps2 = GetPublishedProcess("StaticMemoryLeaks");
 
             //var ps = GetProcess("TestAllocation");
-            var ps = GetProcess("TestExceptions");
+            //var ps = GetProcess("TestExceptions");
+            var ps = GetProcess("TestWebApp");
 
             //var s = new UseCase1();
             //var s = new UseCase2();
             //var s = new UseCase3();q
             //var s = new UseCase4();
-            var s = new UseCase5();
+            //var s = new UseCase5();
+            var s = new UseCase6();
             s.Analyze(ps.Id);
 
 

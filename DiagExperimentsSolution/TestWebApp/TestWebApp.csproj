@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CustomEventSource\CustomEventSource.csproj" />
+  </ItemGroup>
+
 </Project>

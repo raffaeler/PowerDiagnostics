@@ -82,7 +82,7 @@ namespace TestConsole.LinqToDump
             Token = _tokenSource.Token;
             _gcroot = new GCRoot(_clrRuntime.Heap);
 
-            _gcroot.ProgressUpdated += delegate (GCRoot source, int processed) //long current, long total)
+            _gcroot.ProgressUpdated += delegate (GCRoot source, long processed) //long current, long total)
             {
                 //var percent = total == 0 ? 0 : (int)(100 * current / (float)total);
                 //OnGCRoot?.Invoke((current, total, percent, token));

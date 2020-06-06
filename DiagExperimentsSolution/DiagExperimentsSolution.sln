@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp", "TestWebApp\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StressTestWebApp", "StressTestWebApp\StressTestWebApp.csproj", "{70AADF90-6DF6-49A0-B148-6097E93789FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomEventSource", "CustomEventSource\CustomEventSource.csproj", "{1AAA7C20-0337-430C-B131-0856D4EBE119}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{70AADF90-6DF6-49A0-B148-6097E93789FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70AADF90-6DF6-49A0-B148-6097E93789FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70AADF90-6DF6-49A0-B148-6097E93789FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AAA7C20-0337-430C-B131-0856D4EBE119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AAA7C20-0337-430C-B131-0856D4EBE119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AAA7C20-0337-430C-B131-0856D4EBE119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AAA7C20-0337-430C-B131-0856D4EBE119}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

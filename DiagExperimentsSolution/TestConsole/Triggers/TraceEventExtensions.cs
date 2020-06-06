@@ -26,5 +26,10 @@ namespace TestConsole.Triggers
             return null;
         }
 
+        public static void ParseX()
+        {
+            //CounterProfile
+        }
+
     }
 }
