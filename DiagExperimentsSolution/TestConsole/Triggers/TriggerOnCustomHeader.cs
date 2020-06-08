@@ -9,6 +9,7 @@ using CustomEventSource;
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Tracing;
 using Microsoft.Diagnostics.Tracing.Parsers;
+using System.Diagnostics;
 
 namespace TestConsole.Triggers
 {
@@ -38,32 +39,35 @@ namespace TestConsole.Triggers
 
             _session = _client.StartEventPipeSession(_providers);
             _source = new EventPipeEventSource(_session.EventStream);
-            //_source.AllEvents += SourceAllEvents;
+            _source.AllEvents += SourceAllEvents;
             _source.Dynamic.All += Dynamic_All;
             _source.Process();
         }
 
         private void SourceAllEvents(TraceEvent obj)
         {
+            var textual = obj.Dump(true);
+            
+            //Activity activity = new Activity("myOperation");
+            //EventWrittenEventArgs args = obj. as EventWrittenEventArgs;
+
             var dict = obj.GetPayload();
             if (dict == null) return;
-            double count = (double)dict[Constants.TriggerHeaderCounter];
-            //var len = ;
-            //var blob = new byte[len];
-            var blob = obj.EventData(null, 0, 0, obj.EventDataLength);
-            var span = new Span<byte>(blob);
-            var text = Encoding.Unicode.GetString(span);
-            Console.WriteLine($"{obj.EventName} {obj.EventDataLength}");
+            int count = (int)dict["Count"];
+            var max = (double)dict["Max"];
+            Console.WriteLine($"{obj.EventName} - {count} - {max}");
         }
 
         private void Dynamic_All(TraceEvent obj)
         {
+            //Microsoft.Diagnostics.Tracing.Parsers.ClrTraceEventParser
+
             var dict = obj.GetPayload();
             if (dict == null) return;
             int count = (int)dict["Count"];
             var max = (double)dict["Max"];
 
-            Console.WriteLine($"{obj.EventName} {obj.EventDataLength} - {count} - {max}");
+            Console.WriteLine($"{obj.EventName} - {count} - {max}");
         }
 
         public void Stop()

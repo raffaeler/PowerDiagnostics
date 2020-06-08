@@ -21,13 +21,14 @@ namespace TestConsole
             var analyzer = new DumpHelper(fullDumpName);
 
             //var objs = analyzer.GetObjectsOfType("System.Reflection.LoaderAllocator", true);
-            var objs = analyzer.GetAllObjects(o => o.Type.Name == "System.Reflection.LoaderAllocator");
-            foreach (var leakedObj in objs)
+            var loaderAllocatorObjects = analyzer
+                .GetAllObjects(o => o.Type.Name == "System.Reflection.LoaderAllocator");
+            foreach (var loaderAllocator in loaderAllocatorObjects)
             {
-                var leakedType = leakedObj.Type;
-                Console.WriteLine($"{leakedType.Name} Addr:0x{leakedObj.Address:X} Size:{leakedObj.Size} MT:0x{leakedType.MethodTable:X}");
+                var loaderAllocatorType = loaderAllocator.Type;
+                Console.WriteLine($"{loaderAllocatorType.Name} Addr:0x{loaderAllocator.Address:X} Size:{loaderAllocator.Size} MT:0x{loaderAllocatorType.MethodTable:X}");
 
-                var roots = analyzer.EnumerateRoots(leakedObj.Address);
+                var roots = analyzer.EnumerateRoots(loaderAllocator.Address);
                 bool isFirst = true;
                 int i = 0;
                 foreach (var root in roots)

@@ -2,16 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 
+using TestConsole.Helpers;
 using TestConsole.Triggers;
 
 namespace TestConsole
 {
     class UseCase5
     {
-        public void Analyze(int pid = -1)
+        public void Analyze()
         {
-            //var analyzer = new TriggerOnCpuLoad(pid);
-            var analyzer = new TriggerOnExceptions(pid);
+            //var ps = ProcessHelper.GetProcess("TestAllocation");
+            var ps = ProcessHelper.GetProcess("TestExceptions");
+            if (ps == null)
+            {
+                Console.WriteLine("Run the required process first");
+                return;
+            }
+
+            //var analyzer = new TriggerOnCpuLoad(ps.Id);
+            var analyzer = new TriggerOnExceptions(ps.Id);
             analyzer.Start();
 
             Console.ReadKey();

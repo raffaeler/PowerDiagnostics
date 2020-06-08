@@ -19,6 +19,8 @@ namespace TestConsole.Triggers
             { TriggerEventType.DotNetRuntime, "Microsoft-Windows-DotNETRuntime" },
             { TriggerEventType.SystemRuntime, "System.Runtime" },
             { TriggerEventType.SampleProfiler, "Microsoft-DotNETCore-SampleProfiler" },
+
+            // https://github.com/dotnet/aspnetcore/blob/master/src/Hosting/Hosting/src/Internal/HostingEventSource.cs
             { TriggerEventType.AspNetCoreHosting, "Microsoft-AspNetCore-Hosting" },
         };
 

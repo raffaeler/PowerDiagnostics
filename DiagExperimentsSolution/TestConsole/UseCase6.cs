@@ -5,14 +5,25 @@ using System.Threading.Tasks;
 
 using TestConsole.Triggers;
 using CustomEventSource;
+using TestConsole.Helpers;
 
 namespace TestConsole
 {
     class UseCase6
     {
-        public void Analyze(int pid = -1)
+        public void Analyze()
         {
-            var analyzer = new TriggerOnCustomHeader(pid);
+            //var ps = ProcessHelper.GetProcess("StaticMemoryLeaks");
+            //var ps = ProcessHelper.GetProcess("TestAllocation");
+            //var ps = ProcessHelper.GetProcess("TestExceptions");
+            var ps = ProcessHelper.GetProcess("TestWebApp");
+            if (ps == null)
+            {
+                Console.WriteLine("Run the required process first");
+                return;
+            }
+
+            var analyzer = new TriggerOnCustomHeader(ps.Id);
             analyzer.Start();
 
             Console.ReadKey();

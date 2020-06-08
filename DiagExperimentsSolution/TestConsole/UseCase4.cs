@@ -2,16 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 
+using TestConsole.Helpers;
 using TestConsole.Triggers;
 
 namespace TestConsole
 {
     public class UseCase4
     {
-        public void Analyze(int pid = -1)
+        public void Analyze()
         {
-            //var analyzer = new TriggerOnCpuLoad(pid);
-            var analyzer = new TriggerOnMemoryUsage(pid);
+            var ps = ProcessHelper.GetProcess("StaticMemoryLeaks");
+            if(ps == null)
+            {
+                Console.WriteLine("Run the required process first");
+                return;
+            }
+
+            //var analyzer = new TriggerOnCpuLoad(ps.Id);
+            var analyzer = new TriggerOnMemoryUsage(ps.Id);
             analyzer.Start();
 
             Console.ReadKey();

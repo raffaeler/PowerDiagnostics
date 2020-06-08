@@ -35,8 +35,9 @@ namespace CustomEventSource
             new CustomHeaderEventSource();
 
         private CustomHeaderEventSource() :
-            base(Constants.CustomHeaderEventSourceName
-                , EventSourceSettings.EtwSelfDescribingEventFormat)
+            base(//Constants.CustomHeaderEventSourceName
+                //, EventSourceSettings.EtwSelfDescribingEventFormat
+                )
         {
         }
 
@@ -54,8 +55,8 @@ namespace CustomEventSource
             {
                 TriggerHeader = new EventCounter(Constants.TriggerHeaderCounter, this)
                 {
-                    DisplayName = "Count of the custom header received on any request",
-                    DisplayUnits = "Num",
+                    //DisplayName = "Count of the custom header received on any request",
+                    //DisplayUnits = "Num",
                 };
             }
 

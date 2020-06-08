@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using TestConsole.Helpers;
 using TestConsole.LinqToDump;
 
 namespace TestConsole
@@ -15,19 +16,20 @@ namespace TestConsole
         private static string _dumpDir = @"H:\dev.git\Experiments\NetCoreExperiments\DiagnosticHelpers\_dumps";
         private static string _dumpName = "jsonnet.dmp";
 
-        public void Analyze(int pid = -1)
+        public void Analyze()
         {
-            var fullDumpName = Path.Combine(_dumpDir, _dumpName);
             DumpSource analyzer;
-            if (pid == -1)
+            var ps = ProcessHelper.GetProcess("TestAllocation");
+            if (ps == null)
             {
+                var fullDumpName = Path.Combine(_dumpDir, _dumpName);
                 analyzer = new DumpSource(fullDumpName);
             }
             else
             {
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                analyzer = new DumpSource(pid);
+                analyzer = new DumpSource(ps.Id);
                 var elapsed = sw.Elapsed;
                 Console.WriteLine($"Process snapshot took {sw.ElapsedMilliseconds}ms");
             }
