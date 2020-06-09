@@ -21,12 +21,25 @@ using System.Text;
 // Microsoft-System-Net-Security ==> NetEventSource
 
 
+// EventSource:
+// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/EventSource.cs
+
 namespace ClrDiagnostics.Triggers
 {
     public enum KnownProviderName
     {
+        /// <summary>
+        /// "Microsoft-Windows-DotNETRuntime"
+        /// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/NativeRuntimeEventSource.cs
+        /// </summary>
         Microsoft_Windows_DotNETRuntime,
+
+        /// <summary>
+        /// "System.Runtime"
+        /// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/RuntimeEventSource.cs
+        /// </summary>
         System_Runtime,
+
         Microsoft_DotNETCore_SampleProfiler,
 
         /// <summary>

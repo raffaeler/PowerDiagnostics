@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Threading.Tasks;
 
 using ClrDiagnostics.Extensions;
 
@@ -57,11 +59,20 @@ namespace ClrDiagnostics.Triggers
             this.Trigger = trigger ?? throw new ArgumentNullException(nameof(trigger));
             this.Filter = filter;
 
-            _session = _client.StartEventPipeSession(Providers);
-            _source = new EventPipeEventSource(_session.EventStream);
-            OnSubscribe(_source);
-            _source.Dynamic.All += Dynamic_All;
-            _source.Process();
+            //foreach (var provider in Providers)
+            //{
+            //    var listener = new EventListener();
+            //    EventListener.EnableEvents()
+            //}
+
+            Task.Run(() =>
+            {
+                _session = _client.StartEventPipeSession(Providers, false);
+                _source = new EventPipeEventSource(_session.EventStream);
+                OnSubscribe(_source);
+                _source.Dynamic.All += Dynamic_All;
+                _source.Process();
+            });
 
             IsStarted = true;
             return true;

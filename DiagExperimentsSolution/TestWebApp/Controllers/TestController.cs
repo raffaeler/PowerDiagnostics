@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,13 @@ namespace TestWebApp.Controllers
         }
 
         [HttpGet]
-        public string Get() => "Test controller";
+        public string[] Get()
+        {
+            var sources = EventSource.GetSources()
+                .Select(s => $"{s.Name} {s.IsEnabled()}").ToArray();
+            return sources;
+        }
+
 
         [HttpPost("SimplePost")]
         public IActionResult SimplePost([FromBody] string data)

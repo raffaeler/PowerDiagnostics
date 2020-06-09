@@ -16,7 +16,8 @@ namespace ClrDiagnostics.Triggers
     {
         public TriggerOnEventCounter(int processId, string eventSourceName) : base(processId)
         {
-            this.AddProvider(eventSourceName, EventLevel.Verbose, -1);
+            this.AddProvider(eventSourceName, EventLevel.Verbose, -1,
+                new Dictionary<string, string>() { { "EventCounterIntervalSec", "1" } });
         }
 
         protected override void OnEvent(TraceEvent traceEvent, IDictionary<string, object> payload)
