@@ -43,7 +43,7 @@ namespace StressTestWebApp
         /// Unless the server always fails, this call will always succeed
         /// because Polly retries for several time when it fails.
         /// </summary>
-        public async Task<bool> PostTest(string relativeAddress, string data)
+        public async Task<bool> Post(string relativeAddress, string data)
         {
             bool result;
             try

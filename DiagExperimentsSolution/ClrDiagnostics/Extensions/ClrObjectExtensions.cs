@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.Diagnostics.Runtime;
 
-namespace TestConsole.LinqToDump
+namespace ClrDiagnostics.Extensions
 {
     public static class ClrObjectExtensions
     {

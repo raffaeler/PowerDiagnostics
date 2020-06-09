@@ -87,19 +87,19 @@ namespace StressTestWebApp
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.D1:
-                        await ConcurrentGet(_concurrency);
+                        await GetPage(_concurrency);
                         break;
 
                     case ConsoleKey.D2:
-                        await ConcurrentPost(_concurrency);
+                        await SimplePost(_concurrency);
                         break;
 
                     case ConsoleKey.D3:
-                        await ConcurrentFailPost(_concurrency);
+                        await ExceptionOnPost(_concurrency);
                         break;
 
                     case ConsoleKey.D4:
-                        await ConcurrentLongPost(_concurrency);
+                        await SlowPost(_concurrency);
                         break;
 
                     case ConsoleKey.C:
@@ -120,14 +120,14 @@ namespace StressTestWebApp
             Console.Clear();
             Console.WriteLine($"Last Command: {key.KeyChar}");
             Console.WriteLine($"Pid = {Process.GetCurrentProcess().Id}");
-            Console.WriteLine($"1. {nameof(ConcurrentGet)}");
-            Console.WriteLine($"2. {nameof(ConcurrentPost)}");
-            Console.WriteLine($"3. {nameof(ConcurrentFailPost)}");
-            Console.WriteLine($"4. {nameof(ConcurrentLongPost)}");
+            Console.WriteLine($"1. {nameof(GetPage)}");
+            Console.WriteLine($"2. {nameof(SimplePost)}");
+            Console.WriteLine($"3. {nameof(ExceptionOnPost)}");
+            Console.WriteLine($"4. {nameof(SlowPost)}");
             Console.WriteLine($"C. Clear screen");
         }
 
-        private Task ConcurrentGet(int concurrentConnections)
+        private Task GetPage(int concurrentConnections)
         {
             var evt = new ManualResetEventSlim();
             var requests = Enumerable.Range(0, concurrentConnections)
@@ -161,12 +161,12 @@ namespace StressTestWebApp
             });
         }
 
-        private Task ConcurrentPost(int concurrentConnections)
+        private Task SimplePost(int concurrentConnections)
         {
             var evt = new ManualResetEventSlim();
             var requests = Enumerable.Range(0, concurrentConnections)
                 .Select(_ => PreparePostRequest(evt,
-                "/api/Test/PostTest", _postPayload))
+                "/api/Test/SimplePost", _postPayload))
                 .ToArray();
 
             Console.WriteLine("Requests ready to go. Press any key to run them");
@@ -177,12 +177,12 @@ namespace StressTestWebApp
             return Task.WhenAll(requests);
         }
 
-        private Task ConcurrentFailPost(int concurrentConnections)
+        private Task ExceptionOnPost(int concurrentConnections)
         {
             var evt = new ManualResetEventSlim();
             var requests = Enumerable.Range(0, concurrentConnections)
                 .Select(_ => PreparePostRequest(evt,
-                "/api/Test/PostFailTest", _postPayload))
+                "/api/Test/ExceptionOnPost", _postPayload))
                 .ToArray();
 
             Console.WriteLine("Requests ready to go. Press any key to run them");
@@ -193,12 +193,12 @@ namespace StressTestWebApp
             return Task.WhenAll(requests);
         }
 
-        private Task ConcurrentLongPost(int concurrentConnections)
+        private Task SlowPost(int concurrentConnections)
         {
             var evt = new ManualResetEventSlim();
             var requests = Enumerable.Range(0, concurrentConnections)
                 .Select(_ => PreparePostRequest(evt,
-                "/api/Test/PostLongTest", _postPayload))
+                "/api/Test/SlowPost", _postPayload))
                 .ToArray();
 
             Console.WriteLine("Requests ready to go. Press any key to run them");
@@ -218,7 +218,7 @@ namespace StressTestWebApp
 
                 evt.Wait();
 
-                var result = await client.PostTest(relativeAddress, payload);
+                var result = await client.Post(relativeAddress, payload);
                 if (result)
                     Console.Write(".");
                 else

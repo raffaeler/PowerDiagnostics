@@ -4,28 +4,30 @@ using System.Diagnostics.Tracing;
 using System.Text;
 using System.Linq;
 
-using CustomEventSource;
-
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Tracing;
 using Microsoft.Diagnostics.Tracing.Parsers;
 using System.Diagnostics;
+using ClrDiagnostics.Extensions;
 
-namespace TestConsole.Triggers
+namespace ClrDiagnostics.Triggers
 {
-    public class TriggerOnCustomHeader : IDisposable
+    public class TriggerOnEventCounter : IDisposable
     {
         private DiagnosticsClient _client;
         private IList<EventPipeProvider> _providers = new List<EventPipeProvider>();
         private EventPipeSession _session;
         private EventPipeEventSource _source;
+        private string _counterName;
 
-        public TriggerOnCustomHeader(int processId)
+        public TriggerOnEventCounter(int processId, string eventSourceName, string eventCounterName)
         {
             _client = new DiagnosticsClient(processId);
             _providers.Add(new EventPipeProvider(
-                Constants.CustomHeaderEventSourceName,
+                eventSourceName,
                 EventLevel.Verbose, -1));
+
+            _counterName = eventCounterName;
         }
 
         public void Dispose()

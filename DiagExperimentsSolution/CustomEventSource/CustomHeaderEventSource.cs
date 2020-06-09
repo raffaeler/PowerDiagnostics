@@ -24,7 +24,7 @@ namespace CustomEventSource
     {
         public const string CustomHeaderEventSourceName = "Raf-CustomHeader";
         public const string TriggerHeaderName = "X-TriggerHeaderEventSource";
-        public const string TriggerHeaderCounter = "TriggerHeader";
+        public const string TriggerHeaderCounterName = "TriggerHeader";
     }
 
     [EventSource(Name = Constants.CustomHeaderEventSourceName)]
@@ -52,7 +52,7 @@ namespace CustomEventSource
         {
             if (command.Command == EventCommand.Enable)
             {
-                TriggerHeader = new EventCounter(Constants.TriggerHeaderCounter, this)
+                TriggerHeader = new EventCounter(Constants.TriggerHeaderCounterName, this)
                 {
                     DisplayName = "Count of the custom header received on any request",
                     DisplayUnits = "Num",

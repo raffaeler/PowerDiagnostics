@@ -15,7 +15,13 @@ namespace TestWebApp
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine($"Process Id: {Process.GetCurrentProcess().Id}");
+            var myself = Process.GetCurrentProcess();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"Process {myself.ProcessName} Id: {myself.Id}");
+            Console.WriteLine();
+            Console.WriteLine();
             CreateHostBuilder(args).Build().Run();
         }
 

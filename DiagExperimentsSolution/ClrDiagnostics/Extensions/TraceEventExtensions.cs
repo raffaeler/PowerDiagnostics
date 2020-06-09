@@ -4,9 +4,7 @@ using System.Text;
 
 using Microsoft.Diagnostics.Tracing;
 
-using TestConsole.Triggers.Models;
-
-namespace TestConsole.Triggers
+namespace ClrDiagnostics.Extensions
 {
     public static class TraceEventExtensions
     {
@@ -24,11 +22,6 @@ namespace TestConsole.Triggers
             }
 
             return null;
-        }
-
-        public static void ParseX()
-        {
-            //CounterProfile
         }
 
     }

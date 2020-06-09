@@ -7,6 +7,8 @@ using System.Threading;
 using Microsoft.Diagnostics.Runtime;
 using System.IO;
 using TestConsole.Helpers;
+using ClrDiagnostics.Extensions;
+using ClrDiagnostics.Models;
 
 // TODO: dispose pattern
 // TODO: symbols

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using TestConsole.Triggers;
 using CustomEventSource;
 using TestConsole.Helpers;
+using ClrDiagnostics.Helpers;
+using ClrDiagnostics.Triggers;
 
 namespace TestConsole
 {
@@ -23,7 +25,9 @@ namespace TestConsole
                 return;
             }
 
-            var analyzer = new TriggerOnCustomHeader(ps.Id);
+            var analyzer = new TriggerOnEventCounter(ps.Id,
+                Constants.CustomHeaderEventSourceName,
+                Constants.TriggerHeaderCounterName);
             analyzer.Start();
 
             Console.ReadKey();

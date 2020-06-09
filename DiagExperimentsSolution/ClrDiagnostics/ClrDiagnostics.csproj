@@ -1,7 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
@@ -9,11 +8,6 @@
     <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.61701" />
     <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.0.130507" />
     <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="2.0.56" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ClrDiagnostics\ClrDiagnostics.csproj" />
-    <ProjectReference Include="..\CustomEventSource\CustomEventSource.csproj" />
   </ItemGroup>
 
 </Project>

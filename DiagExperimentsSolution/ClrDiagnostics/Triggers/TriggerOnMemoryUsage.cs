@@ -7,7 +7,7 @@ using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Tracing;
 using Microsoft.Diagnostics.Tracing.Parsers;
 
-namespace TestConsole.Triggers
+namespace ClrDiagnostics.Triggers
 {
     public class TriggerOnMemoryUsage : IDisposable
     {

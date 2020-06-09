@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using ClrDiagnostics.Extensions;
+
 using Microsoft.Diagnostics.Runtime;
 
-namespace TestConsole.LinqToDump
+namespace ClrDiagnostics.Models
 {
     public class ClrGraphNode
     {

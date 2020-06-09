@@ -20,27 +20,12 @@ namespace TestConsole.Triggers
             { TriggerEventType.SystemRuntime, "System.Runtime" },
             { TriggerEventType.SampleProfiler, "Microsoft-DotNETCore-SampleProfiler" },
 
+            // Microsoft-AspNetCore-Hosting
+            // https://github.com/aspnet/Hosting/blob/master/src/Microsoft.AspNetCore.Hosting/Internal/HostingEventSource.cs
             // https://github.com/dotnet/aspnetcore/blob/master/src/Hosting/Hosting/src/Internal/HostingEventSource.cs
             { TriggerEventType.AspNetCoreHosting, "Microsoft-AspNetCore-Hosting" },
         };
 
-        // HttpConnectionsEventSource => Microsoft.AspNetCore.Http.Connections
-        // Microsoft-Extensions-Logging
-        // Microsoft-System-Net-Quic ==> NetEventSource 
-        // Microsoft-System-Net-Http ==> NetEventSource 
-        // Microsoft-System-Net-Http-WinHttpHandler ==> NetEventSource 
-        // Microsoft-System-Net-Requests ==> NetEventSource 
-        // Microsoft-System-Net-WebHeaderCollection ==> NetEventSource 
-        // Microsoft-System-Net-WebSockets-Client ==> NetEventSource 
-        // Microsoft-System-Net-HttpListener ==> NetEventSource 
-        // Microsoft-AspNetCore-Server-Kestrel
-        // Microsoft-System-Net-Http
-        // Dotnet-dev-certs ==> CertificateManagerEventSource
-        //
-        // Microsoft-Extensions-DependencyInjection ==> DependencyInjectionEventSource
-        // System.Collections.Concurrent.ConcurrentCollectionsEventSource => CDSCollectionETWBCLProvider 
-        // System.Buffers.ArrayPoolEventSource ==> ArrayPoolEventSource
-        // Microsoft-System-Net-Security ==> NetEventSource
 
 
         private TriggerManager(int processId)

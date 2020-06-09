@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ClrDiagnostics.Helpers;
+using ClrDiagnostics.Triggers;
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ClrDiagnostics.Helpers;
+
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;

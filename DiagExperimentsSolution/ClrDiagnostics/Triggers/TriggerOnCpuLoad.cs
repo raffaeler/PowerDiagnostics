@@ -5,11 +5,13 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
+using ClrDiagnostics.Extensions;
+
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Tracing;
 using Microsoft.Diagnostics.Tracing.Parsers;
 
-namespace TestConsole.Triggers
+namespace ClrDiagnostics.Triggers
 {
     public class TriggerOnCpuLoad : IDisposable
     {
