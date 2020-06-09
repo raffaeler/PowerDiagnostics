@@ -12,72 +12,24 @@ using ClrDiagnostics.Extensions;
 
 namespace ClrDiagnostics.Triggers
 {
-    public class TriggerOnEventCounter : IDisposable
+    public class TriggerOnEventCounter : TriggerBase
     {
-        private DiagnosticsClient _client;
-        private IList<EventPipeProvider> _providers = new List<EventPipeProvider>();
-        private EventPipeSession _session;
-        private EventPipeEventSource _source;
-        private string _counterName;
-
-        public TriggerOnEventCounter(int processId, string eventSourceName, string eventCounterName)
+        public TriggerOnEventCounter(int processId, string eventSourceName) : base(processId)
         {
-            _client = new DiagnosticsClient(processId);
-            _providers.Add(new EventPipeProvider(
-                eventSourceName,
-                EventLevel.Verbose, -1));
-
-            _counterName = eventCounterName;
+            this.AddProvider(eventSourceName, EventLevel.Verbose, -1);
         }
 
-        public void Dispose()
+        protected override void OnEvent(TraceEvent traceEvent, IDictionary<string, object> payload)
         {
-            Stop();
+            if (payload == null) return;
+
+            string counterName = (string)payload["Name"];
+            int count = (int)payload["Count"];
+            var max = (double)payload["Max"];
+            Console.WriteLine($"{counterName} - {count} - {max}");
+
+            Trigger();
         }
 
-        public void Start()
-        {
-            Stop();
-
-            _session = _client.StartEventPipeSession(_providers);
-            _source = new EventPipeEventSource(_session.EventStream);
-            _source.AllEvents += SourceAllEvents;
-            _source.Dynamic.All += Dynamic_All;
-            _source.Process();
-        }
-
-        private void SourceAllEvents(TraceEvent obj)
-        {
-            var textual = obj.Dump(true);
-            
-            //Activity activity = new Activity("myOperation");
-            //EventWrittenEventArgs args = obj. as EventWrittenEventArgs;
-
-            var dict = obj.GetPayload();
-            if (dict == null) return;
-            int count = (int)dict["Count"];
-            var max = (double)dict["Max"];
-            Console.WriteLine($"{obj.EventName} - {count} - {max}");
-        }
-
-        private void Dynamic_All(TraceEvent obj)
-        {
-            //Microsoft.Diagnostics.Tracing.Parsers.ClrTraceEventParser
-
-            var dict = obj.GetPayload();
-            if (dict == null) return;
-            int count = (int)dict["Count"];
-            var max = (double)dict["Max"];
-
-            Console.WriteLine($"{obj.EventName} - {count} - {max}");
-        }
-
-        public void Stop()
-        {
-            //_source.StopProcessing();
-
-            if (_source != null) { _source.Dispose(); _source = null; }
-            if (_session != null) { _session.Dispose(); _session = null; }
-        }
     }
 }

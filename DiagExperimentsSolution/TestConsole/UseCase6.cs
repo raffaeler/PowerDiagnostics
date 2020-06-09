@@ -25,14 +25,18 @@ namespace TestConsole
                 return;
             }
 
-            var analyzer = new TriggerOnEventCounter(ps.Id,
-                Constants.CustomHeaderEventSourceName,
-                Constants.TriggerHeaderCounterName);
-            analyzer.Start();
+            var analyzer = new TriggerOnEventCounter(ps.Id, Constants.CustomHeaderEventSourceName);
+            analyzer.Start(
+                OnTrigger,
+                traceEvent => traceEvent.ProviderName.Equals(Constants.CustomHeaderEventSourceName));
 
             Console.ReadKey();
 
             analyzer.Dispose();
+        }
+
+        private void OnTrigger()
+        {
         }
 
     }

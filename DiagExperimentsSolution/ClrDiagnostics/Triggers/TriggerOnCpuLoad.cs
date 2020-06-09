@@ -13,74 +13,51 @@ using Microsoft.Diagnostics.Tracing.Parsers;
 
 namespace ClrDiagnostics.Triggers
 {
-    public class TriggerOnCpuLoad : IDisposable
+    public class TriggerOnCpuLoad : TriggerBase
     {
-        private DiagnosticsClient _client;
-        private IList<EventPipeProvider> _providers = new List<EventPipeProvider>();
-        private EventPipeSession _session;
-        private EventPipeEventSource _source;
-
-        public TriggerOnCpuLoad(int processId)
+        public TriggerOnCpuLoad(int processId) : base(processId)
         {
-            _client = new DiagnosticsClient(processId);
-            _providers.Add(new EventPipeProvider(
-                "System.Runtime",
+            this.AddProvider("System.Runtime",
                 EventLevel.Informational,
                 (long)ClrTraceEventParser.Keywords.None,
-                new Dictionary<string, string>() { { "EventCounterIntervalSec", "1" } }
-                ));
+                new Dictionary<string, string>() { { "EventCounterIntervalSec", "1" } });
         }
 
-        public void Dispose()
+        private double _threshold;
+        public double Threshold
         {
-            Stop();
-        }
-
-        public void Start()
-        {
-            Stop();
-
-            _session = _client.StartEventPipeSession(_providers);
-            _source = new EventPipeEventSource(_session.EventStream);
-            _source.Dynamic.All += Dynamic_All;
-            _source.Process();
-        }
-
-        private void Dynamic_All(TraceEvent obj)
-        {
-            var threshold = 10;
-            if (obj.EventName.Equals("EventCounters"))
+            get => _threshold;
+            set
             {
-                var fields = obj.GetPayload();
-                if (fields == null) return;
-
-                var name = fields["Name"]?.ToString();
-
-                //Console.WriteLine($"name={name}");
-                if (name == "cpu-usage")
-                {
-                    var cpuUsage = (double)fields["Mean"];
-                    if (cpuUsage > (double)threshold)
-                    {
-                        Console.WriteLine($"High Load! {cpuUsage}");
-                    }
-                }
-
-                if (name == "working-set")
-                {
-                    var mean = (double)fields["Mean"];
-                    var units = fields["DisplayUnits"].ToString();
-                    Console.WriteLine($"{mean}{units}");
-                }
+                if (IsStarted) throw new Exception("Can't change the parameter while running");
+                _threshold = value;
             }
         }
 
-        public void Stop()
+        protected override void OnEvent(TraceEvent traceEvent, IDictionary<string, object> payload)
         {
-            //_source.StopProcessing();
+            if (payload == null) return;
+            var name = payload["Name"]?.ToString();
 
-            if (_source != null) { _source.Dispose(); _source = null; }
-            if (_session != null) { _session.Dispose(); _session = null; }
+            if (name == "cpu-usage")
+            {
+                var cpuUsage = (double)payload["Mean"];
+                if (cpuUsage > Threshold)
+                {
+                    Console.WriteLine($"High Load! {cpuUsage}");
+                    Trigger();
+                }
+            }
+
+            if (name == "working-set")
+            {
+                var mean = (double)payload["Mean"];
+                var units = payload["DisplayUnits"].ToString();
+                Console.WriteLine($"{mean}{units}");
+
+                //Trigger();
+            }
+
         }
     }
 }

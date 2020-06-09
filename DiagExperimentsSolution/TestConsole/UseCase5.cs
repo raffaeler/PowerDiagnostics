@@ -24,12 +24,15 @@ namespace TestConsole
 
             //var analyzer = new TriggerOnCpuLoad(ps.Id);
             var analyzer = new TriggerOnExceptions(ps.Id);
-            analyzer.Start();
+            analyzer.Start(OnTrigger);
 
             Console.ReadKey();
 
             analyzer.Dispose();
         }
 
+        private void OnTrigger()
+        {
+        }
     }
 }

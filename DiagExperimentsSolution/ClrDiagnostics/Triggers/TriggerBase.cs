@@ -28,6 +28,7 @@ namespace ClrDiagnostics.Triggers
 
         public bool IsStarted { get; private set; }
         public Func<TraceEvent, bool> Filter { get; private set; }
+        public Action Trigger { get; private set; }
 
         protected IList<EventPipeProvider> Providers { get; private set; } = new List<EventPipeProvider>();
 
@@ -49,13 +50,16 @@ namespace ClrDiagnostics.Triggers
             Providers.Add(new EventPipeProvider(name, eventLevel, keywords, parameters));
         }
 
-        public bool Start(Func<TraceEvent, bool> filter)
+        public bool Start(Action trigger, Func<TraceEvent, bool> filter = null)
         {
             if (IsStarted || Providers.Count == 0) return false;
 
+            this.Trigger = trigger ?? throw new ArgumentNullException(nameof(trigger));
             this.Filter = filter;
+
             _session = _client.StartEventPipeSession(Providers);
             _source = new EventPipeEventSource(_session.EventStream);
+            OnSubscribe(_source);
             _source.Dynamic.All += Dynamic_All;
             _source.Process();
 
@@ -74,8 +78,14 @@ namespace ClrDiagnostics.Triggers
             return true;
         }
 
-        protected abstract void OnEvent(TraceEvent traceEvent,
-            IDictionary<string, object> parameters);
+        protected virtual void OnSubscribe(EventPipeEventSource source)
+        {
+        }
+
+        protected virtual void OnEvent(TraceEvent traceEvent,
+            IDictionary<string, object> payload)
+        {
+        }
 
         private void Dynamic_All(TraceEvent traceEvent)
         {
