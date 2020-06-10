@@ -16,6 +16,7 @@ using Microsoft.Diagnostics.Runtime;
 
 namespace TestConsole.Helpers
 {
+    [Obsolete]
     public class DumpHelper : IDisposable
     {
         private DataTarget _dataTarget;

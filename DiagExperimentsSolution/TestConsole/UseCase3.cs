@@ -1,4 +1,5 @@
-﻿using ClrDiagnostics.Helpers;
+﻿using ClrDiagnostics;
+using ClrDiagnostics.Helpers;
 
 using System;
 using System.Collections.Concurrent;
@@ -20,18 +21,18 @@ namespace TestConsole
 
         public void Analyze()
         {
-            DumpSource analyzer;
+            DiagnosticAnalyzer analyzer;
             var ps = ProcessHelper.GetProcess("TestAllocation");
             if (ps == null)
             {
                 var fullDumpName = Path.Combine(_dumpDir, _dumpName);
-                analyzer = new DumpSource(fullDumpName);
+                analyzer = DiagnosticAnalyzer.FromDump(fullDumpName);
             }
             else
             {
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                analyzer = new DumpSource(ps.Id);
+                analyzer = DiagnosticAnalyzer.FromProcess(ps.Id);
                 var elapsed = sw.Elapsed;
                 Console.WriteLine($"Process snapshot took {sw.ElapsedMilliseconds}ms");
             }

@@ -9,32 +9,32 @@ namespace ClrDiagnostics.Extensions
 {
     public static class ClrObjectExtensions
     {
-        public static string PrintAddressAndType(this ClrObject @object,
-            string prefix) => $"{prefix}{@object.Address:X16} {@object.Type}";
+        public static string PrintAddressAndType(this ClrObject clrObject,
+            string prefix) => $"{prefix}{clrObject.Address:X16} {clrObject.Type}";
 
-        public static string PrintAddressTypeAndSize(this ClrObject @object,
-            string prefix) => $"{prefix}{@object.Address:X16} {@object.Type} Size:{@object.Size}";
+        public static string PrintAddressTypeAndSize(this ClrObject clrObject,
+            string prefix) => $"{prefix}{clrObject.Address:X16} {clrObject.Type} Size:{clrObject.Size}";
 
-        public static string GetStringValue(this ClrObject @object, int maxLength = int.MaxValue)
+        public static string GetStringValue(this ClrObject clrObject, int maxLength = int.MaxValue)
         {
-            if (@object.Type.ElementType != ClrElementType.String) return null;
-            return @object.Type.ClrObjectHelpers.ReadString(@object.Address, maxLength);
+            if (clrObject.Type.ElementType != ClrElementType.String) return null;
+            return clrObject.Type.ClrObjectHelpers.ReadString(clrObject.Address, maxLength);
         }
 
-        public static UInt64 GetGraphSize(this ClrObject @object)
+        public static UInt64 GetGraphSize(this ClrObject clrObject)
         {
             ulong size = 0;
             var visited = new HashSet<UInt64>();
-            Accumulate(@object, visited, ref size);
+            Accumulate(clrObject, visited, ref size);
 
-            static void Accumulate(ClrObject @object, HashSet<UInt64> visited, ref ulong size)
+            static void Accumulate(ClrObject clrObject, HashSet<UInt64> visited, ref ulong size)
             {
-                if (@object.IsNull) return;
-                if (visited.Contains(@object.Address)) return;
+                if (clrObject.IsNull) return;
+                if (visited.Contains(clrObject.Address)) return;
 
-                size += @object.Size;
-                visited.Add(@object.Address);
-                foreach (var childReference in @object.EnumerateReferencesWithFields())
+                size += clrObject.Size;
+                visited.Add(clrObject.Address);
+                foreach (var childReference in clrObject.EnumerateReferencesWithFields())
                 {
                     Accumulate(childReference.Object, visited, ref size);
                 }
@@ -46,3 +46,27 @@ namespace ClrDiagnostics.Extensions
 
     }
 }
+/*
+        /// 
+        /// dumpheap -type System.AppDomain
+        /// dumpheap -mt 00007ff9fd295f60
+        /// objsize 0000000003d71590
+        /// sizeof(0000000003D71590) = 976 (0x3d0) bytes (System.AppDomain)
+        /// 
+        /// dumpheap -type System.Globalization.CultureInfo
+        /// 00007ff9fd299b18        7          896 System.Globalization.CultureInfo
+        /// dumpheap -mt 00007ff9fd299b18
+        /// objsize 0000000003d82900
+
+             //var examinedAppDomain = heap.EnumerateObjects()
+            //    .First(o => o.Type.Name == "System.AppDomain");
+            //var graphSizeAppDomain = examinedAppDomain.GetGraphSize();
+            //Assert.Equal(976, (int)graphSizeAppDomain);            
+
+            //var examinedCultureInfo = heap.EnumerateObjects()
+            //    .First(o => o.Type.Name == "System.Globalization.CultureInfo");
+            //var graphSizeCultureInfo = examinedCultureInfo.GetGraphSize();
+            //Assert.Equal(5872, (int)graphSizeCultureInfo);            
+ 
+
+ */

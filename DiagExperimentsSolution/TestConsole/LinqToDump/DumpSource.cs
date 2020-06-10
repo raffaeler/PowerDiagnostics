@@ -15,6 +15,7 @@ using ClrDiagnostics.Models;
 
 namespace TestConsole.LinqToDump
 {
+    [Obsolete]
     public class DumpSource : IDisposable
     {
         private DataTarget _dataTarget;

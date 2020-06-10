@@ -26,8 +26,8 @@ namespace ClrDiagnostics.Triggers
 
             string counterName = (string)payload["Name"];
             int count = (int)payload["Count"];
-            var max = (double)payload["Max"];
-            Console.WriteLine($"{counterName} - {count} - {max}");
+            //var max = (double)payload["Max"];
+            Console.WriteLine($"{counterName} - {count}");
 
             Trigger();
         }
