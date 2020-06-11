@@ -26,14 +26,15 @@ namespace ClrDiagnostics
         {
             get
             {
-                var result = _clrRuntime.Heap.EnumerateObjects();
                 if (CacheAllObjects)
                 {
-                    if (_cachedAllObjects == null) _cachedAllObjects = result.ToList();
+                    if (_cachedAllObjects == null)
+                        _cachedAllObjects = _clrRuntime.Heap.EnumerateObjects().ToList();
                     return _cachedAllObjects;
                 }
 
-                return result;
+                _cachedAllObjects = null;
+                return _clrRuntime.Heap.EnumerateObjects();
             }
         }
 

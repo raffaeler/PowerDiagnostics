@@ -17,7 +17,7 @@ namespace TestConsole
         public void Analyze()
         {
             var fullDumpName = Path.Combine(_dumpDir, _dumpName);
-            var analyzer = DiagnosticAnalyzer.FromDump(fullDumpName);
+            var analyzer = DiagnosticAnalyzer.FromDump(fullDumpName, true);
 
             var loaderAllocatorObjects = analyzer.Objects
                 .Where(o => o.Type.Name == "System.Reflection.LoaderAllocator");

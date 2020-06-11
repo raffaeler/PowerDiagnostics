@@ -7,6 +7,7 @@ using Microsoft.Diagnostics.Runtime;
 
 namespace ClrDiagnostics.Models
 {
+    [Obsolete]
     public class AllocatorInfo
     {
         public static readonly AllocatorInfo Default = new AllocatorInfo(true);

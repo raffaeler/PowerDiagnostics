@@ -23,10 +23,12 @@ namespace ClrDiagnostics
                 .ToDictionary(t => t.str, t => t.count);
         }
 
-        public IEnumerable<(ClrObject, string)> GetStringsBySize(long minSize = 1024)
+        public IEnumerable<(ClrObject, string)> GetStringsBySize(long minSize = 1024, long maxSize = long.MaxValue)
         {
             return Objects
-                .Where(o => o.Type.ElementType == ClrElementType.String && o.Size > (ulong)minSize)
+                .Where(o => o.Type.ElementType == ClrElementType.String &&
+                    o.Size >= (ulong)minSize &&
+                    o.Size <= (ulong)maxSize)
                 .Select(o => (@object: o, @string: o.GetStringValue(int.MaxValue)))
                 .Where(t => !string.IsNullOrEmpty(t.@string))
                 .OrderByDescending(t => t.@string.Length);

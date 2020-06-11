@@ -18,11 +18,11 @@ namespace TestConsole
         public void Analyze()
         {
             var fullDumpName = Path.Combine(_dumpDir, _dumpName);
-            var analyzer = DiagnosticAnalyzer.FromDump(fullDumpName);
+            var analyzer = DiagnosticAnalyzer.FromDump(fullDumpName, true);
 
             var collectibles = analyzer.Objects
                 .Where(o => o.Type.IsCollectible).ToList();
-            analyzer.GetAllObjectsGroupedByAllocator(_ => true);
+            var allocator = analyzer.GetObjectsGroupedByAllocator(analyzer.Objects);
 
             //var objs = analyzer.GetObjectsOfType("System.Reflection.LoaderAllocator", true);
             var objs = analyzer.Objects

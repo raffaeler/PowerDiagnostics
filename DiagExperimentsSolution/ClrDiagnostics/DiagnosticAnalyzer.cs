@@ -29,6 +29,7 @@ namespace ClrDiagnostics
         {
             _dataTarget = dataTarget;
             CacheAllObjects = cacheObjects;
+            //_dataTarget.BinaryLocator.FindBinary()
 
             if (_dataTarget.ClrVersions.Length == 0)
             {
@@ -58,9 +59,11 @@ namespace ClrDiagnostics
             PrepareGCRootCache();
         }
 
-        public static DiagnosticAnalyzer FromDump(string filename, bool cacheObjects = true)
+        public static DiagnosticAnalyzer FromDump(string filename, bool cacheObjects,
+            params string[] additionalPdbs)
         {
             var dataTarget = DataTarget.LoadDump(filename);
+            //dataTarget.BinaryLocator.FindBinary()
             return new DiagnosticAnalyzer(dataTarget, cacheObjects);
         }
 
