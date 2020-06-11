@@ -24,7 +24,7 @@ namespace ClrDiagnostics.Triggers
 
         protected override void OnSubscribe(EventPipeEventSource source)
         {
-            source.Clr.ExceptionStart += _ => Trigger();
+            source.Clr.ExceptionStart += traceEvent => Trigger(traceEvent);
         }
 
     }

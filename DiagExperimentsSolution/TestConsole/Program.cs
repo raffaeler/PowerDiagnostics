@@ -21,8 +21,8 @@ namespace TestConsole
         {
             //var s = new UseCase1B();
             //var s = new UseCase2();
-            var s = new UseCase3();
-            //var s = new UseCase4();
+            //var s = new UseCase3();
+            var s = new UseCase4();
             //var s = new UseCase5();
             //var s = new UseCase6();
             s.Analyze();

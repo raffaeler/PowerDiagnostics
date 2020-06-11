@@ -45,7 +45,7 @@ namespace ClrDiagnostics.Triggers
                 if (cpuUsage > Threshold)
                 {
                     Console.WriteLine($"High Load! {cpuUsage}");
-                    Trigger();
+                    Trigger(traceEvent);
                 }
             }
 

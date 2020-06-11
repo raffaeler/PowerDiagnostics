@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestWebApp.Services
 {
-    public class SimpleState
+    public class SimpleStateService
     {
         static int _counter = 0;
         public int Next()

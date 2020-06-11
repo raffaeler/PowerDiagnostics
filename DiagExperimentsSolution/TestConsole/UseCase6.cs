@@ -8,6 +8,7 @@ using CustomEventSource;
 using TestConsole.Helpers;
 using ClrDiagnostics.Helpers;
 using ClrDiagnostics.Triggers;
+using Microsoft.Diagnostics.Tracing;
 
 namespace TestConsole
 {
@@ -35,7 +36,7 @@ namespace TestConsole
             analyzer.Dispose();
         }
 
-        private void OnTrigger()
+        private void OnTrigger(TraceEvent traceEvent)
         {
         }
 

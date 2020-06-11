@@ -29,7 +29,7 @@ namespace ClrDiagnostics.Triggers
             //var max = (double)payload["Max"];
             Console.WriteLine($"{counterName} - {count}");
 
-            Trigger();
+            Trigger(traceEvent);
         }
 
     }

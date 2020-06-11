@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using TestWebApp.Models;
 using TestWebApp.Services;
 
 namespace TestWebApp.Controllers
@@ -17,9 +18,9 @@ namespace TestWebApp.Controllers
     public class TestController : Controller
     {
         private readonly ILogger<TestController> _logger;
-        private readonly SimpleState _simpleState;
+        private readonly SimpleStateService _simpleState;
 
-        public TestController(ILogger<TestController> logger, SimpleState simpleState)
+        public TestController(ILogger<TestController> logger, SimpleStateService simpleState)
         {
             this._logger = logger;
             this._simpleState = simpleState;
@@ -45,7 +46,7 @@ namespace TestWebApp.Controllers
         public IActionResult ExceptionOnPost([FromBody] string data)
         {
             _logger.LogInformation(nameof(ExceptionOnPost));
-            if (_simpleState.Next() % 250 == 0) throw new Exception("Crashing");
+            if (_simpleState.Next() % 250 == 0) throw new DemoException("Throwing a bad exception");
             return new OkResult();
         }
 

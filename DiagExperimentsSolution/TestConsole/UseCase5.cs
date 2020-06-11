@@ -1,6 +1,8 @@
 ﻿using ClrDiagnostics.Helpers;
 using ClrDiagnostics.Triggers;
 
+using Microsoft.Diagnostics.Tracing;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +33,7 @@ namespace TestConsole
             analyzer.Dispose();
         }
 
-        private void OnTrigger()
+        private void OnTrigger(TraceEvent traceEvent)
         {
         }
     }

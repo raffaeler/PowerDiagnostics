@@ -30,7 +30,7 @@ namespace ClrDiagnostics.Triggers
 
         public bool IsStarted { get; private set; }
         public Func<TraceEvent, bool> Filter { get; private set; }
-        public Action Trigger { get; private set; }
+        public Action<TraceEvent> Trigger { get; private set; }
 
         protected IList<EventPipeProvider> Providers { get; private set; } = new List<EventPipeProvider>();
 
@@ -52,7 +52,7 @@ namespace ClrDiagnostics.Triggers
             Providers.Add(new EventPipeProvider(name, eventLevel, keywords, parameters));
         }
 
-        public bool Start(Action trigger, Func<TraceEvent, bool> filter = null)
+        public bool Start(Action<TraceEvent> trigger, Func<TraceEvent, bool> filter = null)
         {
             if (IsStarted || Providers.Count == 0) return false;
 

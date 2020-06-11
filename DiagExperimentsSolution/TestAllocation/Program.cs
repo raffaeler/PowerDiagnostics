@@ -84,7 +84,20 @@ namespace TestAllocation
         static List<byte[]> _arrays = new List<byte[]>();
         private static void AllocateArray()
         {
-            _arrays.Add(new byte[200_000]);
+            //_arrays.Add(new byte[10_000_000]);
+            _arrays.Add(Alloc());
+        }
+
+        private static byte[] Alloc()
+        {
+            Random rnd = new Random();
+            var length = 10_000_000;
+            var blob = new byte[length];
+            for (int i = 0; i < length; i++)
+            {
+                blob[i] = (byte)rnd.Next();
+            }
+            return blob;
         }
 
         private static void FreeArrays() => _arrays.Clear();

@@ -29,7 +29,7 @@ namespace TestWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(CustomHeaderEventSource.Instance);
-            services.AddSingleton<SimpleState>();
+            services.AddSingleton<SimpleStateService>();
             services.AddControllers();
             services.AddRazorPages();
         }
