@@ -17,12 +17,12 @@ namespace TestWebApp.Services
                 _roots.Add(new GraphRoot());
         }
 
-        private static void AllocateArray()
+        public void AllocateArray()
         {
             _arrays.Add(AllocRandom(10_000_000));
         }
 
-        private static byte[] AllocRandom(int length)
+        private byte[] AllocRandom(int length)
         {
             Random rnd = new Random();
             var blob = new byte[length];
@@ -35,6 +35,15 @@ namespace TestWebApp.Services
         {
             _roots.Clear();
             _arrays.Clear();
+        }
+
+        public void GCCollect()
+        {
+            GC.Collect();
+            GC.Collect();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
     }
 

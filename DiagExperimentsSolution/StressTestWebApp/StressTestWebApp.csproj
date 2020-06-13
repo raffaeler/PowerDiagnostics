@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CustomEventSource\CustomEventSource.csproj" />
+  </ItemGroup>
+
 </Project>

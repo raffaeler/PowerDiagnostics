@@ -9,9 +9,9 @@ namespace TestWebApp.Services
 {
     public class CpuStressService
     {
-        public static Task CpuLoad()
+        public Task CpuLoad(long max)
         {
-            var primes = new Primes();
+            var primes = new Primes(max);
             Int64 sum = 0;
             foreach (var prime in primes)
             {

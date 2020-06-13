@@ -29,6 +29,9 @@ namespace TestWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(CustomHeaderEventSource.Instance);
+
+            services.AddSingleton<CpuStressService>();
+            services.AddSingleton<MemoryPressureService>();
             services.AddSingleton<SimpleStateService>();
             services.AddControllers();
             services.AddRazorPages();
