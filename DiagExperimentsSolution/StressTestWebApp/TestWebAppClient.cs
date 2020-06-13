@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
 //using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -27,7 +29,7 @@ namespace StressTestWebApp
             }
             catch (HttpRequestException err)
             {
-                //Debug.WriteLine($"Failed with status {err.StatusCode}");
+                Debug.WriteLine($"Failed with status {err.StatusCode}");
                 result = false;
             }
             catch (Exception)
@@ -49,13 +51,13 @@ namespace StressTestWebApp
             try
             {
                 var response = await Client.PostAsync(relativeAddress,
-                    new StringContent($"\"{data}\""));
-                    //JsonContent.Create(data));
+                    //new StringContent($"\"{data}\"", Encoding.UTF8, "application/json"));
+                    JsonContent.Create(data));
                 result = response.IsSuccessStatusCode;
             }
             catch (HttpRequestException err)
             {
-                //Debug.WriteLine($"Failed with status {err.StatusCode}");
+                Debug.WriteLine($"Failed with status {err.StatusCode}");
                 result = false;
             }
             catch (Exception)

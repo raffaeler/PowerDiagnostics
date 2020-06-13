@@ -9,6 +9,7 @@ using TestConsole.Helpers;
 using ClrDiagnostics.Helpers;
 using ClrDiagnostics.Triggers;
 using Microsoft.Diagnostics.Tracing;
+using ClrDiagnostics.Extensions;
 
 namespace TestConsole
 {
@@ -16,9 +17,6 @@ namespace TestConsole
     {
         public void Analyze()
         {
-            //var ps = ProcessHelper.GetProcess("StaticMemoryLeaks");
-            //var ps = ProcessHelper.GetProcess("TestAllocation");
-            //var ps = ProcessHelper.GetProcess("TestExceptions");
             var ps = ProcessHelper.GetProcess("TestWebApp");
             if (ps == null)
             {
@@ -26,10 +24,8 @@ namespace TestConsole
                 return;
             }
 
-            var analyzer = new TriggerOnEventCounter(ps.Id, Constants.CustomHeaderEventSourceName);
-            analyzer.Start(
-                OnTrigger,
-                traceEvent => traceEvent.ProviderName.Equals(Constants.CustomHeaderEventSourceName));
+            var analyzer = new TriggerOnHttpRequests(ps.Id, 900);
+            analyzer.Start(OnTrigger);
 
             Console.ReadKey();
 
@@ -38,6 +34,25 @@ namespace TestConsole
 
         private void OnTrigger(TraceEvent traceEvent)
         {
+            var payload = traceEvent.GetPayload();
+            string counterName = (string)payload["Name"];
+            if (counterName == "requests-per-second")
+            {
+                var increment = (double)payload["Increment"];
+                if (increment > 0)
+                {
+                    Console.WriteLine($"{counterName} - {increment}");
+                }
+            }
+            //if (counterName == "current-requests")
+            //{
+            //    var count = (int)payload["Count"];
+            //    var mean = (double)payload["Mean"];
+            //    if (count > 0)
+            //    {
+            //        Console.WriteLine($"{counterName} - {count} - {mean}");
+            //    }
+            //}
         }
 
     }

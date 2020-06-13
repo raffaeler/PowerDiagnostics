@@ -58,7 +58,7 @@ namespace ClrDiagnostics.Triggers
             { KnownProviderName.Microsoft_Windows_DotNETRuntime, "Microsoft-Windows-DotNETRuntime" },
             { KnownProviderName.System_Runtime, "System.Runtime" },
             { KnownProviderName.Microsoft_DotNETCore_SampleProfiler, "Microsoft-DotNETCore-SampleProfiler" },
-            { KnownProviderName.Microsoft_AspNetCore_Hosting, "Microsoft-AspNetCore-Hosting" },
+            { KnownProviderName.Microsoft_AspNetCore_Hosting, "Microsoft.AspNetCore.Hosting" },
         };
 
         public static bool TryGetName(KnownProviderName provider, out string providerName)

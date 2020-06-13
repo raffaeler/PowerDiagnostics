@@ -29,10 +29,10 @@ namespace TestWebApp
         public async Task InvokeAsync(HttpContext httpContext)
         {
             bool eventSourceIsEnabled = CustomHeaderEventSource.Instance.IsEnabled();
-            if (!eventSourceIsEnabled)
-            {
-                _logger.LogInformation($"{nameof(CustomHeaderEventSource)} is not enabled");
-            }
+            //if (!eventSourceIsEnabled)
+            //{
+            //    _logger.LogWarning($"{nameof(CustomHeaderEventSource)} is not enabled");
+            //}
 
             if (eventSourceIsEnabled &&
                 httpContext.Request.Headers.ContainsKey(Constants.TriggerHeaderName))
