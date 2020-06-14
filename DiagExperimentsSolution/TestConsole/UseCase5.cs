@@ -1,14 +1,11 @@
-﻿using ClrDiagnostics.Helpers;
-using ClrDiagnostics.Triggers;
-
-using Microsoft.Diagnostics.Tracing;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-using TestConsole.Helpers;
-using TestConsole.Triggers;
+using ClrDiagnostics.Helpers;
+using ClrDiagnostics.Triggers;
+
+using Microsoft.Diagnostics.Tracing;
 
 namespace TestConsole
 {

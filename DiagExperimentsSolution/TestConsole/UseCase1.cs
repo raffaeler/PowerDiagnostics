@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Diagnostics.Runtime;
-
-using TestConsole.Helpers;
+using ClrDiagnostics;
+using ClrDiagnostics.Extensions;
 
 namespace TestConsole
 {
@@ -18,17 +17,17 @@ namespace TestConsole
         public void Analyze()
         {
             var fullDumpName = Path.Combine(_dumpDir, _dumpName);
-            var analyzer = new DumpHelper(fullDumpName);
+            var analyzer = DiagnosticAnalyzer.FromDump(fullDumpName, true);
 
-            //var objs = analyzer.GetObjectsOfType("System.Reflection.LoaderAllocator", true);
-            var loaderAllocatorObjects = analyzer
-                .GetAllObjects(o => o.Type.Name == "System.Reflection.LoaderAllocator");
+            var loaderAllocatorObjects = analyzer.Objects
+                .Where(o => o.Type.Name == "System.Reflection.LoaderAllocator");
+
             foreach (var loaderAllocator in loaderAllocatorObjects)
             {
                 var loaderAllocatorType = loaderAllocator.Type;
                 Console.WriteLine($"{loaderAllocatorType.Name} Addr:0x{loaderAllocator.Address:X} Size:{loaderAllocator.Size} MT:0x{loaderAllocatorType.MethodTable:X}");
 
-                var roots = analyzer.EnumerateRoots(loaderAllocator.Address);
+                var roots = analyzer.RootPaths(loaderAllocator.Address);
                 bool isFirst = true;
                 int i = 0;
                 foreach (var root in roots)
@@ -61,24 +60,25 @@ namespace TestConsole
             }
 
             analyzer.Dispose();
+
         }
 
-        private static void DumpObjects(DumpHelper analyzer, Func<ClrObject, bool> predicate)
+        private static void DumpObjects(DiagnosticAnalyzer analyzer)
         {
-            var objs = analyzer.GetAllObjects(predicate);
+            var objs = analyzer.Objects.Where(o => true);
             Console.WriteLine("         Address               MT     Size");
             foreach (var obj in objs)
             {
-                var size = obj.Size;
-                Console.WriteLine($"{obj.Address:X16} {obj.Type.MethodTable:X16} {size,8}");
+                var textual = obj.PrintAddressTypeAndSize(string.Empty);
+                Console.WriteLine(textual);
             }
         }
 
         private static List<(ulong address, string typeName, string fieldName, bool isStatic)> FindReferencing(
-            DumpHelper analyzer, bool includeInstance, params ulong[] leakedAddresses)
+            DiagnosticAnalyzer analyzer, bool includeInstance, params ulong[] leakedAddresses)
         {
             var result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
-            var all = analyzer.GetAllObjects();
+            var all = analyzer.Objects;
             var mainAppDomain = analyzer.MainAppDomain;
 
             foreach (var obj in all)
@@ -88,10 +88,10 @@ namespace TestConsole
                     foreach (var instanceField in obj.Type.Fields.Where(f => f.IsObjectReference))
                     {
                         // returns zero if it is not an ulong
-                        var staticFieldAddress = instanceField.Read<ulong>(obj.Address  , false);
+                        var staticFieldAddress = instanceField.Read<ulong>(obj.Address, false);
                         if (leakedAddresses.Contains(staticFieldAddress))
                         {
-                            result.Add((obj.Address , obj.Type.Name, instanceField.Name, false));
+                            result.Add((obj.Address, obj.Type.Name, instanceField.Name, false));
                         }
                     }
                 }
@@ -110,9 +110,9 @@ namespace TestConsole
             return result;
         }
 
-        private static void Search(DumpHelper analyzer, ulong leakedAddress)
+        private static void Search(DiagnosticAnalyzer analyzer, ulong leakedAddress)
         {
-            var roots = analyzer.EnumerateRoots(leakedAddress);
+            var roots = analyzer.RootPaths(leakedAddress);
 
             // get the statics being kept by some static field
             var staticRoots = roots
@@ -125,7 +125,7 @@ namespace TestConsole
                 .ToList();
 
 
-            var all = analyzer.GetAllObjects();
+            var all = analyzer.Objects;
             var mainAppDomain = analyzer.MainAppDomain;
 
             foreach (var obj in all)
@@ -151,6 +151,7 @@ namespace TestConsole
                 }
             }
         }
+
 
     }
 }

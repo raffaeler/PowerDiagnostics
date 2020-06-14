@@ -38,6 +38,7 @@ namespace ClrDiagnostics
             }
         }
 
+        // Walk down the graph starting from the given object
         public IEnumerable<ClrObject> ObjectReferences(ClrObject @object)
         {
             return _clrRuntime.Heap.EnumerateObjectReferences(@object.Address, @object.Type, false, true);
@@ -45,6 +46,7 @@ namespace ClrDiagnostics
 
         public IEnumerable<ClrReference> ObjectReferencesWithFields(ClrObject @object)
         {
+            //return @object.EnumerateReferencesWithFields(false, true);
             return _clrRuntime.Heap.EnumerateReferencesWithFields(@object.Address, @object.Type, false, true);
         }
 
@@ -63,11 +65,19 @@ namespace ClrDiagnostics
             return _gcroot.EnumerateAllPaths(source.Address, target.Address, false, Token);
         }
 
+        public IEnumerable<(ClrThread thread, IEnumerable<ClrStackFrame> stackFrames)> Stacks()
+        {
+            return _clrRuntime.Threads
+                .Where(t => t.IsAlive && !t.IsFinalizer && t.ManagedThreadId > 0)
+                .Select(t => (t, t.EnumerateStackTrace()));
+        }
 
-        public IEnumerable<ClrObject> GetObjectsBySize(long minSize = 1024)
+
+        public IEnumerable<ClrObject> GetObjectsBySize(long minSize = 1024, bool excludeFreeBlocks = true)
         {
             return Objects
                 .Where(o => o.Size > (ulong)minSize)
+                .Where(o => !o.IsFree || !excludeFreeBlocks)
                 .OrderByDescending(o => o.Size);
         }
     }

@@ -11,7 +11,7 @@ namespace ClrDiagnostics
 {
     public partial class DiagnosticAnalyzer
     {
-        public IEnumerable<(ClrStaticField, ClrObject)> GetStaticFields()
+        public IEnumerable<(ClrStaticField field, ClrObject obj)> GetStaticFields()
         {
             return _clrRuntime
                 .GetConstructedTypeDefinitions(t => t.StaticFields.Length > 0)
@@ -21,7 +21,7 @@ namespace ClrDiagnostics
                 .Where(t => !t.value.IsNull);
         }
 
-        public IEnumerable<(ClrStaticField, ClrObject, UInt64)> GetStaticFieldsWithGraphSize()
+        public IEnumerable<(ClrStaticField field, ClrObject obj, UInt64 size)> GetStaticFieldsWithGraphSize()
         {
             return _clrRuntime
                 .GetConstructedTypeDefinitions(t => t.StaticFields.Length > 0)
@@ -33,7 +33,7 @@ namespace ClrDiagnostics
                 .OrderByDescending(t => t.size);
         }
 
-        public IEnumerable<(ClrStaticField, ClrObject, UInt64, IEnumerable<ClrGraphNode>)> GetStaticFieldsWithGraphAndSize()
+        public IEnumerable<(ClrStaticField field, ClrObject obj, UInt64 size, IEnumerable<ClrGraphNode> graph)> GetStaticFieldsWithGraphAndSize()
         {
             return _clrRuntime
                 .GetConstructedTypeDefinitions(t => t.StaticFields.Length > 0)

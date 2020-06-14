@@ -4,9 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Diagnostics.Runtime;
-
-using TestConsole.Helpers;
+using ClrDiagnostics;
 
 namespace TestConsole
 {
@@ -18,19 +16,21 @@ namespace TestConsole
         public void Analyze()
         {
             var fullDumpName = Path.Combine(_dumpDir, _dumpName);
-            var analyzer = new DumpHelper(fullDumpName);
+            var analyzer = DiagnosticAnalyzer.FromDump(fullDumpName, true);
 
-            var collectibles = analyzer.GetAllObjects().Where(o => o.Type.IsCollectible).ToList();
-            analyzer.GetAllObjectsGroupedByAllocator(_ => true);
+            var collectibles = analyzer.Objects
+                .Where(o => o.Type.IsCollectible).ToList();
+            var allocator = analyzer.GetObjectsGroupedByAllocator(analyzer.Objects);
 
             //var objs = analyzer.GetObjectsOfType("System.Reflection.LoaderAllocator", true);
-            var objs = analyzer.GetAllObjects(o => o.Type.Name == "System.Reflection.LoaderAllocator");
+            var objs = analyzer.Objects
+                .Where(o => o.Type.Name == "System.Reflection.LoaderAllocator");
             foreach (var leakedObj in objs)
             {
                 var leakedType = leakedObj.Type;
                 Console.WriteLine($"{leakedType.Name} Addr:0x{leakedObj.Address:X} Size:{leakedObj.Size} MT:0x{leakedType.MethodTable:X}");
 
-                var roots = analyzer.EnumerateRoots(leakedObj.Address);
+                var roots = analyzer.RootPaths(leakedObj.Address);
                 bool isFirst = true;
                 int i = 0;
                 foreach (var root in roots)
@@ -65,22 +65,11 @@ namespace TestConsole
             analyzer.Dispose();
         }
 
-        private static void DumpObjects(DumpHelper analyzer, Func<ClrObject, bool> predicate)
-        {
-            var objs = analyzer.GetAllObjects(predicate);
-            Console.WriteLine("         Address               MT     Size");
-            foreach (var obj in objs)
-            {
-                var size = obj.Size;
-                Console.WriteLine($"{obj.Address:X16} {obj.Type.MethodTable:X16} {size,8}");
-            }
-        }
-
         private static List<(ulong address, string typeName, string fieldName, bool isStatic)> FindReferencing(
-            DumpHelper analyzer, bool includeInstance, params ulong[] leakedAddresses)
+            DiagnosticAnalyzer analyzer, bool includeInstance, params ulong[] leakedAddresses)
         {
             var result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
-            var all = analyzer.GetAllObjects();
+            var all = analyzer.Objects;
             var mainAppDomain = analyzer.MainAppDomain;
 
             foreach (var obj in all)
@@ -112,9 +101,10 @@ namespace TestConsole
             return result;
         }
 
-        private static void Search(DumpHelper analyzer, ulong leakedAddress)
+
+        private static void Search(DiagnosticAnalyzer analyzer, ulong leakedAddress)
         {
-            var roots = analyzer.EnumerateRoots(leakedAddress);
+            var roots = analyzer.RootPaths(leakedAddress);
 
             // get the statics being kept by some static field
             var staticRoots = roots
@@ -127,7 +117,7 @@ namespace TestConsole
                 .ToList();
 
 
-            var all = analyzer.GetAllObjects();
+            var all = analyzer.Objects;
             var mainAppDomain = analyzer.MainAppDomain;
 
             foreach (var obj in all)

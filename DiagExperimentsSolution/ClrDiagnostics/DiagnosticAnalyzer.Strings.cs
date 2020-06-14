@@ -20,6 +20,8 @@ namespace ClrDiagnostics
                 .GroupBy(s => s)
                 .Select(s => (str: s.Key, count: s.Count()))
                 .Where(t => t.count >= minCount)
+                .OrderByDescending(t => t.count)
+                .ThenBy(t => t.str)
                 .ToDictionary(t => t.str, t => t.count);
         }
 

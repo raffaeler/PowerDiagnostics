@@ -62,8 +62,10 @@ namespace ClrDiagnostics
         public static DiagnosticAnalyzer FromDump(string filename, bool cacheObjects,
             params string[] additionalPdbs)
         {
-            var dataTarget = DataTarget.LoadDump(filename);
-            //dataTarget.BinaryLocator.FindBinary()
+            var dataTarget = DataTarget.LoadDump(filename, new CacheOptions()
+            {
+                // ...                
+            });
             return new DiagnosticAnalyzer(dataTarget, cacheObjects);
         }
 

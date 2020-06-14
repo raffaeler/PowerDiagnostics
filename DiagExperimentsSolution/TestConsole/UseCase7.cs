@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using TestConsole.Triggers;
+using Microsoft.Diagnostics.Tracing;
 using CustomEventSource;
-using TestConsole.Helpers;
 using ClrDiagnostics.Helpers;
 using ClrDiagnostics.Triggers;
-using Microsoft.Diagnostics.Tracing;
 using ClrDiagnostics.Extensions;
 
 namespace TestConsole
