@@ -25,7 +25,7 @@ namespace ClrDiagnostics
                 .ToDictionary(t => t.str, t => t.count);
         }
 
-        public IEnumerable<(ClrObject, string)> GetStringsBySize(long minSize = 1024, long maxSize = long.MaxValue)
+        public IEnumerable<(ClrObject obj, string text)> GetStringsBySize(long minSize = 1024, long maxSize = long.MaxValue)
         {
             return Objects
                 .Where(o => o.Type.ElementType == ClrElementType.String &&

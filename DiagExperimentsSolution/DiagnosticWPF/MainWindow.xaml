@@ -1,0 +1,70 @@
+﻿<Window x:Class="DiagnosticWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiagnosticWPF"
+        mc:Ignorable="d"
+        Title="Diagnostic Demo by Раффаеле for #dotnext - @raffaeler" Loaded="Window_Loaded"
+        Width="1200" Height="750">
+    <Window.Resources>
+        <Style x:Key="buttonStyle" TargetType="Button" >
+            <Setter Property="Margin" Value="0,5,10,5" />
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        </Style>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Content="{StaticResource fileOpen}" Style="{StaticResource buttonStyle}"
+                    Click="OpenDump"/>
+            <Button Content="{StaticResource snapshot}" Style="{StaticResource buttonStyle}"
+                    Click="PickProcess"/>
+
+            <Grid>
+                <ComboBox x:Name="ComboQueries" Margin="15,5" MinWidth="350" FontSize="22"
+                      Text="Pick a query"
+                      VerticalContentAlignment="Center"
+                      SelectionChanged="ComboQueries_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock x:Name="ComboCue" Margin="20,11" FontSize="22" Text="Pick a query ..."
+                           IsHitTestVisible="false" Foreground="Gray" />
+            </Grid>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition x:Name="detailsColumn" />
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="Master" AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
+                      SelectionChanged="Master_SelectionChanged" />
+
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+            <DataGrid Grid.Column="2" x:Name="Details" AutoGenerateColumns="False"
+                CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" />
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5,10,0,0">
+            <TextBlock x:Name="status" />
+        </StackPanel>
+    </Grid>
+</Window>
