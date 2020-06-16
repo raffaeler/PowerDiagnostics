@@ -36,7 +36,7 @@ namespace DiagnosticWPF.Models
             _store[g.MasterType] = g;
 
             g = UIGrid.Create<UIStaticFields>(null,
-                new UIGridColumn("Static field name", "Field.Name", null, null, "Type.Name", 200),
+                new UIGridColumn("Static field name", "Field.Name", null, null, "Field.Name", 200),
                 new UIGridColumn("Size", "Size", "0:N0", null, "Size", DataGridLength.Auto, true),
                 new UIGridColumn("Object", "Obj", null, null, "Obj", 300));
             _store[g.MasterType] = g;
@@ -95,9 +95,7 @@ namespace DiagnosticWPF.Models
 
         public static bool TryGetUIGridByType(Type type, out UIGrid uIGrid)
         {
-            uIGrid = null;
-            if (!_store.TryGetValue(type, out uIGrid)) return false;
-            return true;
+            return _store.TryGetValue(type, out uIGrid);
         }
 
     }

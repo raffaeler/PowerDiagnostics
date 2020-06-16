@@ -127,6 +127,7 @@ namespace DiagnosticWPF
 
         private void OpenDump(object sender, RoutedEventArgs e)
         {
+            Close(null, null);
             var filename = FileHelper.OpenDialog(this, "Select a dump file");
             if(File.Exists(filename))
             {
@@ -147,6 +148,7 @@ namespace DiagnosticWPF
 
         private void PickProcess(object sender, RoutedEventArgs e)
         {
+            Close(null, null);
             ProcessPicker picker = new ProcessPicker();
             var result = picker.ShowDialog();
             if (result.HasValue && result.Value)
@@ -157,7 +159,7 @@ namespace DiagnosticWPF
                     sw.Start();
                     _analyzer = DiagnosticAnalyzer.FromSnapshot(picker.SelectedProcess.Id);
                     var elapsed = sw.Elapsed;
-                    status.Text = $"Process snapshot took {sw.ElapsedMilliseconds}ms";
+                    status.Text = $"Process {picker.SelectedProcess.Id} snapshot took {sw.ElapsedMilliseconds}ms";
                     ComboQueries.IsEnabled = true;
                 }
                 catch (Exception err)
@@ -169,6 +171,21 @@ namespace DiagnosticWPF
             }
         }
 
+        private void Close(object sender, RoutedEventArgs e)
+        {
+            if (_analyzer != null)
+            {
+                Master.ItemsSource = null;
+                Details.ItemsSource = null;
+                Master.Columns.Clear();
+                Details.Columns.Clear();
+
+                _analyzer.Dispose();
+                _analyzer = null;
+                ComboQueries.IsEnabled = false;
+                status.Text = string.Empty;
+            }
+        }
 
         private void ComboQueries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -190,7 +207,11 @@ namespace DiagnosticWPF
 
         public void MakeGrid(UIGrid uIGrid, UIGrid detailsUiGrid)
         {
+            Master.ItemsSource = null;
+            Details.ItemsSource = null;
             Master.Columns.Clear();
+            Details.Columns.Clear();
+
             foreach (var c in uIGrid.Columns)
             {
                 var column = DynamicGridMaker.CreateGridColumn(c);
@@ -208,7 +229,6 @@ namespace DiagnosticWPF
 
             if (detailsUiGrid == null) return;
 
-            Details.Columns.Clear();
             foreach (var c in detailsUiGrid.Columns)
             {
                 var column = DynamicGridMaker.CreateGridColumn(c);

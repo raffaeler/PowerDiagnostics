@@ -103,7 +103,7 @@ namespace TestWebApp.Controllers
         public IActionResult CpuStressPost([FromBody] string data)
         {
             _logger.LogInformation(nameof(CpuStressPost));
-            _cpuStressService.CpuLoad(100_000);
+            _cpuStressService.CpuLoad(250_000);
             return new OkResult();
         }
 

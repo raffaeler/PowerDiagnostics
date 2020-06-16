@@ -26,9 +26,11 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="{StaticResource fileOpen}" Style="{StaticResource buttonStyle}"
-                    Click="OpenDump"/>
+                    Click="OpenDump" ToolTip="Open a dump file"/>
             <Button Content="{StaticResource snapshot}" Style="{StaticResource buttonStyle}"
-                    Click="PickProcess"/>
+                    Click="PickProcess" ToolTip="Pick a process to snapshot"/>
+            <Button Content="{StaticResource close}" Style="{StaticResource buttonStyle}"
+                    Click="Close" ToolTip="Close the current session"/>
 
             <Grid>
                 <ComboBox x:Name="ComboQueries" Margin="15,5" MinWidth="350" FontSize="22"

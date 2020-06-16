@@ -41,7 +41,7 @@ namespace StressTestWebApp
             _menuItems.Add(new MenuItem('6', HttpMethod.Post, "/api/Test/LeakGraph", 1));
             _menuItems.Add(new MenuItem('7', HttpMethod.Post, "/api/Test/FreeLeaks", 1));
             _menuItems.Add(new MenuItem('8', HttpMethod.Post, "/api/Test/GcCollect", 1));
-            _menuItems.Add(new MenuItem('9', HttpMethod.Post, "/api/Test/CpuStress", 1));
+            _menuItems.Add(new MenuItem('9', HttpMethod.Post, "/api/Test/CpuStress", 4));
         }
 
         public async Task Start()
@@ -65,12 +65,22 @@ namespace StressTestWebApp
 
                 var character = (char)((int)keyInfo.Key);
                 var selectedMenu = _menuItems.FirstOrDefault(i => i.MenuKey == character);
+                bool isStarted = false;
                 if (selectedMenu != null)
                 {
                     if (selectedMenu.Verb == HttpMethod.Get)
+                    {
+                        isStarted = true;
                         await MakeGet(selectedMenu);
+                    }
                     else if (selectedMenu.Verb == HttpMethod.Post)
+                    {
+                        isStarted = true;
                         await MakePost(selectedMenu);
+                    }
+
+                    if(isStarted)
+                        Console.WriteLine($"\r\n{selectedMenu.Verb} {selectedMenu.RelativeAddress} has started");
 
                     ignore = false;
                 }

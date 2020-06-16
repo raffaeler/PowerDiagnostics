@@ -68,7 +68,7 @@ namespace ClrDiagnostics
         public IEnumerable<(ClrThread thread, IEnumerable<ClrStackFrame> stackFrames)> Stacks()
         {
             return _clrRuntime.Threads
-                .Where(t => t.IsAlive && !t.IsFinalizer && t.ManagedThreadId > 0)
+                //.Where(t => t.IsAlive && !t.IsFinalizer && t.ManagedThreadId > 0)
                 .Select(t => (t, t.EnumerateStackTrace()));
         }
 

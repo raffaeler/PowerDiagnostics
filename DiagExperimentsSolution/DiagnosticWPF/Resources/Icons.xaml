@@ -40,4 +40,24 @@
             </Rectangle.Fill>
         </Rectangle>
     </Viewbox>
+
+    <Viewbox x:Key="close" Stretch="Fill" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+        <Rectangle Width="16" Height="16">
+            <Rectangle.Fill>
+                <DrawingBrush>
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <DrawingGroup.Children>
+                                <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5.6169,-0.000199999999999534L4.6179,0.9998 4.1129,0.9998 3.1119,-0.000199999999999534 -9.99999999997669E-05,-0.000199999999999534 -9.99999999997669E-05,1.3828 1.9999,3.3818 1.9999,3.6178 -9.99999999997669E-05,5.6168 -9.99999999997669E-05,6.9998 1.9999,6.9998 1.9999,15.9998 15.9999,15.9998 15.9999,0.9998 8.9999,0.9998 8.9999,-0.000199999999999534z" />
+                                <GeometryDrawing Brush="#FF424242" Geometry="F1M8.1123,2L7.1123,3 14.0003,3 14.0003,14 5.0003,14 5.0003,6.383 4.3653,5.748 3.1123,7 4.0003,7 4.0003,8 3.0003,8 3.0003,9 4.0003,9 4.0003,10 3.0003,10 3.0003,11 4.0003,11 4.0003,12 3.0003,12 3.0003,13 4.0003,13 4.0003,14 3.0003,14 3.0003,15 15.0003,15 15.0003,2z M12.0003,5L12.0003,6 12.0003,7 9.0003,7 9.0003,5.888 8.1123,5z" />
+                                <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M14,3L14,14 5,14 5,6.383 5.617,7 7,7 9,7 12,7 12,6 12,5 8.112,5 6.612,3.5 7.112,3z" />
+                                <GeometryDrawing Brush="#FFA1260D" Geometry="F1M6.2671,4.5688L7.6981,5.9998 6.0311,5.9998 4.3651,4.3328 2.6981,5.9998 1.0311,5.9998 3.5321,3.4998 1.0311,0.9998 2.6981,0.9998 4.3651,2.6668 6.0311,0.9998 7.6981,0.9998 5.1981,3.4998z" />
+                            </DrawingGroup.Children>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+    </Viewbox>
 </ResourceDictionary>
