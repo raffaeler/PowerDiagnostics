@@ -138,13 +138,13 @@ namespace ClrDiagnostics
 
                     //var il = _dataTarget.DataReader.
                     //var x = frame.Method.Type.Module.
-                    var mi = frame.Method.Type.Module.MetadataImport;
-                    if (mi != null)
-                    {
+                    //var mi = frame.Method.Type.Module.MetadataImport;
+                    //if (mi != null)
+                    //{
                         
-                    }
+                    //}
 
-                    Console.WriteLine($"{frame.StackPointer:X16} {frame.InstructionPointer:X16} {callSite} {frame.Method.ToString()}");
+                    Console.WriteLine($"{frame.StackPointer:X16} {frame.InstructionPointer:X16} {callSite} {frame.Method?.ToString()}");
                 }
             }
         }

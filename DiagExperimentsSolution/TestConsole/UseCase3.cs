@@ -24,7 +24,7 @@ namespace TestConsole
             var ps = ProcessHelper.GetProcess("TestWebApp");
             if (ps == null)
             {
-                var fullDumpName = Path.Combine(_dumpDir, _dumpName);
+                var fullDumpName = Path.Combine(_dumpDir, _dumpName); 
                 //var fullPdbName = Path.Combine(_dumpDir, _pdbName);
                 //analyzer = DiagnosticAnalyzer.FromDump(fullDumpName, true, fullPdbName);
 

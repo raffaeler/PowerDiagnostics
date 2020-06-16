@@ -16,19 +16,79 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="VerticalContentAlignment" Value="Stretch" />
         </Style>
+
+        <Style x:Key="triggerHeader" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,5,10,5" />
+            <Setter Property="MinWidth" Value="60" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+
+        </Style>
+        <Style x:Key="triggerValue" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,5,10,5" />
+            <Setter Property="MinWidth" Value="60" />
+            <Setter Property="MaxWidth" Value="600" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+
+        </Style>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource triggerHeader}" Text="CPU"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource triggerValue}" x:Name="trCpu" />
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource triggerHeader}" Text="GC Alloc" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource triggerValue}" x:Name="trGcAlloc" />
+
+                <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource triggerHeader}" Text="Working-set" />
+                <TextBlock Grid.Row="1" Grid.Column="4" Style="{StaticResource triggerValue}" x:Name="trWorkingSet" />
+
+                <TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource triggerHeader}" Text="Http Req/s" />
+                <TextBlock Grid.Row="1" Grid.Column="6" Style="{StaticResource triggerValue}" x:Name="trHttpReq" />
+
+                <TextBlock Grid.Row="0" Grid.Column="8" Style="{StaticResource triggerHeader}" Text="Custom Header" />
+                <TextBlock Grid.Row="1" Grid.Column="8" Style="{StaticResource triggerValue}" x:Name="trCustomHeader" />
+
+                <TextBlock Grid.Row="0" Grid.Column="10" Style="{StaticResource triggerHeader}" Text="Exception"  />
+                <TextBlock Grid.Row="1" Grid.Column="10" Style="{StaticResource triggerValue}" x:Name="trException" />
+            </Grid>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button Content="{StaticResource fileOpen}" Style="{StaticResource buttonStyle}"
                     Click="OpenDump" ToolTip="Open a dump file"/>
+            <Button Content="{StaticResource monitor}" Style="{StaticResource buttonStyle}"
+                    Click="MonitorProcess" ToolTip="Monitor a process"/>
             <Button Content="{StaticResource snapshot}" Style="{StaticResource buttonStyle}"
-                    Click="PickProcess" ToolTip="Pick a process to snapshot"/>
+                    Click="Snapshot" ToolTip="Snapshot the process"/>
             <Button Content="{StaticResource close}" Style="{StaticResource buttonStyle}"
                     Click="Close" ToolTip="Close the current session"/>
 
@@ -46,9 +106,10 @@
                 <TextBlock x:Name="ComboCue" Margin="20,11" FontSize="22" Text="Pick a query ..."
                            IsHitTestVisible="false" Foreground="Gray" />
             </Grid>
+
         </StackPanel>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="5" />
@@ -65,7 +126,7 @@
                 CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" />
         </Grid>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5,10,0,0">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5,10,0,0">
             <TextBlock x:Name="status" />
         </StackPanel>
     </Grid>

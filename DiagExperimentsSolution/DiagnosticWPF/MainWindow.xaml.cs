@@ -16,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClrDiagnostics;
+using ClrDiagnostics.Triggers;
+using CustomEventSource;
 using DiagnosticWPF.Helpers;
 using DiagnosticWPF.Models;
 
@@ -34,6 +36,8 @@ namespace DiagnosticWPF
         private static string _dumpName = "graphdump.dmp";
         private PropertyInfo _currentDetailsProperty;
         private IList<KnownQuery> _queries;
+        private Process _process;
+        private TriggerAll _triggerAll;
 
         public MainWindow()
         {
@@ -89,13 +93,21 @@ namespace DiagnosticWPF
                     .Select(s => new UIStackFrame()
                     {
                         Thread = s.thread,
-                        StackFrames = s.stackFrames,
+                        StackFrames = s.stackFrames.ToList(),
                     })
                     .ToList()),
 
                 new KnownQuery(typeof(IClrRoot), "Roots", a => a.Roots.ToList()),
 
                 new KnownQuery(typeof(ClrObject), "ObjectsBySize", a => a.GetObjectsBySize(1).ToList()),
+                new KnownQuery(typeof(ClrObject), "NonSystemObjectsBySize", a => 
+                    a.GetObjectsBySize(1)
+                    .Where(o => !o.Type.Name.StartsWith("System") &&
+                                !o.Type.Name.StartsWith("Microsoft") &&
+                                !o.Type.Name.StartsWith("Interop") &&
+                                !o.Type.Name.StartsWith("Internal") &&
+                                !o.Type.IsFree)
+                    .ToList()),
 
                 new KnownQuery(typeof(UIAllocatorGroup), "GetObjectsGroupedByAllocator", a =>
                     a.GetObjectsGroupedByAllocator(a.Objects)
@@ -146,45 +158,98 @@ namespace DiagnosticWPF
 
         }
 
-        private void PickProcess(object sender, RoutedEventArgs e)
+        private void Snapshot(object sender, RoutedEventArgs e)
+        {
+            if (_process == null)
+            {
+                MessageBox.Show(this, "Monitor a process before snapshotting it", "Snapshot", MessageBoxButton.OK);
+                return;
+            }
+
+            try
+            {
+                ResetUI();
+                var sw = new Stopwatch();
+                sw.Start();
+                _analyzer = DiagnosticAnalyzer.FromSnapshot(_process.Id);
+                //_analyzer = DiagnosticAnalyzer.FromProcess(_process.Id);
+                var elapsed = sw.Elapsed;
+                status.Text = $"Process {_process.Id} snapshot took {sw.ElapsedMilliseconds}ms";
+                ComboQueries.IsEnabled = true;
+            }
+            catch (Exception err)
+            {
+                _analyzer = null;
+                ComboQueries.IsEnabled = false;
+                status.Text = err.Message;
+            }
+        }
+
+        private void MonitorProcess(object sender, RoutedEventArgs e)
         {
             Close(null, null);
             ProcessPicker picker = new ProcessPicker();
             var result = picker.ShowDialog();
             if (result.HasValue && result.Value)
             {
-                try
-                {
-                    var sw = new Stopwatch();
-                    sw.Start();
-                    _analyzer = DiagnosticAnalyzer.FromSnapshot(picker.SelectedProcess.Id);
-                    var elapsed = sw.Elapsed;
-                    status.Text = $"Process {picker.SelectedProcess.Id} snapshot took {sw.ElapsedMilliseconds}ms";
-                    ComboQueries.IsEnabled = true;
-                }
-                catch (Exception err)
-                {
-                    _analyzer = null;
-                    ComboQueries.IsEnabled = false;
-                    status.Text = err.Message;
-                }
+                _process = picker.SelectedProcess;
+                SubscribeTriggers();
             }
+        }
+
+        private void SubscribeTriggers()
+        {
+            UnsubscribeTriggers();
+            _triggerAll = new TriggerAll(_process.Id, Constants.CustomHeaderEventSourceName,
+                Constants.TriggerHeaderCounterName);
+
+            _triggerAll.OnCpu = d => UpdateTextBlock(trCpu, d.ToString($"{d}%"));
+            _triggerAll.OnEventCounterCount = d => UpdateTextBlock(trCustomHeader, d.ToString());
+            _triggerAll.OnException = d => UpdateTextBlock(trException, d);
+            _triggerAll.OnGcAllocation = d => UpdateTextBlock(trGcAlloc, $"{d}");
+            _triggerAll.OnHttpRequests = d => UpdateTextBlock(trHttpReq, $"{d}/sec");
+            _triggerAll.OnWorkingSet = d => UpdateTextBlock(trWorkingSet, $"{d} MB");
+
+            _triggerAll.Start();
+        }
+
+        private void UnsubscribeTriggers()
+        {
+            if (_triggerAll != null)
+            {
+                _triggerAll.Dispose();
+                _triggerAll = null;
+            }
+        }
+
+        private void UpdateTextBlock(TextBlock tb, string data)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                tb.Text = data.ToString();
+            });
         }
 
         private void Close(object sender, RoutedEventArgs e)
         {
             if (_analyzer != null)
             {
-                Master.ItemsSource = null;
-                Details.ItemsSource = null;
-                Master.Columns.Clear();
-                Details.Columns.Clear();
+                ResetUI();
 
                 _analyzer.Dispose();
                 _analyzer = null;
                 ComboQueries.IsEnabled = false;
                 status.Text = string.Empty;
             }
+        }
+
+        private void ResetUI()
+        {
+            Master.ItemsSource = null;
+            Details.ItemsSource = null;
+            Master.Columns.Clear();
+            Details.Columns.Clear();
+            ComboQueries.SelectedItem = null;
         }
 
         private void ComboQueries_SelectionChanged(object sender, SelectionChangedEventArgs e)

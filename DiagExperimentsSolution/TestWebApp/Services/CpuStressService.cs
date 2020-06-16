@@ -19,7 +19,7 @@ namespace TestWebApp.Services
             this._logger = logger;
         }
 
-        public Task CpuLoad(long max)
+        public void CpuLoad(long max)
         {
             _logger.LogInformation($"Starting stressing the CPU on managed thread {Thread.CurrentThread.ManagedThreadId}");
             var primes = new Primes(max);
@@ -30,7 +30,7 @@ namespace TestWebApp.Services
             }
 
             _logger.LogInformation($"CPU stressing completed on managed thread {Thread.CurrentThread.ManagedThreadId}");
-            return Task.CompletedTask;
+            return;
         }
 
 
