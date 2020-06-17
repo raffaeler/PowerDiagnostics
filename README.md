@@ -1,4 +1,4 @@
-# DiagExperiments
+# Power Diagnostics
 Experiments in .NET Core diagnostics using:
 - [ClrMD](https://github.com/microsoft/clrmd) 
 - [DiagnosticClient](https://github.com/dotnet/diagnostics/tree/master/src/Microsoft.Diagnostics.NETCore.Client)
