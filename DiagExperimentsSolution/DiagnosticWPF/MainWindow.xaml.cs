@@ -32,8 +32,6 @@ namespace DiagnosticWPF
     public partial class MainWindow : Window
     {
         DiagnosticAnalyzer _analyzer;
-        private static string _dumpDir = @"H:\dev.git\Experiments\NetCoreExperiments\DiagnosticHelpers\_dumps";
-        private static string _dumpName = "graphdump.dmp";
         private PropertyInfo _currentDetailsProperty;
         private IList<KnownQuery> _queries;
         private Process _process;
@@ -125,13 +123,6 @@ namespace DiagnosticWPF
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             InitializeQueries();
-            //var fullDumpName = System.IO.Path.Combine(_dumpDir, _dumpName);
-
-            //var sw = new Stopwatch();
-            //sw.Start();
-            //_analyzer = DiagnosticAnalyzer.FromDump(fullDumpName, true);
-            //var elapsed = sw.Elapsed;
-            //status.Text = $"Process snapshot took {sw.ElapsedMilliseconds}ms";
 
             ComboQueries.ItemsSource = _queries;
             ComboQueries.IsEnabled = false;
@@ -269,7 +260,6 @@ namespace DiagnosticWPF
             Master.ItemsSource = item.Populate(_analyzer);
         }
 
-
         public void MakeGrid(UIGrid uIGrid, UIGrid detailsUiGrid)
         {
             Master.ItemsSource = null;
@@ -300,7 +290,6 @@ namespace DiagnosticWPF
                 Details.Columns.Add(column);
             }
         }
-
         private void Master_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var data = Master.SelectedItem;

@@ -2,7 +2,7 @@
 Experiments in .NET Core diagnostics using:
 - [ClrMD](https://github.com/microsoft/clrmd) 
 - [DiagnosticClient](https://github.com/dotnet/diagnostics/tree/master/src/Microsoft.Diagnostics.NETCore.Client)
-- [Trace Event library] (https://github.com/microsoft/perfview/blob/master/documentation/TraceEvent/TraceEventLibrary.md)
+- [Trace Event library](https://github.com/microsoft/perfview/blob/master/documentation/TraceEvent/TraceEventLibrary.md)
 
 The StressTestWebApp is the only project using .NET 5.
 There is no particular reason other than the Http Client is easier to use.
