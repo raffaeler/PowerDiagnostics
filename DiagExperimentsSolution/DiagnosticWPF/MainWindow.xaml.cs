@@ -100,11 +100,13 @@ namespace DiagnosticWPF
                 new KnownQuery(typeof(ClrObject), "ObjectsBySize", a => a.GetObjectsBySize(1).ToList()),
                 new KnownQuery(typeof(ClrObject), "NonSystemObjectsBySize", a => 
                     a.GetObjectsBySize(1)
-                    .Where(o => !o.Type.Name.StartsWith("System") &&
+                    .Where(o => ((o.Type.Name != null &&
+                                !o.Type.Name.StartsWith("System") &&
                                 !o.Type.Name.StartsWith("Microsoft") &&
                                 !o.Type.Name.StartsWith("Interop") &&
-                                !o.Type.Name.StartsWith("Internal") &&
+                                !o.Type.Name.StartsWith("Internal")) &&
                                 !o.Type.IsFree)
+                                || o.Type.Name == null) 
                     .ToList()),
 
                 new KnownQuery(typeof(UIAllocatorGroup), "GetObjectsGroupedByAllocator", a =>
