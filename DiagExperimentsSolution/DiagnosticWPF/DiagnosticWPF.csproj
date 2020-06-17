@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\**" />
+    <Compile Remove="Controls\**" />
+    <EmbeddedResource Remove="Assets\**" />
+    <EmbeddedResource Remove="Controls\**" />
+    <None Remove="Assets\**" />
+    <None Remove="Controls\**" />
+    <Page Remove="Assets\**" />
+    <Page Remove="Controls\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.61701" />
     <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.0.130507" />
     <PackageReference Include="Microsoft.Diagnostics.Runtime.Utilities" Version="2.0.0-rc.20303.3" />
@@ -16,12 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ClrDiagnostics\ClrDiagnostics.csproj" />
     <ProjectReference Include="..\CustomEventSource\CustomEventSource.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Assets\" />
-    <Folder Include="Controls\" />
   </ItemGroup>
 
   

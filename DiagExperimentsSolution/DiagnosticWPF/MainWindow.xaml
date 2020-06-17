@@ -65,7 +65,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource triggerHeader}" Text="CPU"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource triggerValue}" x:Name="trCpu" />
 
-                <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource triggerHeader}" Text="GC Alloc" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource triggerHeader}" Text="Last GC Alloc" />
                 <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource triggerValue}" x:Name="trGcAlloc" />
 
                 <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource triggerHeader}" Text="Working-set" />
@@ -77,7 +77,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="8" Style="{StaticResource triggerHeader}" Text="Custom Header" />
                 <TextBlock Grid.Row="1" Grid.Column="8" Style="{StaticResource triggerValue}" x:Name="trCustomHeader" />
 
-                <TextBlock Grid.Row="0" Grid.Column="10" Style="{StaticResource triggerHeader}" Text="Exception"  />
+                <TextBlock Grid.Row="0" Grid.Column="10" Style="{StaticResource triggerHeader}" Text="Last first chance Exception"  />
                 <TextBlock Grid.Row="1" Grid.Column="10" Style="{StaticResource triggerValue}" x:Name="trException" />
             </Grid>
         </StackPanel>
