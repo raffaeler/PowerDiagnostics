@@ -109,7 +109,7 @@ namespace DiagnosticWPF
                                 || o.Type.Name == null) 
                     .ToList()),
 
-                new KnownQuery(typeof(UIAllocatorGroup), "GetObjectsGroupedByAllocator", a =>
+                new KnownQuery(typeof(UIAllocatorGroup), "Experimental GetObjectsGroupedByAllocator", a =>
                     a.GetObjectsGroupedByAllocator(a.Objects)
                     .Select(g => new UIAllocatorGroup()
                     {
@@ -301,5 +301,9 @@ namespace DiagnosticWPF
             Details.ItemsSource = dataDetails;
         }
 
+        private void ClearLastException(object sender, RoutedEventArgs e)
+        {
+            trException.Text = string.Empty;
+        }
     }
 }

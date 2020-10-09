@@ -17,6 +17,15 @@
             <Setter Property="VerticalContentAlignment" Value="Stretch" />
         </Style>
 
+        <Style x:Key="smallButtonStyle" TargetType="Button" >
+            <!--<Setter Property="Margin" Value="0,5,10,5" />-->
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="Width" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        </Style>
+
         <Style x:Key="triggerHeader" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,5,10,5" />
             <Setter Property="MinWidth" Value="60" />
@@ -77,7 +86,11 @@
                 <TextBlock Grid.Row="0" Grid.Column="8" Style="{StaticResource triggerHeader}" Text="Custom Header" />
                 <TextBlock Grid.Row="1" Grid.Column="8" Style="{StaticResource triggerValue}" x:Name="trCustomHeader" />
 
-                <TextBlock Grid.Row="0" Grid.Column="10" Style="{StaticResource triggerHeader}" Text="Last first chance Exception"  />
+                <StackPanel Grid.Row="0" Grid.Column="10" Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource triggerHeader}" Text="Last first-chance exception"  />
+                    <Button Content="{StaticResource delete}" Style="{StaticResource smallButtonStyle}"
+                            Click="ClearLastException" ToolTip="Clear the last exception"/>
+                </StackPanel>
                 <TextBlock Grid.Row="1" Grid.Column="10" Style="{StaticResource triggerValue}" x:Name="trException" />
             </Grid>
         </StackPanel>

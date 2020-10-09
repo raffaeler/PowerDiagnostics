@@ -79,4 +79,31 @@
             </Rectangle.Fill>
         </Rectangle>
     </Viewbox>
+
+    <Viewbox x:Key="delete" Stretch="Fill" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+        <Rectangle Width="16" Height="16">
+            <Rectangle.Fill>
+                <DrawingBrush>
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup >
+                            <!--<DrawingGroup Opacity="1">
+                                <GeometryDrawing Geometry="F1 M16,16z M0,0z M16,16L0,16 0,0 16,0z">
+                                    <GeometryDrawing.Brush>
+                                        <SolidColorBrush Color="#FFF6F6F6" Opacity="0" />
+                                    </GeometryDrawing.Brush>
+                                </GeometryDrawing>
+                            </DrawingGroup>-->
+                            <DrawingGroup Opacity="1">
+                                <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1 M16,16z M0,0z M16,8L16,14 5,14 5,10 5.232,9.768 3.97,8.505 2,10.475 0,8.475 0,7.525 1.5,6.03 0,4.535 0,3.586 2,1.586 3.97,3.556 5.939,1.586 8.414,4.061 6.444,6.03 8.414,8z" />
+                                <GeometryDrawing Brush="#FF424242" Geometry="F1 M16,16z M0,0z M7.414,9L6,10.414 6,13 15,13 15,9z M14,12L7,12 7,10 14,10z" />
+                                <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1 M16,16z M0,0z M14,10L14,12 7,12 7,10.039z" />
+                                <GeometryDrawing Brush="#FFA1260D" Geometry="F1 M16,16z M0,0z M5.03,6.03L7,8 5.939,9.06 3.97,7.091 2,9.06 0.939,8 2.909,6.03 0.939,4.06 2,3 3.97,4.97 5.939,3 7,4.06z" />
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+
+            </Rectangle.Fill>
+        </Rectangle>
+    </Viewbox>
 </ResourceDictionary>

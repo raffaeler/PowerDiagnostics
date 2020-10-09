@@ -11,8 +11,10 @@ using Polly;
 using Polly.Extensions.Http;
 using Microsoft.Extensions.DependencyInjection;
 
+// dotnet tool update -g dotnet-counters
 // monitoring counters:
-// dotnet-counters monitor -p 23492 --providers Microsoft.AspNetCore.Hosting System.Runtime Raf-CustomHeader
+// dotnet-counters monitor -p 23492      --providers Microsoft.AspNetCore.Hosting System.Runtime Raf-CustomHeader
+// dotnet-counters monitor -n TestWebApp --providers Microsoft.AspNetCore.Hosting System.Runtime Raf-CustomHeader
 
 
 namespace StressTestWebApp
@@ -21,28 +23,30 @@ namespace StressTestWebApp
     {
         private static string _address = "https://localhost:5001";
         private static int _concurrency = 1000;
-        private ServiceProvider _serviceProvider;
 
         static async Task Main(string[] args)
         {
-            await new Program().Start();
+            var p = new Program();
+            var serviceProvider = await p.Start();
+            serviceProvider.Dispose();
         }
 
-        private Task Start()
+        private async Task<ServiceProvider> Start()
         {
-            Initialize();
-            var menu = new Menu(_serviceProvider, _address, _concurrency);
-            return menu.Start();
+            var serviceProvider = Initialize();
+            var menu = new Menu(serviceProvider, _address, _concurrency);
+            await menu.Start();
+            return serviceProvider;
         }
 
-        private void Initialize()
+        private ServiceProvider Initialize()
         {
             var services = new ServiceCollection();
             services.AddHttpClient("stress-client", c =>
             {
 
                 c.BaseAddress = new Uri(_address);
-                c.DefaultRequestHeaders.Add("User-Agent", "Raf-DotNext Http Client");
+                c.DefaultRequestHeaders.Add("User-Agent", "Raf Http Client");
                 //c.DefaultRequestHeaders.Accept.Add("application/json");
                 c.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
                 {
@@ -66,7 +70,7 @@ namespace StressTestWebApp
             })
             .AddTypedClient<TestWebAppClient>();
 
-            _serviceProvider = services.BuildServiceProvider();
+            return services.BuildServiceProvider();
         }
 
     }
