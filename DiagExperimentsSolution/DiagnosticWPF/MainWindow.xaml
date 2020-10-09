@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiagnosticWPF"
         mc:Ignorable="d"
-        Title="Diagnostic Demo by Раффаеле for #dotnext - @raffaeler" Loaded="Window_Loaded"
+        Title="Diagnostic Demo by @raffaeler" Loaded="Window_Loaded"
         Width="1200" Height="750">
     <Window.Resources>
         <Style x:Key="buttonStyle" TargetType="Button" >

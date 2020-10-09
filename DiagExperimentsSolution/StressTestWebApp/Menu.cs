@@ -79,7 +79,7 @@ namespace StressTestWebApp
                         await MakePost(selectedMenu);
                     }
 
-                    if(isStarted)
+                    if (isStarted)
                         Console.WriteLine($"\r\n{selectedMenu.Verb} {selectedMenu.RelativeAddress} has started");
 
                     ignore = false;
@@ -92,14 +92,31 @@ namespace StressTestWebApp
 
         private void Usage(ConsoleKeyInfo key)
         {
+            int[] columns = new[] { 2, 5, 28, 15, 15 };
             Console.Clear();
-            Console.WriteLine($"Last Command: {key.KeyChar}");
-            Console.WriteLine($"Pid = {Process.GetCurrentProcess().Id}");
+            Console.Write($"Pid = {Process.GetCurrentProcess().Id}      ");
+            if (key.KeyChar != 0) Console.Write($"Last Command: {key.KeyChar}");
+            Console.WriteLine();
+            Console.WriteLine();
+            TabWrite(columns, "", "Verb", "Endpoint", "Concurrency", "Header name");
             foreach (var menuItem in _menuItems)
             {
-                Console.WriteLine(menuItem.ToString());
+                //Console.WriteLine(menuItem.ToString());
+                Console.WriteLine(menuItem.ToStringTabular(columns));
             }
             Console.WriteLine($"C. Clear screen");
+        }
+
+        private void TabWrite(int[] columns, params string[] texts)
+        {
+            if (columns.Length < texts.Length) throw new ArgumentException(nameof(columns));
+            for (int i = 0; i < texts.Length; i++)
+            {
+                Console.Write($"{Pad(texts[i], columns[i])} ");
+            }
+            Console.WriteLine();
+
+            static string Pad(string data, int pad) => data.PadRight(pad);
         }
 
         private async Task MakeGet(MenuItem menuItem)
@@ -138,7 +155,7 @@ namespace StressTestWebApp
                 {
                     client.Client.DefaultRequestHeaders.Add(Constants.TriggerHeaderName, "");
                 }
-                var result = await client.Post(menuItem.RelativeAddress, _postPayload); 
+                var result = await client.Post(menuItem.RelativeAddress, _postPayload);
                 if (result)
                     Console.Write(".");
                 else
@@ -160,9 +177,11 @@ namespace StressTestWebApp
         /// <returns></returns>
         private async Task Execute(int concurrency, Func<TestWebAppClient, Task<bool>> requestMaker)
         {
+            using var scope = _serviceProvider.CreateScope();
+
             if (concurrency == 1)
             {
-                var client = _serviceProvider.GetRequiredService<TestWebAppClient>();
+                var client = scope.ServiceProvider.GetRequiredService<TestWebAppClient>();
                 await requestMaker(client);
             }
             else
@@ -173,7 +192,7 @@ namespace StressTestWebApp
                   {
                       return Task.Run<bool>(() =>
                       {
-                          var client = _serviceProvider.GetRequiredService<TestWebAppClient>();
+                          var client = scope.ServiceProvider.GetRequiredService<TestWebAppClient>();
                           evt.Wait();
                           return requestMaker(client);
                       });

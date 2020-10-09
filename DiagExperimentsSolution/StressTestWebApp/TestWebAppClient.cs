@@ -50,9 +50,9 @@ namespace StressTestWebApp
             bool result;
             try
             {
-                var response = await Client.PostAsync(relativeAddress,
-                    //new StringContent($"\"{data}\"", Encoding.UTF8, "application/json"));
-                    JsonContent.Create(data));
+                //new StringContent($"\"{data}\"", Encoding.UTF8, "application/json"));
+                using var content = JsonContent.Create(data);
+                using var response = await Client.PostAsync(relativeAddress, content);
                 result = response.IsSuccessStatusCode;
             }
             catch (HttpRequestException err)

@@ -196,7 +196,7 @@ namespace DiagnosticWPF
             _triggerAll = new TriggerAll(_process.Id, Constants.CustomHeaderEventSourceName,
                 Constants.TriggerHeaderCounterName);
 
-            _triggerAll.OnCpu = d => UpdateTextBlock(trCpu, d.ToString($"{d}%"));
+            _triggerAll.OnCpu = d => UpdateTextBlock(trCpu, d.ToString() + "%");
             _triggerAll.OnEventCounterCount = d => UpdateTextBlock(trCustomHeader, d.ToString());
             _triggerAll.OnException = d => UpdateTextBlock(trException, d);
             _triggerAll.OnGcAllocation = d => UpdateTextBlock(trGcAlloc, $"{d}");
@@ -219,7 +219,7 @@ namespace DiagnosticWPF
         {
             Dispatcher.Invoke(() =>
             {
-                tb.Text = data.ToString();
+                tb.Text = data;
             });
         }
 

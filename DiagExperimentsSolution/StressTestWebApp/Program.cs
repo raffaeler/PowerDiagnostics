@@ -59,10 +59,10 @@ namespace StressTestWebApp
             .AddPolicyHandler(policy =>
             {
                 return HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                .WaitAndRetryAsync(3, retry => TimeSpan.FromSeconds(Math.Pow(2, retry)));
+                    .HandleTransientHttpError()
+                    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    .WaitAndRetryAsync(3, retry => TimeSpan.FromSeconds(Math.Pow(2, retry)));
             })
             .AddTypedClient<TestWebAppClient>();
 
