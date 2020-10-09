@@ -80,5 +80,22 @@ namespace ClrDiagnostics
                 .Where(o => !o.IsFree || !excludeFreeBlocks)
                 .OrderByDescending(o => o.Size);
         }
+
+        public byte[] ReadRawContent(ClrObject @object)
+        {
+            var address = @object.Address;
+            var length = @object.Size;
+            if (@object.IsArray && @object.Type.Name == "Byte")
+            {
+                var arr = @object.AsArray();
+                var bytes = arr.ReadValues<byte>(0, arr.Length);
+                return bytes;
+            }
+
+
+            byte[] blob = new byte[length];
+            _dataTarget.DataReader.Read(address, blob);
+            return blob;
+        }
     }
 }

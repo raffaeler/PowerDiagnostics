@@ -15,14 +15,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using ClrDiagnostics;
 using ClrDiagnostics.Triggers;
+
 using CustomEventSource;
+
 using DiagnosticWPF.Helpers;
 using DiagnosticWPF.Models;
 
 using Microsoft.Diagnostics.Runtime;
 using Microsoft.Win32;
+
+using WpfHexaEditor;
 
 namespace DiagnosticWPF
 {
@@ -86,7 +91,7 @@ namespace DiagnosticWPF
 
                 new KnownQuery(typeof(ClrModule), "Modules", a => a.Modules.ToList()),
 
-                new KnownQuery(typeof(UIStackFrame), "Threads stacks", a => 
+                new KnownQuery(typeof(UIStackFrame), "Threads stacks", a =>
                     a.Stacks()
                     .Select(s => new UIStackFrame()
                     {
@@ -98,7 +103,7 @@ namespace DiagnosticWPF
                 new KnownQuery(typeof(IClrRoot), "Roots", a => a.Roots.ToList()),
 
                 new KnownQuery(typeof(ClrObject), "ObjectsBySize", a => a.GetObjectsBySize(1).ToList()),
-                new KnownQuery(typeof(ClrObject), "NonSystemObjectsBySize", a => 
+                new KnownQuery(typeof(ClrObject), "NonSystemObjectsBySize", a =>
                     a.GetObjectsBySize(1)
                     .Where(o => ((o.Type.Name != null &&
                                 !o.Type.Name.StartsWith("System") &&
@@ -106,7 +111,7 @@ namespace DiagnosticWPF
                                 !o.Type.Name.StartsWith("Interop") &&
                                 !o.Type.Name.StartsWith("Internal")) &&
                                 !o.Type.IsFree)
-                                || o.Type.Name == null) 
+                                || o.Type.Name == null)
                     .ToList()),
 
                 new KnownQuery(typeof(UIAllocatorGroup), "Experimental GetObjectsGroupedByAllocator", a =>
@@ -119,7 +124,7 @@ namespace DiagnosticWPF
                     })
                     .ToList()),
             };
-        
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -134,7 +139,7 @@ namespace DiagnosticWPF
         {
             Close(null, null);
             var filename = FileHelper.OpenDialog(this, "Select a dump file");
-            if(File.Exists(filename))
+            if (File.Exists(filename))
             {
                 try
                 {
@@ -292,6 +297,7 @@ namespace DiagnosticWPF
                 Details.Columns.Add(column);
             }
         }
+
         private void Master_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var data = Master.SelectedItem;
@@ -304,6 +310,26 @@ namespace DiagnosticWPF
         private void ClearLastException(object sender, RoutedEventArgs e)
         {
             trException.Text = string.Empty;
+        }
+
+        private void GridDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = sender as DataGridRow;
+
+            var blob = row.Item switch
+            {
+                ClrObject clrObject => GetBlob(clrObject),
+                IClrRoot clrRoot => GetBlob(clrRoot.Object),
+                _ => null,
+            };
+            
+            if (blob == null) return;
+
+            var hex = new HexViewer();
+            hex.Data = blob;
+            hex.Show();
+
+            byte[] GetBlob(ClrObject @object) => _analyzer.ReadRawContent(@object);
         }
     }
 }

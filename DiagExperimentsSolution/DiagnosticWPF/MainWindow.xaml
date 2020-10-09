@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiagnosticWPF"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="Diagnose_16x.ico"
         Title="Diagnostic Demo by @raffaeler" Loaded="Window_Loaded"
         Width="1200" Height="750">
     <Window.Resources>
@@ -42,6 +42,10 @@
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="Bold" />
 
+        </Style>
+
+        <Style x:Key="GridRowStyle" TargetType="DataGridRow">
+            <EventSetter Event="MouseDoubleClick" Handler="GridDoubleClick" />
         </Style>
     </Window.Resources>
     <Grid Margin="10">
@@ -131,12 +135,13 @@
 
             <DataGrid x:Name="Master" AutoGenerateColumns="False"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
-                      SelectionChanged="Master_SelectionChanged" />
+                      SelectionChanged="Master_SelectionChanged" ItemContainerStyle="{StaticResource GridRowStyle}"/>
 
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
             <DataGrid Grid.Column="2" x:Name="Details" AutoGenerateColumns="False"
-                CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" />
+                CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
+                ItemContainerStyle="{StaticResource GridRowStyle}" />
         </Grid>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5,10,0,0">

@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Diagnose_16x.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,15 +19,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Binary_16x.ico" />
+    <None Remove="Diagnose_16x.ico" />
+    <None Remove="Process_16x.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.141901" />
     <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.0.145301" />
     <PackageReference Include="Microsoft.Diagnostics.Runtime.Utilities" Version="2.0.0-rc.20303.3" />
     <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="2.0.61" />
+    <PackageReference Include="WPFHexaEditor" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ClrDiagnostics\ClrDiagnostics.csproj" />
     <ProjectReference Include="..\CustomEventSource\CustomEventSource.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Binary_16x.ico" />
+    <Resource Include="Diagnose_16x.ico" />
+    <Resource Include="Process_16x.ico" />
   </ItemGroup>
 
   
