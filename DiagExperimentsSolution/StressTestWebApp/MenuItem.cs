@@ -38,12 +38,16 @@ namespace StressTestWebApp
             if (columns.Length < 5) throw new ArgumentException(nameof(columns));
             var header = UseCustomHeader ? "CustomHeader" : "";
 
-            return $"{Pad(MenuKey,columns[0])} {Pad(Verb, columns[1])} {Pad(RelativeAddress, columns[2])} {Pad(Concurrency, columns[3])} {Pad(header, columns[4])}";
+            return string.Join(" ",
+                Pad(MenuKey, columns[0]),
+                Pad(Verb, columns[1]),
+                Pad(RelativeAddress, columns[2]),
+                Pad(Concurrency, columns[3]),
+                Pad(header, columns[4])
+                );
+        
+            static string Pad<T>(T data, int pad) => data.ToString().PadRight(pad);
         }
 
-        private string Pad(string data, int pad) => data.PadRight(pad);
-        private string Pad(int data, int pad) => data.ToString().PadRight(pad);
-        private string Pad(char data, int pad) => data.ToString().PadRight(pad);
-        private string Pad(object data, int pad) => data.ToString().PadRight(pad);
     }
 }

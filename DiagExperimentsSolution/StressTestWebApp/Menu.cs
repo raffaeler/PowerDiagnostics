@@ -104,7 +104,7 @@ namespace StressTestWebApp
                 //Console.WriteLine(menuItem.ToString());
                 Console.WriteLine(menuItem.ToStringTabular(columns));
             }
-            Console.WriteLine($"C. Clear screen");
+            Console.WriteLine($"C  Clear screen");
         }
 
         private void TabWrite(int[] columns, params string[] texts)
