@@ -6,8 +6,12 @@ using System.Text;
 
 using ClrDiagnostics;
 
+
 namespace TestConsole
 {
+    /// <summary>
+    /// Diagnosing problems related to LoadeAllocator
+    /// </summary>
     public class UseCase2
     {
         private static string _dumpDir = @"H:\dev.git\Experiments\NetCoreExperiments\DiagnosticHelpers\_dumps";

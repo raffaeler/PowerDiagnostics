@@ -10,6 +10,10 @@ using ClrDiagnostics.Extensions;
 
 namespace TestConsole
 {
+    /// <summary>
+    /// Used to test triggers.
+    /// These are the perf counters that can be used to trigger a snapshot or dump
+    /// </summary>
     class UseCase6
     {
         public void Analyze()

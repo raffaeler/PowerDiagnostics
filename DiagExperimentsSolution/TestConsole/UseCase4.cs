@@ -11,6 +11,10 @@ using Microsoft.Diagnostics.Tracing.Parsers.Clr;
 
 namespace TestConsole
 {
+    /// <summary>
+    /// Used to test triggers.
+    /// These are the perf counters that can be used to trigger a snapshot or dump
+    /// </summary>
     public class UseCase4
     {
         public void Analyze()

@@ -9,6 +9,10 @@ using Microsoft.Diagnostics.Tracing;
 
 namespace TestConsole
 {
+    /// <summary>
+    /// Used to test triggers.
+    /// These are the perf counters that can be used to trigger a snapshot or dump
+    /// </summary>
     class UseCase5
     {
         public void Analyze()

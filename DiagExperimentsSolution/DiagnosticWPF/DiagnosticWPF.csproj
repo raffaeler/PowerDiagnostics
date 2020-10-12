@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.0.145301" />
     <PackageReference Include="Microsoft.Diagnostics.Runtime.Utilities" Version="2.0.0-rc.20303.3" />
     <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="2.0.61" />
-    <PackageReference Include="WPFHexaEditor" Version="2.0.2" />
+    <PackageReference Include="WPFHexaEditor" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>

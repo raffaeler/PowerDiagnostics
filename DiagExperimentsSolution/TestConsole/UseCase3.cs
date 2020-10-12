@@ -11,6 +11,9 @@ using ClrDiagnostics.Helpers;
 
 namespace TestConsole
 {
+    /// <summary>
+    /// Used to test various utilities
+    /// </summary>
     public class UseCase3
     {
         private static string _dumpDir = @"H:\dev.git\Experiments\NetCoreExperiments\DiagnosticHelpers\_dumps";
