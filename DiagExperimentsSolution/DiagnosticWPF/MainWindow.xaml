@@ -182,7 +182,7 @@
         </Grid>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5,10,0,0">
-            <TextBlock x:Name="status" />
+            <TextBlock x:Name="status" FontSize="16" Foreground="Gray" />
         </StackPanel>
     </Grid>
 </Window>
