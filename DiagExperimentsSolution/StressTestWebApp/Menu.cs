@@ -38,7 +38,7 @@ namespace StressTestWebApp
             _menuItems.Add(new MenuItem('3', HttpMethod.Post, "/api/Test/ExceptionOnPost", _concurrency));
             _menuItems.Add(new MenuItem('4', HttpMethod.Post, "/api/Test/SlowPost", _concurrency));
             _menuItems.Add(new MenuItem('5', HttpMethod.Post, "/api/Test/LeakBlob", 1));
-            _menuItems.Add(new MenuItem('6', HttpMethod.Post, "/api/Test/LeakGraph", 1));
+            _menuItems.Add(new MenuItem('6', HttpMethod.Post, "/api/Test/LeakGraph", 20));
             _menuItems.Add(new MenuItem('7', HttpMethod.Post, "/api/Test/FreeLeaks", 1));
             _menuItems.Add(new MenuItem('8', HttpMethod.Post, "/api/Test/GcCollect", 1));
             _menuItems.Add(new MenuItem('9', HttpMethod.Post, "/api/Test/CpuStress", 4));
@@ -92,13 +92,13 @@ namespace StressTestWebApp
 
         private void Usage(ConsoleKeyInfo key)
         {
-            int[] columns = new[] { 2, 5, 28, 15, 15 };
+            int[] columns = new[] { 2, 5, 26, 18, 15 };
             Console.Clear();
             Console.Write($"Pid = {Process.GetCurrentProcess().Id}      ");
             if (key.KeyChar != 0) Console.Write($"Last Command: {key.KeyChar}");
             Console.WriteLine();
             Console.WriteLine();
-            TabWrite(columns, "", "Verb", "Endpoint", "Concurrency", "Header name");
+            TabWrite(columns, "#", "Verb", "Endpoint", "Concurrent req.", "Header name");
             foreach (var menuItem in _menuItems)
             {
                 //Console.WriteLine(menuItem.ToString());
