@@ -124,6 +124,10 @@
                            IsHitTestVisible="false" Foreground="Gray" />
             </Grid>
 
+            <TextBlock Text="Filter: " Margin="15,5,0,5" FontSize="22" VerticalAlignment="Center" />
+            <TextBox x:Name="FilterTextBlock" KeyUp="FilterChanged" Margin="5,5" MinWidth="150"
+                     FontSize="22" VerticalContentAlignment="Center" />
+
         </StackPanel>
 
         <Grid Grid.Row="2">

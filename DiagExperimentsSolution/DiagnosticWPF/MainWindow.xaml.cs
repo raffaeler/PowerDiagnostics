@@ -41,6 +41,8 @@ namespace DiagnosticWPF
         private IList<KnownQuery> _queries;
         private Process _process;
         private TriggerAll _triggerAll;
+        private ListCollectionView _masterView;
+        private KnownQuery _currentQuery;
 
         public MainWindow()
         {
@@ -59,7 +61,9 @@ namespace DiagnosticWPF
                             Objects = t.objects,
                             GraphSize = t.size,
                         })
-                        .ToList()),
+                        .ToList(),
+                        (o, f) => ((UIDumpHeapStat)o)?.Type?.Name?.FilterBy(f)
+                        ),
 
                 new KnownQuery(typeof(UIStaticFields), "GetStaticFieldsWithGraphAndSize", a =>
                     a.GetStaticFieldsWithGraphAndSize()
@@ -69,7 +73,9 @@ namespace DiagnosticWPF
                             Obj = t.obj,
                             Size = (long)t.size,
                         })
-                        .ToList()),
+                        .ToList(),
+                        (o, f) => ((UIStaticFields)o)?.Obj.Type?.Name?.FilterBy(f)
+                        ),
 
                 new KnownQuery(typeof(UIDupStrings), "GetDuplicateStrings", a =>
                     a.GetDuplicateStrings()
@@ -78,7 +84,9 @@ namespace DiagnosticWPF
                             Text = t.Key,
                             Count = t.Value,
                         })
-                        .ToList()),
+                        .ToList(),
+                        (o, f) => ((UIDupStrings)o)?.Text?.FilterBy(f)
+                        ),
 
                 new KnownQuery(typeof(UIStringsBySize), "GetStringsBySize", a =>
                     a.GetStringsBySize(0)
@@ -87,9 +95,13 @@ namespace DiagnosticWPF
                             Obj = t.obj,
                             Text = t.text,
                         })
-                        .ToList()),
+                        .ToList(),
+                        (o, f) => ((UIStringsBySize)o)?.Text?.FilterBy(f)
+                        ),
 
-                new KnownQuery(typeof(ClrModule), "Modules", a => a.Modules.ToList()),
+                new KnownQuery(typeof(ClrModule), "Modules", a => a.Modules.ToList(),
+                        (o, f) => ((ClrModule)o)?.Name?.FilterBy(f)
+                    ),
 
                 new KnownQuery(typeof(UIStackFrame), "Threads stacks", a =>
                     a.Stacks()
@@ -98,11 +110,18 @@ namespace DiagnosticWPF
                         Thread = s.thread,
                         StackFrames = s.stackFrames.ToList(),
                     })
-                    .ToList()),
+                    .ToList(),
+                    (o, f) => ((UIStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f)     // not much sense
+                    ),
 
-                new KnownQuery(typeof(IClrRoot), "Roots", a => a.Roots.ToList()),
+                new KnownQuery(typeof(IClrRoot), "Roots", a => a.Roots.ToList(),
+                        (o, f) => ((IClrRoot)o).Object.Type?.Name?.FilterBy(f)
+                    ),
 
-                new KnownQuery(typeof(ClrObject), "ObjectsBySize", a => a.GetObjectsBySize(1).ToList()),
+                new KnownQuery(typeof(ClrObject), "ObjectsBySize", a => a.GetObjectsBySize(1).ToList(),
+                        (o, f) => ((ClrObject)o).Type?.Name?.FilterBy(f)
+                    ),
+
                 new KnownQuery(typeof(ClrObject), "NonSystemObjectsBySize", a =>
                     a.GetObjectsBySize(1)
                     .Where(o => ((o.Type.Name != null &&
@@ -112,7 +131,9 @@ namespace DiagnosticWPF
                                 !o.Type.Name.StartsWith("Internal")) &&
                                 !o.Type.IsFree)
                                 || o.Type.Name == null)
-                    .ToList()),
+                    .ToList(),
+                        (o, f) => ((ClrObject)o).Type?.Name?.FilterBy(f)
+                    ),
 
                 new KnownQuery(typeof(UIAllocatorGroup), "Experimental GetObjectsGroupedByAllocator", a =>
                     a.GetObjectsGroupedByAllocator(a.Objects)
@@ -122,7 +143,9 @@ namespace DiagnosticWPF
                         Objects = g.objects,
                         Name = a.GetAllocatorName(g.allocator), // experimental!!
                     })
-                    .ToList()),
+                    .ToList(),
+                        (o, f) => ((UIAllocatorGroup)o)?.Name?.FilterBy(f)
+                    ),
             };
 
         }
@@ -243,6 +266,8 @@ namespace DiagnosticWPF
 
         private void ResetUI()
         {
+            _masterView = null;
+            _currentQuery = null;
             Master.ItemsSource = null;
             Details.ItemsSource = null;
             Master.Columns.Clear();
@@ -264,7 +289,10 @@ namespace DiagnosticWPF
                 KnownGrids.TryGetUIGridByType(uIGrid.DetailsType, out detailsUiGrid);
 
             MakeGrid(uIGrid, detailsUiGrid);
-            Master.ItemsSource = item.Populate(_analyzer);
+            _currentQuery = item;
+            _masterView = (ListCollectionView)CollectionViewSource.GetDefaultView(item.Populate(_analyzer));
+            _masterView.Filter = MasterFilter;
+            Master.ItemsSource = _masterView;
         }
 
         public void MakeGrid(UIGrid uIGrid, UIGrid detailsUiGrid)
@@ -322,7 +350,7 @@ namespace DiagnosticWPF
                 IClrRoot clrRoot => GetBlob(clrRoot.Object),
                 _ => null,
             };
-            
+
             if (blob == null) return;
 
             var hex = new HexViewer();
@@ -330,6 +358,28 @@ namespace DiagnosticWPF
             hex.Show();
 
             byte[] GetBlob(ClrObject @object) => _analyzer.ReadRawContent(@object);
+        }
+
+        private void FilterChanged(object sender, KeyEventArgs e)
+        {
+            if (_analyzer == null) return;
+
+            _masterView.Filter = MasterFilter;
+        }
+
+        private bool MasterFilter(object obj)
+        {
+            try
+            {
+                var result = _currentQuery.Filter(obj, FilterTextBlock.Text);
+                if (!result.HasValue) return false;
+                return result.Value;
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine(err.ToString());
+                return false;
+            }
         }
     }
 }
