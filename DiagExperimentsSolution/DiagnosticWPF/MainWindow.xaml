@@ -8,7 +8,32 @@
         Title="Diagnostic Demo by @raffaeler" Loaded="Window_Loaded"
         Width="1200" Height="750">
     <Window.Resources>
-        <Style x:Key="buttonStyle" TargetType="Button" >
+        <Style x:Key="clearButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="15,5,0,5" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="ToolTip" Value="Clear the filter" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style x:Key="triggerHeader" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,5,10,5" />
+            <Setter Property="MinWidth" Value="60" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style x:Key="triggerHeaderButton" TargetType="Button">
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="0,5,10,5" />
+            <Setter Property="MinWidth" Value="60" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="ToolTip" Value="Clear" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style x:Key="toolButtonStyle" TargetType="Button" >
             <Setter Property="Margin" Value="0,5,10,5" />
             <Setter Property="Padding" Value="2" />
             <Setter Property="Width" Value="48" />
@@ -26,13 +51,6 @@
             <Setter Property="VerticalContentAlignment" Value="Stretch" />
         </Style>
 
-        <Style x:Key="triggerHeader" TargetType="TextBlock">
-            <Setter Property="Margin" Value="0,5,10,5" />
-            <Setter Property="MinWidth" Value="60" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="14" />
-
-        </Style>
         <Style x:Key="triggerValue" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,5,10,5" />
             <Setter Property="MinWidth" Value="60" />
@@ -75,38 +93,50 @@
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource triggerHeader}" Text="CPU"/>
+                <!--<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource triggerHeader}" Text="CPU"/>-->
+                <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource triggerHeaderButton}"
+                        Content="CPU" Click="ClearHeader" Tag="{Binding ElementName=trCpu}"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource triggerValue}" x:Name="trCpu" />
 
-                <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource triggerHeader}" Text="Last GC Alloc" />
+                <!--<TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource triggerHeader}" Text="Last GC Alloc" />-->
+                <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource triggerHeaderButton}"
+                        Content="Last GC Alloc" Click="ClearHeader" Tag="{Binding ElementName=trGcAlloc}"/>
                 <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource triggerValue}" x:Name="trGcAlloc" />
 
-                <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource triggerHeader}" Text="Working-set" />
+                <!--<TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource triggerHeader}" Text="Working-set" />-->
+                <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource triggerHeaderButton}"
+                        Content="Working-set" Click="ClearHeader" Tag="{Binding ElementName=trWorkingSet}"/>
                 <TextBlock Grid.Row="1" Grid.Column="4" Style="{StaticResource triggerValue}" x:Name="trWorkingSet" />
 
-                <TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource triggerHeader}" Text="Http Req/s" />
+                <!--<TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource triggerHeader}" Text="Http Req/s" />-->
+                <Button Grid.Row="0" Grid.Column="6" Style="{StaticResource triggerHeaderButton}"
+                        Content="Http Req/s" Click="ClearHeader" Tag="{Binding ElementName=trHttpReq}"/>
                 <TextBlock Grid.Row="1" Grid.Column="6" Style="{StaticResource triggerValue}" x:Name="trHttpReq" />
 
-                <TextBlock Grid.Row="0" Grid.Column="8" Style="{StaticResource triggerHeader}" Text="Custom Header" />
+                <!--<TextBlock Grid.Row="0" Grid.Column="8" Style="{StaticResource triggerHeader}" Text="Custom Header" />-->
+                <Button Grid.Row="0" Grid.Column="8" Style="{StaticResource triggerHeaderButton}"
+                        Content="Custom Header" Click="ClearHeader" Tag="{Binding ElementName=trCustomHeader}"/>
                 <TextBlock Grid.Row="1" Grid.Column="8" Style="{StaticResource triggerValue}" x:Name="trCustomHeader" />
 
-                <StackPanel Grid.Row="0" Grid.Column="10" Orientation="Horizontal">
+                <!--<StackPanel Grid.Row="0" Grid.Column="10" Orientation="Horizontal">
                     <TextBlock Style="{StaticResource triggerHeader}" Text="Last first-chance exception"  />
                     <Button Content="{StaticResource delete}" Style="{StaticResource smallButtonStyle}"
                             Click="ClearLastException" ToolTip="Clear the last exception"/>
-                </StackPanel>
+                </StackPanel>-->
+                <Button Grid.Row="0" Grid.Column="10" Style="{StaticResource triggerHeaderButton}"
+                        Content="Last first-chance exception" Click="ClearHeader" Tag="{Binding ElementName=trException}"/>
                 <TextBlock Grid.Row="1" Grid.Column="10" Style="{StaticResource triggerValue}" x:Name="trException" />
             </Grid>
         </StackPanel>
         
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Content="{StaticResource fileOpen}" Style="{StaticResource buttonStyle}"
+            <Button Content="{StaticResource fileOpen}" Style="{StaticResource toolButtonStyle}"
                     Click="OpenDump" ToolTip="Open a dump file"/>
-            <Button Content="{StaticResource monitor}" Style="{StaticResource buttonStyle}"
+            <Button Content="{StaticResource monitor}" Style="{StaticResource toolButtonStyle}"
                     Click="MonitorProcess" ToolTip="Monitor a process"/>
-            <Button Content="{StaticResource snapshot}" Style="{StaticResource buttonStyle}"
+            <Button Content="{StaticResource snapshot}" Style="{StaticResource toolButtonStyle}"
                     Click="Snapshot" ToolTip="Snapshot the process"/>
-            <Button Content="{StaticResource close}" Style="{StaticResource buttonStyle}"
+            <Button Content="{StaticResource close}" Style="{StaticResource toolButtonStyle}"
                     Click="Close" ToolTip="Close the current session"/>
 
             <Grid>
@@ -124,7 +154,10 @@
                            IsHitTestVisible="false" Foreground="Gray" />
             </Grid>
 
-            <TextBlock Text="Filter: " Margin="15,5,0,5" FontSize="22" VerticalAlignment="Center" />
+            <!--<TextBlock Text="Filter: " Margin="15,5,0,5" FontSize="22" VerticalAlignment="Center" />-->
+            <Button Style="{StaticResource clearButtonStyle}"
+                    Content="Filter: " Click="ClearFilter" Tag="{Binding ElementName=FilterTextBlock}"/>
+
             <TextBox x:Name="FilterTextBlock" KeyUp="FilterChanged" Margin="5,5" MinWidth="150"
                      FontSize="22" VerticalContentAlignment="Center" />
 

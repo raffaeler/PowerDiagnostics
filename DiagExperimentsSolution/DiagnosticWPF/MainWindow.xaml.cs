@@ -360,9 +360,27 @@ namespace DiagnosticWPF
             byte[] GetBlob(ClrObject @object) => _analyzer.ReadRawContent(@object);
         }
 
+        private void ClearFilter(object sender, RoutedEventArgs e)
+        {
+            FilterTextBlock.Text = string.Empty;
+            FilterChanged(null, null);
+        }
+
+        private void ClearHeader(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null) return;
+            var textBlock = button.Tag as TextBlock;
+            if (textBlock != null)
+            {
+                textBlock.Text = string.Empty;
+                return;
+            }
+        }
+
         private void FilterChanged(object sender, KeyEventArgs e)
         {
-            if (_analyzer == null) return;
+            if (_analyzer == null || _masterView == null) return;
 
             _masterView.Filter = MasterFilter;
         }
