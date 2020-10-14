@@ -11,11 +11,15 @@ using Polly;
 using Polly.Extensions.Http;
 using Microsoft.Extensions.DependencyInjection;
 
+// Update the tool:
 // dotnet tool update -g dotnet-counters
-// monitoring counters:
+//
+// Monitoring counters:
 // dotnet-counters monitor -p 23492      --providers Microsoft.AspNetCore.Hosting System.Runtime Raf-CustomHeader
 // dotnet-counters monitor -n TestWebApp --providers Microsoft.AspNetCore.Hosting System.Runtime Raf-CustomHeader
-
+//
+// Collecting a dump:
+// dotnet-dump collect -o TestWebApp-GraphLeaks.dmp -p 1234
 
 namespace StressTestWebApp
 {
