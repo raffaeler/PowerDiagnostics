@@ -160,6 +160,7 @@ namespace DiagnosticWPF
 
         private void OpenDump(object sender, RoutedEventArgs e)
         {
+            status.Text = string.Empty;
             Close(null, null);
             var filename = FileHelper.OpenDialog(this, "Select a dump file");
             if (File.Exists(filename))
@@ -181,6 +182,7 @@ namespace DiagnosticWPF
 
         private void Snapshot(object sender, RoutedEventArgs e)
         {
+            status.Text = string.Empty;
             if (_process == null)
             {
                 MessageBox.Show(this, "Monitor a process before snapshotting it", "Snapshot", MessageBoxButton.OK);
@@ -208,6 +210,7 @@ namespace DiagnosticWPF
 
         private void MonitorProcess(object sender, RoutedEventArgs e)
         {
+            status.Text = string.Empty;
             Close(null, null);
             ProcessPicker picker = new ProcessPicker();
             var result = picker.ShowDialog();
@@ -266,6 +269,7 @@ namespace DiagnosticWPF
 
         private void ResetUI()
         {
+            status.Text = string.Empty;
             _masterView = null;
             _currentQuery = null;
             Master.ItemsSource = null;

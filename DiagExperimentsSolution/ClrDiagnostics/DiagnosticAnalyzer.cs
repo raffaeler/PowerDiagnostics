@@ -52,6 +52,11 @@ namespace ClrDiagnostics
             }
 
             _clrInfo = _dataTarget.ClrVersions[0];
+            if (_clrInfo.DacInfo.LocalDacPath == null)
+            {
+                throw new Exception("The runtime used in the dump cannot be found on this installation");
+            }
+
             _clrLocation = new FileInfo(_clrInfo.DacInfo.LocalDacPath);
             _clrRuntime = _clrInfo.CreateRuntime();
             _dacInfo = _clrInfo.DacInfo;
