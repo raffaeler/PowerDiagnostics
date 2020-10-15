@@ -8,6 +8,7 @@ using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
 using Microsoft.Diagnostics.Symbols;
 using System.IO;
+using System.Diagnostics;
 
 namespace ClrDiagnostics
 {
@@ -19,14 +20,6 @@ namespace ClrDiagnostics
         private const ulong _ptrManagedAssemblyLoadContextOffset = 0x160;
         private const string _nameField = "_name";
 
-        private ClrObject GetAllocatorObject(ClrObject clrObject)
-        {
-            var allocatorHandle = clrObject.Type.LoaderAllocatorHandle;
-            var allocatorAddress = _dataTarget.DataReader.ReadPointer(allocatorHandle);
-            var allocatorObject = _clrRuntime.Heap.GetObject(allocatorAddress);
-            return allocatorObject;
-        }
-
         public IEnumerable<(ClrObject allocator, IEnumerable<ClrObject> objects)> GetObjectsGroupedByAllocator(IEnumerable<ClrObject> objects)
         {
             return objects
@@ -37,8 +30,45 @@ namespace ClrDiagnostics
                 .Select(g => (g.Key, (IEnumerable<ClrObject>)g.ToList()));
         }
 
+        private ClrObject GetAllocatorObject(ClrObject clrObject)
+        {
+            var assemblyLoadContextAddress = clrObject.Type.AssemblyLoadContextAddress;
+            //if (assemblyLoadContextAddress != 0) Debugger.Break();
+            var alc = _clrRuntime.Heap.GetObject(assemblyLoadContextAddress);
+            return alc;
+        }
+
+        /// <summary>
+        /// This only works starting from .NET 5
+        /// https://github.com/dotnet/runtime/issues/11157
+        /// TODO: compute the field from the property name
+        /// </summary>
+        /// <param name="allocatorObject"></param>
+        /// <returns></returns>
+        public string GetAllocatorName(ClrObject allocatorObject)
+        {
+            // allocatorObject is AssemblyLoadContext or a derived class
+            // this means it has a property called "Name"
+            var value = allocatorObject.ReadObjectField("_name");
+            return value.GetStringValue();
+        }
+
+/*
         /// <summary>
         /// Experimental, may crash
+        /// </summary>
+        private ClrObject GetAllocatorObject(ClrObject clrObject)
+        {
+            var allocatorHandle = clrObject.Type.LoaderAllocatorHandle;
+            var allocatorAddress = _dataTarget.DataReader.ReadPointer(allocatorHandle);
+            var allocatorObject = _clrRuntime.Heap.GetObject(allocatorAddress);
+            return allocatorObject;
+        }
+  
+        /// <summary>
+        /// Experimental, may crash
+        /// This was the only way to make it work with dumps created in .NET Core 3.x
+        /// Starting from .NET 5, the SOS8 interface has been introduced and specifically address this need.
         /// </summary>
         public string GetAllocatorName(ClrObject allocatorObject)
         {
@@ -86,5 +116,6 @@ namespace ClrDiagnostics
             var allocatorObject = GetAllocatorObject(clrObject);
             return GetAllocatorName(allocatorObject);
         }
+*/
     }
 }

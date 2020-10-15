@@ -135,7 +135,7 @@ namespace DiagnosticWPF
                         (o, f) => ((ClrObject)o).Type?.Name?.FilterBy(f)
                     ),
 
-                new KnownQuery(typeof(UIAllocatorGroup), "Experimental GetObjectsGroupedByAllocator", a =>
+                new KnownQuery(typeof(UIAllocatorGroup), "GetObjectsGroupedByAllocator (.NET5 dumps)", a =>
                     a.GetObjectsGroupedByAllocator(a.Objects)
                     .Select(g => new UIAllocatorGroup()
                     {
