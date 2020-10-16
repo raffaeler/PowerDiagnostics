@@ -37,6 +37,7 @@ The projects in the solution are:
 There is no particular reason other than the Http Client is easier to use.
 You can change the framework to .NET Core 3 and change the code so that it uses application/json as Content-Type.
 This stress app is a Console application with a menu that sends requests to the web app and can cause different kind of issues (cpu stress, memory leaks, high number of requests, etc.). One of the requests also send the custom header that could be used to trigger a snapshot (this is not done automatically for the reasons I explained above)
+
 ![StressTestWebApp](_images/Stress-App.png)
 
 ---
