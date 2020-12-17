@@ -17,6 +17,12 @@ using System.Threading;
 // build running: msbuild
 //
 // https://github.com/microsoft/perfview/issues/1157
+//
+// System.Diagnostics.Tracing (facade):
+// https://github.com/dotnet/runtime/tree/master/src/libraries/System.Diagnostics.Tracing
+//
+// System.Diagnostics.Tracing (implementation):
+// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing
 
 namespace CustomEventSource
 {

@@ -15,6 +15,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClrDiagnostics", "ClrDiagno
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiagnosticWPF", "DiagnosticWPF\DiagnosticWPF.csproj", "{AF7E328B-A57F-41D6-AAC8-175ADF7A8E18}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fusion", "Fusion\Fusion.csproj", "{B7A96992-7CE0-4783-AC2A-EC1495EB0154}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6575DE4E-E11B-4067-B34E-CA0AC1B29750} = {6575DE4E-E11B-4067-B34E-CA0AC1B29750}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DiagServer", "DiagServer", "{64B88FFD-D9CF-47B6-9D66-FB6CE13366D4}"
+	ProjectSection(SolutionItems) = preProject
+		Microsoft.Diagnostics.NETCore.Client.md = Microsoft.Diagnostics.NETCore.Client.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Diagnostics.NETCore.Client", "Microsoft.Diagnostics.NETCore.Client\Microsoft.Diagnostics.NETCore.Client.csproj", "{BCDD0C02-57D7-46FB-8022-06450432D58C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FusionDebuggee", "FusionDebuggee\FusionDebuggee.csproj", "{6575DE4E-E11B-4067-B34E-CA0AC1B29750}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,9 +59,24 @@ Global
 		{AF7E328B-A57F-41D6-AAC8-175ADF7A8E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF7E328B-A57F-41D6-AAC8-175ADF7A8E18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF7E328B-A57F-41D6-AAC8-175ADF7A8E18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7A96992-7CE0-4783-AC2A-EC1495EB0154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7A96992-7CE0-4783-AC2A-EC1495EB0154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7A96992-7CE0-4783-AC2A-EC1495EB0154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7A96992-7CE0-4783-AC2A-EC1495EB0154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCDD0C02-57D7-46FB-8022-06450432D58C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCDD0C02-57D7-46FB-8022-06450432D58C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCDD0C02-57D7-46FB-8022-06450432D58C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCDD0C02-57D7-46FB-8022-06450432D58C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6575DE4E-E11B-4067-B34E-CA0AC1B29750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6575DE4E-E11B-4067-B34E-CA0AC1B29750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6575DE4E-E11B-4067-B34E-CA0AC1B29750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6575DE4E-E11B-4067-B34E-CA0AC1B29750}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BCDD0C02-57D7-46FB-8022-06450432D58C} = {64B88FFD-D9CF-47B6-9D66-FB6CE13366D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E464F9B-0796-4380-9D20-3C55C01CB5DA}
