@@ -163,11 +163,13 @@ namespace DiagnosticWPF
             status.Text = string.Empty;
             Close(null, null);
             var filename = FileHelper.OpenDialog(this, "Select a dump file");
-            if (File.Exists(filename))
+            if (string.IsNullOrEmpty(filename)) return;
+            var fi = new FileInfo(filename);
+            if (fi.Exists)
             {
                 try
                 {
-                    _analyzer = DiagnosticAnalyzer.FromDump(filename, true);
+                    _analyzer = DiagnosticAnalyzer.FromDump(fi.FullName, true);
                     ComboQueries.IsEnabled = true;
                 }
                 catch (Exception err)
@@ -175,9 +177,11 @@ namespace DiagnosticWPF
                     _analyzer = null;
                     ComboQueries.IsEnabled = false;
                     status.Text = err.Message;
+                    return;
                 }
             }
 
+            UpdateStatus($"File {fi.Name} loaded");
         }
 
         private void Snapshot(object sender, RoutedEventArgs e)
@@ -315,11 +319,13 @@ namespace DiagnosticWPF
             if (uIGrid.DetailsType == null)
             {
                 detailsColumn.Width = new GridLength(0);
+                detailsColumn.MinWidth = 0;
                 _currentDetailsProperty = null;
                 return;
             }
             _currentDetailsProperty = uIGrid.DetailsProperty;
             detailsColumn.Width = new GridLength(1, GridUnitType.Star);
+            detailsColumn.MinWidth = 100;
 
             if (detailsUiGrid == null) return;
 
@@ -333,10 +339,34 @@ namespace DiagnosticWPF
         private void Master_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var data = Master.SelectedItem;
+            if (data is ClrObject clrObject)
+            {
+                UpdateDetailsText(clrObject);
+                return;
+            }
+
+            UpdateDetailsText(null);
+
             if (data == null || _currentDetailsProperty == null) return;
             var dataDetails = _currentDetailsProperty.GetValue(data) as System.Collections.IEnumerable;
-            if (dataDetails == null) return;
+            if (dataDetails == null)
+            {
+                return;
+            }
+
             Details.ItemsSource = dataDetails;
+        }
+
+        private void Details_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var data = Details.SelectedItem;
+            if (data is ClrObject clrObject)
+            {
+                UpdateDetailsText(clrObject);
+                return;
+            }
+
+            UpdateDetailsText(null);
         }
 
         private void ClearLastException(object sender, RoutedEventArgs e)
@@ -402,6 +432,30 @@ namespace DiagnosticWPF
                 Debug.WriteLine(err.ToString());
                 return false;
             }
+        }
+
+        private async void UpdateStatus(string text, int milliseconds = 3500)
+        {
+            if (text == null) text = string.Empty;
+            status.Text = text;
+            await Task.Delay(milliseconds);
+            status.Text = string.Empty;
+        }
+
+        private void UpdateDetailsText(ClrObject? clrObject)
+        {
+            if (clrObject == null)
+            {
+                textDetails.Text = string.Empty;
+                detailsRow.Height = new GridLength(0);
+                detailsRow.MinHeight = 0;
+                return;
+            }
+
+            string rootText = _analyzer.PrintRoots(clrObject.Value);
+            textDetails.Text = rootText;
+            detailsRow.Height = new GridLength(2, GridUnitType.Star);
+            detailsRow.MinHeight = 100;
         }
     }
 }

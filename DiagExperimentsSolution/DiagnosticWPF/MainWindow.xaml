@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DiagnosticWPF"
         mc:Ignorable="d" Icon="Diagnose_16x.ico"
         Title="Diagnostic Demo by @raffaeler" Loaded="Window_Loaded"
-        Width="1200" Height="750">
+        Width="1200" Height="600">
     <Window.Resources>
         <Style x:Key="clearButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="5" />
@@ -128,7 +128,7 @@
                 <TextBlock Grid.Row="1" Grid.Column="10" Style="{StaticResource triggerValue}" x:Name="trException" />
             </Grid>
         </StackPanel>
-        
+
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button Content="{StaticResource fileOpen}" Style="{StaticResource toolButtonStyle}"
                     Click="OpenDump" ToolTip="Open a dump file"/>
@@ -164,21 +164,33 @@
         </StackPanel>
 
         <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition x:Name="detailsColumn" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="5" />
+                <RowDefinition x:Name="detailsRow" Height="0"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition x:Name="detailsColumn" />
+                </Grid.ColumnDefinitions>
 
-            <DataGrid x:Name="Master" AutoGenerateColumns="False"
+                <DataGrid x:Name="Master" AutoGenerateColumns="False"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
                       SelectionChanged="Master_SelectionChanged" ItemContainerStyle="{StaticResource GridRowStyle}"/>
 
-            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
-            <DataGrid Grid.Column="2" x:Name="Details" AutoGenerateColumns="False"
+                <DataGrid Grid.Column="2" x:Name="Details" AutoGenerateColumns="False"
                 CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
-                ItemContainerStyle="{StaticResource GridRowStyle}" />
+                ItemContainerStyle="{StaticResource GridRowStyle}"
+                          SelectionChanged="Details_SelectionChanged"/>
+            </Grid>
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
+            <ScrollViewer Grid.Row="2">
+                <TextBlock x:Name="textDetails" FontSize="16" IsEnabled="False"/>
+            </ScrollViewer>
         </Grid>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5,10,0,0">

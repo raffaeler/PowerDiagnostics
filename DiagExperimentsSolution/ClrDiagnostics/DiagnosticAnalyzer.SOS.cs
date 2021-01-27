@@ -50,10 +50,11 @@ namespace ClrDiagnostics
             Console.WriteLine($"{pinnedType.MethodTable:X16} {pinnedCount,8} {pinnedSize,12} {pinnedType.Name}");
         }
 
-        public void PrintRoots(ClrObject clrObject)
+        public string PrintRoots(ClrObject clrObject)
         {
+            StringBuilder sb = new StringBuilder();
             var objectType = clrObject.Type;
-            Console.WriteLine($"{objectType.Name} Addr:0x{clrObject.Address:X} Size:{clrObject.Size} MT:0x{objectType.MethodTable:X}");
+            sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} Size:{clrObject.Size} MT:0x{objectType.MethodTable:X}");
 
             var roots = RootPaths(clrObject.Address);
             bool isFirst = true;
@@ -62,29 +63,31 @@ namespace ClrDiagnostics
             {
                 if (isFirst)
                 {
-                    Console.WriteLine($"Root {root.Root.RootKind} Addr:{root.Root.Address} {root.Root.Object.Type.Name} Addr:{root.Root.Address}");
+                    sb.AppendLine($"Root {root.Root.RootKind} Addr:{root.Root.Address} {root.Root.Object.Type.Name} Addr:{root.Root.Address}");
                     isFirst = false;
                 }
 
-                Console.WriteLine($"  Path {i++}");
+                sb.AppendLine($"  Path {i++}");
                 foreach (var path in root.Path)
                 {
-                    Console.WriteLine($"     {path.Address:X16} {path.Type.Name}");
+                    sb.AppendLine($"     {path.Address:X16} {path.Type.Name}");
                     var result = FindReferencing(false, path.Address);
                     if (result.Count > 0)
                     {
-                        Console.WriteLine($"                 Objects whose fields point to {path.Address:X16}");
+                        sb.AppendLine($"                 Objects whose fields point to {path.Address:X16}");
                         foreach (var res in result)
                         {
                             string isStaticString = res.isStatic ? "static" : "instance";
-                            Console.WriteLine($"                   {res.address:X16} Type:{res.typeName} field:{res.fieldName} {isStaticString}");
+                            sb.AppendLine($"                   {res.address:X16} Type:{res.typeName} field:{res.fieldName} {isStaticString}");
                         }
                     }
 
                 }
 
-                Console.WriteLine();
+                sb.AppendLine();
             }
+
+            return sb.ToString();
         }
 
         private List<(ulong address, string typeName, string fieldName, bool isStatic)> FindReferencing(
