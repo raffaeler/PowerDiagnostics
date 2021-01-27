@@ -442,7 +442,7 @@ namespace DiagnosticWPF
             status.Text = string.Empty;
         }
 
-        private void UpdateDetailsText(ClrObject? clrObject)
+        private async void UpdateDetailsText(ClrObject? clrObject)
         {
             if (clrObject == null)
             {
@@ -452,7 +452,7 @@ namespace DiagnosticWPF
                 return;
             }
 
-            string rootText = _analyzer.PrintRoots(clrObject.Value);
+            string rootText = await _analyzer.PrintRootsAsync(clrObject.Value);
             textDetails.Text = rootText;
             detailsRow.Height = new GridLength(2, GridUnitType.Star);
             detailsRow.MinHeight = 100;

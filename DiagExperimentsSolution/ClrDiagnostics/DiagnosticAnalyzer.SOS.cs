@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
+using System.Threading.Tasks;
 
 namespace ClrDiagnostics
 {
@@ -48,6 +49,11 @@ namespace ClrDiagnostics
             Console.WriteLine();
             Console.WriteLine("Roots:");
             Console.WriteLine($"{pinnedType.MethodTable:X16} {pinnedCount,8} {pinnedSize,12} {pinnedType.Name}");
+        }
+
+        public Task<string> PrintRootsAsync(ClrObject clrObject)
+        {
+            return Task.Run<string>(() => PrintRoots(clrObject));
         }
 
         public string PrintRoots(ClrObject clrObject)
