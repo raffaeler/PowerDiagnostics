@@ -444,18 +444,40 @@ namespace DiagnosticWPF
 
         private async void UpdateDetailsText(ClrObject? clrObject)
         {
+            textDetails.Text = string.Empty;
             if (clrObject == null)
             {
-                textDetails.Text = string.Empty;
                 detailsRow.Height = new GridLength(0);
                 detailsRow.MinHeight = 0;
                 return;
             }
 
-            string rootText = await _analyzer.PrintRootsAsync(clrObject.Value);
-            textDetails.Text = rootText;
-            detailsRow.Height = new GridLength(2, GridUnitType.Star);
-            detailsRow.MinHeight = 100;
+            int count = _analyzer.GetGraphPathsCount(clrObject.Value);
+            if (count > 75)
+            {
+                if (MessageBox.Show($"There are {count} references. Do you want to continue?",
+                    "Time expensive operation",
+                    MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                string rootText = await _analyzer.PrintRootsAsync(clrObject.Value);
+                textDetails.Text = rootText;
+                detailsRow.Height = new GridLength(2, GridUnitType.Star);
+                detailsRow.MinHeight = 100;
+            }
+            catch (Exception err)
+            {
+                UpdateStatus(err.Message);
+            }
+            finally
+            {
+                UpdateStatus($"Graph built successfully ({count} references)");
+            }
         }
     }
 }

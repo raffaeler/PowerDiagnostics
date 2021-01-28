@@ -56,12 +56,25 @@ namespace ClrDiagnostics
             return Task.Run<string>(() => PrintRoots(clrObject));
         }
 
+        public int GetGraphPathsCount(ClrObject clrObject)
+        {
+            int count = 0;
+            var objectType = clrObject.Type;
+            var roots = RootPaths(clrObject.Address);
+            foreach (var root in roots)
+            {
+                count += root.Path.Length;
+            }
+
+            return count;
+        }
+
         public string PrintRoots(ClrObject clrObject)
         {
             StringBuilder sb = new StringBuilder();
             var objectType = clrObject.Type;
-            sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} Size:{clrObject.Size} MT:0x{objectType.MethodTable:X}");
-
+            sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} MT:0x{objectType.MethodTable:X} Size:{clrObject.Size}");
+            sb.AppendLine();
             var roots = RootPaths(clrObject.Address);
             bool isFirst = true;
             int i = 0;
@@ -69,7 +82,7 @@ namespace ClrDiagnostics
             {
                 if (isFirst)
                 {
-                    sb.AppendLine($"Root {root.Root.RootKind} Addr:{root.Root.Address} {root.Root.Object.Type.Name} Addr:{root.Root.Address}");
+                    sb.AppendLine($"Root {root.Root.RootKind} Addr:{root.Root.Address:X16} {root.Root.Object.Type.Name} ");
                     isFirst = false;
                 }
 
