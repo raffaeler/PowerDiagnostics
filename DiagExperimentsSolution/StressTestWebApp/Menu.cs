@@ -92,13 +92,13 @@ namespace StressTestWebApp
 
         private void Usage(ConsoleKeyInfo key)
         {
-            int[] columns = new[] { 2, 5, 26, 18, 15 };
+            int[] columns = new[] { 2, 5, 26, 12, 15 };
             Console.Clear();
             Console.Write($"Pid = {Process.GetCurrentProcess().Id}      ");
             if (key.KeyChar != 0) Console.Write($"Last Command: {key.KeyChar}");
             Console.WriteLine();
             Console.WriteLine();
-            TabWrite(columns, "#", "Verb", "Endpoint", "Concurrent req.", "Header name");
+            TabWrite(columns, "#", "Verb", "Endpoint", "Concurrency", "Header");
             foreach (var menuItem in _menuItems)
             {
                 //Console.WriteLine(menuItem.ToString());

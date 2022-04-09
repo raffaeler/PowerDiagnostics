@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
+using System.Threading.Tasks;
 
 namespace ClrDiagnostics
 {
@@ -50,11 +51,30 @@ namespace ClrDiagnostics
             Console.WriteLine($"{pinnedType.MethodTable:X16} {pinnedCount,8} {pinnedSize,12} {pinnedType.Name}");
         }
 
-        public void PrintRoots(ClrObject clrObject)
+        public Task<string> PrintRootsAsync(ClrObject clrObject)
         {
-            var objectType = clrObject.Type;
-            Console.WriteLine($"{objectType.Name} Addr:0x{clrObject.Address:X} Size:{clrObject.Size} MT:0x{objectType.MethodTable:X}");
+            return Task.Run<string>(() => PrintRoots(clrObject));
+        }
 
+        public int GetGraphPathsCount(ClrObject clrObject)
+        {
+            int count = 0;
+            var objectType = clrObject.Type;
+            var roots = RootPaths(clrObject.Address);
+            foreach (var root in roots)
+            {
+                count += root.Path.Length;
+            }
+
+            return count;
+        }
+
+        public string PrintRoots(ClrObject clrObject)
+        {
+            StringBuilder sb = new StringBuilder();
+            var objectType = clrObject.Type;
+            sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} MT:0x{objectType.MethodTable:X} Size:{clrObject.Size}");
+            sb.AppendLine();
             var roots = RootPaths(clrObject.Address);
             bool isFirst = true;
             int i = 0;
@@ -62,29 +82,31 @@ namespace ClrDiagnostics
             {
                 if (isFirst)
                 {
-                    Console.WriteLine($"Root {root.Root.RootKind} Addr:{root.Root.Address} {root.Root.Object.Type.Name} Addr:{root.Root.Address}");
+                    sb.AppendLine($"Root {root.Root.RootKind} Addr:{root.Root.Address:X16} {root.Root.Object.Type.Name} ");
                     isFirst = false;
                 }
 
-                Console.WriteLine($"  Path {i++}");
+                sb.AppendLine($"  Path {i++}");
                 foreach (var path in root.Path)
                 {
-                    Console.WriteLine($"     {path.Address:X16} {path.Type.Name}");
+                    sb.AppendLine($"     {path.Address:X16} {path.Type.Name}");
                     var result = FindReferencing(false, path.Address);
                     if (result.Count > 0)
                     {
-                        Console.WriteLine($"                 Objects whose fields point to {path.Address:X16}");
+                        sb.AppendLine($"                 Objects whose fields point to {path.Address:X16}");
                         foreach (var res in result)
                         {
                             string isStaticString = res.isStatic ? "static" : "instance";
-                            Console.WriteLine($"                   {res.address:X16} Type:{res.typeName} field:{res.fieldName} {isStaticString}");
+                            sb.AppendLine($"                   {res.address:X16} Type:{res.typeName} field:{res.fieldName} {isStaticString}");
                         }
                     }
 
                 }
 
-                Console.WriteLine();
+                sb.AppendLine();
             }
+
+            return sb.ToString();
         }
 
         private List<(ulong address, string typeName, string fieldName, bool isStatic)> FindReferencing(
