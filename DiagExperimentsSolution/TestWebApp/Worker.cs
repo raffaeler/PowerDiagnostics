@@ -52,7 +52,7 @@ namespace TestWebApp
         {
             Debug.WriteLine("StopAsync");
 
-            _addonService.UnloadContext();
+            _addonService?.UnloadContext();
             return base.StopAsync(cancellationToken);
         }
 

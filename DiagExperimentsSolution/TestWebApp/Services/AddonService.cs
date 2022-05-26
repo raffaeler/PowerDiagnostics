@@ -42,16 +42,20 @@ namespace TestWebApp.Services
 
         public void UnloadContext()
         {
-            _myLoadContext.Unload();
-            _myLoadContext.Unloading -= OnMyLoadContextUnloading;
-            _myLoadContext = null;
+            if (_myLoadContext != null)
+            {
+                _myLoadContext.Unload();
+                _myLoadContext.Unloading -= OnMyLoadContextUnloading;
+                _myLoadContext = null;
+            }
+            
             // _isLoadContextAlive.IsAlive tells whether the load context is still alive
         }
 
         public void MakeAddonWork()
         {
             //_addon.LeakSomeMemory(20);
-            _leakyDictionary[DateTime.Now.Ticks.ToString()] = _addon.AllocateSomeMemory(1234);
+            _leakyDictionary[DateTime.Now.Ticks.ToString()] = _addon.AllocateSomeMemory(2048);
         }
 
 
