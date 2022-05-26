@@ -19,9 +19,10 @@ namespace TestWebApp.Services
             this._logger = logger;
         }
 
-        public void CpuLoad(long max)
+        public void CpuLoad(long max, bool logVerbose = true)
         {
-            _logger.LogInformation($"Starting stressing the CPU on managed thread {Thread.CurrentThread.ManagedThreadId}");
+            if(logVerbose)
+                _logger.LogInformation($"Starting stressing the CPU on managed thread {Thread.CurrentThread.ManagedThreadId}");
             var primes = new Primes(max);
             Int64 sum = 0;
             foreach (var prime in primes)
@@ -29,7 +30,8 @@ namespace TestWebApp.Services
                 sum += prime;
             }
 
-            _logger.LogInformation($"CPU stressing completed on managed thread {Thread.CurrentThread.ManagedThreadId}");
+            if (logVerbose)
+                _logger.LogInformation($"CPU stressing completed on managed thread {Thread.CurrentThread.ManagedThreadId}");
             return;
         }
 

@@ -20,12 +20,12 @@ namespace DiagnosticWPF.Models
             g = UIGrid.Create<UIDumpHeapStat>("Objects",
                     new UIGridColumn("Type", "Type", null, null, "Type", 300),
                     new UIGridColumn("MT", "Type.MethodTable", "0:X16", "MethodTable", null, DataGridLength.Auto),
-                    new UIGridColumn("Graph Size", "GraphSize", null, null, "GraphSize", DataGridLength.Auto, true));
+                    new UIGridColumn("Graph Size", "GraphSize", "0:N0", null, "GraphSize", DataGridLength.Auto, true));
             _store[g.MasterType] = g;
 
             g = UIGrid.Create<ClrObject>(null,
                 new UIGridColumn("Address", "Address", "0:X16", "Address", null, DataGridLength.Auto, true),
-                new UIGridColumn("Size", "Size", null, null, "Size", DataGridLength.Auto, true),
+                new UIGridColumn("Size", "Size", "0:N0", null, "Size", DataGridLength.Auto, true),
                 new UIGridColumn("Type", "Type", null, null, "Type", DataGridLength.Auto));
             _store[g.MasterType] = g;
 
@@ -86,7 +86,7 @@ namespace DiagnosticWPF.Models
 
             g = UIGrid.Create<UIAllocatorGroup>("Objects",
                 new UIGridColumn("Alloctor Address", "Allocator.Address", "0:X16", "Allocator.Address", null, DataGridLength.Auto, true),
-                new UIGridColumn("Alloctor Size", "Allocator.Size", null, null, "Allocator.Size", DataGridLength.Auto, true),
+                new UIGridColumn("Alloctor Size", "Allocator.Size", "0:N0", null, "Allocator.Size", DataGridLength.Auto, true),
                 new UIGridColumn("Alloctor Type", "Allocator.Type", null, null, "Allocator.Type", DataGridLength.Auto),
                 new UIGridColumn("Alloctor Name", "Name", null, null, "Name", DataGridLength.Auto));
             _store[g.MasterType] = g;

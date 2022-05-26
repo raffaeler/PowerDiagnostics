@@ -51,18 +51,23 @@ namespace DiagnosticWPF
 
         private void InitializeQueries()
         {
+            _queries = KnownQueries.CreateQueries();
+            /*
             _queries = new List<KnownQuery>()
             {
-                new KnownQuery(typeof(UIDumpHeapStat), "DumpHeapStat", a =>
-                    a.DumpHeapStat(0)
-                        .Select(t => new UIDumpHeapStat()
-                        {
-                            Type = t.type,
-                            Objects = t.objects,
-                            GraphSize = t.size,
-                        })
-                        .ToList(),
-                        (o, f) => ((UIDumpHeapStat)o)?.Type?.Name?.FilterBy(f)
+                new KnownQuery(
+                    type: typeof(UIDumpHeapStat),
+                    name: "DumpHeapStat",
+                    populate: a =>
+                        a.DumpHeapStat(0)
+                            .Select(t => new UIDumpHeapStat()
+                            {
+                                Type = t.type,
+                                Objects = t.objects,
+                                GraphSize = t.size,
+                            })
+                            .ToList(),
+                    filter: (o, f) => ((UIDumpHeapStat)o)?.Type?.Name?.FilterBy(f)
                         ),
 
                 new KnownQuery(typeof(UIStaticFields), "GetStaticFieldsWithGraphAndSize", a =>
@@ -147,7 +152,7 @@ namespace DiagnosticWPF
                         (o, f) => ((UIAllocatorGroup)o)?.Name?.FilterBy(f)
                     ),
             };
-
+            */
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

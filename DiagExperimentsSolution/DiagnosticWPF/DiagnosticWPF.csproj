@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6-Windows</TargetFramework>
+    <TargetFramework>net6.0-Windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Diagnose_16x.ico</ApplicationIcon>
   </PropertyGroup>

@@ -9,6 +9,10 @@ namespace DiagnosticWPF.Models
 {
     public class KnownQuery
     {
+        public KnownQuery()
+        {
+        }
+
         public KnownQuery(Type type, string name, Func<DiagnosticAnalyzer, IEnumerable> populate,
             Func<object, string, bool?> filter)
         {

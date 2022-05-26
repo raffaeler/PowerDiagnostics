@@ -30,6 +30,13 @@ namespace ClrDiagnostics
                 .Select(g => (g.Key, (IEnumerable<ClrObject>)g.ToList()));
         }
 
+        /// <summary>
+        /// AssemblyLoadContextAddress
+        /// PR: https://github.com/microsoft/clrmd/pull/776
+        /// Discussion: https://github.com/dotnet/runtime/issues/11157
+        /// </summary>
+        /// <param name="clrObject"></param>
+        /// <returns></returns>
         private ClrObject GetAllocatorObject(ClrObject clrObject)
         {
             var assemblyLoadContextAddress = clrObject.Type.AssemblyLoadContextAddress;

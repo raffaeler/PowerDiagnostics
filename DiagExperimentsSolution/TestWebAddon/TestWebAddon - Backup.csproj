@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="echo xcopy /y /e &quot;$(ProjectDir)bin/$(Configuration)/net6.0/TestWebAddon.*&quot; &quot;$(SolutionDir)TestWebApp/bin/$(Configuration)/net6.0&quot;" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestWebAddonContract\TestWebAddonContract.csproj" />
+  </ItemGroup>
+
+</Project>

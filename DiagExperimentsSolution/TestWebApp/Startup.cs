@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using TestWebApp.Configurations;
 using TestWebApp.Services;
 
 namespace TestWebApp
@@ -28,11 +29,17 @@ namespace TestWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<GeneralConfig>(Configuration.GetSection("GeneralConfig"));
+
             services.AddSingleton(CustomHeaderEventSource.Instance);
 
             services.AddSingleton<CpuStressService>();
             services.AddSingleton<MemoryPressureService>();
             services.AddSingleton<SimpleStateService>();
+            services.AddSingleton<AddonService>();
+
+            services.AddHostedService<Worker>();
+
             services.AddControllers();
             services.AddRazorPages();
         }

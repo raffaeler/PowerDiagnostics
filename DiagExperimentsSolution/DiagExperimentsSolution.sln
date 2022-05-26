@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30028.174
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32505.426
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "TestConsole\TestConsole.csproj", "{2CC2174B-EC19-46EF-A7E3-4433E354EAB2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp", "TestWebApp\TestWebApp.csproj", "{E20C15F7-F731-4474-82E1-1EDA29AE2AA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DFDA117B-0AE0-4085-A6BC-12999887829F} = {DFDA117B-0AE0-4085-A6BC-12999887829F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StressTestWebApp", "StressTestWebApp\StressTestWebApp.csproj", "{70AADF90-6DF6-49A0-B148-6097E93789FB}"
 EndProject
@@ -27,7 +30,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DiagServer", "DiagServer", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Diagnostics.NETCore.Client", "Microsoft.Diagnostics.NETCore.Client\Microsoft.Diagnostics.NETCore.Client.csproj", "{BCDD0C02-57D7-46FB-8022-06450432D58C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FusionDebuggee", "FusionDebuggee\FusionDebuggee.csproj", "{6575DE4E-E11B-4067-B34E-CA0AC1B29750}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FusionDebuggee", "FusionDebuggee\FusionDebuggee.csproj", "{6575DE4E-E11B-4067-B34E-CA0AC1B29750}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebAddon", "TestWebAddon\TestWebAddon.csproj", "{DFDA117B-0AE0-4085-A6BC-12999887829F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebAddonContract", "TestWebAddonContract\TestWebAddonContract.csproj", "{7AAD52DC-188B-477C-AF24-2C788C648220}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +78,14 @@ Global
 		{6575DE4E-E11B-4067-B34E-CA0AC1B29750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6575DE4E-E11B-4067-B34E-CA0AC1B29750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6575DE4E-E11B-4067-B34E-CA0AC1B29750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFDA117B-0AE0-4085-A6BC-12999887829F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFDA117B-0AE0-4085-A6BC-12999887829F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFDA117B-0AE0-4085-A6BC-12999887829F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFDA117B-0AE0-4085-A6BC-12999887829F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AAD52DC-188B-477C-AF24-2C788C648220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AAD52DC-188B-477C-AF24-2C788C648220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AAD52DC-188B-477C-AF24-2C788C648220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AAD52DC-188B-477C-AF24-2C788C648220}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
