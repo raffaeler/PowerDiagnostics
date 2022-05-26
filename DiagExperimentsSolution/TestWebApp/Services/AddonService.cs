@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Loader;
 
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,8 @@ namespace TestWebApp.Services
         private WeakReference _isLoadContextAlive;
         private ILeakyAddon _addon;
 
+        private static Dictionary<string, byte[]> _leakyDictionary = new();
+
         public AddonService(ILogger<Worker> logger)
         {
             _logger = logger;
@@ -27,7 +30,6 @@ namespace TestWebApp.Services
             _myLoadContext = new AssemblyLoadContext("MyLoadContext", true);
             _isLoadContextAlive = new WeakReference(_myLoadContext, true);
 
-            //var asmName = typeof(System.Text.Json.JsonSerializer).Assembly.GetName();
             var asmName = new System.Reflection.AssemblyName("TestWebAddon");   // see xcopy in post-build action
             var file = System.IO.Path.Combine(GetCurrentExecutablePath(), "TestWebAddon");
             var asm = _myLoadContext.LoadFromAssemblyPath(file);
@@ -48,8 +50,10 @@ namespace TestWebApp.Services
 
         public void MakeAddonWork()
         {
-            _addon.LeakSomeMemory(20);
+            //_addon.LeakSomeMemory(20);
+            _leakyDictionary[DateTime.Now.Ticks.ToString()] = _addon.AllocateSomeMemory(1234);
         }
+
 
         private void OnMyLoadContextUnloading(AssemblyLoadContext obj)
         {

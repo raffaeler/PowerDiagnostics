@@ -203,6 +203,7 @@ namespace DiagnosticWPF
                 ResetUI();
                 var sw = new Stopwatch();
                 sw.Start();
+                var processPath = new FileInfo(_process.MainModule.FileName).DirectoryName;
                 _analyzer = DiagnosticAnalyzer.FromSnapshot(_process.Id);
                 //_analyzer = DiagnosticAnalyzer.FromProcess(_process.Id);
                 var elapsed = sw.Elapsed;

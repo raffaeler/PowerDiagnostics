@@ -77,6 +77,7 @@ namespace ClrDiagnostics
         public static DiagnosticAnalyzer FromSnapshot(int pid, bool cacheObjects = true)
         {
             var dataTarget = DataTarget.CreateSnapshotAndAttach(pid);
+            //dataTarget.BinaryLocator.FindBinary()
             return new DiagnosticAnalyzer(dataTarget, cacheObjects);
         }
 
