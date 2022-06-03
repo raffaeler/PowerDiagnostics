@@ -19,7 +19,28 @@ using System.Text;
 // System.Collections.Concurrent.ConcurrentCollectionsEventSource => CDSCollectionETWBCLProvider 
 // System.Buffers.ArrayPoolEventSource ==> ArrayPoolEventSource
 // Microsoft-System-Net-Security ==> NetEventSource
-
+//
+//
+// Microsoft.EntityFrameworkCore
+// https://github.com/dotnet/efcore/blob/main/src/EFCore/Infrastructure/EntityFrameworkEventSource.cs
+// https://docs.microsoft.com/en-us/ef/core/logging-events-diagnostics/event-counters?tabs=windows
+// dotnet counters monitor -p <pid>  Microsoft.EntityFrameworkCore
+// [Microsoft.EntityFrameworkCore]
+//    Active DbContexts                                               1
+//    Execution Strategy Operation Failures (Count / 1 sec)           0
+//    Execution Strategy Operation Failures (Total)                   0
+//    Optimistic Concurrency Failures (Count / 1 sec)                 0
+//    Optimistic Concurrency Failures (Total)                         0
+//    Queries(Count / 1 sec)                                          1
+//    Queries(Total)                                                189
+//    Query Cache Hit Rate (%)                                      100
+//    SaveChanges(Count / 1 sec)                                      0
+//    SaveChanges(Total)                                              0
+//
+//
+// Microsoft.Data.SqlClient.EventSource
+// https://github.com/dotnet/SqlClient/blob/main/src/Microsoft.Data.SqlClient/src/Microsoft/Data/SqlClient/SqlClientEventSource.cs
+// https://docs.microsoft.com/en-us/sql/connect/ado-net/event-counters?view=sql-server-ver16
 
 // EventSource:
 // https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/EventSource.cs
