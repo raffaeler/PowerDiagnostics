@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
+using System.Net;
 
 namespace ClrDiagnostics
 {
@@ -35,6 +36,57 @@ namespace ClrDiagnostics
 
                 _cachedAllObjects = null;
                 return _clrRuntime.Heap.EnumerateObjects();
+            }
+        }
+
+        public IEnumerable<(ClrObject, ClrInstanceField, ulong)> ObjectsWithInstanceFields
+        {
+            get
+            {
+                if (CacheAllObjects)
+                {
+                    if (_objectsWithInstanceFields == null)
+                    {
+                        _objectsWithInstanceFields = Objects
+                                .SelectMany(o => o.Type.Fields, (o, f) => (obj: o, field: f))
+                                .Where(t => t.field.IsObjectReference)
+                                .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(t.obj.Address, false)))
+                                .ToList();
+                    }
+
+                    return _objectsWithInstanceFields;
+                }
+
+                return Objects
+                    .SelectMany(o => o.Type.Fields, (o, f) => (obj: o, field: f))
+                    .Where(t => t.field.IsObjectReference)
+                    .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(t.obj.Address, false)));
+            }
+        }
+
+        public IEnumerable<(ClrObject, ClrStaticField, ulong)> ObjectsWithStaticFields
+        {
+            get
+            {
+                if (CacheAllObjects)
+                {
+                    if (_objectsWithStaticFields == null)
+                    {
+                        _objectsWithStaticFields = Objects
+                            .SelectMany(o => o.Type.StaticFields, (o, f) => (obj: o, field: f))
+                            .Where(t => t.field.IsObjectReference)
+                            .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(MainAppDomain)))
+                            .ToList();
+                    }
+
+                    return _objectsWithStaticFields;
+                }
+
+                return Objects
+                    .SelectMany(o => o.Type.StaticFields, (o, f) => (obj: o, field: f))
+                    .Where(t => t.field.IsObjectReference)
+                    .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(MainAppDomain)));
+
             }
         }
 

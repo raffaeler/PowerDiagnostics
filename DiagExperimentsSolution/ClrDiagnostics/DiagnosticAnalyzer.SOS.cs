@@ -7,6 +7,7 @@ using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ClrDiagnostics
 {
@@ -51,9 +52,9 @@ namespace ClrDiagnostics
             Console.WriteLine($"{pinnedType.MethodTable:X16} {pinnedCount,8} {pinnedSize,12} {pinnedType.Name}");
         }
 
-        public Task<string> PrintRootsAsync(ClrObject clrObject)
+        public Task<string> PrintRootsAsync(ClrObject clrObject, Action<int> onProgress, CancellationToken cancellationToken)
         {
-            return Task.Run<string>(() => PrintRoots(clrObject));
+            return Task.Run<string>(() => PrintRoots(clrObject, onProgress, cancellationToken));
         }
 
         public int GetGraphPathsCount(ClrObject clrObject)
@@ -69,7 +70,13 @@ namespace ClrDiagnostics
             return count;
         }
 
-        public string PrintRoots(ClrObject clrObject)
+        /// <summary>
+        /// Create a long string with all the possible paths from the object to its roots
+        /// </summary>
+        /// <param name="clrObject">The object to analyze</param>
+        /// <param name="onProgress">The progress of the operation. The total number is given by GetGraphPathsCount</param>
+        /// <returns></returns>
+        public string PrintRoots(ClrObject clrObject, Action<int> onProgress, CancellationToken cancellationToken)
         {
             StringBuilder sb = new StringBuilder();
             var objectType = clrObject.Type;
@@ -78,6 +85,7 @@ namespace ClrDiagnostics
             var roots = RootPaths(clrObject.Address);
             bool isFirst = true;
             int i = 0;
+            int count = 0;
             foreach (var root in roots)
             {
                 if (isFirst)
@@ -89,15 +97,19 @@ namespace ClrDiagnostics
                 sb.AppendLine($"  Path {i++}");
                 foreach (var path in root.Path)
                 {
+                    count++;
+                    if (cancellationToken.IsCancellationRequested)
+                        throw new OperationCanceledException("Canceled by user request");
+                    onProgress(count);
                     sb.AppendLine($"     {path.Address:X16} {path.Type.Name}");
                     var result = FindReferencing(false, path.Address);
-                    if (result.Count > 0)
+                    if (result != null && result.Count > 0)
                     {
-                        sb.AppendLine($"                 Objects whose fields point to {path.Address:X16}");
+                        sb.AppendLine($"          Objects whose fields point to {path.Address:X16}");
                         foreach (var res in result)
                         {
                             string isStaticString = res.isStatic ? "static" : "instance";
-                            sb.AppendLine($"                   {res.address:X16} Type:{res.typeName} field:{res.fieldName} {isStaticString}");
+                            sb.AppendLine($"               {res.address:X16} Type:{res.typeName} [{isStaticString}] field:{res.fieldName}");
                         }
                     }
 
@@ -112,31 +124,31 @@ namespace ClrDiagnostics
         private List<(ulong address, string typeName, string fieldName, bool isStatic)> FindReferencing(
             bool includeInstance, params ulong[] leakedAddresses)
         {
-            var result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
+            List<(ulong address, string typeName, string fieldName, bool isStatic)> result = null;
 
-            foreach (var obj in Objects)
+            if (includeInstance)
             {
-                if (includeInstance)
+                foreach (var (obj, field, address) in ObjectsWithInstanceFields)
                 {
-                    foreach (var instanceField in obj.Type.Fields.Where(f => f.IsObjectReference))
+                    if (leakedAddresses.Contains(address))
                     {
-                        // returns zero if it is not an ulong
-                        var staticFieldAddress = instanceField.Read<ulong>(obj.Address, false);
-                        if (leakedAddresses.Contains(staticFieldAddress))
-                        {
-                            result.Add((obj.Address, obj.Type.Name, instanceField.Name, false));
-                        }
+                        if (result == null)
+                            result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
+
+                        result.Add((obj.Address, obj.Type.Name, field.Name, false));
                     }
                 }
+            }
 
-                foreach (var staticField in obj.Type.StaticFields.Where(f => f.IsObjectReference))
+            foreach (var (obj, field, address) in ObjectsWithStaticFields)
+            {
+                // returns zero if it is not an ulong
+                if (leakedAddresses.Contains(address))
                 {
-                    // returns zero if it is not an ulong
-                    var staticFieldAddress = staticField.Read<ulong>(MainAppDomain);
-                    if (leakedAddresses.Contains(staticFieldAddress))
-                    {
-                        result.Add((obj.Address, obj.Type.Name, staticField.Name, true));
-                    }
+                    if (result == null)
+                        result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
+
+                    result.Add((obj.Address, obj.Type.Name, field.Name, true));
                 }
             }
 

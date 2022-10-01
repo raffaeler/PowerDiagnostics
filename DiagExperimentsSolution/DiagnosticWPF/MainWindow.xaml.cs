@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,6 +30,8 @@ using Microsoft.Win32;
 
 using WpfHexaEditor;
 
+using static System.Net.Mime.MediaTypeNames;
+
 namespace DiagnosticWPF
 {
     /// <summary>
@@ -43,6 +46,7 @@ namespace DiagnosticWPF
         private TriggerAll _triggerAll;
         private ListCollectionView _masterView;
         private KnownQuery _currentQuery;
+        private CancellationTokenSource _updateDetailsTextCts;
 
         public MainWindow()
         {
@@ -450,6 +454,10 @@ namespace DiagnosticWPF
 
         private async void UpdateDetailsText(ClrObject? clrObject)
         {
+            if (_updateDetailsTextCts != null)
+                _updateDetailsTextCts.Cancel();
+
+            _updateDetailsTextCts = new CancellationTokenSource();
             textDetails.Text = string.Empty;
             if (clrObject == null)
             {
@@ -471,18 +479,32 @@ namespace DiagnosticWPF
 
             try
             {
-                string rootText = await _analyzer.PrintRootsAsync(clrObject.Value);
+                var previous = 0;
+                string rootText = await _analyzer.PrintRootsAsync(clrObject.Value, num =>
+                {
+                    var newProgress = (int)((double)num * 100.0 / (double)count);
+                    if (newProgress != previous)
+                    {
+                        Dispatcher.Invoke(() => status.Text = $"{newProgress}%");
+                        previous = newProgress;
+                    }
+                }, _updateDetailsTextCts.Token);
+
                 textDetails.Text = rootText;
                 detailsRow.Height = new GridLength(2, GridUnitType.Star);
                 detailsRow.MinHeight = 100;
+
+                UpdateStatus($"Graph built successfully ({count} references)");
+                _updateDetailsTextCts = null;
+            }
+            catch (OperationCanceledException err)
+            {
+                Debug.WriteLine($"Roots computation canceled: {err.Message}");
+                UpdateStatus(string.Empty);
             }
             catch (Exception err)
             {
                 UpdateStatus(err.Message);
-            }
-            finally
-            {
-                UpdateStatus($"Graph built successfully ({count} references)");
             }
         }
     }

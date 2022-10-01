@@ -23,6 +23,8 @@ namespace ClrDiagnostics
 
         private GCRoot _gcroot;
         private IList<ClrObject> _cachedAllObjects;
+        private IList<(ClrObject, ClrInstanceField, ulong)> _objectsWithInstanceFields;
+        private IList<(ClrObject, ClrStaticField, ulong)> _objectsWithStaticFields;
         private CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
         private DiagnosticAnalyzer(DataTarget dataTarget, bool cacheObjects)
