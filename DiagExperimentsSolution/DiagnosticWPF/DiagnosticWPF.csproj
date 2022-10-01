@@ -24,10 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.320703" />
-    <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.0.226801" />
+    <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.328102" />
+    <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.2.332302" />
     <PackageReference Include="Microsoft.Diagnostics.Runtime.Utilities" Version="2.0.0-rc.20303.3" />
-    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.0.5" />
     <PackageReference Include="WPFHexaEditor" Version="2.1.7" />
   </ItemGroup>
 

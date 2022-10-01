@@ -24,12 +24,16 @@ namespace ClrDiagnostics
         //    return pdbInfos;
         //}
 
+/*
+ * This was broken starting with CLRMD 2.1
+ * https://github.com/microsoft/clrmd/blob/main/doc/Migrating21.md
+ * 
         private ulong GetOffsetForFieldNative(ulong addressBase, string className, string fieldName)
         {
             string pdbFilename = null;
             foreach (var module in _dataTarget.EnumerateModules())
             {
-                var image = module.GetPEImage();
+                var image = module.GetPEImage();    // <======= See note for GetPEImage replacement
                 if (image == null) continue;
 
                 var imageBase = module.ImageBase;
@@ -53,7 +57,7 @@ namespace ClrDiagnostics
 
             return 0;
         }
-
+*/
 
     }
 }

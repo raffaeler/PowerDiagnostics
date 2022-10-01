@@ -19,7 +19,7 @@ namespace ClrDiagnostics
         private FileInfo _clrLocation;
         private ClrInfo _clrInfo;
         private ClrRuntime _clrRuntime;
-        private DacInfo _dacInfo;
+        private DebugLibraryInfo _debugLibraryInfo;
 
         private GCRoot _gcroot;
         private IList<ClrObject> _cachedAllObjects;
@@ -33,33 +33,54 @@ namespace ClrDiagnostics
 
             if (_dataTarget.ClrVersions.Length == 0)
             {
-                throw new Exception("No compatible CLR has been found on this machine");
+                throw new Exception("[1] No compatible CLR has been found on this machine");
             }
 
             if (_dataTarget.ClrVersions.Length > 1)
             {
                 Debug.WriteLine("Multiple compatible CLR have been found on this machine, picking the first of the following list");
-                foreach (var version in _dataTarget.ClrVersions)
+                foreach (var clrInfo in _dataTarget.ClrVersions)
                 {
-                    var dacFilename = version.DacInfo.PlatformSpecificFileName;
-                    var moduleInfo = version.ModuleInfo;
-                    Debug.WriteLine("CLR Version: " + version.Version);
-                    Debug.WriteLine("Filesize:  {0:X}", moduleInfo.IndexFileSize);
-                    Debug.WriteLine("Timestamp: {0:X}", moduleInfo.IndexTimeStamp);
-                    Debug.WriteLine("Dac File:  {0}", dacFilename);
+                    Debug.WriteLine($"Version:        {clrInfo.Version}");
+                    Debug.WriteLine($"IndexFileSize:  {clrInfo.IndexFileSize:X}");
+                    Debug.WriteLine($"IndexTimeStamp: {clrInfo.IndexTimeStamp:X}");
+                    foreach (var dli in clrInfo.DebuggingLibraries)
+                    {
+                        Debug.WriteLine($"    FileName:           {dli.FileName}");
+                        Debug.WriteLine($"    TargetArchitecture: {dli.TargetArchitecture}");
+                        Debug.WriteLine($"    Platform:           {dli.Platform}");
+                        Debug.WriteLine($"    IndexFileSize:      {dli.IndexFileSize:X}");
+                        Debug.WriteLine($"    IndexTimeStamp:     {dli.IndexTimeStamp:X}");
+                        Debug.WriteLine("");
+                    }
+
                     Debug.WriteLine("");
                 }
             }
 
             _clrInfo = _dataTarget.ClrVersions[0];
-            if (_clrInfo.DacInfo.LocalDacPath == null)
+            if (_clrInfo.DebuggingLibraries.Length == 0)
             {
-                throw new Exception($"The runtime used in the dump is {_clrInfo.DacInfo.Version} and cannot be found on this installation");
+                throw new Exception("[2] No compatible CLR has been found on this machine");
             }
 
-            _clrLocation = new FileInfo(_clrInfo.DacInfo.LocalDacPath);
+            if(_clrInfo.DebuggingLibraries.Length > 1)
+            {
+                // TODO: match the current platform/architecture
+                _debugLibraryInfo = _clrInfo.DebuggingLibraries[0];
+            }
+            else
+            {
+                _debugLibraryInfo = _clrInfo.DebuggingLibraries.Single();
+            }
+
+            if (_debugLibraryInfo.FileName == null)
+            {
+                throw new Exception($"The runtime used in the dump is Version:{_clrInfo.Version} Platform:{_debugLibraryInfo.Platform} Architecture:{_debugLibraryInfo.TargetArchitecture} and cannot be found on this installation");
+            }
+
+            _clrLocation = new FileInfo(_debugLibraryInfo.FileName);
             _clrRuntime = _clrInfo.CreateRuntime();
-            _dacInfo = _clrInfo.DacInfo;
 
             PrepareGCRootCache();
         }
