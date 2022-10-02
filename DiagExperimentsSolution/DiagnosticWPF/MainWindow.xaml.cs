@@ -491,7 +491,7 @@ namespace DiagnosticWPF
                 }, _updateDetailsTextCts.Token);
 
                 textDetails.Text = rootText;
-                detailsRow.Height = new GridLength(2, GridUnitType.Star);
+                detailsRow.Height = new GridLength(3, GridUnitType.Star);
                 detailsRow.MinHeight = 100;
 
                 UpdateStatus($"Graph built successfully ({count} references)");
