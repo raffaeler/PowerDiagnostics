@@ -112,7 +112,7 @@ namespace ClrDiagnostics
             return _gcroot.EnumerateGCRoots(address, false, Token);
         }
 
-        public IEnumerable<LinkedList<ClrObject>> PathsAmong(ClrObject source, ClrObject target)
+        public IEnumerable<LinkedList<ClrObject>> PathsBetween(ClrObject source, ClrObject target)
         {
             return _gcroot.EnumerateAllPaths(source.Address, target.Address, false, Token);
         }
