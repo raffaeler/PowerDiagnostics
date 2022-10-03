@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebAddonContract", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagnosticServer", "DiagnosticServer\DiagnosticServer.csproj", "{BFAB0CF9-4D8C-45E7-AC23-ABC3DB0054EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagnosticModels", "DiagnosticModels\DiagnosticModels.csproj", "{2A493AC4-0683-408D-A5E6-C880816343E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{BFAB0CF9-4D8C-45E7-AC23-ABC3DB0054EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFAB0CF9-4D8C-45E7-AC23-ABC3DB0054EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFAB0CF9-4D8C-45E7-AC23-ABC3DB0054EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A493AC4-0683-408D-A5E6-C880816343E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A493AC4-0683-408D-A5E6-C880816343E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A493AC4-0683-408D-A5E6-C880816343E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A493AC4-0683-408D-A5E6-C880816343E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

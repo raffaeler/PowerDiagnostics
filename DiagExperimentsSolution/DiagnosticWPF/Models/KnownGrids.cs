@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+
+using DiagnosticModels;
+
 using DiagnosticWPF.Helpers;
 using Microsoft.Diagnostics.Runtime;
 
@@ -17,7 +20,7 @@ namespace DiagnosticWPF.Models
             _store = new Dictionary<Type, UIGrid>();
             UIGrid g;
 
-            g = UIGrid.Create<UIDumpHeapStat>("Objects",
+            g = UIGrid.Create<DbmDumpHeapStat>("Objects",
                     new UIGridColumn("Type", "Type", null, null, "Type", 300),
                     new UIGridColumn("MT", "Type.MethodTable", "0:X16", "MethodTable", null, DataGridLength.Auto),
                     new UIGridColumn("Graph Size", "GraphSize", "0:N0", null, "GraphSize", DataGridLength.Auto, true));
@@ -35,18 +38,18 @@ namespace DiagnosticWPF.Models
                 new UIGridColumn("Module Name", "Module.Name", null, null, "Module.Name", DataGridLength.Auto));
             _store[g.MasterType] = g;
 
-            g = UIGrid.Create<UIStaticFields>(null,
+            g = UIGrid.Create<DbmStaticFields>(null,
                 new UIGridColumn("Static field name", "Field.Name", null, null, "Field.Name", 200),
                 new UIGridColumn("Size", "Size", "0:N0", null, "Size", DataGridLength.Auto, true),
                 new UIGridColumn("Object", "Obj", null, null, "Obj", 300));
             _store[g.MasterType] = g;
 
-            g = UIGrid.Create<UIDupStrings>(null,
+            g = UIGrid.Create<DbmDupStrings>(null,
                 new UIGridColumn("String", "Text", null, null, "Text", 200),
                 new UIGridColumn("Count", "Count", "0:N0", null, "Count", DataGridLength.Auto, true));
             _store[g.MasterType] = g;
 
-            g = UIGrid.Create<UIStringsBySize>(null,
+            g = UIGrid.Create<DbmStringsBySize>(null,
                 new UIGridColumn("Object", "Obj", null, null, "Obj", 300),
                 new UIGridColumn("String", "Text", null, null, "Text", 200),
                 new UIGridColumn("Size", "Size", "0:N0", null, "Size", DataGridLength.Auto, true));
@@ -65,7 +68,7 @@ namespace DiagnosticWPF.Models
                 new UIGridColumn("Address", "Address", "0:X16", null, "Address", DataGridLength.Auto, true));
             _store[g.MasterType] = g;
 
-            g = UIGrid.Create<UIStackFrame>("StackFrames",
+            g = UIGrid.Create<DbmStackFrame>("StackFrames",
                 new UIGridColumn("IsAlive", "Thread.IsAlive", null, null, "Thread.IsAlive", DataGridLength.Auto),
                 new UIGridColumn("ManagedThreadId", "Thread.ManagedThreadId", null, null, "Thread.ManagedThreadId", 200),
                 new UIGridColumn("Address", "Thread.Address", "0:X16", null, "Thread.Address", DataGridLength.Auto, true));
@@ -84,7 +87,7 @@ namespace DiagnosticWPF.Models
                 new UIGridColumn("IsPinned", "IsPinned", null, null, "IsPinned", DataGridLength.Auto));
             _store[g.MasterType] = g;
 
-            g = UIGrid.Create<UIAllocatorGroup>("Objects",
+            g = UIGrid.Create<DbmAllocatorGroup>("Objects",
                 new UIGridColumn("Alloctor Address", "Allocator.Address", "0:X16", "Allocator.Address", null, DataGridLength.Auto, true),
                 new UIGridColumn("Alloctor Size", "Allocator.Size", "0:N0", null, "Allocator.Size", DataGridLength.Auto, true),
                 new UIGridColumn("Alloctor Type", "Allocator.Type", null, null, "Allocator.Type", DataGridLength.Auto),

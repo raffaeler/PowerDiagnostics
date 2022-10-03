@@ -60,67 +60,67 @@ namespace DiagnosticWPF
             _queries = new List<KnownQuery>()
             {
                 new KnownQuery(
-                    type: typeof(UIDumpHeapStat),
+                    type: typeof(DbmDumpHeapStat),
                     name: "DumpHeapStat",
                     populate: a =>
                         a.DumpHeapStat(0)
-                            .Select(t => new UIDumpHeapStat()
+                            .Select(t => new DbmDumpHeapStat()
                             {
                                 Type = t.type,
                                 Objects = t.objects,
                                 GraphSize = t.size,
                             })
                             .ToList(),
-                    filter: (o, f) => ((UIDumpHeapStat)o)?.Type?.Name?.FilterBy(f)
+                    filter: (o, f) => ((DbmDumpHeapStat)o)?.Type?.Name?.FilterBy(f)
                         ),
 
-                new KnownQuery(typeof(UIStaticFields), "GetStaticFieldsWithGraphAndSize", a =>
+                new KnownQuery(typeof(DbmStackFrame), "GetStaticFieldsWithGraphAndSize", a =>
                     a.GetStaticFieldsWithGraphAndSize()
-                        .Select(t => new UIStaticFields()
+                        .Select(t => new DbmStackFrame()
                         {
                             Field = t.field,
                             Obj = t.obj,
                             Size = (long)t.size,
                         })
                         .ToList(),
-                        (o, f) => ((UIStaticFields)o)?.Obj.Type?.Name?.FilterBy(f)
+                        (o, f) => ((DbmStackFrame)o)?.Obj.Type?.Name?.FilterBy(f)
                         ),
 
-                new KnownQuery(typeof(UIDupStrings), "GetDuplicateStrings", a =>
+                new KnownQuery(typeof(DbmDupStrings), "GetDuplicateStrings", a =>
                     a.GetDuplicateStrings()
-                        .Select(t => new UIDupStrings()
+                        .Select(t => new DbmDupStrings()
                         {
                             Text = t.Key,
                             Count = t.Value,
                         })
                         .ToList(),
-                        (o, f) => ((UIDupStrings)o)?.Text?.FilterBy(f)
+                        (o, f) => ((DbmDupStrings)o)?.Text?.FilterBy(f)
                         ),
 
-                new KnownQuery(typeof(UIStringsBySize), "GetStringsBySize", a =>
+                new KnownQuery(typeof(DbmStringsBySize), "GetStringsBySize", a =>
                     a.GetStringsBySize(0)
-                        .Select(t => new UIStringsBySize()
+                        .Select(t => new DbmStringsBySize()
                         {
                             Obj = t.obj,
                             Text = t.text,
                         })
                         .ToList(),
-                        (o, f) => ((UIStringsBySize)o)?.Text?.FilterBy(f)
+                        (o, f) => ((DbmStringsBySize)o)?.Text?.FilterBy(f)
                         ),
 
                 new KnownQuery(typeof(ClrModule), "Modules", a => a.Modules.ToList(),
                         (o, f) => ((ClrModule)o)?.Name?.FilterBy(f)
                     ),
 
-                new KnownQuery(typeof(UIStackFrame), "Threads stacks", a =>
+                new KnownQuery(typeof(DbmStackFrame), "Threads stacks", a =>
                     a.Stacks()
-                    .Select(s => new UIStackFrame()
+                    .Select(s => new DbmStackFrame()
                     {
                         Thread = s.thread,
                         StackFrames = s.stackFrames.ToList(),
                     })
                     .ToList(),
-                    (o, f) => ((UIStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f)     // not much sense
+                    (o, f) => ((DbmStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f)     // not much sense
                     ),
 
                 new KnownQuery(typeof(IClrRoot), "Roots", a => a.Roots.ToList(),
@@ -144,16 +144,16 @@ namespace DiagnosticWPF
                         (o, f) => ((ClrObject)o).Type?.Name?.FilterBy(f)
                     ),
 
-                new KnownQuery(typeof(UIAllocatorGroup), "GetObjectsGroupedByAllocator (.NET5 dumps)", a =>
+                new KnownQuery(typeof(DbmAllocatorGroup), "GetObjectsGroupedByAllocator (.NET5 dumps)", a =>
                     a.GetObjectsGroupedByAllocator(a.Objects)
-                    .Select(g => new UIAllocatorGroup()
+                    .Select(g => new DbmAllocatorGroup()
                     {
                         Allocator = g.allocator,
                         Objects = g.objects,
                         Name = a.GetAllocatorName(g.allocator), // experimental!!
                     })
                     .ToList(),
-                        (o, f) => ((UIAllocatorGroup)o)?.Name?.FilterBy(f)
+                        (o, f) => ((DbmAllocatorGroup)o)?.Name?.FilterBy(f)
                     ),
             };
             */
@@ -262,10 +262,20 @@ namespace DiagnosticWPF
 
         private void UpdateTextBlock(TextBlock tb, string data)
         {
-            Dispatcher.Invoke(() =>
+            try
             {
-                tb.Text = data;
-            });
+                Dispatcher.Invoke(() =>
+                {
+                    tb.Text = data;
+                });
+            }
+            catch(Exception)
+            {
+                // Swallow exceptions coming from the dispatche
+                // This happens when the application is closing
+                // and the UI has gone before the async operation
+                // has completed
+            }
         }
 
         private void Close(object sender, RoutedEventArgs e)

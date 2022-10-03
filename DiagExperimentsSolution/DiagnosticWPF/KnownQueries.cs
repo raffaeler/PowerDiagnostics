@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using DiagnosticModels;
+
 using DiagnosticWPF.Helpers;
 using DiagnosticWPF.Models;
 
@@ -19,60 +21,60 @@ namespace DiagnosticWPF
 
             queries.Add(new()
             {
-                Type = typeof(UIDumpHeapStat),
+                Type = typeof(DbmDumpHeapStat),
                 Name = "DumpHeapStat",
                 Populate = a => a.DumpHeapStat(0)
-                                .Select(t => new UIDumpHeapStat()
+                                .Select(t => new DbmDumpHeapStat()
                                 {
                                     Type = t.type,
                                     Objects = t.objects,
                                     GraphSize = t.size,
                                 })
                                 .ToList(),
-                Filter = (o, f) => ((UIDumpHeapStat)o)?.Type?.Name?.FilterBy(f),
+                Filter = (o, f) => ((DbmDumpHeapStat)o)?.Type?.Name?.FilterBy(f),
             });
 
             queries.Add(new()
             {
-                Type = typeof(UIStaticFields),
+                Type = typeof(DbmStaticFields),
                 Name = "GetStaticFieldsWithGraphAndSize",
                 Populate = a => a.GetStaticFieldsWithGraphAndSize()
-                                .Select(t => new UIStaticFields()
+                                .Select(t => new DbmStaticFields()
                                 {
                                     Field = t.field,
                                     Obj = t.obj,
                                     Size = (long)t.size,
                                 })
                                 .ToList(),
-                Filter = (o, f) => ((UIStaticFields)o)?.Obj.Type?.Name?.FilterBy(f)
+                Filter = (o, f) => ((DbmStaticFields)o)?.Obj.Type?.Name?.FilterBy(f)
             });
 
             queries.Add(new()
             {
-                Type = typeof(UIDupStrings),
+                Type = typeof(DbmDupStrings),
                 Name = "GetDuplicateStrings", 
                 Populate = a => a.GetDuplicateStrings()
-                                .Select(t => new UIDupStrings()
+                                .Select(t => new DbmDupStrings()
                                 {
                                     Text = t.Key,
                                     Count = t.Value,
                                 })
                                 .ToList(),
-                Filter = (o, f) => ((UIDupStrings)o)?.Text?.FilterBy(f)
+                Filter = (o, f) => ((DbmDupStrings)o)?.Text?.FilterBy(f)
             });
 
             queries.Add(new()
             {
-                Type = typeof(UIStringsBySize),
+                Type = typeof(DbmStringsBySize),
                 Name = "GetStringsBySize",
                 Populate = a => a.GetStringsBySize(0)
-                                .Select(t => new UIStringsBySize()
+                                .Select(t => new DbmStringsBySize()
                                 {
                                     Obj = t.obj,
                                     Text = t.text,
                                 })
                                 .ToList(),
-                Filter = (o, f) => ((UIStringsBySize)o)?.Text?.FilterBy(f),
+                Filter = (o, f) => ((DbmStringsBySize)o)?.Text?.FilterBy(f),
             });
 
             queries.Add(new()
@@ -85,16 +87,16 @@ namespace DiagnosticWPF
 
             queries.Add(new()
             {
-                Type = typeof(UIStackFrame),
+                Type = typeof(DbmStackFrame),
                 Name = "Threads stacks",
                 Populate = a => a.Stacks()
-                                .Select(s => new UIStackFrame()
+                                .Select(s => new DbmStackFrame()
                                 {
                                     Thread = s.thread,
                                     StackFrames = s.stackFrames.ToList(),
                                 })
                                 .ToList(),
-                Filter = (o, f) => ((UIStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f)
+                Filter = (o, f) => ((DbmStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f)
             });
 
             queries.Add(new()
@@ -131,17 +133,17 @@ namespace DiagnosticWPF
 
             queries.Add(new()
             {
-                Type = typeof(UIAllocatorGroup),
+                Type = typeof(DbmAllocatorGroup),
                 Name = "GetObjectsGroupedByAllocator (.NET5+ dumps)",
                 Populate = a => a.GetObjectsGroupedByAllocator(a.Objects)
-                                .Select(g => new UIAllocatorGroup()
+                                .Select(g => new DbmAllocatorGroup()
                                 {
                                     Allocator = g.allocator,
                                     Objects = g.objects,
                                     Name = a.GetAllocatorName(g.allocator),
                                 })
                                 .ToList(),
-                Filter = (o, f) => ((UIAllocatorGroup)o)?.Name?.FilterBy(f)
+                Filter = (o, f) => ((DbmAllocatorGroup)o)?.Name?.FilterBy(f)
             });
 
             //queries.Add(new()
