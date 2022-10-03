@@ -1,3 +1,6 @@
+using DiagnosticServer.Hubs;
+using DiagnosticServer.Services;
+
 namespace DiagnosticServer
 {
     public class Program
@@ -9,6 +12,7 @@ namespace DiagnosticServer
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+            builder.Services.AddSignalR();
             // Cors configuration is needed during front-end development
             // because react is hosted in a different domain 
             // which is typically localhost:3000
@@ -18,6 +22,7 @@ namespace DiagnosticServer
                 {
                     policy
                         //.AllowAnyOrigin()
+                        .AllowCredentials()
                         .WithOrigins("https://localhost:3000", "http://localhost:3000")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
@@ -27,6 +32,8 @@ namespace DiagnosticServer
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddHostedService<DebuggingSessionService>();
 
             var app = builder.Build();
 
@@ -50,6 +57,7 @@ namespace DiagnosticServer
             {
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("/index.html");
+                endpoints.MapHub<DiagnosticHub>("/diagnosticHub");
             });
 
             app.Run();
