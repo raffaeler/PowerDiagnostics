@@ -271,7 +271,7 @@ namespace DiagnosticWPF
             }
             catch(Exception)
             {
-                // Swallow exceptions coming from the dispatche
+                // Swallow exceptions coming from the dispatcher
                 // This happens when the application is closing
                 // and the UI has gone before the async operation
                 // has completed
