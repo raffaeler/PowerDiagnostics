@@ -1,3 +1,4 @@
+using DiagnosticServer.Configurations;
 using DiagnosticServer.Hubs;
 using DiagnosticServer.Services;
 
@@ -10,6 +11,10 @@ namespace DiagnosticServer
             var corsPolicy = "CorsPolicy";
 
             var builder = WebApplication.CreateBuilder(args);
+
+            var generalSection = builder.Configuration.GetSection("General");
+            //var generalConfiguration = generalSection.Get<GeneralConfiguration>();
+            builder.Services.Configure<GeneralConfiguration>(generalSection);
 
             builder.Services.AddControllers();
             builder.Services.AddSignalR();
