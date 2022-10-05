@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Processes\" />
+  </ItemGroup>
+
 </Project>

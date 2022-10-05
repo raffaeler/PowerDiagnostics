@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Diagnostics.NETCore.Client;
+
 namespace ClrDiagnostics.Helpers
 {
     public static class ProcessHelper
@@ -35,5 +37,12 @@ namespace ClrDiagnostics.Helpers
             return null;
         }
 
+        public static IList<Process> GetDotnetProcesses()
+        {
+            var processes = DiagnosticsClient.GetPublishedProcesses()
+                .Select(p => Process.GetProcessById(p))
+                .ToList();
+            return processes;
+        }
     }
 }

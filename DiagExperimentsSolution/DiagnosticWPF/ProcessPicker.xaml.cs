@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using ClrDiagnostics.Helpers;
+
 using Microsoft.Diagnostics.NETCore.Client;
 
 namespace DiagnosticWPF
@@ -41,9 +43,7 @@ namespace DiagnosticWPF
 
         private void Refresh()
         {
-            var processes = DiagnosticsClient.GetPublishedProcesses()
-                .Select(p => Process.GetProcessById(p))
-                .ToList();
+            var processes = ProcessHelper.GetDotnetProcesses();
 
             lvProcesses.ItemsSource = processes;
         }

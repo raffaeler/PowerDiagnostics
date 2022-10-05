@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { HubConnectionBuilder, JsonHubProtocol } from '@microsoft/signalr';
 import ShowJson from '../components/showJson';
 import Global from '../global';
@@ -19,6 +20,11 @@ function Home(props) {
         props.hub.on('onMessage', (user, msg) => {
             setMessageRX(msg);
         });
+
+        props.hub.on('onAlert', (message) => {
+            alert(message)
+        })
+
     }, [props.hub]);
 
     const invokeAPI = async () => {
@@ -70,6 +76,7 @@ function Home(props) {
             </div>
 
             <Button onClick={() => sendMessage('Hello')}>click me</Button>
+            <Button onClick={() => props.hub.off('onMessage')}>Stop</Button>
         </>
     );
 }

@@ -13,6 +13,11 @@
 * @microsoft/signalr
 * react-bootstrap
 * react-router-dom@6
+* react-router-bootstrap
+
+## Extra docs
+- SignalR JS package: https://learn.microsoft.com/en-us/javascript/api/@microsoft/signalr/?view=signalr-js-latest&viewFallbackFrom=aspnetcore-6.0
+- SignalR JS connection: https://learn.microsoft.com/en-us/javascript/api/@microsoft/signalr/hubconnection?view=signalr-js-latest
 
 TODO:
 - 
