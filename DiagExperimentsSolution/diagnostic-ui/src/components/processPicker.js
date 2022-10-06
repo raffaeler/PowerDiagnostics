@@ -6,6 +6,7 @@ import ProcessItem from './processItem';
 export default function ProcessPicker() {
     const [processes, setProcesses] = useState([]);
     const [selectedProcess, setSelectedProcess] = useState({});
+    const [isAttached, setIsAttached] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [enableAttach, setEnableAttach] = useState(false);
@@ -13,6 +14,7 @@ export default function ProcessPicker() {
     async function getProcesses() {
         console.log('fetching');
         var res = await Global.invokeAPI("GET", Global.apiProcesses);
+        console.log(res);
         if (isError) {
             console.log('getProcesses fetch failed')
             setIsError(res.isError);
@@ -33,8 +35,17 @@ export default function ProcessPicker() {
         getProcesses();
     }
 
-    const attach = () => {
+    const attach = async () => {
+        if(isAttached) await detach();
         // TODO: call webapi to attach the process and receive the event traces
+        await Global.invokeAPI('POST', Global.apiProcessAttach + '/' + selectedProcess.id);
+        setIsAttached(true);
+    }
+
+    const detach = async () => {
+        // TODO: call webapi to attach the process and receive the event traces
+        await Global.invokeAPI('POST', Global.apiProcessAttach + '/' + selectedProcess.id);
+        setIsAttached(false);
     }
 
     const itemClicked = (itemId) => {
@@ -58,7 +69,7 @@ export default function ProcessPicker() {
                 ? (<div>{selectedProcess.name} ({selectedProcess.id})</div>)
                 : (<div>Select a process</div>) }</div>
 
-            <ListGroup as="ul" style={{ display:'inline-block', overflowY:'scroll', height:'250px',  }} >
+            <ListGroup as="ul" style={{ display:'inline-block', overflowY:'scroll', height:'250px' }} >
                 {processes.map(function (data, index) {
                     return (
                         <ListGroupItem key={data.id} as="li" onClick={() => itemClicked(data.id)} active={data.active}>

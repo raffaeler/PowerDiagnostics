@@ -28,8 +28,10 @@ function Home(props) {
     }, [props.hub]);
 
     const invokeAPI = async () => {
+        return Global.invokeAPI("GET", Global.apiProcesses);
+
         try {
-            const response = await fetch(Global.baseAddress + Global.apiProcess, {
+            const response = await fetch(Global.baseAddress + Global.apiProcesses, {
                 headers: {
                 },
             });

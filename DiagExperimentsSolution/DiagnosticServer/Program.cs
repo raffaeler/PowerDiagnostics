@@ -38,7 +38,10 @@ namespace DiagnosticServer
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddHostedService<DebuggingSessionService>();
+            //builder.Services.AddHostedService<DebuggingSessionService>();
+            builder.Services.AddSingleton<DebuggingSessionService>();
+            builder.Services.AddHostedService<DebuggingSessionService>(
+                provider => provider.GetService<DebuggingSessionService>() ?? throw new Exception($"Service not found ({nameof(DebuggingSessionService)})"));
 
             var app = builder.Build();
 

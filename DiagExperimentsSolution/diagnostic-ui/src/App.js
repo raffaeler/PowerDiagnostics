@@ -57,7 +57,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Layout hub={hub} />}>
             <Route path='home' element={<Home hub={hub} />} />
             <Route path='process' element={<Process hub={hub} />} />
           </Route>

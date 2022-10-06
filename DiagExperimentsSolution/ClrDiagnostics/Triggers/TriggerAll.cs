@@ -72,7 +72,7 @@ namespace ClrDiagnostics.Triggers
             Providers.Add(new EventPipeProvider(name, eventLevel, keywords, parameters));
         }
 
-        public bool Start()
+        public bool Start() 
         {
             if (IsStarted || Providers.Count == 0) return false;
 
