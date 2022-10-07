@@ -93,8 +93,8 @@ namespace ClrDiagnostics.Triggers
         {
             if (!IsStarted) return false;
 
-            if (_source != null) { _source.Dispose(); _source = null; }
             if (_session != null) { _session.Dispose(); _session = null; }
+            if (_source != null) { _source.Dispose(); _source = null; }
 
             IsStarted = false;
             return true;

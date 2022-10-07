@@ -6,6 +6,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import Global from './global';
 // import ShowJson from './components/showJson';
 import Home from './pages/home';
+import Bogus from './pages/bogus';
 import Process from './pages/process';
 import Layout from './pages/layout';
 
@@ -58,7 +59,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout hub={hub} />}>
-            <Route path='home' element={<Home hub={hub} />} />
+            <Route index element={<Home />} />
+            {/* <Route path='home' element={<Home hub={hub} />} /> */}
             <Route path='process' element={<Process hub={hub} />} />
           </Route>
         </Routes>

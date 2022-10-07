@@ -2,83 +2,56 @@ import { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { HubConnectionBuilder, JsonHubProtocol } from '@microsoft/signalr';
-import ShowJson from '../components/showJson';
-import Global from '../global';
 import Button from 'react-bootstrap/Button';
+
+import ProcessPicker from '../components/processPicker';
+import Global from '../global';
+
 
 
 function Home(props) {
-    const [message, setMessage] = useState("Hello, world: ");
-    const [messageRX, setMessageRX] = useState("");
+    const [modalShow, setModalShow] = useState(false);
+    const [isAttached, setIsAttached] = useState(false);
+    const [selectedProcess, setSelectedProcess] = useState({});
 
-    const [result, setResult] = useState("");
-    const [isError, setIsError] = useState(true);
-
-    useEffect(() => {
-        if (props.hub == null) return;
-
-        props.hub.on('onMessage', (user, msg) => {
-            setMessageRX(msg);
-        });
-
-        props.hub.on('onAlert', (message) => {
-            alert(message)
-        })
-
-    }, [props.hub]);
-
-    const invokeAPI = async () => {
-        return Global.invokeAPI("GET", Global.apiProcesses);
-
-        try {
-            const response = await fetch(Global.baseAddress + Global.apiProcesses, {
-                headers: {
-                },
-            });
-
-            if (!response.ok) {
-                let message = `Fetch failed with HTTP status ${response.status} ${response.statusText}`;
-                setResult(message);
-                setIsError(true);
-                return;
-            }
-
-            setResult(await response.json());
-            setIsError(false);
-        }
-        catch (e) {
-            console.log(e);
-            setResult(e.message);
-            setIsError(true);
-        }
+    const onAttach = async (process) => {
+        console.log("Selected process:", process);
+        setModalShow(false);
+        if (isAttached) await detach();
+        // TODO: call webapi to attach the process and receive the event traces
+        await Global.invokeAPI('POST', Global.apiProcessAttach + '/' + process.id);
+        setIsAttached(true);
+        setSelectedProcess(process);
     }
 
-    const sendMessage = async msg => {
-        console.log(props.hub);
-        if (props.hub.state !== 'Connected') return;
-
-        try {
-            await props.hub.send('SendMessage', "someUser", msg + " " + Date.now());
-        }
-        catch (e) {
-            console.log(e);
-        }
+    const detach = async (e) => {
+        // TODO: call webapi to attach the process and receive the event traces
+        console.log('Detaching process', selectedProcess.name, e);
+        await Global.invokeAPI('POST', Global.apiProcessDetach);
+        setIsAttached(false);
     }
 
+    const showPicker = () => {
+        console.log("showPicker");
+        setModalShow(true);
+    }
 
+    const renderPicker = () => {
+        if(!isAttached) return (
+            <div>
+                Process to monitor: <a href="#" onClick={showPicker}>click to select</a>
+                <ProcessPicker show={modalShow} onHide={() => setModalShow(false)} onSelectedProcess={onAttach} />
+            </div>
+        ); else return(
+            <div>
+                <a href="#" onClick={(e) => detach(e)}>Stop monitoring {selectedProcess.name}</a>
+            </div>
+        );
+    }
 
     return (
         <>
-            <a href="#" onClick={invokeAPI}>Invoke API</a> &nbsp;&nbsp;&nbsp;
-            <a href="#" onClick={() => sendMessage('Hi')}>Hub</a> &nbsp;&nbsp;&nbsp;
-            <p>{message} ==> {messageRX}</p>
-
-            <div className="apiResult">
-                {isError ? result : (<ShowJson label="API result" data={result} />)}
-            </div>
-
-            <Button onClick={() => sendMessage('Hello')}>click me</Button>
-            <Button onClick={() => props.hub.off('onMessage')}>Stop</Button>
+            {renderPicker()}
         </>
     );
 }

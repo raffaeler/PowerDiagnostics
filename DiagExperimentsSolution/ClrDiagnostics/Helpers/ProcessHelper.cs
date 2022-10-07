@@ -40,6 +40,7 @@ namespace ClrDiagnostics.Helpers
         public static IList<Process> GetDotnetProcesses()
         {
             var processes = DiagnosticsClient.GetPublishedProcesses()
+                .OrderBy(p => p)
                 .Select(p => Process.GetProcessById(p))
                 .ToList();
             return processes;

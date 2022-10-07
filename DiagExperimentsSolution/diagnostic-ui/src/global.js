@@ -2,7 +2,7 @@ export default class Global {
     static baseAddress = "https://localhost:7072";
     static apiProcesses = "/api/Processes";
     static apiProcessAttach = "/api/Processes/Attach";
-    static apiProcessDetach = "/api/Process/Detach";
+    static apiProcessDetach = "/api/Processes/Detach";
     static diagnosticHub = "/diagnosticHub";
 
     static async invokeAPI(verb, relativeAddress) {
@@ -22,11 +22,9 @@ export default class Global {
             }
 
             console.log("response", response);
-            console.log("body", response.body);
-            console.log("headers", response.headers);
-            console.log("content-type", response.headers.get('content-type'));
-            //console.log("text", response.text());
-
+            // console.log("body", response.body);
+            // console.log("headers", response.headers);
+            // console.log("content-type", response.headers.get('content-type'));
             
             let res;
             if (response.headers.get('content-type') != null)
