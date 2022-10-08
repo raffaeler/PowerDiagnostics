@@ -22,6 +22,8 @@ using ClrDiagnostics.Triggers;
 
 using CustomEventSource;
 
+using DiagnosticInvestigations;
+
 using DiagnosticWPF.Helpers;
 using DiagnosticWPF.Models;
 
@@ -55,108 +57,7 @@ namespace DiagnosticWPF
 
         private void InitializeQueries()
         {
-            _queries = KnownQueries.CreateQueries();
-            /*
-            _queries = new List<KnownQuery>()
-            {
-                new KnownQuery(
-                    type: typeof(DbmDumpHeapStat),
-                    name: "DumpHeapStat",
-                    populate: a =>
-                        a.DumpHeapStat(0)
-                            .Select(t => new DbmDumpHeapStat()
-                            {
-                                Type = t.type,
-                                Objects = t.objects,
-                                GraphSize = t.size,
-                            })
-                            .ToList(),
-                    filter: (o, f) => ((DbmDumpHeapStat)o)?.Type?.Name?.FilterBy(f)
-                        ),
-
-                new KnownQuery(typeof(DbmStackFrame), "GetStaticFieldsWithGraphAndSize", a =>
-                    a.GetStaticFieldsWithGraphAndSize()
-                        .Select(t => new DbmStackFrame()
-                        {
-                            Field = t.field,
-                            Obj = t.obj,
-                            Size = (long)t.size,
-                        })
-                        .ToList(),
-                        (o, f) => ((DbmStackFrame)o)?.Obj.Type?.Name?.FilterBy(f)
-                        ),
-
-                new KnownQuery(typeof(DbmDupStrings), "GetDuplicateStrings", a =>
-                    a.GetDuplicateStrings()
-                        .Select(t => new DbmDupStrings()
-                        {
-                            Text = t.Key,
-                            Count = t.Value,
-                        })
-                        .ToList(),
-                        (o, f) => ((DbmDupStrings)o)?.Text?.FilterBy(f)
-                        ),
-
-                new KnownQuery(typeof(DbmStringsBySize), "GetStringsBySize", a =>
-                    a.GetStringsBySize(0)
-                        .Select(t => new DbmStringsBySize()
-                        {
-                            Obj = t.obj,
-                            Text = t.text,
-                        })
-                        .ToList(),
-                        (o, f) => ((DbmStringsBySize)o)?.Text?.FilterBy(f)
-                        ),
-
-                new KnownQuery(typeof(ClrModule), "Modules", a => a.Modules.ToList(),
-                        (o, f) => ((ClrModule)o)?.Name?.FilterBy(f)
-                    ),
-
-                new KnownQuery(typeof(DbmStackFrame), "Threads stacks", a =>
-                    a.Stacks()
-                    .Select(s => new DbmStackFrame()
-                    {
-                        Thread = s.thread,
-                        StackFrames = s.stackFrames.ToList(),
-                    })
-                    .ToList(),
-                    (o, f) => ((DbmStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f)     // not much sense
-                    ),
-
-                new KnownQuery(typeof(IClrRoot), "Roots", a => a.Roots.ToList(),
-                        (o, f) => ((IClrRoot)o).Object.Type?.Name?.FilterBy(f)
-                    ),
-
-                new KnownQuery(typeof(ClrObject), "ObjectsBySize", a => a.GetObjectsBySize(1).ToList(),
-                        (o, f) => ((ClrObject)o).Type?.Name?.FilterBy(f)
-                    ),
-
-                new KnownQuery(typeof(ClrObject), "NonSystemObjectsBySize", a =>
-                    a.GetObjectsBySize(1)
-                    .Where(o => ((o.Type.Name != null &&
-                                !o.Type.Name.StartsWith("System") &&
-                                !o.Type.Name.StartsWith("Microsoft") &&
-                                !o.Type.Name.StartsWith("Interop") &&
-                                !o.Type.Name.StartsWith("Internal")) &&
-                                !o.Type.IsFree)
-                                || o.Type.Name == null)
-                    .ToList(),
-                        (o, f) => ((ClrObject)o).Type?.Name?.FilterBy(f)
-                    ),
-
-                new KnownQuery(typeof(DbmAllocatorGroup), "GetObjectsGroupedByAllocator (.NET5 dumps)", a =>
-                    a.GetObjectsGroupedByAllocator(a.Objects)
-                    .Select(g => new DbmAllocatorGroup()
-                    {
-                        Allocator = g.allocator,
-                        Objects = g.objects,
-                        Name = a.GetAllocatorName(g.allocator), // experimental!!
-                    })
-                    .ToList(),
-                        (o, f) => ((DbmAllocatorGroup)o)?.Name?.FilterBy(f)
-                    ),
-            };
-            */
+            _queries = new QueriesService().CreateQueries();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

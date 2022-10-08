@@ -36,9 +36,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebAddon", "TestWebAddo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebAddonContract", "TestWebAddonContract\TestWebAddonContract.csproj", "{7AAD52DC-188B-477C-AF24-2C788C648220}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagnosticServer", "DiagnosticServer\DiagnosticServer.csproj", "{BFAB0CF9-4D8C-45E7-AC23-ABC3DB0054EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiagnosticServer", "DiagnosticServer\DiagnosticServer.csproj", "{BFAB0CF9-4D8C-45E7-AC23-ABC3DB0054EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagnosticModels", "DiagnosticModels\DiagnosticModels.csproj", "{2A493AC4-0683-408D-A5E6-C880816343E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiagnosticModels", "DiagnosticModels\DiagnosticModels.csproj", "{2A493AC4-0683-408D-A5E6-C880816343E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagnosticInvestigations", "DiagnosticInvestigations\DiagnosticInvestigations.csproj", "{DAD67A33-DFE0-4968-9C07-3B203717442E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,10 @@ Global
 		{2A493AC4-0683-408D-A5E6-C880816343E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A493AC4-0683-408D-A5E6-C880816343E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A493AC4-0683-408D-A5E6-C880816343E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD67A33-DFE0-4968-9C07-3B203717442E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAD67A33-DFE0-4968-9C07-3B203717442E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAD67A33-DFE0-4968-9C07-3B203717442E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD67A33-DFE0-4968-9C07-3B203717442E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

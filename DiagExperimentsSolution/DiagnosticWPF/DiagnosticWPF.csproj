@@ -34,6 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClrDiagnostics\ClrDiagnostics.csproj" />
     <ProjectReference Include="..\CustomEventSource\CustomEventSource.csproj" />
+    <ProjectReference Include="..\DiagnosticInvestigations\DiagnosticInvestigations.csproj" />
     <ProjectReference Include="..\DiagnosticModels\DiagnosticModels.csproj" />
   </ItemGroup>
 
