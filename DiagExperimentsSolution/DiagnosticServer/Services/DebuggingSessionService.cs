@@ -1,4 +1,8 @@
-﻿using System.Text.Json;
+﻿using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using ClrDiagnostics;
@@ -14,6 +18,7 @@ using DiagnosticModels.Converters;
 using DiagnosticServer.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Diagnostics.Tracing.AutomatedAnalysis;
 
 namespace DiagnosticServer.Services
 {
@@ -23,6 +28,12 @@ namespace DiagnosticServer.Services
         private readonly IHubContext<DiagnosticHub> _diagnosticHubContext;
         private readonly InvestigationState _investigationState;
         private readonly JsonSerializerOptions _jsonOptions;
+
+        private AutoResetEvent _quit = new(false);
+        private AutoResetEvent _go = new(false);
+        private TimeSpan _loopTimeout = TimeSpan.FromSeconds(15);
+
+        private ConcurrentQueue<(InvestigationScope scope, KnownQuery query, TaskCompletionSource<IEnumerable>)> _executionQuery = new();
 
         private TriggerAll? _triggerAll;
 
@@ -46,12 +57,38 @@ namespace DiagnosticServer.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation($"Service Started");
-            while(true)
+            WaitHandle[] handles = new[] { _quit, _go };
+            (InvestigationScope scope, KnownQuery query, TaskCompletionSource < IEnumerable > tcs) trio = default;
+            while (true)
             {
-                await Task.Delay(1000);
+                //await Task.Delay(1000);
+                var wait = WaitHandle.WaitAny(handles, _loopTimeout);
+                if (wait == 0) return;
+                if (wait == 1)
+                {
+                    if (!_executionQuery.TryDequeue(out trio))
+                    {
+                        Debug.WriteLine("Event signalled but the queue is empty");
+                        continue;
+                    }
+
+                    var analyzer = trio.scope.DiagnosticAnalyzer;
+                    var knownQuery = trio.query;
+                    var tcs = trio.tcs;
+                    var result = knownQuery.Populate(analyzer);
+                    tcs.SetResult(result);
+                }
+
                 await _diagnosticHubContext.Clients.All.SendAsync("onMessage", "userX", "Test " + DateTime.Now);
                 _investigationState.ClearSessionIfExpired();
             }
+        }
+
+        public Task<IEnumerable> ExecuteAsync(InvestigationScope scope, KnownQuery query)
+        {
+            var tcs = new TaskCompletionSource<IEnumerable>();
+            _executionQuery.Enqueue((scope, query, tcs));
+            return tcs.Task;
         }
 
         private void SendTrigger(EvsBase evs)

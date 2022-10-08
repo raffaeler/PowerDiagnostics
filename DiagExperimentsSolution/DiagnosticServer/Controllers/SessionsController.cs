@@ -46,34 +46,44 @@ namespace DiagnosticServer.Controllers
 
 
         [HttpPost("Query/{sessionId}/{query}")]
-        public Task<IActionResult> MakeQuery(string sessionId, string query)
+        public async Task<IActionResult> MakeQuery(string sessionId, string query)
         {
             if(!_queriesService.Queries.TryGetValue(query, out var knownQuery))
             {
-                return Task.FromResult<IActionResult>(NotFound());
+                return NotFound();
             }
 
             if (!Guid.TryParse(sessionId, out Guid id))
             {
-                return Task.FromResult<IActionResult>(NotFound());
+                return NotFound();
             }
 
             var scope = _debuggingSessionService.GetInvestigationScope(id);
             if(scope == null)
             {
-                return Task.FromResult<IActionResult>(NotFound());
+                return NotFound();
             }
 
-            var analyzer = scope.DiagnosticAnalyzer;
+            // We offload the execution to the background service thread,
+            // including the TaskCompletionSource that is awaited here
+            // This is the synchronous code that we do NOT want to do here
+            //   var analyzer = scope.DiagnosticAnalyzer;
+            //   var result = knownQuery.Populate(analyzer);
 
-            // TODO: create "command" for the background thread,
-            // including the TaskCompletionSource that will be
-            // awaited here
-            // command content: scope, query
+            System.Collections.IEnumerable result;
+            _logger.LogInformation($"Offloaded the execution of the query {knownQuery.Name}");
+            try
+            {
+                result = await _debuggingSessionService.ExecuteAsync(scope, knownQuery);
+                _logger.LogInformation($"Query {knownQuery.Name} has completed");
+            }
+            catch(Exception err)
+            {
+                _logger.LogError(err, $"Query {knownQuery.Name} has faulted");
+                throw;
+            }
 
-            var result = knownQuery.Populate(analyzer);
-            
-            return Task.FromResult<IActionResult>(Ok(result));
+            return Ok(result);
         }
 
 
