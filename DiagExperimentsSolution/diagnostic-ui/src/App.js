@@ -7,7 +7,7 @@ import Global from './global';
 // import ShowJson from './components/showJson';
 import Home from './pages/home';
 import Bogus from './pages/bogus';
-import Process from './pages/process';
+import Analysis from './pages/analysis';
 import Layout from './pages/layout';
 
 import Button from 'react-bootstrap/Button';
@@ -17,6 +17,8 @@ import './App.css';
 
 function App() {
   const [hub, setHub] = useState(null); // connection
+  const [selectedSessionId, setSelectedSessionId] = useState(null);
+
   const [message, setMessage] = useState("Hello, world: ");
   const [messageRX, setMessageRX] = useState("");
 
@@ -53,15 +55,18 @@ function App() {
     connect();
   }, [hub]);
 
+  const onSelectedSessionId = (sessionId) => {
+    setSelectedSessionId(sessionId);
+  }
 
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout hub={hub} />}>
-            <Route index element={<Home />} />
+            <Route index element={<Home onSelectedSessionId={onSelectedSessionId}/>} />
             {/* <Route path='home' element={<Home hub={hub} />} /> */}
-            <Route path='process' element={<Process hub={hub} />} />
+            <Route path='analysis' element={<Analysis hub={hub} sessionId={selectedSessionId} />} />
           </Route>
         </Routes>
       </BrowserRouter>

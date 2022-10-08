@@ -31,6 +31,7 @@ namespace DiagnosticServer.Services
 
         private AutoResetEvent _quit = new(false);
         private AutoResetEvent _go = new(false);
+        private Thread _worker;
         private TimeSpan _loopTimeout = TimeSpan.FromSeconds(15);
 
         private ConcurrentQueue<(InvestigationScope scope, KnownQuery query, TaskCompletionSource<IEnumerable>)> _executionQuery = new();
@@ -46,6 +47,10 @@ namespace DiagnosticServer.Services
             _diagnosticHubContext = diagnosticHubContext;
             _investigationState = investigationState;
             _jsonOptions = SetupConverters.CreateOptions();
+            _worker = new(Worker);
+            _worker.IsBackground = true;
+            _worker.Priority = ThreadPriority.BelowNormal;
+            _worker.Start();
         }
 
         public override void Dispose()
@@ -54,9 +59,21 @@ namespace DiagnosticServer.Services
             base.Dispose();
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation($"Service Started");
+            return Task.CompletedTask;
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation($"Service Stopped");
+            return base.StopAsync(cancellationToken);
+        }
+
+        private async void Worker()
+        {
+            _logger.LogInformation($"Worker Started");
             WaitHandle[] handles = new[] { _quit, _go };
             (InvestigationScope scope, KnownQuery query, TaskCompletionSource < IEnumerable > tcs) trio = default;
             while (true)
@@ -88,6 +105,7 @@ namespace DiagnosticServer.Services
         {
             var tcs = new TaskCompletionSource<IEnumerable>();
             _executionQuery.Enqueue((scope, query, tcs));
+            _go.Set();
             return tcs.Task;
         }
 

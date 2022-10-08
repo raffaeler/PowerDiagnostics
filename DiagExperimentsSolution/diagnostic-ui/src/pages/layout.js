@@ -24,17 +24,19 @@ export default function Layout(props) {
                             </LinkContainer> */}
 
                             {/* Replacement for <Link to="process">Process</Link> {" "} */}
-                            <LinkContainer to="process">
-                                <Nav.Link>Process</Nav.Link>
+                            <LinkContainer to="analysis">
+                                <Nav.Link>Analysis</Nav.Link>
                             </LinkContainer>
 
                         </Nav>
 
-                        {/* <Nav className="ms-auto">
-                            <LinkContainer to="home" >
-                                <Nav.Link>Right link</Nav.Link>
-                            </LinkContainer>
-                        </Nav> */}
+                        {/*
+                            <Nav className="ms-auto">
+                                <LinkContainer to="home" >
+                                    <Nav.Link>Right link</Nav.Link>
+                                </LinkContainer>
+                            </Nav>
+                        */}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
@@ -49,14 +51,14 @@ export default function Layout(props) {
 }
 
 const styles = {
-    valueStyle: {
-        textAlign: 'center',
-        color: 'navy'
-    },
+    // valueStyle: {
+    //     textAlign: 'center',
+    //     color: 'navy'
+    // },
 
-    headerStyle: {
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: 'navy'
-    }
+    // headerStyle: {
+    //     textAlign: 'center',
+    //     fontWeight: 'bold',
+    //     color: 'navy'
+    // }
 };

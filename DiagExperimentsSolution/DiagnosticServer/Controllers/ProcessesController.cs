@@ -1,5 +1,7 @@
 ﻿using ClrDiagnostics.Helpers;
 
+using DiagnosticInvestigations;
+
 using DiagnosticServer.Services;
 
 using Microsoft.AspNetCore.Http;
@@ -11,10 +13,13 @@ namespace DiagnosticServer.Controllers
     [ApiController]
     public class ProcessesController : ControllerBase
     {
+        private readonly ILogger<ProcessesController> _logger;
         private readonly DebuggingSessionService _debuggingSessionService;
 
-        public ProcessesController(DebuggingSessionService debuggingSessionService)
+        public ProcessesController(ILogger<ProcessesController> logger,
+            DebuggingSessionService debuggingSessionService)
         {
+            _logger = logger;
             _debuggingSessionService = debuggingSessionService;
         }
 
@@ -32,28 +37,28 @@ namespace DiagnosticServer.Controllers
         }
 
         //[Route("api/[controller]/{id}")]
-        [HttpPost("Attach/{id}")]
+        [HttpPost("attach/{id}")]
         public Task<IActionResult> AttachEvents(int id)
         {
             _debuggingSessionService.SubscribeTriggers(id);
             return Task.FromResult<IActionResult>(Ok());
         }
 
-        [HttpPost("Detach")]
+        [HttpPost("detach")]
         public Task<IActionResult> DetachEvents()
         {
             _debuggingSessionService.UnsubscribeTriggers();
             return Task.FromResult<IActionResult>(Ok());
         }
 
-        [HttpPost("Snapshot/{id}")]
+        [HttpPost("snapshot/{id}")]
         public Task<IActionResult> Snapshot(int id)
         {
             var sessionId = _debuggingSessionService.Snapshot(id);
             return Task.FromResult<IActionResult>(Ok(sessionId));
         }
 
-        [HttpPost("Dump/{id}")]
+        [HttpPost("dump/{id}")]
         public Task<IActionResult> Dump(int id)
         {
             var sessionId = _debuggingSessionService.Dump(id);

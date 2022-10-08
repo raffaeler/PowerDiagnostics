@@ -1,8 +1,16 @@
 export default class Global {
     static baseAddress = "https://localhost:7072";
-    static apiProcesses = "/api/Processes";
-    static apiProcessAttach = "/api/Processes/Attach";
-    static apiProcessDetach = "/api/Processes/Detach";
+    
+    static apiProcesses = "/api/processes";                     // () => returns list of processes
+    static apiProcessAttach = "/api/processes/attach";          // /{id} => returns no value
+    static apiProcessDetach = "/api/processes/detach";          // () => returns no value
+    static apiProcessSnapshot = "/api/processes/snapshot";      // /{id} => returns SessionId
+    static apiProcessDump = "/api/processes/dump";              // /{id} => returns SessionId
+
+    static apiSessions = "/api/sessions";                       // () => returns list of sessions (strings)
+    static apiSessionsQueries = "/api/sessions/queries";        // () => returns list of queries (strings)
+    static apiSessionsQuery = "/api/sessions/query";            // /{sessionId}/{query}
+
     static diagnosticHub = "/diagnosticHub";
 
     static async invokeAPI(verb, relativeAddress) {
