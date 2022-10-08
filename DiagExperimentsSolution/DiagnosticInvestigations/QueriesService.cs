@@ -12,7 +12,14 @@ namespace DiagnosticInvestigations;
 
 public class QueriesService
 {
-    public IList<KnownQuery> CreateQueries()
+    public QueriesService()
+    {
+        var queries = CreateQueries();
+        Queries = queries.ToDictionary(q => q.Name, q => q);
+    }
+
+    public IDictionary<string, KnownQuery> Queries { get; }
+    private IList<KnownQuery> CreateQueries()
     {
         var queries = new List<KnownQuery>();
 

@@ -57,7 +57,8 @@ namespace DiagnosticWPF
 
         private void InitializeQueries()
         {
-            _queries = new QueriesService().CreateQueries();
+            var queryService = new QueriesService();
+            _queries = queryService.Queries.Values.ToList();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

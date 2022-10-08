@@ -1,6 +1,8 @@
 using DiagnosticInvestigations;
+using DiagnosticInvestigations.Configurations;
 
-using DiagnosticServer.Configurations;
+using DiagnosticModels.Converters;
+
 using DiagnosticServer.Hubs;
 using DiagnosticServer.Services;
 
@@ -18,7 +20,9 @@ namespace DiagnosticServer
             //var generalConfiguration = generalSection.Get<GeneralConfiguration>();
             builder.Services.Configure<GeneralConfiguration>(generalSection);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options => SetupConverters.ConfigureOptions(options.JsonSerializerOptions));
+
             builder.Services.AddSignalR();
             // Cors configuration is needed during front-end development
             // because react is hosted in a different domain 

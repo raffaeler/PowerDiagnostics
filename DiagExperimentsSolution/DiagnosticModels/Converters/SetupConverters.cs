@@ -26,4 +26,19 @@ public static class SetupConverters
                 new ClrTypeConverter(),
             }
         };
+
+    public static void ConfigureOptions(JsonSerializerOptions options)
+    {
+        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.Converters.Clear();
+        options.Converters.Add(new ClrExceptionConverter());
+        options.Converters.Add(new ClrInstanceFieldConverter());
+        options.Converters.Add(new ClrModuleConverter());
+        options.Converters.Add(new ClrObjectConverter());
+        options.Converters.Add(new ClrRootConverter());
+        options.Converters.Add(new ClrStackFrameConverter());
+        options.Converters.Add(new ClrStaticFieldConverter());
+        options.Converters.Add(new ClrThreadConverter());
+        options.Converters.Add(new ClrTypeConverter());
+    }
 }

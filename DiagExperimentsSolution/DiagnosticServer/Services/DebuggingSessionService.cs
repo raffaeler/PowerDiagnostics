@@ -50,6 +50,7 @@ namespace DiagnosticServer.Services
             {
                 await Task.Delay(1000);
                 await _diagnosticHubContext.Clients.All.SendAsync("onMessage", "userX", "Test " + DateTime.Now);
+                _investigationState.ClearSessionIfExpired();
             }
         }
 
@@ -101,5 +102,10 @@ namespace DiagnosticServer.Services
             return sessionId;
         }
 
+        public IList<InvestigationScope> GetActiveSessions()
+            => _investigationState.GetActiveSessions();
+
+        public InvestigationScope? GetInvestigationScope(Guid sessionId)
+            => _investigationState.GetInvestigationScope(sessionId);
     }
 }

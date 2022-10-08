@@ -14,16 +14,20 @@ namespace DiagnosticInvestigations;
 /// </summary>
 public record class InvestigationScope
 {
-    public InvestigationScope(InvestigationKind investigationKind,
+    public InvestigationScope(Guid sessionId,
+        InvestigationKind investigationKind,
         DiagnosticAnalyzer diagnosticAnalyzer,
         FileInfo? temporaryFile = null)
     {
+        this.SessionId = sessionId;
         this.InvestigationKind = investigationKind;
-        this.When = DateTime.Now;
+        this.Created = DateTime.Now;
         this.DiagnosticAnalyzer = diagnosticAnalyzer;
     }
 
-    public DateTime When { get; }
+    public Guid SessionId { get; }
+    public DateTime Created { get; }
+
     public InvestigationKind InvestigationKind { get; }
     public DiagnosticAnalyzer DiagnosticAnalyzer { get; }
     public FileInfo? TemporaryFile { get; }
