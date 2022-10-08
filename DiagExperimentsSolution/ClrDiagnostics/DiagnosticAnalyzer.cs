@@ -8,6 +8,7 @@ using System.Threading;
 
 using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Helpers;
+using Microsoft.Diagnostics.NETCore.Client;
 
 namespace ClrDiagnostics
 {
@@ -85,6 +86,19 @@ namespace ClrDiagnostics
             _clrRuntime = _clrInfo.CreateRuntime();
 
             PrepareGCRootCache();
+        }
+
+        public static DiagnosticAnalyzer FromDump(int pid, bool cacheObjects = true)
+        {
+            var temp = Path.GetTempFileName();
+            var client = new DiagnosticsClient(pid);
+            client.WriteDump(DumpType.WithHeap, temp);
+            var dataTarget = DataTarget.LoadDump(temp, new CacheOptions()
+            {
+                // ...
+            });
+
+            return new DiagnosticAnalyzer(dataTarget, cacheObjects);
         }
 
         public static DiagnosticAnalyzer FromDump(string filename, bool cacheObjects,

@@ -46,5 +46,19 @@ namespace DiagnosticServer.Controllers
             return Task.FromResult<IActionResult>(Ok());
         }
 
+        [HttpPost("Snapshot/{id}")]
+        public Task<IActionResult> Snapshot(int id)
+        {
+            var sessionId = _debuggingSessionService.Snapshot(id);
+            return Task.FromResult<IActionResult>(Ok(sessionId));
+        }
+
+        [HttpPost("Dump/{id}")]
+        public Task<IActionResult> Dump(int id)
+        {
+            var sessionId = _debuggingSessionService.Dump(id);
+            return Task.FromResult<IActionResult>(Ok(sessionId));
+        }
+
     }
 }

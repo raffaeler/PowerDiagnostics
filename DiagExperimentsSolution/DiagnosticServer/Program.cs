@@ -1,3 +1,5 @@
+using DiagnosticInvestigations;
+
 using DiagnosticServer.Configurations;
 using DiagnosticServer.Hubs;
 using DiagnosticServer.Services;
@@ -42,6 +44,8 @@ namespace DiagnosticServer
             builder.Services.AddSingleton<DebuggingSessionService>();
             builder.Services.AddHostedService<DebuggingSessionService>(
                 provider => provider.GetService<DebuggingSessionService>() ?? throw new Exception($"Service not found ({nameof(DebuggingSessionService)})"));
+            builder.Services.AddSingleton<QueriesService>();
+            builder.Services.AddSingleton<InvestigationState>();
 
             var app = builder.Build();
 
@@ -65,7 +69,9 @@ namespace DiagnosticServer
             {
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("/index.html");
-                endpoints.MapHub<DiagnosticHub>("/diagnosticHub");
+                endpoints.MapHub<DiagnosticHub>("/diagnosticHub", options =>
+                {
+                });
             });
 
             app.Run();

@@ -1,9 +1,12 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using ClrDiagnostics;
 using ClrDiagnostics.Triggers;
 
 using CustomEventSource;
+
+using DiagnosticInvestigations;
 
 using DiagnosticModels;
 using DiagnosticModels.Converters;
@@ -18,15 +21,19 @@ namespace DiagnosticServer.Services
     {
         private readonly ILogger<DebuggingSessionService> _logger;
         private readonly IHubContext<DiagnosticHub> _diagnosticHubContext;
+        private readonly InvestigationState _investigationState;
         private readonly JsonSerializerOptions _jsonOptions;
 
         private TriggerAll? _triggerAll;
 
-        public DebuggingSessionService(ILogger<DebuggingSessionService> logger,
-            IHubContext<DiagnosticHub> diagnosticHubContext)
+        public DebuggingSessionService(
+            ILogger<DebuggingSessionService> logger,
+            IHubContext<DiagnosticHub> diagnosticHubContext,
+            InvestigationState investigationState)
         {
             _logger = logger;
             _diagnosticHubContext = diagnosticHubContext;
+            _investigationState = investigationState;
             _jsonOptions = SetupConverters.CreateOptions();
         }
 
@@ -78,6 +85,20 @@ namespace DiagnosticServer.Services
                 _triggerAll.Dispose();
                 _triggerAll = null;
             }
+        }
+
+        public Guid Snapshot(int pid)
+        {
+            var analyzer = DiagnosticAnalyzer.FromSnapshot(pid);
+            var sessionId = _investigationState.AddSnapshot(analyzer);
+            return sessionId;
+        }
+
+        public Guid Dump(int pid)
+        {
+            var analyzer = DiagnosticAnalyzer.FromDump(pid);
+            var sessionId = _investigationState.AddDump(analyzer);
+            return sessionId;
         }
 
     }
