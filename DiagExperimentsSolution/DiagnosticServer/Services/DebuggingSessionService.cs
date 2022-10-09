@@ -75,7 +75,7 @@ namespace DiagnosticServer.Services
         {
             _logger.LogInformation($"Worker Started");
             WaitHandle[] handles = new[] { _quit, _go };
-            (InvestigationScope scope, KnownQuery query, TaskCompletionSource < IEnumerable > tcs) trio = default;
+            (InvestigationScope scope, KnownQuery query, TaskCompletionSource<IEnumerable> tcs) trio = default;
             while (true)
             {
                 //await Task.Delay(1000);
@@ -83,17 +83,18 @@ namespace DiagnosticServer.Services
                 if (wait == 0) return;
                 if (wait == 1)
                 {
-                    if (!_executionQuery.TryDequeue(out trio))
+                    while (_executionQuery.TryDequeue(out trio))
                     {
-                        Debug.WriteLine("Event signalled but the queue is empty");
-                        continue;
+                        Debug.WriteLine($"Worker thread> processing query {trio.query.Name}");
+
+                        var analyzer = trio.scope.DiagnosticAnalyzer;
+                        var knownQuery = trio.query;
+                        var tcs = trio.tcs;
+                        var result = knownQuery.Populate(analyzer);
+                        tcs.SetResult(result);
                     }
 
-                    var analyzer = trio.scope.DiagnosticAnalyzer;
-                    var knownQuery = trio.query;
-                    var tcs = trio.tcs;
-                    var result = knownQuery.Populate(analyzer);
-                    tcs.SetResult(result);
+                    continue;
                 }
 
                 await _diagnosticHubContext.Clients.All.SendAsync("onMessage", "userX", "Test " + DateTime.Now);

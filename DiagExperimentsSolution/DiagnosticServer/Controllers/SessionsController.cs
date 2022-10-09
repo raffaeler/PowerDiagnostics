@@ -50,7 +50,7 @@ namespace DiagnosticServer.Controllers
             return Task.FromResult<IActionResult>(Ok(_queriesService.Queries.Keys));
         }
 
-        [HttpPost("query/{sessionId}/{query}")]
+        [HttpPost("{sessionId}/{query}")]
         public async Task<IActionResult> RunQuery(string sessionId, string query)
         {
             if(!_queriesService.Queries.TryGetValue(query, out var knownQuery))

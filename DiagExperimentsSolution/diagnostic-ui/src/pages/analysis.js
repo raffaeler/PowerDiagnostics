@@ -41,7 +41,7 @@ export default function Analysis(props) {
 
     const runQuery = async () => {
         console.log('run query', selectedQuery);
-        var res = await Global.invokeAPI('POST', Global.apiSessionsQuery + '/' + props.sessionId + '/' + selectedQuery);
+        var res = await Global.invokeAPI('POST', Global.apiSessions + '/' + props.sessionId + '/' + selectedQuery);
         if(res.isError) {
             console.log('runquery failed')
             setIsError(res.isError);

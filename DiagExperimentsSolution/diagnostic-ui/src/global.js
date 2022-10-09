@@ -9,7 +9,7 @@ export default class Global {
 
     static apiSessions = "/api/sessions";                       // () => returns list of sessions (strings)
     static apiSessionsQueries = "/api/sessions/queries";        // () => returns list of queries (strings)
-    static apiSessionsQuery = "/api/sessions/query";            // /{sessionId}/{query}
+    // /api/sessions/{sessionId}/{query}
 
     static diagnosticHub = "/diagnosticHub";
 
