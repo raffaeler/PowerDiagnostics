@@ -58,7 +58,7 @@ namespace TestWebApp
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRequestHook();
             app.UseStaticFiles();

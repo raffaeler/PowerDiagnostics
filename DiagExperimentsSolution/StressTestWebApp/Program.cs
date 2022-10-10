@@ -25,7 +25,7 @@ namespace StressTestWebApp
 {
     class Program
     {
-        private static string _address = "https://localhost:5201";
+        private static string _address = "http://localhost:5200";
         private static int _concurrency = 1000;
 
         static async Task Main(string[] args)

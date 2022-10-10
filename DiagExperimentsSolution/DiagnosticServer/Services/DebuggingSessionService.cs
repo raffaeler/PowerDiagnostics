@@ -19,6 +19,7 @@ using DiagnosticServer.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Diagnostics.Tracing.AutomatedAnalysis;
+using Microsoft.Extensions.Hosting;
 
 namespace DiagnosticServer.Services
 {
@@ -40,10 +41,12 @@ namespace DiagnosticServer.Services
 
         public DebuggingSessionService(
             ILogger<DebuggingSessionService> logger,
+            IHostApplicationLifetime applicationLifetime,
             IHubContext<DiagnosticHub> diagnosticHubContext,
             InvestigationState investigationState)
         {
             _logger = logger;
+            applicationLifetime.ApplicationStopping.Register(() => _quit.Set());
             _diagnosticHubContext = diagnosticHubContext;
             _investigationState = investigationState;
             _jsonOptions = SetupConverters.CreateOptions();
@@ -80,7 +83,12 @@ namespace DiagnosticServer.Services
             {
                 //await Task.Delay(1000);
                 var wait = WaitHandle.WaitAny(handles, _loopTimeout);
-                if (wait == 0) return;
+                if (wait == 0)
+                {
+                    _logger.LogInformation($"Quitting worker thread");
+                    return;
+                }
+
                 if (wait == 1)
                 {
                     while (_executionQuery.TryDequeue(out trio))

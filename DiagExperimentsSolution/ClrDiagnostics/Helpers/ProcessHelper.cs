@@ -41,7 +41,19 @@ namespace ClrDiagnostics.Helpers
         {
             var processes = DiagnosticsClient.GetPublishedProcesses()
                 .OrderBy(p => p)
-                .Select(p => Process.GetProcessById(p))
+                .Select(p =>
+                {
+                    try
+                    {
+                        return Process.GetProcessById(p);
+                    }
+                    catch(Exception ex)
+                    {
+                        Debug.WriteLine($"GetProcessById failed (ghost process?): {ex.Message}");
+                        return null;
+                    }
+                })
+                .Where(p => p != null)
                 .ToList();
             return processes;
         }

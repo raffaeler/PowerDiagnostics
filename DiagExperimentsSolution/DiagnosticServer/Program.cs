@@ -60,7 +60,7 @@ namespace DiagnosticServer
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();    // testing
             app.UseCors(corsPolicy);    // raf
             app.UseRouting();           // raf
             app.UseStaticFiles();       // raf

@@ -1,5 +1,5 @@
 export default class Global {
-    static baseAddress = "https://localhost:7072";
+    static baseAddress = window.location.origin;
     
     static apiProcesses = "/api/processes";                     // () => returns list of processes
     static apiProcessAttach = "/api/processes/attach";          // /{id} => returns no value
