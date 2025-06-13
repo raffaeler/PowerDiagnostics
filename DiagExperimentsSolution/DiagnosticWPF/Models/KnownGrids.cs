@@ -88,10 +88,10 @@ namespace DiagnosticWPF.Models
             _store[g.MasterType] = g;
 
             g = UIGrid.Create<DbmAllocatorGroup>("Objects",
-                new UIGridColumn("Alloctor Address", "Allocator.Address", "0:X16", "Allocator.Address", null, DataGridLength.Auto, true),
-                new UIGridColumn("Alloctor Size", "Allocator.Size", "0:N0", null, "Allocator.Size", DataGridLength.Auto, true),
-                new UIGridColumn("Alloctor Type", "Allocator.Type", null, null, "Allocator.Type", DataGridLength.Auto),
-                new UIGridColumn("Alloctor Name", "Name", null, null, "Name", DataGridLength.Auto));
+                new UIGridColumn("Allocator Address", "Allocator.Address", "0:X16", "Allocator.Address", null, DataGridLength.Auto, true),
+                new UIGridColumn("Allocator Size", "Allocator.Size", "0:N0", null, "Allocator.Size", DataGridLength.Auto, true),
+                new UIGridColumn("Allocator Type", "Allocator.Type", null, null, "Allocator.Type", DataGridLength.Auto),
+                new UIGridColumn("Allocator Name", "Name", null, null, "Name", DataGridLength.Auto));
             _store[g.MasterType] = g;
         }
 
