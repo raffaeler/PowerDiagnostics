@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 using Microsoft.Diagnostics.Runtime;
+//using Microsoft.Diagnostics.Runtime.Interfaces;   // required by Microsoft.Diagnostics.Runtime version 3.0
 
 namespace DiagnosticModels.Converters;
 

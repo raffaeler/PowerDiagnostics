@@ -7,6 +7,7 @@ using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
 using System.Net;
+//using Microsoft.Diagnostics.Runtime.Interfaces; // required by Microsoft.Diagnostics.Runtime version 3.0
 
 namespace ClrDiagnostics
 {
@@ -93,11 +94,14 @@ namespace ClrDiagnostics
         // Walk down the graph starting from the given object
         public IEnumerable<ClrObject> ObjectReferences(ClrObject @object)
         {
+            // required by Microsoft.Diagnostics.Runtime version 3.0
+            //return @object.EnumerateReferences(false, true);
             return _clrRuntime.Heap.EnumerateObjectReferences(@object.Address, @object.Type, false, true);
         }
 
         public IEnumerable<ClrReference> ObjectReferencesWithFields(ClrObject @object)
         {
+            // required by Microsoft.Diagnostics.Runtime version 3.0
             //return @object.EnumerateReferencesWithFields(false, true);
             return _clrRuntime.Heap.EnumerateReferencesWithFields(@object.Address, @object.Type, false, true);
         }
