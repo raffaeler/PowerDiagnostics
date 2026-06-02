@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { Box, Paper, Typography, Button, CircularProgress } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import ProcessItem from './ProcessItem'
@@ -11,6 +11,18 @@ export default function ProcessPicker() {
   useEffect(() => {
     fetchProcesses()
   }, [fetchProcesses])
+
+  const handleSelect = useCallback(
+    (p: typeof processes[number]) => {
+      // Deselect if clicking the already-selected process
+      if (selectedProcess?.id === p.id) {
+        selectProcess(null)
+      } else {
+        selectProcess(p)
+      }
+    },
+    [selectedProcess, selectProcess],
+  )
 
   return (
     <Paper variant="outlined" sx={{ p: 2, height: '100%' }}>
@@ -36,7 +48,7 @@ export default function ProcessPicker() {
             key={p.id}
             process={p}
             selected={selectedProcess?.id === p.id}
-            onSelect={selectProcess}
+            onSelect={handleSelect}
           />
         ))
       )}

@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Grid, Typography, Button, Box, Alert, CircularProgress } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import ProcessPicker from '@/components/home/ProcessPicker'
 import SessionActions from '@/components/home/SessionActions'
 import DumpUploadDialog from '@/components/home/DumpUploadDialog'
+import EventsBar from '@/components/debug/EventsBar'
 import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
+import { useSignalRStore } from '@/stores/useSignalRStore'
 
 export default function HomePage() {
   const navigate = useNavigate()
@@ -13,10 +15,46 @@ export default function HomePage() {
   const processes = useDiagnosticsStore((s) => s.processes)
   const processesFetched = useDiagnosticsStore((s) => s.processesFetched)
   const fetchProcesses = useDiagnosticsStore((s) => s.fetchProcesses)
+  const selectedProcess = useDiagnosticsStore((s) => s.selectedProcess)
+  const attachToProcess = useDiagnosticsStore((s) => s.attachToProcess)
+  const detachFromProcess = useDiagnosticsStore((s) => s.detachFromProcess)
+  const clearEvents = useSignalRStore((s) => s.clearEvents)
+
+  // Track the previously selected process PID for auto-attach/detach
+  const prevPidRef = useRef<number | null>(null)
 
   useEffect(() => {
     fetchProcesses()
   }, [fetchProcesses])
+
+  // Auto-attach/detach when selected process changes
+  useEffect(() => {
+    const currentPid = selectedProcess?.id ?? null
+    const prevPid = prevPidRef.current
+
+    if (prevPid !== currentPid) {
+      // Detach from previous process
+      if (prevPid !== null) {
+        detachFromProcess()
+        clearEvents()
+      }
+      // Attach to new process
+      if (currentPid !== null) {
+        attachToProcess(currentPid)
+      }
+      prevPidRef.current = currentPid
+    }
+  }, [selectedProcess, attachToProcess, detachFromProcess, clearEvents])
+
+  // Detach on unmount (navigating away from HomePage)
+  useEffect(() => {
+    return () => {
+      if (prevPidRef.current !== null) {
+        detachFromProcess()
+        clearEvents()
+      }
+    }
+  }, [detachFromProcess, clearEvents])
 
   const handleSessionCreated = (sessionId: string) => {
     navigate(`/debug/${sessionId}`)
@@ -41,6 +79,9 @@ export default function HomePage() {
           No .NET processes found. Make sure a .NET application is running, or open a crash dump file instead.
         </Alert>
       )}
+
+      {/* Real-time events (auto-subscribed when a process is selected) */}
+      <EventsBar />
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>

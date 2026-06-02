@@ -18,6 +18,7 @@ public class TriggerAll
     private EventPipeSession? _session;
     private EventPipeEventSource? _source;
     private string? _eventCounterName;
+    private Task? _processingTask;
 
     public TriggerAll(int processId, string eventSourceName, string eventCounterName)
     {
@@ -75,13 +76,27 @@ public class TriggerAll
     {
         if (IsStarted || Providers.Count == 0) return false;
 
-        Task.Run(() =>
+        _processingTask = Task.Run(() =>
         {
-            _session = _client.StartEventPipeSession(Providers, false);
-            _source = new EventPipeEventSource(_session.EventStream);
-            OnSubscribe(_source);
-            _source.Dynamic.All += Dynamic_All;
-            _source.Process();
+            try
+            {
+                _session = _client.StartEventPipeSession(Providers, false);
+                _source = new EventPipeEventSource(_session.EventStream);
+                OnSubscribe(_source);
+                _source.Dynamic.All += Dynamic_All;
+                _source.Process();
+            }
+            catch (Exception) when (_isDisposed)
+            {
+                // Expected when the session is stopped during processing
+            }
+            catch (Exception ex)
+            {
+                // Log unexpected errors that would otherwise crash the
+                // background task silently (unobserved task exception).
+                // The task is fire-and-forget by design.
+                Debug.WriteLine($"[TriggerAll] Event processing failed: {ex}");
+            }
         });
 
         IsStarted = true;
@@ -92,7 +107,20 @@ public class TriggerAll
     {
         if (!IsStarted) return false;
 
+        // Dispose the session first — this stops the EventPipe and causes
+        // _source.Process() to return on the background thread.
         if (_session != null) { _session.Dispose(); _session = null; }
+
+        // Wait for the processing task to finish before disposing the source.
+        // No timeout needed: disposing the session closes the stream, which
+        // guarantees Process() returns (either normally or via exception).
+        if (_processingTask != null)
+        {
+            try { _processingTask.Wait(); }
+            catch (AggregateException) { /* expected if Process() threw */ }
+            _processingTask = null;
+        }
+
         if (_source != null) { _source.Dispose(); _source = null; }
 
         IsStarted = false;
@@ -110,15 +138,13 @@ public class TriggerAll
     {
         source.Clr.GCAllocationTick += traceEvent =>
         {
-            var obj = traceEvent as GCAllocationTickTraceData;
-            //Debug.WriteLine($"{obj.ClrInstanceID} - {obj.TypeName} - {obj.AllocationAmount} - {obj.AllocationKind}");
+            if (traceEvent is not GCAllocationTickTraceData obj) return;
             OnGcAllocation?.Invoke(obj.AllocationAmount);
         };
 
         source.Clr.ExceptionStart += traceEvent =>
         {
-            var obj = traceEvent as ExceptionTraceData;
-            //OnException?.Invoke(obj.)
+            if (traceEvent is not ExceptionTraceData obj) return;
             var text = $"{obj.ExceptionType}: {obj.ExceptionMessage}";
             OnException?.Invoke(text);
         };
@@ -128,37 +154,30 @@ public class TriggerAll
         IDictionary<string, object> payload)
     {
         if (payload == null) return;
-        var name = payload["Name"]?.ToString();
+        if (!payload.TryGetValue("Name", out var nameObj)) return;
+        var name = nameObj?.ToString();
 
-        if (name == "cpu-usage")
+        if (name == "cpu-usage" && payload.TryGetValue("Mean", out var cpuMean))
         {
-            var cpuUsage = (double)payload["Mean"];
-            OnCpu?.Invoke(cpuUsage);
+            OnCpu?.Invoke((double)cpuMean);
         }
 
-
-        if (name == "working-set")
+        if (name == "working-set" && payload.TryGetValue("Mean", out var wsMean))
         {
-            var mean = (double)payload["Mean"];
-            var units = payload["DisplayUnits"].ToString();
-            OnWorkingSet?.Invoke(mean);
+            OnWorkingSet?.Invoke((double)wsMean);
         }
-
 
         // event counter
-        if (name == _eventCounterName)
+        if (name == _eventCounterName && payload.TryGetValue("Count", out var countObj))
         {
-            int count = (int)payload["Count"];
-            OnEventCounterCount?.Invoke(count);
+            OnEventCounterCount?.Invoke((int)countObj);
         }
 
         // http req
-        if (name == "requests-per-second")
+        if (name == "requests-per-second" && payload.TryGetValue("Increment", out var incObj))
         {
-            var increment = (double)payload["Increment"];
-            OnHttpRequests?.Invoke(increment);
+            OnHttpRequests?.Invoke((double)incObj);
         }
-
     }
 
     private void Dynamic_All(TraceEvent traceEvent)
@@ -184,6 +203,10 @@ public class TriggerAll
         {
             if (disposing)
             {
+                // Set _isDisposed BEFORE Stop() so the background task's
+                // exception filter can catch the ObjectDisposedException
+                // that Process() throws when the session stream closes.
+                _isDisposed = true;
                 OnDisposing();
                 Stop();
             }

@@ -16,8 +16,18 @@ public static class TraceEventExtensions
             if (payloadContainer == null)
                 return null;
 
-            if (payloadContainer["Payload"] is IDictionary<string, object> payload)
-                return payload;
+            // Some trace events wrap the payload in an outer "Payload" key
+            // (e.g. EventCounter events from certain providers). If present,
+            // unwrap and return the inner dictionary.
+            if (payloadContainer.TryGetValue("Payload", out var inner) &&
+                inner is IDictionary<string, object> innerPayload)
+            {
+                return innerPayload;
+            }
+
+            // No outer wrapper — the container itself is the event payload
+            // (e.g. EventCounter events from System.Runtime).
+            return payloadContainer;
         }
 
         return null;

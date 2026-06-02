@@ -66,11 +66,18 @@ public abstract class TriggerBase : IDisposable
 
         Task.Run(() =>
         {
-            _session = _client.StartEventPipeSession(Providers, false);
-            _source = new EventPipeEventSource(_session.EventStream);
-            OnSubscribe(_source);
-            _source.Dynamic.All += Dynamic_All;
-            _source.Process();
+            try
+            {
+                _session = _client.StartEventPipeSession(Providers, false);
+                _source = new EventPipeEventSource(_session.EventStream);
+                OnSubscribe(_source);
+                _source.Dynamic.All += Dynamic_All;
+                _source.Process();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[TriggerBase] Event processing failed: {ex}");
+            }
         });
 
         IsStarted = true;

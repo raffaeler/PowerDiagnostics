@@ -1,28 +1,17 @@
-import { Box, Paper, Typography, Button, Stack, Alert } from '@mui/material'
+import { Paper, Typography, Button, Stack, Alert } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
 import { useState } from 'react'
 
 export default function SessionActions() {
   const navigate = useNavigate()
-  const { selectedProcess, isAttached, attachToProcess, detachFromProcess, takeSnapshot, createDump, fetchSessions } =
+  const { selectedProcess, takeSnapshot, createDump, fetchSessions } =
     useDiagnosticsStore()
   const [message, setMessage] = useState<{ text: string; severity: 'success' | 'error' } | null>(null)
 
   const showMessage = (text: string, severity: 'success' | 'error') => {
     setMessage({ text, severity })
     setTimeout(() => setMessage(null), 3000)
-  }
-
-  const handleAttach = async () => {
-    if (!selectedProcess) return
-    const ok = await attachToProcess(selectedProcess.id)
-    showMessage(ok ? 'Events attached' : 'Attach failed', ok ? 'success' : 'error')
-  }
-
-  const handleDetach = async () => {
-    const ok = await detachFromProcess()
-    showMessage(ok ? 'Events detached' : 'Detach failed', ok ? 'success' : 'error')
   }
 
   const handleSnapshot = async () => {
@@ -64,15 +53,6 @@ export default function SessionActions() {
       )}
 
       <Stack spacing={1.5}>
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Button variant="contained" disabled={disabled || isAttached} onClick={handleAttach} fullWidth>
-            Attach Events
-          </Button>
-          <Button variant="outlined" disabled={disabled || !isAttached} onClick={handleDetach} fullWidth>
-            Detach Events
-          </Button>
-        </Box>
-
         <Button variant="contained" color="secondary" disabled={disabled} onClick={handleSnapshot} fullWidth>
           Take Snapshot
         </Button>

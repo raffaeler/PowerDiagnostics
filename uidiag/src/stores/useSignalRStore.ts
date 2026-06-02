@@ -9,6 +9,7 @@ interface SignalRState {
   connectionState: HubConnectionState
   events: EvsEvent[]
   lastEvent: EvsEvent | null
+  lastEventByCategory: Record<string, EvsEvent>
   connect: () => Promise<void>
   disconnect: () => Promise<void>
   clearEvents: () => void
@@ -22,13 +23,25 @@ export const useSignalRStore = create<SignalRState>((set, get) => {
 
   // Subscribe to diagnostic events
   signalRService.onEvent('onEvs', (evsString: unknown) => {
+    console.log('[DEBUG onEvs] FIRED — raw type:', typeof evsString, 'value:', evsString)
     try {
       const evs: EvsEvent = typeof evsString === 'string' ? JSON.parse(evsString) : (evsString as EvsEvent)
+      console.log('[DEBUG onEvs] PARSED — cat:', evs.cat, 'val:', evs.val, 'uom:', evs.uom)
+      const prev = get().lastEventByCategory
+      console.log('[DEBUG onEvs] prev lastEventByCategory keys:', Object.keys(prev))
       const events = [...get().events, evs].slice(-50) // keep last 50
-      set({ events, lastEvent: evs })
-    } catch {
-      // Ignore malformed events
+      const lastEventByCategory = { ...get().lastEventByCategory, [evs.cat]: evs }
+      console.log('[DEBUG onEvs] new lastEventByCategory keys:', Object.keys(lastEventByCategory))
+      set({ events, lastEvent: evs, lastEventByCategory })
+    } catch (err) {
+      console.error('[DEBUG onEvs] ERROR:', err)
     }
+  })
+
+  // Handle server→client messages (DiagnosticHub.SendMessage)
+  signalRService.onEvent('onMessage', (_user: unknown, _message: unknown) => {
+    // Messages are received but not displayed by default.
+    // Add a log handler or UI toast here if needed.
   })
 
   // Subscribe to GC root path progress
@@ -54,6 +67,7 @@ export const useSignalRStore = create<SignalRState>((set, get) => {
     connectionState: signalRService.state,
     events: [],
     lastEvent: null,
+    lastEventByCategory: {},
 
     connect: async () => {
       await signalRService.start()
@@ -63,6 +77,6 @@ export const useSignalRStore = create<SignalRState>((set, get) => {
       await signalRService.stop()
     },
 
-    clearEvents: () => set({ events: [], lastEvent: null }),
+    clearEvents: () => set({ events: [], lastEvent: null, lastEventByCategory: {} }),
   }
 })

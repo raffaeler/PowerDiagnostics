@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { Box, Typography, Button, Stack, Paper, Alert } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import CloseIcon from '@mui/icons-material/Close'
-import EventsBar from '@/components/debug/EventsBar'
 import QueryPicker from '@/components/debug/QueryPicker'
 import FilterBar from '@/components/debug/FilterBar'
 import MasterDetailGrid from '@/components/debug/MasterDetailGrid'
@@ -98,7 +97,7 @@ export default function DebugPage() {
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Typography variant="h5">
-          Debug Playground
+          Snapshot / Dump Analysis
           {activeSessionId && (
             <Typography
               component="span"
@@ -118,9 +117,6 @@ export default function DebugPage() {
           Session <strong>{sessionId?.substring(0, 8)}…</strong> has expired or was closed. Return to Home to start a new session.
         </Alert>
       )}
-
-      {/* Real-time events */}
-      <EventsBar />
 
       {/* Toolbar */}
       <Paper variant="outlined" sx={{ p: 1.5, mb: 2 }}>

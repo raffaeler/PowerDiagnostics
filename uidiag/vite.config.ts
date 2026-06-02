@@ -29,7 +29,7 @@ export default defineConfig({
     emptyOutDir: true,
     chunkSizeWarningLimit: 1200,
     rolldownOptions: {
-      onLog(level, log) {
+      onLog(_level, log) {
         // Suppress INVALID_ANNOTATION warnings from third-party signalr package
         if (log.code === 'INVALID_ANNOTATION') return
       },

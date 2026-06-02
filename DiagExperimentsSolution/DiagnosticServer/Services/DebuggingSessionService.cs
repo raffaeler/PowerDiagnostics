@@ -110,7 +110,6 @@ public class DebuggingSessionService : BackgroundService
                     continue;
                 }
 
-                await _diagnosticHubContext.Clients.All.SendAsync("onMessage", "userX", "Test " + DateTime.Now);
                 _investigationState.ClearSessionIfExpired();
             }
         }
