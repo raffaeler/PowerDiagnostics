@@ -14,6 +14,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route index element={<HomePage />} />
             <Route path="debug" element={<DebugPage />} />
+            <Route path="debug/:sessionId" element={<DebugPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

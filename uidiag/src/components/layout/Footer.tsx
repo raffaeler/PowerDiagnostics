@@ -5,7 +5,8 @@ import { HubConnectionState } from '@microsoft/signalr'
 
 export default function Footer() {
   const connectionState = useSignalRStore((s) => s.connectionState)
-  const sessionCount = useDiagnosticsStore((s) => s.sessions.length)
+  const sessions = useDiagnosticsStore((s) => s.sessions)
+  const activeSessionId = useDiagnosticsStore((s) => s.activeSessionId)
 
   const stateLabel =
     connectionState === HubConnectionState.Connected
@@ -42,7 +43,13 @@ export default function Footer() {
 
       <Chip label={`SignalR: ${stateLabel}`} color={stateColor} size="small" variant="outlined" />
 
-      <Chip label={`Sessions: ${sessionCount}`} size="small" variant="outlined" />
+      <Chip label={`Sessions: ${sessions.length}`} size="small" variant="outlined" />
+
+      {activeSessionId && (
+        <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
+          Active: {activeSessionId.substring(0, 8)}…
+        </Typography>
+      )}
 
       <Box sx={{ flexGrow: 1 }} />
 

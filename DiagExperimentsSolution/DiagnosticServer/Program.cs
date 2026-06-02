@@ -20,6 +20,12 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
+        // Kestrel: allow large request bodies for dump file uploads
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.Limits.MaxRequestBodySize = 2_147_483_648; // 2 GB
+        });
+
         // Configuration
         var generalSection = builder.Configuration.GetSection("General");
         builder.Services.Configure<GeneralConfiguration>(generalSection);

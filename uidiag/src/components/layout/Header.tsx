@@ -13,11 +13,13 @@ import {
 } from '@mui/material'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppStore } from '@/stores/useAppStore'
+import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
 
 export default function Header() {
   const navigate = useNavigate()
   const location = useLocation()
   const { username, isLoggedIn, login, logout } = useAppStore()
+  const activeSessionId = useDiagnosticsStore((s) => s.activeSessionId)
 
   const [loginOpen, setLoginOpen] = useState(false)
   const [nameInput, setNameInput] = useState('')
@@ -36,7 +38,7 @@ export default function Header() {
 
   const navItems = [
     { label: 'Home', path: '/' },
-    { label: 'Debug', path: '/debug' },
+    { label: 'Debug', path: activeSessionId ? `/debug/${activeSessionId}` : '/debug' },
   ]
 
   return (
@@ -57,8 +59,14 @@ export default function Header() {
                 onClick={() => navigate(item.path)}
                 sx={{
                   textTransform: 'none',
-                  fontWeight: location.pathname === item.path ? 700 : 400,
-                  borderBottom: location.pathname === item.path ? '2px solid white' : '2px solid transparent',
+                  fontWeight:
+                    location.pathname === item.path || location.pathname.startsWith(item.path + '/')
+                      ? 700
+                      : 400,
+                  borderBottom:
+                    location.pathname === item.path || location.pathname.startsWith(item.path + '/')
+                      ? '2px solid white'
+                      : '2px solid transparent',
                   borderRadius: 0,
                 }}
               >

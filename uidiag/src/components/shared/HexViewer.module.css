@@ -1,0 +1,87 @@
+.hexViewer {
+  font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  overflow: auto;
+  border-radius: 4px;
+  user-select: text;
+}
+
+.row {
+  display: flex;
+  white-space: pre;
+}
+
+.row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.offset {
+  color: #569cd6;
+  min-width: 9ch;
+  padding-right: 2ch;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.hexBytes {
+  color: #d4d4d4;
+  min-width: 50ch;
+  padding-right: 2ch;
+  flex-shrink: 0;
+}
+
+.hexByte {
+  display: inline-block;
+  width: 2.3ch;
+  text-align: center;
+}
+
+.ascii {
+  color: #6a9955;
+}
+
+.nonPrintable {
+  color: #555;
+}
+
+.header {
+  color: #888;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 2px;
+}
+
+.loadMore {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.loadMoreBtn {
+  background: #333;
+  color: #aaa;
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: 2px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.loadMoreBtn:hover {
+  background: #444;
+  color: #fff;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  color: #666;
+  font-family: inherit;
+}

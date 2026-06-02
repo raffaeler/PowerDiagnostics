@@ -7,19 +7,16 @@ using System.Threading.Tasks;
 namespace DiagnosticModels;
 public abstract class EvsBase
 {
-    /// <summary>
-    /// The category of this event
-    /// </summary>
+    /// <summary>The category of this event</summary>
     public abstract string Cat { get; }
 
-    /// <summary>
-    /// The string representation of the value
-    /// </summary>
+    /// <summary>The string representation of the value</summary>
     public abstract string Val { get; }
 
-    /// <summary>
-    /// Unit of measure or string.Empty
-    /// </summary>
+    /// <summary>Unit of measure or string.Empty</summary>
     public virtual string Uom { get; } = string.Empty;
+
+    /// <summary>ISO 8601 timestamp set by the server when the event is broadcast.</summary>
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }
 

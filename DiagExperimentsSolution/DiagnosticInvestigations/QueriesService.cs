@@ -36,6 +36,9 @@ public class QueriesService
                             })
                             .ToList(),
             Filter = (o, f) => ((DbmDumpHeapStat)o)?.Type?.Name?.FilterBy(f),
+            HasDetails = true,
+            DetailType = typeof(ClrObject),
+            DetailProperty = "Objects",
         });
 
         queries.Add(new()
@@ -50,7 +53,10 @@ public class QueriesService
                                 Size = (long)t.size,
                             })
                             .ToList(),
-            Filter = (o, f) => ((DbmStaticFields)o)?.Obj.Type?.Name?.FilterBy(f)
+            Filter = (o, f) => ((DbmStaticFields)o)?.Obj.Type?.Name?.FilterBy(f),
+            HasDetails = true,
+            DetailType = typeof(ClrObject),
+            DetailProperty = "Obj",
         });
 
         queries.Add(new()
@@ -100,7 +106,10 @@ public class QueriesService
                                 StackFrames = s.stackFrames.ToList(),
                             })
                             .ToList(),
-            Filter = (o, f) => ((DbmStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f)
+            Filter = (o, f) => ((DbmStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f),
+            HasDetails = true,
+            DetailType = typeof(ClrStackFrame),
+            DetailProperty = "StackFrames",
         });
 
         queries.Add(new()
@@ -147,7 +156,10 @@ public class QueriesService
                                 Name = a.GetAllocatorName(g.allocator),
                             })
                             .ToList(),
-            Filter = (o, f) => ((DbmAllocatorGroup)o)?.Name?.FilterBy(f)
+            Filter = (o, f) => ((DbmAllocatorGroup)o)?.Name?.FilterBy(f),
+            HasDetails = true,
+            DetailType = typeof(ClrObject),
+            DetailProperty = "Objects",
         });
 
         //queries.Add(new()

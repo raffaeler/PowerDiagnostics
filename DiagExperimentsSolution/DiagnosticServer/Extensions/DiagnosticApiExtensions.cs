@@ -1,6 +1,7 @@
 using ClrDiagnostics.Helpers;
 
 using DiagnosticInvestigations;
+using DiagnosticModels;
 
 using DiagnosticServer.Services;
 
@@ -90,6 +91,64 @@ public static class DiagnosticApiExtensions
     private static void MapSessionEndpoints(IEndpointRouteBuilder endpoints)
     {
         /// <summary>
+        /// Opens a dump file from a server-side path.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/open-dump-path", (DumpPathRequest request, DebuggingSessionService svc) =>
+        {
+            if (string.IsNullOrWhiteSpace(request.Path) || !File.Exists(request.Path))
+            {
+                return Results.NotFound(new ProblemDetails
+                {
+                    Title = "File not found",
+                    Detail = $"The file '{request.Path}' does not exist on the server.",
+                    Status = StatusCodes.Status404NotFound,
+                });
+            }
+
+            var sessionId = svc.OpenDumpFromFile(request.Path);
+            return Results.Ok(new { sessionId, investigationKind = InvestigationKind.Dump.ToString(), created = DateTime.Now });
+        })
+        .WithName("OpenDumpPath")
+        .Produces<object>()
+        .ProducesProblem(StatusCodes.Status404NotFound);
+
+        /// <summary>
+        /// Opens an uploaded dump file.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/open-dump", async (HttpRequest request, DebuggingSessionService svc, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType)
+            {
+                return Results.BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid content type",
+                    Detail = "Expected multipart/form-data with a file field named 'file'.",
+                    Status = StatusCodes.Status400BadRequest,
+                });
+            }
+
+            var form = await request.ReadFormAsync(ct);
+            var file = form.Files.GetFile("file");
+            if (file is null || file.Length == 0)
+            {
+                return Results.BadRequest(new ProblemDetails
+                {
+                    Title = "No file uploaded",
+                    Detail = "Please upload a .dmp file in the 'file' field.",
+                    Status = StatusCodes.Status400BadRequest,
+                });
+            }
+
+            await using var stream = file.OpenReadStream();
+            var sessionId = await svc.OpenDumpFromUploadAsync(stream, file.FileName, ct);
+            return Results.Ok(new { sessionId, investigationKind = InvestigationKind.Dump.ToString(), created = DateTime.Now });
+        })
+        .WithName("OpenDumpUpload")
+        .Produces<object>()
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .DisableAntiforgery();
+
+        /// <summary>
         /// Returns a list of all active diagnostic sessions.
         /// </summary>
         endpoints.MapGet("/api/sessions", (DebuggingSessionService debuggingSessionService) =>
@@ -117,11 +176,22 @@ public static class DiagnosticApiExtensions
         .Produces<IEnumerable<string>>();
 
         /// <summary>
+        /// Returns metadata for all queries including column definitions.
+        /// </summary>
+        endpoints.MapGet("/api/sessions/queries/metadata", (QueriesService queriesService) =>
+        {
+            var metadata = queriesService.Queries.Values.Select(q => q.GetMetadata()).ToList();
+            return Results.Ok(metadata);
+        })
+        .WithName("GetQueriesMetadata")
+        .Produces<IEnumerable<QueryMetadata>>();
+
+        /// <summary>
         /// Runs a diagnostic query against the specified session.
-        /// Offloads the execution to a background worker thread to avoid blocking.
+        /// Returns QueryResult with HasDetails/DetailType metadata.
         /// </summary>
         endpoints.MapPost("/api/sessions/{sessionId}/{query}",
-            async (string sessionId, string query,
+            async (string sessionId, string query, string? filter,
                    DebuggingSessionService debuggingSessionService,
                    QueriesService queriesService,
                    ILogger<Program> logger) =>
@@ -146,8 +216,10 @@ public static class DiagnosticApiExtensions
                 });
             }
 
-            var scope = debuggingSessionService.GetInvestigationScope(id);
-            if (scope == null)
+            logger.LogInformation("Running query {QueryName} on session {SessionId}", query, sessionId);
+            var result = await debuggingSessionService.GetQueryResultAsync(id, knownQuery, filter);
+
+            if (result is null)
             {
                 return Results.NotFound(new ProblemDetails
                 {
@@ -157,24 +229,85 @@ public static class DiagnosticApiExtensions
                 });
             }
 
-            // Offload the execution to the background service thread via TaskCompletionSource.
-            System.Collections.IEnumerable result;
-            logger.LogInformation("Offloaded the execution of the query {QueryName}", knownQuery.Name);
-            try
-            {
-                result = await debuggingSessionService.ExecuteAsync(scope, knownQuery);
-                logger.LogInformation("Query {QueryName} has completed", knownQuery.Name);
-            }
-            catch (Exception err)
-            {
-                logger.LogError(err, "Query {QueryName} has faulted", knownQuery.Name);
-                throw;
-            }
-
             return Results.Ok(result);
         })
         .WithName("RunQuery")
-        .Produces<System.Collections.IEnumerable>()
+        .Produces<QueryResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound);
+
+        /// <summary>
+        /// Gets raw bytes for a heap object (hex viewer).
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/hex/{objectAddress}",
+            (string sessionId, string objectAddress, DebuggingSessionService svc) =>
+        {
+            if (!Guid.TryParse(sessionId, out Guid id))
+                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
+
+            if (!TryParseHexAddress(objectAddress, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{objectAddress}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetHexData(id, addr);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{objectAddress}' in session.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetHexData")
+        .Produces<HexDataResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Gets GC root paths for a heap object.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/gcroot/{objectAddress}",
+            async (string sessionId, string objectAddress, int? maxPaths, DebuggingSessionService svc) =>
+        {
+            if (!Guid.TryParse(sessionId, out Guid id))
+                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
+
+            if (!TryParseHexAddress(objectAddress, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{objectAddress}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = await svc.GetGcRootPathAsync(id, addr, maxPaths ?? 75);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{objectAddress}' in session.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetGcRootPath")
+        .Produces<GcRootPathResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Closes a diagnostic session and releases resources.
+        /// </summary>
+        endpoints.MapDelete("/api/sessions/{sessionId}",
+            (string sessionId, DebuggingSessionService svc) =>
+        {
+            if (!Guid.TryParse(sessionId, out Guid id))
+                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
+
+            svc.CloseSession(id);
+            return Results.Ok();
+        })
+        .WithName("CloseSession")
+        .Produces(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status404NotFound);
     }
+
+    private static bool TryParseHexAddress(string hex, out ulong value)
+    {
+        hex = hex.Trim();
+        if (hex.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+            hex = hex[2..];
+        return ulong.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out value);
+    }
 }
+
+/// <summary>
+/// Request body for opening a dump from a server-side path.
+/// </summary>
+public record DumpPathRequest(string Path);

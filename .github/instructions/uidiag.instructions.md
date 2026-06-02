@@ -73,12 +73,13 @@ src/
 ├── stores/             ← Zustand stores
 │   ├── useAppStore.ts  ← User/auth state
 │   ├── useDiagnosticsStore.ts ← Diagnostics domain state + actions
-│   └── useSignalRStore.ts ← SignalR connection + event buffer
+│   ├── useSignalRStore.ts ← SignalR connection + event buffer
+│   └── useToastStore.ts ← Toast notification state (global, non-React)
 ├── components/
-│   ├── layout/         ← AppLayout, Header, Footer
-│   ├── home/           ← ProcessPicker, ProcessItem, SessionActions
-│   ├── debug/          ← EventsBar, SessionList, QueryRunner, QueryResults
-│   └── shared/         ← JsonTree, reusable primitives
+│   ├── layout/         ← AppLayout, Header, Footer, ToastProvider
+│   ├── home/           ← ProcessPicker, SessionActions, DumpUploadDialog
+│   ├── debug/          ← EventsBar, SessionList, QueryRunner, MasterDetailGrid, FilterBar, QueryPicker, HexViewerDialog, GcRootPanel
+│   └── shared/         ← HexViewer, HexViewer.module.css, JsonTree
 ├── pages/              ← Route page compositions
 │   ├── HomePage.tsx
 │   └── DebugPage.tsx
@@ -137,10 +138,16 @@ The Vite dev server proxies:
 | POST | `/api/processes/dump/{id}` | Create memory dump |
 | GET | `/api/sessions` | List active sessions |
 | GET | `/api/sessions/queries` | List available queries |
+| GET | `/api/sessions/queries/metadata` | Query metadata with column definitions |
+| POST | `/api/sessions/open-dump` | Upload dump file (multipart) |
+| POST | `/api/sessions/open-dump-path` | Open dump from server path |
 | POST | `/api/sessions/{sessionId}/{query}` | Execute query |
+| POST | `/api/sessions/{sessionId}/gcroot/{addr}` | GC root path analysis |
+| POST | `/api/sessions/{sessionId}/hex/{addr}` | Raw object bytes (base64) |
+| DELETE | `/api/sessions/{sessionId}` | Close session |
 
 ### SignalR Hub (`/diagnosticHub`)
-- **Server→Client**: `onEvs` (diagnostic event JSON), `onMessage`, `onAlert`
+- **Server→Client**: `onEvs` (diagnostic event JSON), `onMessage`, `onAlert`, `onGcRootProgress`, `onGcRootComplete`, `onSessionCreated`, `onSessionClosed`
 - **Client→Server**: `SendMessage(user, message)`
 
 ## Extension Points

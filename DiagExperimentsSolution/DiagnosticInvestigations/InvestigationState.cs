@@ -58,6 +58,42 @@ public class InvestigationState
         return session;
     }
 
+    /// <summary>
+    /// Registers a dump session with an associated temporary file (for cleanup on close/expiry).
+    /// </summary>
+    public Guid AddDumpFromFile(DiagnosticAnalyzer analyzer, FileInfo temporaryFile)
+    {
+        Guid session = Guid.NewGuid();
+        InvestigationScope scope = new(session, InvestigationKind.Dump, analyzer, temporaryFile);
+        _scopes[session] = scope;
+        return session;
+    }
+
+    /// <summary>
+    /// Explicitly removes and disposes a session.
+    /// </summary>
+    public bool RemoveSession(Guid sessionId)
+    {
+        if (!_scopes.TryRemove(sessionId, out var scope))
+            return false;
+
+        scope.DiagnosticAnalyzer.Dispose();
+        if (scope.TemporaryFile != null)
+        {
+            try
+            {
+                File.Delete(scope.TemporaryFile.FullName);
+            }
+            catch (Exception err)
+            {
+                _logger.LogWarning("Failed to delete temporary file {Path}: {Message}",
+                    scope.TemporaryFile.FullName, err.Message);
+            }
+        }
+
+        return true;
+    }
+
     public int ClientRefCount
     {
         get

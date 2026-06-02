@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import { Box } from '@mui/material'
 import Header from './Header'
 import Footer from './Footer'
+import ToastProvider from '@/components/shared/ToastProvider'
 import { useSignalRStore } from '@/stores/useSignalRStore'
 
 /**
@@ -23,6 +24,7 @@ export default function AppLayout() {
         <Outlet />
       </Box>
       <Footer />
+      <ToastProvider />
     </Box>
   )
 }

@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 import { HubConnectionState } from '@microsoft/signalr'
 import { signalRService } from '@/services/signalRService'
+import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
 import type { EvsEvent } from '@/types/signalr'
+import type { GcRootProgress } from '@/types/api'
 
 interface SignalRState {
   connectionState: HubConnectionState
@@ -27,6 +29,25 @@ export const useSignalRStore = create<SignalRState>((set, get) => {
     } catch {
       // Ignore malformed events
     }
+  })
+
+  // Subscribe to GC root path progress
+  signalRService.onEvent('onGcRootProgress', (progress: unknown) => {
+    useDiagnosticsStore.getState().setGcRootProgress(progress as GcRootProgress)
+  })
+
+  // Clear progress when GC root path completes
+  signalRService.onEvent('onGcRootComplete', () => {
+    useDiagnosticsStore.getState().setGcRootProgress(null)
+  })
+
+  // Refresh session list when sessions are created or closed
+  signalRService.onEvent('onSessionCreated', () => {
+    useDiagnosticsStore.getState().fetchSessions()
+  })
+
+  signalRService.onEvent('onSessionClosed', () => {
+    useDiagnosticsStore.getState().fetchSessions()
   })
 
   return {
