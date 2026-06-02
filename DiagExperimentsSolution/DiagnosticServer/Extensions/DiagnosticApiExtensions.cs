@@ -66,9 +66,9 @@ public static class DiagnosticApiExtensions
         /// <summary>
         /// Takes a snapshot of the specified process.
         /// </summary>
-        endpoints.MapPost("/api/processes/snapshot/{id}", (int id, DebuggingSessionService debuggingSessionService) =>
+        endpoints.MapPost("/api/processes/snapshot/{id}", async (int id, DebuggingSessionService debuggingSessionService) =>
         {
-            var sessionId = debuggingSessionService.Snapshot(id);
+            var sessionId = await debuggingSessionService.Snapshot(id);
             return Results.Ok(sessionId);
         })
         .WithName("SnapshotProcess")
@@ -77,9 +77,9 @@ public static class DiagnosticApiExtensions
         /// <summary>
         /// Creates a dump of the specified process.
         /// </summary>
-        endpoints.MapPost("/api/processes/dump/{id}", (int id, DebuggingSessionService debuggingSessionService) =>
+        endpoints.MapPost("/api/processes/dump/{id}", async (int id, DebuggingSessionService debuggingSessionService) =>
         {
-            var sessionId = debuggingSessionService.Dump(id);
+            var sessionId = await debuggingSessionService.Dump(id);
             return Results.Ok(sessionId);
         })
         .WithName("DumpProcess")
@@ -93,7 +93,7 @@ public static class DiagnosticApiExtensions
         /// <summary>
         /// Opens a dump file from a server-side path.
         /// </summary>
-        endpoints.MapPost("/api/sessions/open-dump-path", (DumpPathRequest request, DebuggingSessionService svc) =>
+        endpoints.MapPost("/api/sessions/open-dump-path", async (DumpPathRequest request, DebuggingSessionService svc) =>
         {
             if (string.IsNullOrWhiteSpace(request.Path) || !File.Exists(request.Path))
             {
@@ -105,7 +105,7 @@ public static class DiagnosticApiExtensions
                 });
             }
 
-            var sessionId = svc.OpenDumpFromFile(request.Path);
+            var sessionId = await svc.OpenDumpFromFile(request.Path);
             return Results.Ok(new { sessionId, investigationKind = InvestigationKind.Dump.ToString(), created = DateTime.Now });
         })
         .WithName("OpenDumpPath")
@@ -285,12 +285,12 @@ public static class DiagnosticApiExtensions
         /// Closes a diagnostic session and releases resources.
         /// </summary>
         endpoints.MapDelete("/api/sessions/{sessionId}",
-            (string sessionId, DebuggingSessionService svc) =>
+            async (string sessionId, DebuggingSessionService svc) =>
         {
             if (!Guid.TryParse(sessionId, out Guid id))
                 return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
 
-            svc.CloseSession(id);
+            await svc.CloseSession(id);
             return Results.Ok();
         })
         .WithName("CloseSession")

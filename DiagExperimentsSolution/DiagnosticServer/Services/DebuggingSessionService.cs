@@ -73,39 +73,50 @@ public class DebuggingSessionService : BackgroundService
         return base.StopAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Worker thread loop. Runs with BelowNormal priority.
+    /// Exceptions are logged rather than crashing the process.
+    /// </summary>
     private async void Worker()
     {
         _logger.LogInformation($"Worker Started");
-        WaitHandle[] handles = new[] { _quit, _go };
-        (InvestigationScope scope, KnownQuery query, TaskCompletionSource<IEnumerable> tcs) trio = default;
-        while (true)
+        try
         {
-            //await Task.Delay(1000);
-            var wait = WaitHandle.WaitAny(handles, _loopTimeout);
-            if (wait == 0)
+            WaitHandle[] handles = new[] { _quit, _go };
+            (InvestigationScope scope, KnownQuery query, TaskCompletionSource<IEnumerable> tcs) trio = default;
+            while (true)
             {
-                _logger.LogInformation($"Quitting worker thread");
-                return;
-            }
-
-            if (wait == 1)
-            {
-                while (_executionQuery.TryDequeue(out trio))
+                //await Task.Delay(1000);
+                var wait = WaitHandle.WaitAny(handles, _loopTimeout);
+                if (wait == 0)
                 {
-                    Debug.WriteLine($"Worker thread> processing query {trio.query.Name}");
-
-                    var analyzer = trio.scope.DiagnosticAnalyzer;
-                    var knownQuery = trio.query;
-                    var tcs = trio.tcs;
-                    var result = knownQuery.Populate!(analyzer);
-                    tcs.SetResult(result);
+                    _logger.LogInformation($"Quitting worker thread");
+                    return;
                 }
 
-                continue;
-            }
+                if (wait == 1)
+                {
+                    while (_executionQuery.TryDequeue(out trio))
+                    {
+                        Debug.WriteLine($"Worker thread> processing query {trio.query.Name}");
 
-            await _diagnosticHubContext.Clients.All.SendAsync("onMessage", "userX", "Test " + DateTime.Now);
-            _investigationState.ClearSessionIfExpired();
+                        var analyzer = trio.scope.DiagnosticAnalyzer;
+                        var knownQuery = trio.query;
+                        var tcs = trio.tcs;
+                        var result = knownQuery.Populate!(analyzer);
+                        tcs.SetResult(result);
+                    }
+
+                    continue;
+                }
+
+                await _diagnosticHubContext.Clients.All.SendAsync("onMessage", "userX", "Test " + DateTime.Now);
+                _investigationState.ClearSessionIfExpired();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Worker thread crashed");
         }
     }
 
@@ -117,11 +128,16 @@ public class DebuggingSessionService : BackgroundService
         return tcs.Task;
     }
 
+    /// <summary>
+    /// Sends a trigger event to connected clients.
+    /// Fire-and-forget by design: trace event delegates are synchronous Action&lt;T&gt;
+    /// and we must not block the trace event source.
+    /// </summary>
     private void SendTrigger(EvsBase evs)
     {
         evs.Timestamp = DateTime.UtcNow;
         var evsJson = JsonSerializer.Serialize(evs, _jsonOptions);
-        _diagnosticHubContext.Clients.All.SendAsync("onEvs", evsJson);
+        _ = _diagnosticHubContext.Clients.All.SendAsync("onEvs", evsJson);
     }
 
     public void SubscribeTriggers(int pid)
@@ -150,29 +166,29 @@ public class DebuggingSessionService : BackgroundService
         }
     }
 
-    public Guid Snapshot(int pid)
+    public async Task<Guid> Snapshot(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromSnapshot(pid);
         var sessionId = _investigationState.AddSnapshot(analyzer);
-        _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Snapshot" });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Snapshot" });
         return sessionId;
     }
 
-    public Guid Dump(int pid)
+    public async Task<Guid> Dump(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(pid);
         var sessionId = _investigationState.AddDump(analyzer);
-        _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
         return sessionId;
     }
 
     /// <summary>Opens a dump file from a server-side path.</summary>
-    public Guid OpenDumpFromFile(string serverPath)
+    public async Task<Guid> OpenDumpFromFile(string serverPath)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(serverPath, cacheObjects: true);
         var sessionId = _investigationState.AddDump(analyzer);
         _logger.LogInformation("Opened dump from {Path}, session {Id}", serverPath, sessionId);
-        _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
         return sessionId;
     }
 
@@ -186,17 +202,17 @@ public class DebuggingSessionService : BackgroundService
             await stream.CopyToAsync(fs, ct);
         var analyzer = DiagnosticAnalyzer.FromDump(path, cacheObjects: true);
         var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(path));
-        _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
         _logger.LogInformation("Uploaded dump {Name}, session {Id}", fileName, sessionId);
         return sessionId;
     }
 
     /// <summary>Closes a session, disposing analyzer and temp files.</summary>
-    public void CloseSession(Guid sessionId)
+    public async Task CloseSession(Guid sessionId)
     {
         _investigationState.RemoveSession(sessionId);
         _logger.LogInformation("Closed session {Id}", sessionId);
-        _diagnosticHubContext.Clients.All.SendAsync("onSessionClosed", new { sessionId = sessionId.ToString() });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionClosed", new { sessionId = sessionId.ToString() });
     }
 
     /// <summary>Returns raw bytes for a heap object (hex viewer).</summary>
@@ -235,13 +251,14 @@ public class DebuggingSessionService : BackgroundService
             if (pct > lastPct)
             {
                 lastPct = pct;
+                // Fire-and-forget: progress callback is synchronous, we must not block the trace pipeline.
                 _ = _diagnosticHubContext.Clients.All.SendAsync("onGcRootProgress",
                     new { sessionId = sid, objectAddress = addr, percent = pct, status = $"Processing... {pct}%" });
             }
         }, cts.Token);
 
         var result = new GcRootPathResult { TotalPaths = 1, TotalReferences = total, Paths = ParseRootPaths(text) };
-        _diagnosticHubContext.Clients.All.SendAsync("onGcRootComplete", new { sessionId = sid, objectAddress = addr, pathCount = total });
+        await _diagnosticHubContext.Clients.All.SendAsync("onGcRootComplete", new { sessionId = sid, objectAddress = addr, pathCount = total });
         return result;
     }
 

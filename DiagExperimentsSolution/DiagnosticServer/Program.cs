@@ -52,6 +52,12 @@ public class Program
         // Problem Details (RFC 7807)
         builder.Services.AddProblemDetails();
 
+        // JSON: use camelCase property names (JavaScript convention)
+        builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+        {
+            options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+        });
+
         // Application Services
         builder.Services.AddSingleton<DebuggingSessionService>();
         builder.Services.AddHostedService<DebuggingSessionService>(

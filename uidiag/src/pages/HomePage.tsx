@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Grid, Typography, Button, Box, Alert, CircularProgress } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
@@ -12,6 +12,11 @@ export default function HomePage() {
   const [dumpDialogOpen, setDumpDialogOpen] = useState(false)
   const processes = useDiagnosticsStore((s) => s.processes)
   const processesFetched = useDiagnosticsStore((s) => s.processesFetched)
+  const fetchProcesses = useDiagnosticsStore((s) => s.fetchProcesses)
+
+  useEffect(() => {
+    fetchProcesses()
+  }, [fetchProcesses])
 
   const handleSessionCreated = (sessionId: string) => {
     navigate(`/debug/${sessionId}`)
