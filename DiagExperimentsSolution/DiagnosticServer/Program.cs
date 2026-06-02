@@ -90,6 +90,11 @@ public class Program
         }
 
         app.UseCors(corsPolicy);
+
+        // Serve the React SPA from wwwroot (production / integrated mode)
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
+
         app.UseRouting();
         app.UseAuthorization();
 
@@ -100,6 +105,9 @@ public class Program
 
         // SignalR hub for real-time diagnostics notifications
         app.MapHub<DiagnosticHub>("/diagnosticHub");
+
+        // SPA fallback — any non-API route serves index.html for client-side routing
+        app.MapFallbackToFile("index.html");
 
         app.Run();
     }
