@@ -303,7 +303,7 @@ namespace DiagnosticWPF
             var blob = row.Item switch
             {
                 ClrObject clrObject => GetBlob(clrObject),
-                IClrRoot clrRoot => GetBlob(clrRoot.Object),
+                ClrRoot clrRoot => GetBlob(clrRoot.Object),
                 _ => null,
             };
 

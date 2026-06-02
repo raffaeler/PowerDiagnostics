@@ -1,10 +1,13 @@
-﻿using System;
+﻿using ClrDiagnostics;
+
+using Microsoft.Diagnostics.Runtime;
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-
-using ClrDiagnostics;
 
 
 namespace TestConsole
@@ -37,22 +40,35 @@ namespace TestConsole
                 var roots = analyzer.RootPaths(leakedObj.Address);
                 bool isFirst = true;
                 int i = 0;
-                foreach (var root in roots)
+                foreach (var tplRoot in roots)
                 {
                     if (isFirst)
                     {
-                        Console.WriteLine($"Root {root.Root.RootKind} Addr:{root.Root.Address} {root.Root.Object.Type.Name} Addr:{root.Root.Address}  alloc:{root.Root.Object.Type.LoaderAllocatorHandle:X16}");
+                        Console.WriteLine($"Root {tplRoot.Root.RootKind} Addr:{tplRoot.Root.Address} {tplRoot.Root.Object.Type.Name} Addr:{tplRoot.Root.Address}  alloc:{tplRoot.Root.Object.Type.LoaderAllocatorHandle:X16}");
                         isFirst = false;
                     }
 
+                    // new in v3
+                    var root = tplRoot.Root;
+                    var path = tplRoot.Path;
+
                     Console.WriteLine($"  Path {i++}");
-                    foreach (var path in root.Path)
+                    //foreach (var path in tplRoot.Path)
+                    for (GCRoot.ChainLink? link = path; link != null; link = link.Next)
                     {
-                        Console.WriteLine($"     {path.Address:X16} {path.Type.Name} alloc:{leakedType.LoaderAllocatorHandle:X16}");
-                        var result = FindReferencing(analyzer, false, path.Address);
+                        var obj = link.Object;
+                        var obj2 = root.Address;
+                        Debug.Assert(obj == obj2);
+
+                        var address = link.Object;
+                        var type = root.Object.Type;
+
+
+                        Console.WriteLine($"     {address:X16} {type.Name} alloc:{leakedType.LoaderAllocatorHandle:X16}");
+                        var result = FindReferencing(analyzer, false, address);
                         if (result.Count > 0)
                         {
-                            Console.WriteLine($"                 Objects whose fields point to {path.Address:X16}");
+                            Console.WriteLine($"                 Objects whose fields point to {address:X16}");
                             foreach (var res in result)
                             {
                                 string isStaticString = res.isStatic ? "static" : "instance";
@@ -111,13 +127,12 @@ namespace TestConsole
             var roots = analyzer.RootPaths(leakedAddress);
 
             // get the statics being kept by some static field
-            var staticRoots = roots
+            // v3: GCRoot.ChainLink is a linked list, walk manually instead of LINQ Skip/Take
+            var addressesToSearch = roots
                 .Where(r => r.Root.IsPinned && r.Root.Object.Type.Name == "System.Object[]")
-                .SelectMany(r => r.Path.Skip(1).Take(1))
-                .ToList();
-
-            var addressesToSearch = staticRoots
-                .Select(a => a.Address)
+                .Select(r => r.Path?.Next)
+                .Where(link => link != null)
+                .Select(link => link.Object)
                 .ToList();
 
 

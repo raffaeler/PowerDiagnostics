@@ -8,6 +8,7 @@ using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Diagnostics;
 
 namespace ClrDiagnostics
 {
@@ -61,10 +62,12 @@ namespace ClrDiagnostics
         {
             int count = 0;
             var objectType = clrObject.Type;
-            var roots = RootPaths(clrObject.Address);
+            var roots = RootPaths(clrObject);
             foreach (var root in roots)
             {
-                count += root.Path.Length;
+                // v3: GCRoot.ChainLink is a linked list; walk to count
+                for (var link = root.Path; link != null; link = link.Next)
+                    count++;
             }
 
             return count;
@@ -82,30 +85,42 @@ namespace ClrDiagnostics
             var objectType = clrObject.Type;
             sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} MT:0x{objectType.MethodTable:X} Size:{clrObject.Size}");
             sb.AppendLine();
-            var roots = RootPaths(clrObject.Address);
+            var roots = RootPaths(clrObject);
             bool isFirst = true;
             int i = 0;
             int count = 0;
-            foreach (var root in roots)
+            foreach (var tplRoot in roots)
             {
                 if (isFirst)
                 {
-                    sb.AppendLine($"Root {root.Root.RootKind} Addr:{root.Root.Address:X16} {root.Root.Object.Type.Name} ");
+                    sb.AppendLine($"Root {tplRoot.Root.RootKind} Addr:{tplRoot.Root.Address:X16} {tplRoot.Root.Object.Type.Name} ");
                     isFirst = false;
                 }
 
+                // new in v3
+                var root = tplRoot.Root;
+                var path = tplRoot.Path;
+
                 sb.AppendLine($"  Path {i++}");
-                foreach (var path in root.Path)
+                //foreach (var path in tplRoot.Path)
+                for (GCRoot.ChainLink? link = path; link != null; link = link.Next)
                 {
+                    var obj = link.Object;
+                    var obj2 = root.Address;
+                    Debug.Assert(obj == obj2);
+
+                    var address = link.Object;
+                    var type = root.Object.Type;
+
                     count++;
                     if (cancellationToken.IsCancellationRequested)
                         throw new OperationCanceledException("Canceled by user request");
                     onProgress(count);
-                    sb.AppendLine($"     {path.Address:X16} {path.Type.Name}");
-                    var result = FindReferencing(false, path.Address);
+                    sb.AppendLine($"     {address:X16} {type.Name}");
+                    var result = FindReferencing(false, address);
                     if (result != null && result.Count > 0)
                     {
-                        sb.AppendLine($"          Objects whose fields point to {path.Address:X16}");
+                        sb.AppendLine($"          Objects whose fields point to {address:X16}");
                         foreach (var res in result)
                         {
                             string isStaticString = res.isStatic ? "static" : "instance";

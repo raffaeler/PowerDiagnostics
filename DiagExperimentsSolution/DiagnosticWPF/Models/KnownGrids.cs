@@ -81,7 +81,7 @@ namespace DiagnosticWPF.Models
                 new UIGridColumn("StackPointer", "StackPointer", "0:X16", null, "StackPointer", DataGridLength.Auto, true));
             _store[g.MasterType] = g;
 
-            g = UIGrid.Create<IClrRoot>(null,
+            g = UIGrid.Create<ClrRoot>(null,
                 new UIGridColumn("Address", "Address", "0:X16", null, "Address", DataGridLength.Auto, true),
                 new UIGridColumn("Object", "Object", null, null, "Object", DataGridLength.Auto),
                 new UIGridColumn("IsPinned", "IsPinned", null, null, "IsPinned", DataGridLength.Auto));

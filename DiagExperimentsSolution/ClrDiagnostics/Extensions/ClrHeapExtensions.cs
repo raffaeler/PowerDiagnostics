@@ -12,7 +12,7 @@ namespace ClrDiagnostics.Extensions
         public static IEnumerable<ulong> EnumerateObjectAddresses(this ClrHeap heap,
             Func<ClrType, bool> predicate)
         {
-            return heap.Segments.SelectMany(s => s.EnumerateObjectAddresses(predicate));
+            return heap.Segments.SelectMany(s => s.EnumerateObjectAddresses(heap, predicate));
         }
 
 

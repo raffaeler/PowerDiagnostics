@@ -21,8 +21,8 @@ namespace ClrDiagnostics
         public IEnumerable<ClrThread> Threads => _clrRuntime.Threads;
 
         // Heap
-        public IEnumerable<IClrRoot> Roots => _clrRuntime.Heap.EnumerateRoots();
-        public IEnumerable<IClrRoot> FinalizerRoots => _clrRuntime.Heap.EnumerateFinalizerRoots();
+        public IEnumerable<ClrRoot> Roots => _clrRuntime.Heap.EnumerateRoots();
+        public IEnumerable<ClrRoot> FinalizerRoots => _clrRuntime.Heap.EnumerateFinalizerRoots();
         public IEnumerable<ClrObject> FinalizableObjects => _clrRuntime.Heap.EnumerateFinalizableObjects();
         public IEnumerable<ClrObject> Objects
         {
@@ -96,31 +96,46 @@ namespace ClrDiagnostics
         public IEnumerable<ClrObject> ObjectReferences(ClrObject @object)
         {
             // required by Microsoft.Diagnostics.Runtime version 3.0
-            //return @object.EnumerateReferences(false, true);
-            return _clrRuntime.Heap.EnumerateObjectReferences(@object.Address, @object.Type, false, true);
+            return @object.EnumerateReferences(false, true);
+
+            // v2:
+            //return _clrRuntime.Heap.EnumerateObjectReferences(@object.Address, @object.Type, false, true);
         }
 
         public IEnumerable<ClrReference> ObjectReferencesWithFields(ClrObject @object)
         {
             // required by Microsoft.Diagnostics.Runtime version 3.0
-            //return @object.EnumerateReferencesWithFields(false, true);
-            return _clrRuntime.Heap.EnumerateReferencesWithFields(@object.Address, @object.Type, false, true);
+            return @object.EnumerateReferencesWithFields(false, true);
+
+            // v2
+            //return _clrRuntime.Heap.EnumerateReferencesWithFields(@object.Address, @object.Type, false, true);
         }
 
-        public IEnumerable<GCRootPath> RootPaths(ClrObject @object)
+        public IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths(ClrObject @object)
         {
-            return RootPaths(@object.Address);
+            var gcroot = GetOrCreateGCRoot(@object.Address);
+            return gcroot.EnumerateRootPaths();
         }
 
-        public IEnumerable<GCRootPath> RootPaths(ulong address)
+        [Obsolete("Use RootPaths(ClrObject) instead")]
+        public IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths(ulong address)
         {
-            return _gcroot.EnumerateGCRoots(address, false, Token);
+            var gcroot = GetOrCreateGCRoot(address);
+            return gcroot.EnumerateRootPaths();
         }
 
-        public IEnumerable<LinkedList<ClrObject>> PathsBetween(ClrObject source, ClrObject target)
+        private IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths()
         {
-            return _gcroot.EnumerateAllPaths(source.Address, target.Address, false, Token);
+            return _gcroot?.EnumerateRootPaths()
+                ?? Enumerable.Empty<(ClrRoot, GCRoot.ChainLink)>();
         }
+
+        // EnumerateAllPaths — no direct replacement in v3
+        //
+        //public IEnumerable<LinkedList<ClrObject>> PathsBetween(ClrObject source, ClrObject target)
+        //{
+        //    return _gcroot.EnumerateAllPaths(source.Address, target.Address, false, Token);
+        //}
 
         public IEnumerable<(ClrThread thread, IEnumerable<ClrStackFrame> stackFrames)> Stacks()
         {

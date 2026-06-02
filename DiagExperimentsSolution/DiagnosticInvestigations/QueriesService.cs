@@ -105,10 +105,10 @@ public class QueriesService
 
         queries.Add(new()
         {
-            Type = typeof(IClrRoot),
+            Type = typeof(ClrRoot),
             Name = "Roots",
             Populate = a => a.Roots.ToList(),
-            Filter = (o, f) => ((IClrRoot)o).Object.Type?.Name?.FilterBy(f)
+            Filter = (o, f) => ((ClrRoot)o).Object.Type?.Name?.FilterBy(f)
         });
 
         queries.Add(new()

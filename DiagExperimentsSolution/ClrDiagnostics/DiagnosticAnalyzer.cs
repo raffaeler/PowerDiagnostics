@@ -22,7 +22,8 @@ namespace ClrDiagnostics
         private ClrRuntime _clrRuntime;
         private DebugLibraryInfo _debugLibraryInfo;
 
-        private GCRoot _gcroot;
+        private ulong _gcrootTarget;
+        private GCRoot? _gcroot;
         private IList<ClrObject> _cachedAllObjects;
         private IList<(ClrObject, ClrInstanceField, ulong)> _objectsWithInstanceFields;
         private IList<(ClrObject, ClrStaticField, ulong)> _objectsWithStaticFields;
@@ -84,8 +85,6 @@ namespace ClrDiagnostics
 
             _clrLocation = new FileInfo(_debugLibraryInfo.FileName);
             _clrRuntime = _clrInfo.CreateRuntime();
-
-            PrepareGCRootCache();
         }
 
         public static DiagnosticAnalyzer FromDump(int pid, bool cacheObjects = true)
@@ -93,10 +92,7 @@ namespace ClrDiagnostics
             var temp = Path.GetTempFileName();
             var client = new DiagnosticsClient(pid);
             client.WriteDump(DumpType.WithHeap, temp);
-            var dataTarget = DataTarget.LoadDump(temp, new CacheOptions()
-            {
-                // ...
-            });
+            var dataTarget = DataTarget.LoadDump(temp);
 
             return new DiagnosticAnalyzer(dataTarget, cacheObjects);
         }
@@ -104,10 +100,8 @@ namespace ClrDiagnostics
         public static DiagnosticAnalyzer FromDump(string filename, bool cacheObjects,
             params string[] additionalPdbs)
         {
-            var dataTarget = DataTarget.LoadDump(filename, new CacheOptions()
-            {
-                // ...                
-            });
+            var dataTarget = DataTarget.LoadDump(filename);
+
             return new DiagnosticAnalyzer(dataTarget, cacheObjects);
         }
 
@@ -170,15 +164,20 @@ namespace ClrDiagnostics
             }
         }
 
-        private void PrepareGCRootCache()
+        /// <summary>
+        /// Returns a <see cref="GCRoot"/> instance for the given target address.
+        /// Caches and reuses the instance for sequential calls on the same target.
+        /// v3: GCRoot targets are specified at construction, not per-call.
+        /// </summary>
+        private GCRoot GetOrCreateGCRoot(ulong targetAddress)
         {
-            var token = _tokenSource.Token;
-            _gcroot = new GCRoot(_clrRuntime.Heap);
-
-            _gcroot.ProgressUpdated += delegate (GCRoot source, long processed)
+            if (_gcroot == null || _gcrootTarget != targetAddress)
             {
-                OnGCRoot?.Invoke((processed, token));
-            };
+                _gcrootTarget = targetAddress;
+                _gcroot = new GCRoot(_clrRuntime.Heap, o => o.Address == targetAddress);
+            }
+
+            return _gcroot;
         }
 
         #region Dispose pattern

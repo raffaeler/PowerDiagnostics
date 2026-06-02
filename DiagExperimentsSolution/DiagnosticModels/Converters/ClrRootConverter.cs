@@ -11,14 +11,14 @@ using Microsoft.Diagnostics.Runtime;
 
 namespace DiagnosticModels.Converters;
 
-public class ClrRootConverter : JsonConverter<IClrRoot>
+public class ClrRootConverter : JsonConverter<ClrRoot>
 {
-    public override IClrRoot Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override ClrRoot Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }
 
-    public override void Write(Utf8JsonWriter writer, IClrRoot value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, ClrRoot value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 

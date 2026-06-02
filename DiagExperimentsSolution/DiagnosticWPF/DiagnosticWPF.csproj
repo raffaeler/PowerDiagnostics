@@ -25,8 +25,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.661903" />
-    <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.4.416101" />
-    <PackageReference Include="Microsoft.Diagnostics.Runtime.Utilities" Version="2.4.416101" />
+    <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="4.0.726401" />
+    <PackageReference Include="Microsoft.Diagnostics.Runtime.Utilities" Version="4.0.726401" />
     <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.2.3" />
     <PackageReference Include="WPFHexaEditor" Version="2.1.7" />
   </ItemGroup>
