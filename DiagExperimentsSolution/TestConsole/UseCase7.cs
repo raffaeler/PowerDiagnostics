@@ -18,7 +18,7 @@ class UseCase7
 {
     public void Analyze()
     {
-        var ps = ProcessHelper.GetProcess("TestWebApp");
+        var ps = ProcessHelper.Default.GetProcess("TestWebApp");
         if (ps == null)
         {
             Console.WriteLine("Run the required process first");

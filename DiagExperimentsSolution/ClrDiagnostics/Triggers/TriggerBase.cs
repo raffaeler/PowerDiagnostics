@@ -31,7 +31,7 @@ public abstract class TriggerBase : IDisposable
     public Func<TraceEvent, bool>? Filter { get; private set; }
     public Action<TraceEvent>? Trigger { get; private set; }
 
-    protected IList<EventPipeProvider> Providers { get; private set; } = new List<EventPipeProvider>();
+    internal IList<EventPipeProvider> Providers { get; private set; } = new List<EventPipeProvider>();
 
     public void AddKnownProvider(KnownProviderName name,
         EventLevel eventLevel = EventLevel.Informational,

@@ -33,7 +33,7 @@ public static class DiagnosticApiExtensions
         /// </summary>
         endpoints.MapGet("/api/processes", () =>
         {
-            var processes = ProcessHelper.GetDotnetProcesses()
+            var processes = ProcessHelper.Default.GetDotnetProcesses()
                 .Select(p => new { Id = p.Id, Name = p.ProcessName });
             return Results.Ok(processes);
         })

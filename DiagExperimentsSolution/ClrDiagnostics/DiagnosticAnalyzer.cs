@@ -28,7 +28,12 @@ public partial class DiagnosticAnalyzer : IDisposable
     private IList<(ClrObject, ClrStaticField, ulong)>? _objectsWithStaticFields;
     private CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
-    private DiagnosticAnalyzer(DataTarget dataTarget, bool cacheObjects)
+    /// <summary>Parameterless constructor for NSubstitute proxy generation in tests.</summary>
+#pragma warning disable CS8618 // Non-nullable fields uninitialized — test proxy only
+    protected DiagnosticAnalyzer() { }
+#pragma warning restore CS8618
+
+    internal DiagnosticAnalyzer(DataTarget dataTarget, bool cacheObjects)
     {
         _dataTarget = dataTarget;
         CacheAllObjects = cacheObjects;
@@ -113,7 +118,7 @@ public partial class DiagnosticAnalyzer : IDisposable
 
     public static DiagnosticAnalyzer? FromSnapshot(string processName, bool cacheObjects = true)
     {
-        var process = ProcessHelper.GetProcess(processName);
+        var process = ProcessHelper.Default.GetProcess(processName);
         if (process == null) return null;
         return FromSnapshot(process.Id, cacheObjects);
     }
@@ -126,7 +131,7 @@ public partial class DiagnosticAnalyzer : IDisposable
 
     public static DiagnosticAnalyzer? FromProcess(string processName, bool cacheObjects = true)
     {
-        var process = ProcessHelper.GetProcess(processName);
+        var process = ProcessHelper.Default.GetProcess(processName);
         if (process == null) return null;
         return FromProcess(process.Id, cacheObjects);
     }

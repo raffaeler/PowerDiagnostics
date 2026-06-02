@@ -23,6 +23,7 @@ public record class InvestigationScope
         this.InvestigationKind = investigationKind;
         this.Created = DateTime.Now;
         this.DiagnosticAnalyzer = diagnosticAnalyzer;
+        this.TemporaryFile = temporaryFile;
     }
 
     public Guid SessionId { get; }

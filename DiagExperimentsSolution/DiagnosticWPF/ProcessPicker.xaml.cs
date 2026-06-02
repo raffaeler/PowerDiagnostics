@@ -42,7 +42,7 @@ public partial class ProcessPicker : Window
 
     private void Refresh()
     {
-        var processes = ProcessHelper.GetDotnetProcesses();
+        var processes = ProcessHelper.Default.GetDotnetProcesses();
 
         lvProcesses.ItemsSource = processes;
     }

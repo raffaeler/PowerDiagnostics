@@ -23,7 +23,7 @@ public class UseCase3
     public void Analyze()
     {
         DiagnosticAnalyzer analyzer;
-        var ps = ProcessHelper.GetProcess("TestWebApp");
+        var ps = ProcessHelper.Default.GetProcess("TestWebApp");
         if (ps == null)
         {
             var fullDumpName = Path.Combine(_dumpDir, _dumpName); 

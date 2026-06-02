@@ -18,8 +18,8 @@ public class UseCase4
 {
     public void Analyze()
     {
-        //var ps = ProcessHelper.GetProcess("StaticMemoryLeaks");
-        var ps = ProcessHelper.GetProcess("TestAllocation");
+        //var ps = ProcessHelper.Default.GetProcess("StaticMemoryLeaks");
+        var ps = ProcessHelper.Default.GetProcess("TestAllocation");
         if (ps == null)
         {
             Console.WriteLine("Run the required process first");

@@ -16,8 +16,8 @@ class UseCase5
 {
     public void Analyze()
     {
-        //var ps = ProcessHelper.GetProcess("TestAllocation");
-        var ps = ProcessHelper.GetProcess("TestExceptions");
+        //var ps = ProcessHelper.Default.GetProcess("TestAllocation");
+        var ps = ProcessHelper.Default.GetProcess("TestExceptions");
         if (ps == null)
         {
             Console.WriteLine("Run the required process first");
