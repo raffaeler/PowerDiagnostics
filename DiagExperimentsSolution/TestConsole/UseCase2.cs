@@ -57,15 +57,10 @@ public class UseCase2
                 //foreach (var path in tplRoot.Path)
                 for (GCRoot.ChainLink? link = path; link != null; link = link.Next)
                 {
-                    var obj = link.Object;
-                    var obj2 = root.Address;
-                    Debug.Assert(obj == obj2);
-
                     var address = link.Object;
-                    var type = root.Object.Type!;
+                    var type = analyzer.GetObjectType(address);
 
-
-                    Console.WriteLine($"     {address:X16} {type.Name} alloc:{leakedType.LoaderAllocatorHandle:X16}");
+                    Console.WriteLine($"     {address:X16} {type?.Name ?? "?"} alloc:{leakedType.LoaderAllocatorHandle:X16}");
                     var result = FindReferencing(analyzer, false, address);
                     if (result.Count > 0)
                     {

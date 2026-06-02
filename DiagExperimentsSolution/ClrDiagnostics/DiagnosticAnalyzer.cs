@@ -141,6 +141,12 @@ public partial class DiagnosticAnalyzer : IDisposable
         RenewCancellationToken();
     }
 
+    /// <summary>
+    /// Resolves the <see cref="ClrType"/> for an object at the given address.
+    /// Returns <see langword="null"/> if the address does not point to a valid object.
+    /// </summary>
+    public ClrType? GetObjectType(ulong address) => _clrRuntime.Heap.GetObjectType(address);
+
     private void RenewCancellationToken()
     {
         if (_tokenSource != null) _tokenSource.Dispose();

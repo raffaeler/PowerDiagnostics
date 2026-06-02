@@ -106,12 +106,8 @@ public partial class DiagnosticAnalyzer
             //foreach (var path in tplRoot.Path)
             for (GCRoot.ChainLink? link = path; link != null; link = link.Next)
             {
-                var obj = link.Object;
-                var obj2 = root.Address;
-                Debug.Assert(obj == obj2);
-
                 var address = link.Object;
-                var type = root.Object.Type;
+                var type = _clrRuntime.Heap.GetObjectType(address);
 
                 count++;
                 if (cancellationToken.IsCancellationRequested)
