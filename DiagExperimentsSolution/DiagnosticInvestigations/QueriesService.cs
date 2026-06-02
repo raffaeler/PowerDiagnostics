@@ -15,7 +15,7 @@ public class QueriesService
     public QueriesService()
     {
         var queries = CreateQueries();
-        Queries = queries.ToDictionary(q => q.Name, q => q);
+        Queries = queries.ToDictionary(q => q.Name!, q => q);
     }
 
     public IDictionary<string, KnownQuery> Queries { get; }

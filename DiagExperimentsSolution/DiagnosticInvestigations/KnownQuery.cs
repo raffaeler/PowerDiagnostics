@@ -22,8 +22,8 @@ public class KnownQuery
         this.Filter = filter;
     }
 
-    public Type Type { get; set; }
-    public string Name { get; set; }
-    public Func<DiagnosticAnalyzer, IEnumerable> Populate { get; set; }
-    public Func<object, string, bool?> Filter { get; set; }
+    public Type? Type { get; set; }
+    public string? Name { get; set; }
+    public Func<DiagnosticAnalyzer, IEnumerable>? Populate { get; set; }
+    public Func<object, string, bool?>? Filter { get; set; }
 }

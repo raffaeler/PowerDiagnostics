@@ -11,55 +11,55 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace DiagnosticWPF
+namespace DiagnosticWPF;
+/// <summary>
+/// Interaction logic for HexViewer.xaml
+/// </summary>
+public partial class HexViewer : Window
 {
-    /// <summary>
-    /// Interaction logic for HexViewer.xaml
-    /// </summary>
-    public partial class HexViewer : Window
+    private bool _isLoaded;
+
+    public HexViewer()
     {
-        private bool _isLoaded;
+        InitializeComponent();
+    }
 
-        public HexViewer()
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        _isLoaded = true;
+        SetSource();
+    }
+
+    private void OnCancel(object sender, RoutedEventArgs e)
+    {
+        //this.DialogResult = false;
+        this.Close();
+        hexEditor.Stream?.Dispose();
+    }
+
+    private void OnOK(object sender, RoutedEventArgs e)
+    {
+        //this.DialogResult = true;
+        this.Close();
+        hexEditor.Stream?.Dispose();
+    }
+
+
+    private byte[]? _data;
+    public byte[]? Data
+    {
+        get => _data;
+        set
         {
-            InitializeComponent();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            _isLoaded = true;
-            SetSource();
-        }
-
-        private void OnCancel(object sender, RoutedEventArgs e)
-        {
-            //this.DialogResult = false;
-            this.Close();
-            hexEditor.Stream?.Dispose();
-        }
-
-        private void OnOK(object sender, RoutedEventArgs e)
-        {
-            //this.DialogResult = true;
-            this.Close();
-            hexEditor.Stream?.Dispose();
-        }
-
-
-        private byte[] _data;
-        public byte[] Data
-        {
-            get => _data;
-            set
-            {
-                _data = value;
-                if (_isLoaded) SetSource();
-            }
-        }
-
-        private void SetSource()
-        {
-            hexEditor.Stream = new MemoryStream(_data);
+            _data = value;
+            if (_isLoaded) SetSource();
         }
     }
+
+    private void SetSource()
+    {
+        if (_data != null)
+            hexEditor.Stream = new MemoryStream(_data);
+    }
 }
+

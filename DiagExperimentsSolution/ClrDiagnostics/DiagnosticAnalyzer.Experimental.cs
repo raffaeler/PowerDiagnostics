@@ -9,55 +9,54 @@ using ClrDiagnostics.Models;
 using Microsoft.Diagnostics.Symbols;
 using System.IO;
 
-namespace ClrDiagnostics
+namespace ClrDiagnostics;
+public partial class DiagnosticAnalyzer
 {
-    public partial class DiagnosticAnalyzer
-    {
-        //public IList<PdbInfo> GetAllPdbs()
-        //{
-        //    var pdbInfos = _dataTarget.EnumerateModules()
-        //        .Select(m => m.GetPEImage())
-        //        .Where(p => p != null)
-        //        .SelectMany(p => p.Pdbs)
-        //        .ToList();
+    //public IList<PdbInfo> GetAllPdbs()
+    //{
+    //    var pdbInfos = _dataTarget.EnumerateModules()
+    //        .Select(m => m.GetPEImage())
+    //        .Where(p => p != null)
+    //        .SelectMany(p => p.Pdbs)
+    //        .ToList();
 
-        //    return pdbInfos;
-        //}
+    //    return pdbInfos;
+    //}
 
 /*
  * This was broken starting with CLRMD 2.1
  * https://github.com/microsoft/clrmd/blob/main/doc/Migrating21.md
  * 
-        private ulong GetOffsetForFieldNative(ulong addressBase, string className, string fieldName)
+    private ulong GetOffsetForFieldNative(ulong addressBase, string className, string fieldName)
+    {
+        string pdbFilename = null;
+        foreach (var module in _dataTarget.EnumerateModules())
         {
-            string pdbFilename = null;
-            foreach (var module in _dataTarget.EnumerateModules())
+            var image = module.GetPEImage();    // <======= See note for GetPEImage replacement
+            if (image == null) continue;
+
+            var imageBase = module.ImageBase;
+            var imageSize = (ulong)module.IndexFileSize;
+            if (addressBase > imageBase && addressBase < (imageBase + imageSize))
             {
-                var image = module.GetPEImage();    // <======= See note for GetPEImage replacement
-                if (image == null) continue;
-
-                var imageBase = module.ImageBase;
-                var imageSize = (ulong)module.IndexFileSize;
-                if (addressBase > imageBase && addressBase < (imageBase + imageSize))
-                {
-                    // we found the module
-                    pdbFilename = module.Pdb.Path;
-                }
+                // we found the module
+                pdbFilename = module.Pdb.Path;
             }
-
-            if (pdbFilename == null) return 0;
-
-            using var tw = new StringWriter();
-            var reader = new SymbolReader(tw);
-            var nativeModule = reader.OpenNativeSymbolFile(pdbFilename);
-            //nativeModule.
-            //reader.OpenNativeSymbolFile()
-            //NativeSymbolModule module = new NativeSymbolModule();
-            //_dataTarget.DataReader.
-
-            return 0;
         }
+
+        if (pdbFilename == null) return 0;
+
+        using var tw = new StringWriter();
+        var reader = new SymbolReader(tw);
+        var nativeModule = reader.OpenNativeSymbolFile(pdbFilename);
+        //nativeModule.
+        //reader.OpenNativeSymbolFile()
+        //NativeSymbolModule module = new NativeSymbolModule();
+        //_dataTarget.DataReader.
+
+        return 0;
+    }
 */
 
-    }
 }
+

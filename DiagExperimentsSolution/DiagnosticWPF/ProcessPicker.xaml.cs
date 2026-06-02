@@ -17,49 +17,48 @@ using ClrDiagnostics.Helpers;
 
 using Microsoft.Diagnostics.NETCore.Client;
 
-namespace DiagnosticWPF
+namespace DiagnosticWPF;
+/// <summary>
+/// Interaction logic for ProcessPicker.xaml
+/// </summary>
+public partial class ProcessPicker : Window
 {
-    /// <summary>
-    /// Interaction logic for ProcessPicker.xaml
-    /// </summary>
-    public partial class ProcessPicker : Window
+    public ProcessPicker()
     {
-        public ProcessPicker()
-        {
-            InitializeComponent();
-        }
-
-        public Process SelectedProcess { get; private set; }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            Refresh();
-        }
-
-        private void OnRefresh(object sender, RoutedEventArgs e)
-        {
-            Refresh();
-        }
-
-        private void Refresh()
-        {
-            var processes = ProcessHelper.GetDotnetProcesses();
-
-            lvProcesses.ItemsSource = processes;
-        }
-
-        private void OnCancel(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
-        }
-
-        private void OnOK(object sender, RoutedEventArgs e)
-        {
-            SelectedProcess = lvProcesses.SelectedItem as Process;
-            this.DialogResult = true;
-            this.Close();
-        }
-
+        InitializeComponent();
     }
+
+    public Process? SelectedProcess { get; private set; }
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        Refresh();
+    }
+
+    private void OnRefresh(object sender, RoutedEventArgs e)
+    {
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        var processes = ProcessHelper.GetDotnetProcesses();
+
+        lvProcesses.ItemsSource = processes;
+    }
+
+    private void OnCancel(object sender, RoutedEventArgs e)
+    {
+        this.DialogResult = false;
+        this.Close();
+    }
+
+    private void OnOK(object sender, RoutedEventArgs e)
+    {
+        SelectedProcess = lvProcesses.SelectedItem as Process;
+        this.DialogResult = true;
+        this.Close();
+    }
+
 }
+

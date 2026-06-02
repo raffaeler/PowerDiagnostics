@@ -4,45 +4,46 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace DiagnosticWPF.Models
+namespace DiagnosticWPF.Models;
+
+public class UIGrid
 {
-    public class UIGrid
+    public UIGrid()
     {
-        public UIGrid()
-        {
-            Columns = new List<UIGridColumn>();
-        }
+        Columns = new List<UIGridColumn>();
+    }
 
-        public static UIGrid Create<T>(string detailsProperty, params UIGridColumn[] columns)
-        {
-            var instance = new UIGrid();
-            foreach (var column in columns)
-                instance.Columns.Add(column);
+    public static UIGrid Create<T>(string? detailsProperty, params UIGridColumn[] columns)
+    {
+        var instance = new UIGrid();
+        foreach (var column in columns)
+            instance.Columns.Add(column);
 
-            instance.MasterType = typeof(T);
-            if (detailsProperty != null)
-            {
-                instance.DetailsProperty = instance.MasterType.GetProperty(detailsProperty);
+        instance.MasterType = typeof(T);
+        if (detailsProperty != null)
+        {
+            instance.DetailsProperty = instance.MasterType!.GetProperty(detailsProperty);
+            if (instance.DetailsProperty != null)
                 instance.DetailsType = instance.GetFirstGenericType(instance.DetailsProperty);
-            }
-
-            return instance;
         }
 
-        public Type MasterType { get; set; }
+        return instance;
+    }
 
-        public IList<UIGridColumn> Columns { get; private set; }
+    public Type? MasterType { get; set; }
 
-        public PropertyInfo DetailsProperty { get; set; }
+    public IList<UIGridColumn> Columns { get; private set; }
 
-        public Type DetailsType { get; set; }
+    public PropertyInfo? DetailsProperty { get; set; }
 
-        private Type GetFirstGenericType(PropertyInfo property)
-        {
-            if (!property.PropertyType.IsGenericType) throw new Exception("Invalid details property");
-            var firstArg = property.PropertyType.GetGenericArguments().FirstOrDefault();
-            if (firstArg == null) new Exception("Invalid details property");
-            return firstArg;
-        }
+    public Type? DetailsType { get; set; }
+
+    private Type GetFirstGenericType(PropertyInfo property)
+    {
+        if (!property.PropertyType.IsGenericType) throw new Exception("Invalid details property");
+        var firstArg = property.PropertyType.GetGenericArguments().FirstOrDefault();
+        if (firstArg == null) throw new Exception("Invalid details property");
+        return firstArg;
     }
 }
+

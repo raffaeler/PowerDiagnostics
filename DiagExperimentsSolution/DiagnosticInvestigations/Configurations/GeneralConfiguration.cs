@@ -1,7 +1,6 @@
-﻿namespace DiagnosticInvestigations.Configurations
+﻿namespace DiagnosticInvestigations.Configurations;
+
+public class GeneralConfiguration
 {
-    public class GeneralConfiguration
-    {
-        public int DebuggingSessionsExpirationMinutes { get; set; } = 10;
-    }
+    public int DebuggingSessionsExpirationMinutes { get; set; } = 10;
 }

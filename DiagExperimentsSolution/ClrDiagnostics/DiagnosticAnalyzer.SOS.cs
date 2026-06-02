@@ -10,193 +10,194 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 
-namespace ClrDiagnostics
+namespace ClrDiagnostics;
+/// <summary>
+/// This source file contains the methods emulating the SOS commands
+/// </summary>
+public partial class DiagnosticAnalyzer
 {
     /// <summary>
-    /// This source file contains the methods emulating the SOS commands
+    /// equivalent to SOS dumpheap -stat
     /// </summary>
-    public partial class DiagnosticAnalyzer
+    public IEnumerable<(ClrType? type, List<ClrObject> objects, long size)> DumpHeapStat(
+        long minTotalSize = 1024)
     {
-        /// <summary>
-        /// equivalent to SOS dumpheap -stat
-        /// </summary>
-        public IEnumerable<(ClrType type, List<ClrObject> objects, long size)> DumpHeapStat(
-            long minTotalSize = 1024)
+        return Objects
+            .GroupBy(o => o.Type, o => o)
+            .Select(o => (type: o.Key, objects: o.ToList(), totalSize: o.Sum(s => (long)s.Size)))
+            .Where(t => t.totalSize > minTotalSize)
+            .OrderBy(t => t.totalSize)
+            .ThenBy(t => t.type?.Name);
+    }
+
+    public void PrintDumpHeapStat(long minTotalSize = 1024)
+    {
+        var dumpHeapStat = DumpHeapStat(minTotalSize);
+        var pinned = Roots.Where(r => r.IsPinned && r.Object.Type?.Name == "System.Object[]");
+
+        var pinnedType = pinned.FirstOrDefault()?.Object.Type;
+        var pinnedSize = pinned.Sum(p => (long)p.Object.Size);
+        var pinnedCount = pinned.Count();
+
+        Console.WriteLine("              MT    Count    TotalSize Class Name");
+        foreach (var t in dumpHeapStat)
         {
-            return Objects
-                .GroupBy(o => o.Type, o => o)
-                .Select(o => (type: o.Key, objects: o.ToList(), totalSize: o.Sum(s => (long)s.Size)))
-                .Where(t => t.totalSize > minTotalSize)
-                .OrderBy(t => t.totalSize)
-                .ThenBy(t => t.type.Name);
+            Console.WriteLine($"{t.type?.MethodTable:X16} {t.objects.Count,8} {t.size,12} {t.type?.Name}");
         }
 
-        public void PrintDumpHeapStat(long minTotalSize = 1024)
-        {
-            var dumpHeapStat = DumpHeapStat(minTotalSize);
-            var pinned = Roots.Where(r => r.IsPinned && r.Object.Type.Name == "System.Object[]");
-
-            var pinnedType = pinned.FirstOrDefault()?.Object.Type;
-            var pinnedSize = pinned.Sum(p => (long)p.Object.Size);
-            var pinnedCount = pinned.Count();
-
-            Console.WriteLine("              MT    Count    TotalSize Class Name");
-            foreach (var t in dumpHeapStat)
-            {
-                Console.WriteLine($"{t.type.MethodTable:X16} {t.objects.Count,8} {t.size,12} {t.type.Name}");
-            }
-
-            var total = dumpHeapStat.Sum(d => d.objects.Count);
-            Console.WriteLine($"Total {total} objects");
-            Console.WriteLine();
-            Console.WriteLine("Roots:");
+        var total = dumpHeapStat.Sum(d => d.objects.Count);
+        Console.WriteLine($"Total {total} objects");
+        Console.WriteLine();
+        Console.WriteLine("Roots:");
+        if (pinnedType != null)
             Console.WriteLine($"{pinnedType.MethodTable:X16} {pinnedCount,8} {pinnedSize,12} {pinnedType.Name}");
+    }
+
+    public Task<string> PrintRootsAsync(ClrObject clrObject, Action<int> onProgress, CancellationToken cancellationToken)
+    {
+        return Task.Run<string>(() => PrintRoots(clrObject, onProgress, cancellationToken));
+    }
+
+    public int GetGraphPathsCount(ClrObject clrObject)
+    {
+        int count = 0;
+        var objectType = clrObject.Type;
+        var roots = RootPaths(clrObject);
+        foreach (var root in roots)
+        {
+            // v3: GCRoot.ChainLink is a linked list; walk to count
+            for (var link = root.Path; link != null; link = link.Next)
+                count++;
         }
 
-        public Task<string> PrintRootsAsync(ClrObject clrObject, Action<int> onProgress, CancellationToken cancellationToken)
-        {
-            return Task.Run<string>(() => PrintRoots(clrObject, onProgress, cancellationToken));
-        }
+        return count;
+    }
 
-        public int GetGraphPathsCount(ClrObject clrObject)
+    /// <summary>
+    /// Create a long string with all the possible paths from the object to its roots
+    /// </summary>
+    /// <param name="clrObject">The object to analyze</param>
+    /// <param name="onProgress">The progress of the operation. The total number is given by GetGraphPathsCount</param>
+    /// <returns></returns>
+    public string PrintRoots(ClrObject clrObject, Action<int> onProgress, CancellationToken cancellationToken)
+    {
+        StringBuilder sb = new StringBuilder();
+        var objectType = clrObject.Type;
+        if (objectType == null) return string.Empty;
+        sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} MT:0x{objectType.MethodTable:X} Size:{clrObject.Size}");
+        sb.AppendLine();
+        var roots = RootPaths(clrObject);
+        bool isFirst = true;
+        int i = 0;
+        int count = 0;
+        foreach (var tplRoot in roots)
         {
-            int count = 0;
-            var objectType = clrObject.Type;
-            var roots = RootPaths(clrObject);
-            foreach (var root in roots)
+            if (isFirst)
             {
-                // v3: GCRoot.ChainLink is a linked list; walk to count
-                for (var link = root.Path; link != null; link = link.Next)
-                    count++;
+                sb.AppendLine($"Root {tplRoot.Root.RootKind} Addr:{tplRoot.Root.Address:X16} {tplRoot.Root.Object.Type?.Name ?? "?"} ");
+                isFirst = false;
             }
 
-            return count;
-        }
+            // new in v3
+            var root = tplRoot.Root;
+            var path = tplRoot.Path;
 
-        /// <summary>
-        /// Create a long string with all the possible paths from the object to its roots
-        /// </summary>
-        /// <param name="clrObject">The object to analyze</param>
-        /// <param name="onProgress">The progress of the operation. The total number is given by GetGraphPathsCount</param>
-        /// <returns></returns>
-        public string PrintRoots(ClrObject clrObject, Action<int> onProgress, CancellationToken cancellationToken)
-        {
-            StringBuilder sb = new StringBuilder();
-            var objectType = clrObject.Type;
-            sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} MT:0x{objectType.MethodTable:X} Size:{clrObject.Size}");
+            sb.AppendLine($"  Path {i++}");
+            //foreach (var path in tplRoot.Path)
+            for (GCRoot.ChainLink? link = path; link != null; link = link.Next)
+            {
+                var obj = link.Object;
+                var obj2 = root.Address;
+                Debug.Assert(obj == obj2);
+
+                var address = link.Object;
+                var type = root.Object.Type;
+
+                count++;
+                if (cancellationToken.IsCancellationRequested)
+                    throw new OperationCanceledException("Canceled by user request");
+                onProgress(count);
+                sb.AppendLine($"     {address:X16} {type?.Name ?? "?"}");
+                var result = FindReferencing(false, address);
+                if (result != null && result.Count > 0)
+                {
+                    sb.AppendLine($"          Objects whose fields point to {address:X16}");
+                    foreach (var res in result)
+                    {
+                        string isStaticString = res.isStatic ? "static" : "instance";
+                        sb.AppendLine($"               {res.address:X16} Type:{res.typeName} [{isStaticString}] field:{res.fieldName}");
+                    }
+                }
+
+            }
+
             sb.AppendLine();
-            var roots = RootPaths(clrObject);
-            bool isFirst = true;
-            int i = 0;
-            int count = 0;
-            foreach (var tplRoot in roots)
-            {
-                if (isFirst)
-                {
-                    sb.AppendLine($"Root {tplRoot.Root.RootKind} Addr:{tplRoot.Root.Address:X16} {tplRoot.Root.Object.Type.Name} ");
-                    isFirst = false;
-                }
-
-                // new in v3
-                var root = tplRoot.Root;
-                var path = tplRoot.Path;
-
-                sb.AppendLine($"  Path {i++}");
-                //foreach (var path in tplRoot.Path)
-                for (GCRoot.ChainLink? link = path; link != null; link = link.Next)
-                {
-                    var obj = link.Object;
-                    var obj2 = root.Address;
-                    Debug.Assert(obj == obj2);
-
-                    var address = link.Object;
-                    var type = root.Object.Type;
-
-                    count++;
-                    if (cancellationToken.IsCancellationRequested)
-                        throw new OperationCanceledException("Canceled by user request");
-                    onProgress(count);
-                    sb.AppendLine($"     {address:X16} {type.Name}");
-                    var result = FindReferencing(false, address);
-                    if (result != null && result.Count > 0)
-                    {
-                        sb.AppendLine($"          Objects whose fields point to {address:X16}");
-                        foreach (var res in result)
-                        {
-                            string isStaticString = res.isStatic ? "static" : "instance";
-                            sb.AppendLine($"               {res.address:X16} Type:{res.typeName} [{isStaticString}] field:{res.fieldName}");
-                        }
-                    }
-
-                }
-
-                sb.AppendLine();
-            }
-
-            return sb.ToString();
         }
 
-        private List<(ulong address, string typeName, string fieldName, bool isStatic)> FindReferencing(
-            bool includeInstance, params ulong[] leakedAddresses)
+        return sb.ToString();
+    }
+
+    private List<(ulong address, string typeName, string fieldName, bool isStatic)>? FindReferencing(
+        bool includeInstance, params ulong[] leakedAddresses)
+    {
+        List<(ulong address, string typeName, string fieldName, bool isStatic)>? result = null;
+
+        if (includeInstance)
         {
-            List<(ulong address, string typeName, string fieldName, bool isStatic)> result = null;
-
-            if (includeInstance)
+            foreach (var (obj, field, address) in ObjectsWithInstanceFields)
             {
-                foreach (var (obj, field, address) in ObjectsWithInstanceFields)
-                {
-                    if (leakedAddresses.Contains(address))
-                    {
-                        if (result == null)
-                            result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
-
-                        result.Add((obj.Address, obj.Type.Name, field.Name, false));
-                    }
-                }
-            }
-
-            foreach (var (obj, field, address) in ObjectsWithStaticFields)
-            {
-                // returns zero if it is not an ulong
                 if (leakedAddresses.Contains(address))
                 {
                     if (result == null)
                         result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
 
-                    result.Add((obj.Address, obj.Type.Name, field.Name, true));
+                    result.Add((obj.Address, obj.Type?.Name ?? "?", field?.Name ?? "?", false));
                 }
             }
-
-            return result;
         }
 
-
-        public void PrintClrStack()
+        foreach (var (obj, field, address) in ObjectsWithStaticFields)
         {
-            var stacks = this.Stacks();
-            foreach (var stack in stacks)
+            // returns zero if it is not an ulong
+            if (leakedAddresses.Contains(address))
             {
-                Console.WriteLine($"OS Thread Id: 0x{stack.thread.OSThreadId:x} ({stack.thread.ManagedThreadId})");
-                Console.WriteLine("        Child SP               IP Call Site");
-                foreach (var frame in stack.stackFrames)
-                {
-                    var callSite = frame.FrameName == null
-                        ? "" :
-                        $"[{frame.FrameName} {frame.StackPointer:X16}]";
+                if (result == null)
+                    result = new List<(ulong address, string typeName, string fieldName, bool isStatic)>();
 
-
-                    //var il = _dataTarget.DataReader.
-                    //var x = frame.Method.Type.Module.
-                    //var mi = frame.Method.Type.Module.MetadataImport;
-                    //if (mi != null)
-                    //{
-                        
-                    //}
-
-                    Console.WriteLine($"{frame.StackPointer:X16} {frame.InstructionPointer:X16} {callSite} {frame.Method?.ToString()}");
-                }
+                result.Add((obj.Address, obj.Type?.Name ?? "?", field?.Name ?? "?", true));
             }
         }
 
+        return result;
     }
+
+
+    public void PrintClrStack()
+    {
+        var stacks = this.Stacks();
+        foreach (var stack in stacks)
+        {
+            Console.WriteLine($"OS Thread Id: 0x{stack.thread.OSThreadId:x} ({stack.thread.ManagedThreadId})");
+            Console.WriteLine("        Child SP               IP Call Site");
+            foreach (var frame in stack.stackFrames)
+            {
+                var callSite = frame.FrameName == null
+                    ? "" :
+                    $"[{frame.FrameName} {frame.StackPointer:X16}]";
+
+
+                //var il = _dataTarget.DataReader.
+                //var x = frame.Method.Type!.Module.
+                //var mi = frame.Method.Type!.Module.MetadataImport;
+                //if (mi != null)
+                //{
+                    
+                //}
+
+                Console.WriteLine($"{frame.StackPointer:X16} {frame.InstructionPointer:X16} {callSite} {frame.Method?.ToString()}");
+            }
+        }
+    }
+
 }
+

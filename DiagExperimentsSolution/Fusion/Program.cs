@@ -23,124 +23,123 @@ using Microsoft.Diagnostics.Tracing.Parsers.Clr;
 // An official tool will hopefully come soon
 //
 
-namespace Fusion
+namespace Fusion;
+class Program
 {
-    class Program
+    private const string _debuggee = @"../../../../FusionDebuggee/bin/Debug/net5.0/FusionDebuggee.exe";
+    private const string _diagPortEnvKey = "DOTNET_DiagnosticPorts";
+
+    private ClrTraceEventParser? _parser;
+
+    static async Task<int> Main(string[] args)
     {
-        private const string _debuggee = @"../../../../FusionDebuggee/bin/Debug/net5.0/FusionDebuggee.exe";
-        private const string _diagPortEnvKey = "DOTNET_DiagnosticPorts";
+        var p = new Program();
+        await p.RunRemoteServer();
+        return 0;
+    }
 
-        private ClrTraceEventParser _parser;
+    public async Task RunRemoteServer()
+    {
+        var debuggee = Path.GetFullPath(_debuggee);
+        var diagnosticPort = $"Fusion_{Process.GetCurrentProcess().Id}";
 
-        static async Task<int> Main(string[] args)
-        {
-            var p = new Program();
-            await p.RunRemoteServer();
-            return 0;
-        }
+        // 1. Start the diagnostic server
+        ReversedDiagnosticsServer srv = new ReversedDiagnosticsServer(diagnosticPort);
+        srv.Start();
 
-        public async Task RunRemoteServer()
-        {
-            var debuggee = Path.GetFullPath(_debuggee);
-            var diagnosticPort = $"Fusion_{Process.GetCurrentProcess().Id}";
+        // 2. Start accepting connections
+        using CancellationTokenSource cancellation = new CancellationTokenSource(20000);
+        var acceptTask = srv.AcceptAsync(cancellation.Token);
 
-            // 1. Start the diagnostic server
-            ReversedDiagnosticsServer srv = new ReversedDiagnosticsServer(diagnosticPort);
-            srv.Start();
+        // 3. Run the debuggee
+        Console.WriteLine("Starting child process using Diagnostic Port over Pipe");
+        ProcessStartInfo psi = new(debuggee);
+        psi.CreateNoWindow = false;
+        psi.EnvironmentVariables[_diagPortEnvKey] = diagnosticPort;
+        var process = Process.Start(psi);
 
-            // 2. Start accepting connections
-            using CancellationTokenSource cancellation = new CancellationTokenSource(20000);
-            var acceptTask = srv.AcceptAsync(cancellation.Token);
-
-            // 3. Run the debuggee
-            Console.WriteLine("Starting child process using Diagnostic Port over Pipe");
-            ProcessStartInfo psi = new(debuggee);
-            psi.CreateNoWindow = false;
-            psi.EnvironmentVariables[_diagPortEnvKey] = diagnosticPort;
-            var process = Process.Start(psi);
-
-            // 4. Wait for the remote CLR to connect with us
-            var endpoint = await acceptTask;
-            Console.WriteLine($"Remote process {endpoint.ProcessId} connected with cookie: {endpoint.RuntimeInstanceCookie}");
+        // 4. Wait for the remote CLR to connect with us
+        var endpoint = await acceptTask;
+        Console.WriteLine($"Remote process {endpoint.ProcessId} connected with cookie: {endpoint.RuntimeInstanceCookie}");
 
 
-            // 5. Use the endpoint to start the diagnostic client
-            using var fusion = new FusionTrace(endpoint.Endpoint);
-            fusion.Start(e => SubscribeDynamicEvents(e), s => SubscribeRuntimeEvents(s));
+        // 5. Use the endpoint to start the diagnostic client
+        using var fusion = new FusionTrace(endpoint.Endpoint);
+        fusion.Start(e => SubscribeDynamicEvents(e), s => SubscribeRuntimeEvents(s));
 
 
-            while (Console.ReadKey().Key != ConsoleKey.Q) ;
-        }
+        while (Console.ReadKey().Key != ConsoleKey.Q) ;
+    }
 
-        public void SubscribeDynamicEvents(Microsoft.Diagnostics.Tracing.TraceEvent e)
-        {
-            //if (e.PayloadNames.Length > 0)
-            //{
-            //    Console.WriteLine();
-            //    Console.WriteLine($"{e.EventName} {e.EventIndex} {e.FormattedMessage}");
-            //    var dn = string.Join(", ", e.GetDynamicMemberNames().Select(n => n.ToString()));
-            //    Console.WriteLine($"{dn}");
-            //    foreach (var name in e.PayloadNames)
-            //    {
-            //        Console.WriteLine($"name: {name}");
-            //    }
-            //    Console.WriteLine();
+    public void SubscribeDynamicEvents(Microsoft.Diagnostics.Tracing.TraceEvent e)
+    {
+        //if (e.PayloadNames.Length > 0)
+        //{
+        //    Console.WriteLine();
+        //    Console.WriteLine($"{e.EventName} {e.EventIndex} {e.FormattedMessage}");
+        //    var dn = string.Join(", ", e.GetDynamicMemberNames().Select(n => n.ToString()));
+        //    Console.WriteLine($"{dn}");
+        //    foreach (var name in e.PayloadNames)
+        //    {
+        //        Console.WriteLine($"name: {name}");
+        //    }
+        //    Console.WriteLine();
 
-            //    //var payloadContainer = e.PayloadValue(0) as IDictionary<string, object>;
+        //    //var payloadContainer = e.PayloadValue(0) as IDictionary<string, object>;
 
-            //    //if (payloadContainer == null)
-            //    //    return null;
+        //    //if (payloadContainer == null)
+        //    //    return null;
 
-            //    //if (payloadContainer["Payload"] is IDictionary<string, object> payload)
-            //    //    return payload;
-            //}
+        //    //if (payloadContainer["Payload"] is IDictionary<string, object> payload)
+        //    //    return payload;
+        //}
 
 
-            ////Console.WriteLine(e.Dump(true, false));
-
-        }
-
-        public void SubscribeRuntimeEvents(Microsoft.Diagnostics.Tracing.TraceEventSource s)
-        {
-            _parser = new ClrTraceEventParser(s);
-            //_parser.LoaderAppDomainLoad += d => Console.WriteLine($"LoaderAppDomainLoad {d.AppDomainID}");
-            //_parser.LoaderAppDomainUnload += d => Console.WriteLine($"LoaderAppDomainUnload {d.AppDomainID}");
-            //_parser.LoaderAssemblyLoad += d => Console.WriteLine($"LoaderAssemblyLoad {d.FullyQualifiedAssemblyName}");
-            //_parser.LoaderAssemblyUnload += d => Console.WriteLine($"LoaderAssemblyUnload {d.FullyQualifiedAssemblyName}");
-            //_parser.LoaderDomainModuleLoad += d => Console.WriteLine($"LoaderDomainModuleLoad {d.ModuleNativePath}");
-            //_parser.LoaderModuleDCStartV2 += d => Console.WriteLine($"LoaderModuleDCStartV2 {d.ModuleNativePath}");
-            //_parser.LoaderModuleDCStopV2 += d => Console.WriteLine($"LoaderModuleDCStopV2 {d.ModuleNativePath}");
-            //_parser.LoaderModuleLoad += d => Console.WriteLine($"LoaderModuleLoad {d.ModuleNativePath}");
-            //_parser.LoaderModuleUnload += d => Console.WriteLine($"LoaderModuleUnload {d.ModuleNativePath}");
-            //_parser.AssemblyLoaderAppDomainAssemblyResolveHandlerInvoked += d => Console.WriteLine($"AssemblyLoaderAppDomainAssemblyResolveHandlerInvoked {d.ResultAssemblyPath}");
-            //_parser.AssemblyLoaderAssemblyLoadContextResolvingHandlerInvoked += d => Console.WriteLine($"AssemblyLoaderAssemblyLoadContextResolvingHandlerInvoked {d.ResultAssemblyPath}");
-            //_parser.AssemblyLoaderAssemblyLoadFromResolveHandlerInvoked += d => Console.WriteLine($"AssemblyLoaderAssemblyLoadFromResolveHandlerInvoked {d.RequestingAssemblyPath}");
-            //_parser.AssemblyLoaderKnownPathProbed += d => Console.WriteLine($"AssemblyLoaderKnownPathProbed {d.PathSource}");
-            _parser.AssemblyLoaderResolutionAttempted += d =>
-            {
-                switch(d.Result)
-                {
-                    case ResolutionAttemptedResult.Success:
-                        Console.WriteLine($"AssemblyLoaderResolutionAttempted {d.Result} {d.AssemblyLoadContext} {d.ResultAssemblyPath} ");
-                        break;
-                    //default:
-                    //    Console.WriteLine($"AssemblyLoaderResolutionAttempted {d.Result} {d.AssemblyLoadContext} {d.AssemblyName}");
-                    //    break;
-                }
-            };
-            //_parser.AssemblyLoaderStart += d =>
-            //{
-            //    if (d.AssemblyLoadContext != "Default") Console.WriteLine($"AssemblyLoaderStart {d.AssemblyLoadContext} {d.AssemblyPath}");
-            //};
-            //_parser.AssemblyLoaderStop += d =>
-            //{
-            //    if (d.AssemblyLoadContext != "Default") Console.WriteLine($"AssemblyLoaderStop {d.AssemblyLoadContext} {d.AssemblyPath}");
-            //};
-            //_parser.MethodLoad += d => Console.WriteLine($"MethodLoad {d.MethodToken}");
-            //_parser.MethodLoadVerbose += d => Console.WriteLine($"MethodLoadVerbose {d.MethodNamespace} {d.MethodName}");
-            //_parser.TypeLoadStart += d => Console.WriteLine($"TypeLoadStart {d.TypeLoadStartID}");
-            //_parser.TypeLoadStop += d => Console.WriteLine($"TypeLoadStop {d.TypeName}");
-        }
+        ////Console.WriteLine(e.Dump(true, false));
 
     }
+
+    public void SubscribeRuntimeEvents(Microsoft.Diagnostics.Tracing.TraceEventSource s)
+    {
+        _parser = new ClrTraceEventParser(s);
+        //_parser.LoaderAppDomainLoad += d => Console.WriteLine($"LoaderAppDomainLoad {d.AppDomainID}");
+        //_parser.LoaderAppDomainUnload += d => Console.WriteLine($"LoaderAppDomainUnload {d.AppDomainID}");
+        //_parser.LoaderAssemblyLoad += d => Console.WriteLine($"LoaderAssemblyLoad {d.FullyQualifiedAssemblyName}");
+        //_parser.LoaderAssemblyUnload += d => Console.WriteLine($"LoaderAssemblyUnload {d.FullyQualifiedAssemblyName}");
+        //_parser.LoaderDomainModuleLoad += d => Console.WriteLine($"LoaderDomainModuleLoad {d.ModuleNativePath}");
+        //_parser.LoaderModuleDCStartV2 += d => Console.WriteLine($"LoaderModuleDCStartV2 {d.ModuleNativePath}");
+        //_parser.LoaderModuleDCStopV2 += d => Console.WriteLine($"LoaderModuleDCStopV2 {d.ModuleNativePath}");
+        //_parser.LoaderModuleLoad += d => Console.WriteLine($"LoaderModuleLoad {d.ModuleNativePath}");
+        //_parser.LoaderModuleUnload += d => Console.WriteLine($"LoaderModuleUnload {d.ModuleNativePath}");
+        //_parser.AssemblyLoaderAppDomainAssemblyResolveHandlerInvoked += d => Console.WriteLine($"AssemblyLoaderAppDomainAssemblyResolveHandlerInvoked {d.ResultAssemblyPath}");
+        //_parser.AssemblyLoaderAssemblyLoadContextResolvingHandlerInvoked += d => Console.WriteLine($"AssemblyLoaderAssemblyLoadContextResolvingHandlerInvoked {d.ResultAssemblyPath}");
+        //_parser.AssemblyLoaderAssemblyLoadFromResolveHandlerInvoked += d => Console.WriteLine($"AssemblyLoaderAssemblyLoadFromResolveHandlerInvoked {d.RequestingAssemblyPath}");
+        //_parser.AssemblyLoaderKnownPathProbed += d => Console.WriteLine($"AssemblyLoaderKnownPathProbed {d.PathSource}");
+        _parser.AssemblyLoaderResolutionAttempted += d =>
+        {
+            switch(d.Result)
+            {
+                case ResolutionAttemptedResult.Success:
+                    Console.WriteLine($"AssemblyLoaderResolutionAttempted {d.Result} {d.AssemblyLoadContext} {d.ResultAssemblyPath} ");
+                    break;
+                //default:
+                //    Console.WriteLine($"AssemblyLoaderResolutionAttempted {d.Result} {d.AssemblyLoadContext} {d.AssemblyName}");
+                //    break;
+            }
+        };
+        //_parser.AssemblyLoaderStart += d =>
+        //{
+        //    if (d.AssemblyLoadContext != "Default") Console.WriteLine($"AssemblyLoaderStart {d.AssemblyLoadContext} {d.AssemblyPath}");
+        //};
+        //_parser.AssemblyLoaderStop += d =>
+        //{
+        //    if (d.AssemblyLoadContext != "Default") Console.WriteLine($"AssemblyLoaderStop {d.AssemblyLoadContext} {d.AssemblyPath}");
+        //};
+        //_parser.MethodLoad += d => Console.WriteLine($"MethodLoad {d.MethodToken}");
+        //_parser.MethodLoadVerbose += d => Console.WriteLine($"MethodLoadVerbose {d.MethodNamespace} {d.MethodName}");
+        //_parser.TypeLoadStart += d => Console.WriteLine($"TypeLoadStart {d.TypeLoadStartID}");
+        //_parser.TypeLoadStop += d => Console.WriteLine($"TypeLoadStop {d.TypeName}");
+    }
+
 }
+

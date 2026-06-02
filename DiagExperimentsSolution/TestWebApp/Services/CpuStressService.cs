@@ -8,33 +8,32 @@ using Microsoft.Extensions.Logging;
 
 using TestWebApp.Helpers;
 
-namespace TestWebApp.Services
+namespace TestWebApp.Services;
+public class CpuStressService
 {
-    public class CpuStressService
+    private readonly ILogger<CpuStressService> _logger;
+
+    public CpuStressService(ILogger<CpuStressService> logger)
     {
-        private readonly ILogger<CpuStressService> _logger;
-
-        public CpuStressService(ILogger<CpuStressService> logger)
-        {
-            this._logger = logger;
-        }
-
-        public void CpuLoad(long max, bool logVerbose = true)
-        {
-            if(logVerbose)
-                _logger.LogInformation($"Starting stressing the CPU on managed thread {Thread.CurrentThread.ManagedThreadId}");
-            var primes = new Primes(max);
-            Int64 sum = 0;
-            foreach (var prime in primes)
-            {
-                sum += prime;
-            }
-
-            if (logVerbose)
-                _logger.LogInformation($"CPU stressing completed on managed thread {Thread.CurrentThread.ManagedThreadId}");
-            return;
-        }
-
-
+        this._logger = logger;
     }
+
+    public void CpuLoad(long max, bool logVerbose = true)
+    {
+        if(logVerbose)
+            _logger.LogInformation($"Starting stressing the CPU on managed thread {Thread.CurrentThread.ManagedThreadId}");
+        var primes = new Primes(max);
+        Int64 sum = 0;
+        foreach (var prime in primes)
+        {
+            sum += prime;
+        }
+
+        if (logVerbose)
+            _logger.LogInformation($"CPU stressing completed on managed thread {Thread.CurrentThread.ManagedThreadId}");
+        return;
+    }
+
+
 }
+

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DiagnosticModels
+namespace DiagnosticModels;
+public class EvsException : EvsBaseString
 {
-    public class EvsException : EvsBaseString
-    {
-        public EvsException(string value) : base(value) { }
-        public override string Cat => "Last first-chance Exception";
+    public EvsException(string value) : base(value) { }
+    public override string Cat => "Last first-chance Exception";
 
-    }
 }
+

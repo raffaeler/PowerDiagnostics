@@ -4,14 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TestWebApp.Services
+namespace TestWebApp.Services;
+public class SimpleStateService
 {
-    public class SimpleStateService
+    static int _counter = 0;
+    public int Next()
     {
-        static int _counter = 0;
-        public int Next()
-        {
-            return Interlocked.Increment(ref _counter);
-        }
+        return Interlocked.Increment(ref _counter);
     }
 }
+

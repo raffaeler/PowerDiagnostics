@@ -4,25 +4,24 @@ using System.Text;
 
 using Microsoft.Diagnostics.Tracing;
 
-namespace ClrDiagnostics.Extensions
+namespace ClrDiagnostics.Extensions;
+public static class TraceEventExtensions
 {
-    public static class TraceEventExtensions
+    public static IDictionary<string, object>? GetPayload(this TraceEvent traceEvent)
     {
-        public static IDictionary<string, object> GetPayload(this TraceEvent traceEvent)
+        if(traceEvent.PayloadNames.Length > 0)
         {
-            if(traceEvent.PayloadNames.Length > 0)
-            {
-                var payloadContainer = traceEvent.PayloadValue(0) as IDictionary<string, object>;
+            var payloadContainer = traceEvent.PayloadValue(0) as IDictionary<string, object>;
 
-                if (payloadContainer == null)
-                    return null;
+            if (payloadContainer == null)
+                return null;
 
-                if (payloadContainer["Payload"] is IDictionary<string, object> payload)
-                    return payload;
-            }
-
-            return null;
+            if (payloadContainer["Payload"] is IDictionary<string, object> payload)
+                return payload;
         }
 
+        return null;
     }
+
 }
+

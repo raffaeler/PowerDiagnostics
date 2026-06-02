@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DiagnosticWPF.Helpers
+namespace DiagnosticWPF.Helpers;
+public static class ICollectionExtensions
 {
-    public static class ICollectionExtensions
+    public static void AddRange<T>(this ICollection<T> list, IEnumerable<T> items)
     {
-        public static void AddRange<T>(this ICollection<T> list, IEnumerable<T> items)
+        foreach (var item in list)
         {
-            foreach (var item in list)
-            {
-                list.Add(item);
-            }
+            list.Add(item);
         }
     }
 }
+

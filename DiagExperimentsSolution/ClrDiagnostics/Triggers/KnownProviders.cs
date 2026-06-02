@@ -45,47 +45,46 @@ using System.Text;
 // EventSource:
 // https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/EventSource.cs
 
-namespace ClrDiagnostics.Triggers
+namespace ClrDiagnostics.Triggers;
+public enum KnownProviderName
 {
-    public enum KnownProviderName
-    {
-        /// <summary>
-        /// "Microsoft-Windows-DotNETRuntime"
-        /// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/NativeRuntimeEventSource.cs
-        /// </summary>
-        Microsoft_Windows_DotNETRuntime,
+    /// <summary>
+    /// "Microsoft-Windows-DotNETRuntime"
+    /// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/NativeRuntimeEventSource.cs
+    /// </summary>
+    Microsoft_Windows_DotNETRuntime,
 
-        /// <summary>
-        /// "System.Runtime"
-        /// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/RuntimeEventSource.cs
-        /// </summary>
-        System_Runtime,
+    /// <summary>
+    /// "System.Runtime"
+    /// https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing/RuntimeEventSource.cs
+    /// </summary>
+    System_Runtime,
 
-        Microsoft_DotNETCore_SampleProfiler,
+    Microsoft_DotNETCore_SampleProfiler,
 
-        /// <summary>
-        /// Microsoft-AspNetCore-Hosting
-        /// https://github.com/aspnet/Hosting/blob/master/src/Microsoft.AspNetCore.Hosting/Internal/HostingEventSource.cs
-        /// https://github.com/dotnet/aspnetcore/blob/master/src/Hosting/Hosting/src/Internal/HostingEventSource.cs
-        /// </summary>
-        Microsoft_AspNetCore_Hosting,
-    }
-
-    public static class KnownProviders
-    {
-        private static Dictionary<KnownProviderName, string> Map =
-            new Dictionary<KnownProviderName, string>()
-        {
-            { KnownProviderName.Microsoft_Windows_DotNETRuntime, "Microsoft-Windows-DotNETRuntime" },
-            { KnownProviderName.System_Runtime, "System.Runtime" },
-            { KnownProviderName.Microsoft_DotNETCore_SampleProfiler, "Microsoft-DotNETCore-SampleProfiler" },
-            { KnownProviderName.Microsoft_AspNetCore_Hosting, "Microsoft.AspNetCore.Hosting" },
-        };
-
-        public static bool TryGetName(KnownProviderName provider, out string providerName)
-        {
-            return Map.TryGetValue(provider, out providerName);
-        }
-    }
-
+    /// <summary>
+    /// Microsoft-AspNetCore-Hosting
+    /// https://github.com/aspnet/Hosting/blob/master/src/Microsoft.AspNetCore.Hosting/Internal/HostingEventSource.cs
+    /// https://github.com/dotnet/aspnetcore/blob/master/src/Hosting/Hosting/src/Internal/HostingEventSource.cs
+    /// </summary>
+    Microsoft_AspNetCore_Hosting,
 }
+
+public static class KnownProviders
+{
+    private static Dictionary<KnownProviderName, string> Map =
+        new Dictionary<KnownProviderName, string>()
+    {
+        { KnownProviderName.Microsoft_Windows_DotNETRuntime, "Microsoft-Windows-DotNETRuntime" },
+        { KnownProviderName.System_Runtime, "System.Runtime" },
+        { KnownProviderName.Microsoft_DotNETCore_SampleProfiler, "Microsoft-DotNETCore-SampleProfiler" },
+        { KnownProviderName.Microsoft_AspNetCore_Hosting, "Microsoft.AspNetCore.Hosting" },
+    };
+
+    public static bool TryGetName(KnownProviderName provider, out string providerName)
+    {
+        return Map.TryGetValue(provider, out providerName!);
+    }
+}
+
+

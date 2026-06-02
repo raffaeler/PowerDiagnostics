@@ -6,56 +6,56 @@ using System.Text;
 
 using Microsoft.Diagnostics.NETCore.Client;
 
-namespace ClrDiagnostics.Helpers
+namespace ClrDiagnostics.Helpers;
+public static class ProcessHelper
 {
-    public static class ProcessHelper
+    public static Process? GetProcess(string processName)
     {
-        public static Process GetProcess(string processName)
+        var pss = Process.GetProcessesByName(processName);
+        if (pss.Length != 1)
         {
-            var pss = Process.GetProcessesByName(processName);
-            if (pss.Length != 1)
-            {
-                return null;
-            }
-
-            return pss.Single();
-        }
-
-        public static Process GetOrStartProcess(string processName, string filename)
-        {
-            var pss = Process.GetProcessesByName(processName);
-            if (pss.Length == 0)
-            {
-                return Process.Start(filename);
-            }
-
-            if (pss.Length == 1)
-            {
-                return pss.Single();
-            }
-
             return null;
         }
 
-        public static IList<Process> GetDotnetProcesses()
+        return pss.Single();
+    }
+
+    public static Process? GetOrStartProcess(string processName, string filename)
+    {
+        var pss = Process.GetProcessesByName(processName);
+        if (pss.Length == 0)
         {
-            var processes = DiagnosticsClient.GetPublishedProcesses()
-                .OrderBy(p => p)
-                .Select(p =>
-                {
-                    try
-                    {
-                        return Process.GetProcessById(p);
-                    }
-                    catch(Exception ex)
-                    {
-                        Debug.WriteLine($"GetProcessById failed (ghost process?): {ex.Message}");
-                        return null;
-                    }
-                })
-                .Where(p => p != null)
-                .ToList();
-            return processes;
+            return Process.Start(filename);
         }
+
+        if (pss.Length == 1)
+        {
+            return pss.Single();
+        }
+
+        return null;
+    }
+
+    public static IList<Process> GetDotnetProcesses()
+    {
+        var processes = DiagnosticsClient.GetPublishedProcesses()
+            .OrderBy(p => p)
+            .Select(p =>
+            {
+                try
+                {
+                    return Process.GetProcessById(p);
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine($"GetProcessById failed (ghost process?): {ex.Message}");
+                    return null;
+                }
+            })
+            .Where(p => p != null)
+            .Select(p => p!)
+            .ToList();
+        return processes;
     }
 }
+

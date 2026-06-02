@@ -9,37 +9,36 @@ using ClrDiagnostics.Helpers;
 using ClrDiagnostics.Triggers;
 using ClrDiagnostics.Extensions;
 
-namespace TestConsole
+namespace TestConsole;
+/// <summary>
+/// Used to test triggers.
+/// These are the perf counters that can be used to trigger a snapshot or dump
+/// </summary>
+class UseCase7
 {
-    /// <summary>
-    /// Used to test triggers.
-    /// These are the perf counters that can be used to trigger a snapshot or dump
-    /// </summary>
-    class UseCase7
+    public void Analyze()
     {
-        public void Analyze()
+        var ps = ProcessHelper.GetProcess("TestWebApp");
+        if (ps == null)
         {
-            var ps = ProcessHelper.GetProcess("TestWebApp");
-            if (ps == null)
-            {
-                Console.WriteLine("Run the required process first");
-                return;
-            }
-
-            var analyzer = new TriggerOnEventCounter(ps.Id, Constants.CustomHeaderEventSourceName);
-            analyzer.Start(
-                OnTrigger,
-                traceEvent => traceEvent.ProviderName.Equals(Constants.CustomHeaderEventSourceName));
-
-            Console.ReadKey();
-
-            analyzer.Dispose();
+            Console.WriteLine("Run the required process first");
+            return;
         }
 
-        private void OnTrigger(TraceEvent traceEvent)
-        {
+        var analyzer = new TriggerOnEventCounter(ps.Id, Constants.CustomHeaderEventSourceName);
+        analyzer.Start(
+            OnTrigger,
+            traceEvent => traceEvent.ProviderName.Equals(Constants.CustomHeaderEventSourceName));
 
-        }
+        Console.ReadKey();
+
+        analyzer.Dispose();
+    }
+
+    private void OnTrigger(TraceEvent traceEvent)
+    {
 
     }
+
 }
+

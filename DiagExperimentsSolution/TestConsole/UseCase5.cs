@@ -7,35 +7,34 @@ using ClrDiagnostics.Triggers;
 
 using Microsoft.Diagnostics.Tracing;
 
-namespace TestConsole
+namespace TestConsole;
+/// <summary>
+/// Used to test triggers.
+/// These are the perf counters that can be used to trigger a snapshot or dump
+/// </summary>
+class UseCase5
 {
-    /// <summary>
-    /// Used to test triggers.
-    /// These are the perf counters that can be used to trigger a snapshot or dump
-    /// </summary>
-    class UseCase5
+    public void Analyze()
     {
-        public void Analyze()
+        //var ps = ProcessHelper.GetProcess("TestAllocation");
+        var ps = ProcessHelper.GetProcess("TestExceptions");
+        if (ps == null)
         {
-            //var ps = ProcessHelper.GetProcess("TestAllocation");
-            var ps = ProcessHelper.GetProcess("TestExceptions");
-            if (ps == null)
-            {
-                Console.WriteLine("Run the required process first");
-                return;
-            }
-
-            //var analyzer = new TriggerOnCpuLoad(ps.Id);
-            var analyzer = new TriggerOnExceptions(ps.Id);
-            analyzer.Start(OnTrigger);
-
-            Console.ReadKey();
-
-            analyzer.Dispose();
+            Console.WriteLine("Run the required process first");
+            return;
         }
 
-        private void OnTrigger(TraceEvent traceEvent)
-        {
-        }
+        //var analyzer = new TriggerOnCpuLoad(ps.Id);
+        var analyzer = new TriggerOnExceptions(ps.Id);
+        analyzer.Start(OnTrigger);
+
+        Console.ReadKey();
+
+        analyzer.Dispose();
+    }
+
+    private void OnTrigger(TraceEvent traceEvent)
+    {
     }
 }
+

@@ -7,10 +7,9 @@ using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
 
-namespace ClrDiagnostics
+namespace ClrDiagnostics;
+public partial class DiagnosticAnalyzer
 {
-    public partial class DiagnosticAnalyzer
-    {
 
-    }
 }
+

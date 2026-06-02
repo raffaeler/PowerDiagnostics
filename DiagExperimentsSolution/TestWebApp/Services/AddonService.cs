@@ -8,65 +8,65 @@ using TestWebAddonContract;
 
 using TestWebApp.Helpers;
 
-namespace TestWebApp.Services
+namespace TestWebApp.Services;
+public class AddonService
 {
-    public class AddonService
+    private readonly ILogger<Worker> _logger;
+
+    private AssemblyLoadContext? _myLoadContext;
+    private WeakReference? _isLoadContextAlive;
+    private ILeakyAddon? _addon;
+
+    private static Dictionary<string, byte[]> _leakyDictionary = new();
+
+    public AddonService(ILogger<Worker> logger)
     {
-        private readonly ILogger<Worker> _logger;
+        _logger = logger;
+    }
 
-        private AssemblyLoadContext _myLoadContext;
-        private WeakReference _isLoadContextAlive;
-        private ILeakyAddon _addon;
+    public void LoadContext()
+    {
+        _myLoadContext = new AssemblyLoadContext("MyLoadContext", true);
+        _isLoadContextAlive = new WeakReference(_myLoadContext, true);
 
-        private static Dictionary<string, byte[]> _leakyDictionary = new();
+        var asmName = new System.Reflection.AssemblyName("TestWebAddon");   // see xcopy in post-build action
+        var file = System.IO.Path.Combine(GetCurrentExecutablePath(), "TestWebAddon");
+        var asm = _myLoadContext.LoadFromAssemblyPath(file);
+        var type = asm.GetType("TestWebAddon.LeakyAddon");
+        if (type != null)
+            _addon = (ILeakyAddon?)Activator.CreateInstance(type);
+        _myLoadContext!.Unloading += OnMyLoadContextUnloading;
 
-        public AddonService(ILogger<Worker> logger)
+        ContextHelpers.PrintAllContexts("Contexts");
+    }
+
+    public void UnloadContext()
+    {
+        if (_myLoadContext != null)
         {
-            _logger = logger;
+            _myLoadContext.Unload();
+            _myLoadContext.Unloading -= OnMyLoadContextUnloading;
+            _myLoadContext = null;
         }
+        
+        // _isLoadContextAlive.IsAlive tells whether the load context is still alive
+    }
 
-        public void LoadContext()
-        {
-            _myLoadContext = new AssemblyLoadContext("MyLoadContext", true);
-            _isLoadContextAlive = new WeakReference(_myLoadContext, true);
-
-            var asmName = new System.Reflection.AssemblyName("TestWebAddon");   // see xcopy in post-build action
-            var file = System.IO.Path.Combine(GetCurrentExecutablePath(), "TestWebAddon");
-            var asm = _myLoadContext.LoadFromAssemblyPath(file);
-            var type = asm.GetType("TestWebAddon.LeakyAddon");
-            _addon = (ILeakyAddon)Activator.CreateInstance(type);
-            _myLoadContext.Unloading += OnMyLoadContextUnloading;
-
-            ContextHelpers.PrintAllContexts("Contexts");
-        }
-
-        public void UnloadContext()
-        {
-            if (_myLoadContext != null)
-            {
-                _myLoadContext.Unload();
-                _myLoadContext.Unloading -= OnMyLoadContextUnloading;
-                _myLoadContext = null;
-            }
-            
-            // _isLoadContextAlive.IsAlive tells whether the load context is still alive
-        }
-
-        public void MakeAddonWork()
-        {
-            //_addon.LeakSomeMemory(20);
-            _leakyDictionary[DateTime.Now.Ticks.ToString()] = _addon.AllocateSomeMemory(2048);
-        }
+    public void MakeAddonWork()
+    {
+        //_addon.LeakSomeMemory(20);
+        _leakyDictionary[DateTime.Now.Ticks.ToString()] = _addon!.AllocateSomeMemory(2048);
+    }
 
 
-        private void OnMyLoadContextUnloading(AssemblyLoadContext obj)
-        {
-            _logger.LogInformation("Secondary context unloaded");
-        }
+    private void OnMyLoadContextUnloading(AssemblyLoadContext obj)
+    {
+        _logger.LogInformation("Secondary context unloaded");
+    }
 
-        private string GetCurrentExecutablePath()
-        {
-            return new System.IO.FileInfo(typeof(Startup).Assembly.Location).DirectoryName;
-        }
+    private string GetCurrentExecutablePath()
+    {
+        return new System.IO.FileInfo(typeof(Startup).Assembly.Location).DirectoryName!;
     }
 }
+

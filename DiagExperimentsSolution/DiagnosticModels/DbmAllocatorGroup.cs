@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 using Microsoft.Diagnostics.Runtime;
 
-namespace DiagnosticModels
+namespace DiagnosticModels;
+public class DbmAllocatorGroup
 {
-    public class DbmAllocatorGroup
-    {
-        public ClrObject Allocator { get; set; }
-        public IEnumerable<ClrObject> Objects { get; set; } = Enumerable.Empty<ClrObject>();
-        public string Name { get; set; } = string.Empty;
-    }
+    public ClrObject Allocator { get; set; }
+    public IEnumerable<ClrObject> Objects { get; set; } = Enumerable.Empty<ClrObject>();
+    public string Name { get; set; } = string.Empty;
 }
+

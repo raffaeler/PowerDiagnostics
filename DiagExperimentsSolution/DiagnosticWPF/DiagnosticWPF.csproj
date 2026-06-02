@@ -4,6 +4,8 @@
     <TargetFramework>net10.0-Windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Diagnose_16x.ico</ApplicationIcon>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

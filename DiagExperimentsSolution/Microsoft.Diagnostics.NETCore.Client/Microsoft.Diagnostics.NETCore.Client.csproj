@@ -12,7 +12,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <IncludeSymbols>true</IncludeSymbols>
         <IsShipping>true</IsShipping>
-
+        <NoWarn>CS1591</NoWarn>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 

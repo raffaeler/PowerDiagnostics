@@ -13,131 +13,130 @@ using DiagnosticInvestigations.Configurations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace DiagnosticInvestigations
+namespace DiagnosticInvestigations;
+public class InvestigationState
 {
-    public class InvestigationState
+    private readonly ILogger<InvestigationState> _logger;
+    private readonly GeneralConfiguration _generalConfiguration;
+
+    private ConcurrentDictionary<Guid, InvestigationScope> _scopes = new();
+    private int _clientRefCount = 0;
+    private DateTime? _orphaned = null;
+
+    public InvestigationState(
+        ILogger<InvestigationState> logger,
+        IOptions<GeneralConfiguration> generalConfigurationOption)
     {
-        private readonly ILogger<InvestigationState> _logger;
-        private readonly GeneralConfiguration _generalConfiguration;
+        _logger = logger;
+        _generalConfiguration = generalConfigurationOption.Value;
+    }
 
-        private ConcurrentDictionary<Guid, InvestigationScope> _scopes = new();
-        private int _clientRefCount = 0;
-        private DateTime? _orphaned = null;
+    public IList<InvestigationScope> GetActiveSessions()
+    {
+        return _scopes.Values.ToList();
+    }
 
-        public InvestigationState(
-            ILogger<InvestigationState> logger,
-            IOptions<GeneralConfiguration> generalConfigurationOption)
+    public InvestigationScope? GetInvestigationScope(Guid sessionId)
+    {
+        if(!_scopes.TryGetValue(sessionId, out var scope)) { return null; }
+        return scope;
+    }
+
+    public Guid AddSnapshot(DiagnosticAnalyzer analyzer)
+    {
+        Guid session = Guid.NewGuid();
+        InvestigationScope scope = new(session, InvestigationKind.Snapshot, analyzer);
+        _scopes[session] = scope;
+        return session;
+    }
+
+    public Guid AddDump(DiagnosticAnalyzer analyzer)
+    {
+        Guid session = Guid.NewGuid();
+        InvestigationScope scope = new(session, InvestigationKind.Dump, analyzer);
+        _scopes[session] = scope;
+        return session;
+    }
+
+    public int ClientRefCount
+    {
+        get
         {
-            _logger = logger;
-            _generalConfiguration = generalConfigurationOption.Value;
+            lock (this) { return _clientRefCount; }
         }
+    }
 
-        public IList<InvestigationScope> GetActiveSessions()
+    public DateTime? Orphaned
+    {
+        get
         {
-            return _scopes.Values.ToList();
+            lock (this) { return _orphaned; } 
         }
+    }
 
-        public InvestigationScope? GetInvestigationScope(Guid sessionId)
+    public void MarkClientConnection()
+    {
+        lock (this)
         {
-            if(!_scopes.TryGetValue(sessionId, out var scope)) { return null; }
-            return scope;
+            _clientRefCount++;
+            _orphaned = null;
         }
+    }
 
-        public Guid AddSnapshot(DiagnosticAnalyzer analyzer)
+    public void MarkClientDisconnection()
+    {
+        lock (this)
         {
-            Guid session = Guid.NewGuid();
-            InvestigationScope scope = new(session, InvestigationKind.Snapshot, analyzer);
-            _scopes[session] = scope;
-            return session;
-        }
-
-        public Guid AddDump(DiagnosticAnalyzer analyzer)
-        {
-            Guid session = Guid.NewGuid();
-            InvestigationScope scope = new(session, InvestigationKind.Dump, analyzer);
-            _scopes[session] = scope;
-            return session;
-        }
-
-        public int ClientRefCount
-        {
-            get
+            _clientRefCount--;
+            if (_clientRefCount == 0)
             {
-                lock (this) { return _clientRefCount; }
+                _orphaned = DateTime.Now;
             }
-        }
-
-        public DateTime? Orphaned
-        {
-            get
+            else
             {
-                lock (this) { return _orphaned; } 
-            }
-        }
-
-        public void MarkClientConnection()
-        {
-            lock (this)
-            {
-                _clientRefCount++;
                 _orphaned = null;
             }
         }
+    }
 
-        public void MarkClientDisconnection()
+    /// <summary>
+    /// This is intended to be called periodically from the background service.
+    /// After the given timeout all the opened debugging sessions will be cleared out.
+    /// We avoid clearing the debugging session synchronously on the disconnection of
+    /// the SignalR connection because there may be connectivity issues.
+    /// Instead, we give time to the client(s) to reconnect and gain control of the 
+    /// debugging sessions again.
+    /// </summary>
+    public void ClearSessionIfExpired()
+    {
+        var expiryTime = TimeSpan.FromMinutes(_generalConfiguration.DebuggingSessionsExpirationMinutes);
+        var orphaned = Orphaned;
+        if(orphaned.HasValue && DateTime.Now - orphaned.Value > expiryTime)
         {
-            lock (this)
+            lock(this)
             {
-                _clientRefCount--;
-                if (_clientRefCount == 0)
+                foreach(var scope in _scopes.Values)
                 {
-                    _orphaned = DateTime.Now;
-                }
-                else
-                {
-                    _orphaned = null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// This is intended to be called periodically from the background service.
-        /// After the given timeout all the opened debugging sessions will be cleared out.
-        /// We avoid clearing the debugging session synchronously on the disconnection of
-        /// the SignalR connection because there may be connectivity issues.
-        /// Instead, we give time to the client(s) to reconnect and gain control of the 
-        /// debugging sessions again.
-        /// </summary>
-        public void ClearSessionIfExpired()
-        {
-            var expiryTime = TimeSpan.FromMinutes(_generalConfiguration.DebuggingSessionsExpirationMinutes);
-            var orphaned = Orphaned;
-            if(orphaned.HasValue && DateTime.Now - orphaned.Value > expiryTime)
-            {
-                lock(this)
-                {
-                    foreach(var scope in _scopes.Values)
+                    scope.DiagnosticAnalyzer.Dispose();
+                    if(scope.TemporaryFile != null)
                     {
-                        scope.DiagnosticAnalyzer.Dispose();
-                        if(scope.TemporaryFile != null)
+                        try
                         {
-                            try
-                            {
-                                File.Delete(scope.TemporaryFile.FullName);
-                            }
-                            catch (Exception err)
-                            {
-                                _logger.LogWarning($"The temporary file {scope.TemporaryFile.FullName} could not be deleted: {err.Message}");
-                            }
+                            File.Delete(scope.TemporaryFile.FullName);
+                        }
+                        catch (Exception err)
+                        {
+                            _logger.LogWarning($"The temporary file {scope.TemporaryFile.FullName} could not be deleted: {err.Message}");
                         }
                     }
-
-                    _scopes.Clear();
-                    _logger.LogInformation($"Debugging sessions has been cleared out");
                 }
+
+                _scopes.Clear();
+                _logger.LogInformation($"Debugging sessions has been cleared out");
             }
         }
-
-
     }
+
+
 }
+

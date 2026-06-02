@@ -24,48 +24,47 @@ using System.Threading;
 // System.Diagnostics.Tracing (implementation):
 // https://github.com/dotnet/runtime/blob/master/src/libraries/System.Private.CoreLib/src/System/Diagnostics/Tracing
 
-namespace CustomEventSource
+namespace CustomEventSource;
+public static class Constants
 {
-    public static class Constants
+    public const string CustomHeaderEventSourceName = "Raf-CustomHeader";
+    public const string TriggerHeaderName = "X-TriggerHeaderEventSource";
+    public const string TriggerHeaderCounterName = "TriggerHeader";
+}
+
+[EventSource(Name = Constants.CustomHeaderEventSourceName)]
+public class CustomHeaderEventSource : EventSource
+{
+    private long _triggerHeaderCounter;
+    public static readonly CustomHeaderEventSource Instance =
+        new CustomHeaderEventSource();
+
+    private CustomHeaderEventSource() :
+        base(Constants.CustomHeaderEventSourceName
+            , EventSourceSettings.EtwSelfDescribingEventFormat)
     {
-        public const string CustomHeaderEventSourceName = "Raf-CustomHeader";
-        public const string TriggerHeaderName = "X-TriggerHeaderEventSource";
-        public const string TriggerHeaderCounterName = "TriggerHeader";
     }
 
-    [EventSource(Name = Constants.CustomHeaderEventSourceName)]
-    public class CustomHeaderEventSource : EventSource
+    public EventCounter? TriggerHeader { get; private set; }
+
+    public void RaiseTriggerHeaderCounter()
     {
-        private long _triggerHeaderCounter;
-        public static readonly CustomHeaderEventSource Instance =
-            new CustomHeaderEventSource();
+        var nextValue = Interlocked.Increment(ref _triggerHeaderCounter);
+        TriggerHeader?.WriteMetric(nextValue);
+    }
 
-        private CustomHeaderEventSource() :
-            base(Constants.CustomHeaderEventSourceName
-                , EventSourceSettings.EtwSelfDescribingEventFormat)
+    protected override void OnEventCommand(EventCommandEventArgs command)
+    {
+        if (command.Command == EventCommand.Enable)
         {
-        }
-
-        public EventCounter TriggerHeader { get; private set; }
-
-        public void RaiseTriggerHeaderCounter()
-        {
-            var nextValue = Interlocked.Increment(ref _triggerHeaderCounter);
-            TriggerHeader.WriteMetric(nextValue);
-        }
-
-        protected override void OnEventCommand(EventCommandEventArgs command)
-        {
-            if (command.Command == EventCommand.Enable)
+            TriggerHeader = new EventCounter(Constants.TriggerHeaderCounterName, this)
             {
-                TriggerHeader = new EventCounter(Constants.TriggerHeaderCounterName, this)
-                {
-                    DisplayName = "Count of the custom header received on any request",
-                    DisplayUnits = "Num",
-                };
-            }
-
-            //base.OnEventCommand(command);
+                DisplayName = "Count of the custom header received on any request",
+                DisplayUnits = "Num",
+            };
         }
+
+        //base.OnEventCommand(command);
     }
 }
+

@@ -4,25 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DiagnosticInvestigations
+namespace DiagnosticInvestigations;
+
+public enum InvestigationKind
 {
-    public enum InvestigationKind
-    {
-        Unknown,
+    Unknown,
 
-        /// <summary>
-        /// Fast, but currently cannot be saved on disk
-        /// </summary>
-        Snapshot,
+    /// <summary>
+    /// Fast, but currently cannot be saved on disk
+    /// </summary>
+    Snapshot,
 
-        /// <summary>
-        /// Slower than Snapshot, but it can be persisted
-        /// </summary>
-        Dump,
+    /// <summary>
+    /// Slower than Snapshot, but it can be persisted
+    /// </summary>
+    Dump,
 
-        /// <summary>
-        /// Currently not implemented. Does not provide all we may want to investigate
-        /// </summary>
-        LiveProcess
-    }
+    /// <summary>
+    /// Currently not implemented. Does not provide all we may want to investigate
+    /// </summary>
+    LiveProcess
 }
