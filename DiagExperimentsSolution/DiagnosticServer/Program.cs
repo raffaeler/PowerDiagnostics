@@ -20,17 +20,17 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
-        // ── Configuration ──────────────────────────────────────────────
+        // Configuration
         var generalSection = builder.Configuration.GetSection("General");
         builder.Services.Configure<GeneralConfiguration>(generalSection);
 
-        // ── OpenAPI ────────────────────────────────────────────────────
+        // OpenAPI
         builder.Services.AddOpenApi();
 
-        // ── SignalR ────────────────────────────────────────────────────
+        // SignalR
         builder.Services.AddSignalR();
 
-        // ── CORS (required during front-end development with React at localhost:3000) ──
+        // CORS (required during front-end development with React at localhost:3000)
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(corsPolicy, policy =>
@@ -43,10 +43,10 @@ public class Program
             });
         });
 
-        // ── Problem Details (RFC 7807) ─────────────────────────────────
+        // Problem Details (RFC 7807)
         builder.Services.AddProblemDetails();
 
-        // ── Application Services ───────────────────────────────────────
+        // Application Services
         builder.Services.AddSingleton<DebuggingSessionService>();
         builder.Services.AddHostedService<DebuggingSessionService>(
             provider => provider.GetRequiredService<DebuggingSessionService>());
@@ -55,9 +55,9 @@ public class Program
 
         var app = builder.Build();
 
-        // ── Middleware Pipeline ────────────────────────────────────────
+        // Middleware Pipeline
 
-        // Global exception handler — returns ProblemDetails JSON
+        // Global exception handler: returns ProblemDetails JSON
         app.UseExceptionHandler(exceptionHandlerApp =>
         {
             exceptionHandlerApp.Run(async context =>
@@ -98,15 +98,16 @@ public class Program
         app.UseRouting();
         app.UseAuthorization();
 
-        // ── Endpoint Mapping ───────────────────────────────────────────
+        // Endpoint Mapping
 
-        // Minimal API endpoints (replaces controllers)
+        // Minimal API endpoints
         app.MapDiagnosticApi();
 
         // SignalR hub for real-time diagnostics notifications
         app.MapHub<DiagnosticHub>("/diagnosticHub");
 
-        // SPA fallback — any non-API route serves index.html for client-side routing
+        // SPA fallback
+        // any non-API route serves index.html for client-side routing
         app.MapFallbackToFile("index.html");
 
         app.Run();
