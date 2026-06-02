@@ -13,7 +13,7 @@ The code in this repository **does not implement any automated task**, but inste
 
 Experiments in .NET Core diagnostics using:
 - [ClrMD](https://github.com/microsoft/clrmd). This Microsoft library contains the code equivalent to the "SOS" plugin used in WinDbg. This code is cross-platform and allows investigating on the application objects as well as the runtime.
-- [DiagnosticClient](https://github.com/dotnet/diagnostics/tree/master/src/Microsoft.Diagnostics.NETCore.Client). This Microsoft library is new in .NET Core 3 and opens a special communication channel with the CLR of any .NET Core powered application. It uses named pipes and is used in many dotnet diagnostics global tools
+- [DiagnosticClient](https://www.nuget.org/packages/Microsoft.Diagnostics.NETCore.Client/) (NuGet package `Microsoft.Diagnostics.NETCore.Client` v0.2.661903). This Microsoft library is new in .NET Core 3 and opens a special communication channel with the CLR of any .NET Core powered application. It uses named pipes and is used in many dotnet diagnostics global tools.
 - [Trace Event library](https://github.com/microsoft/perfview/blob/master/documentation/TraceEvent/TraceEventLibrary.md). The Microsoft Trace Event Library (kinda ETW but cross-platform) allows retrieving important information about any .NET process such as memory (GC and working set), HTTP requests, CPU, custom traces, and many, many others.
 - [WpfHexEditorControl](https://github.com/abbaye/WpfHexEditorControl/) Thanks to Derek for the great work! This is the hexadecimal viewer control used to view the memory in the WPF demo app.
 

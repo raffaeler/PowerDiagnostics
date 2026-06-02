@@ -43,28 +43,20 @@ class Program
         var debuggee = Path.GetFullPath(_debuggee);
         var diagnosticPort = $"Fusion_{Process.GetCurrentProcess().Id}";
 
-        // 1. Start the diagnostic server
-        ReversedDiagnosticsServer srv = new ReversedDiagnosticsServer(diagnosticPort);
-        srv.Start();
-
-        // 2. Start accepting connections
-        using CancellationTokenSource cancellation = new CancellationTokenSource(20000);
-        var acceptTask = srv.AcceptAsync(cancellation.Token);
-
-        // 3. Run the debuggee
+        // 1. Run the debuggee with the diagnostic port env var
         Console.WriteLine("Starting child process using Diagnostic Port over Pipe");
         ProcessStartInfo psi = new(debuggee);
         psi.CreateNoWindow = false;
         psi.EnvironmentVariables[_diagPortEnvKey] = diagnosticPort;
         var process = Process.Start(psi);
 
-        // 4. Wait for the remote CLR to connect with us
-        var endpoint = await acceptTask;
-        Console.WriteLine($"Remote process {endpoint.ProcessId} connected with cookie: {endpoint.RuntimeInstanceCookie}");
+        // 2. Wait for the remote CLR to connect with us
+        using CancellationTokenSource cancellation = new CancellationTokenSource(20000);
+        var connector = await DiagnosticsClientConnector.FromDiagnosticPort(diagnosticPort, cancellation.Token);
+        Console.WriteLine($"Remote process connected");
 
-
-        // 5. Use the endpoint to start the diagnostic client
-        using var fusion = new FusionTrace(endpoint.Endpoint);
+        // 3. Use the connector's DiagnosticsClient to start tracing
+        using var fusion = new FusionTrace(connector.Instance);
         fusion.Start(e => SubscribeDynamicEvents(e), s => SubscribeRuntimeEvents(s));
 
 

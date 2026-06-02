@@ -27,9 +27,9 @@ public class FusionTrace : IDisposable
         AddDotNetRuntimeProvider();
     }
 
-    public FusionTrace(IpcEndpoint endpoint)
+    public FusionTrace(DiagnosticsClient client)
     {
-        _client = new DiagnosticsClient(endpoint);
+        _client = client;
         AddDotNetRuntimeProvider();
     }
 

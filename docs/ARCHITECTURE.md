@@ -84,7 +84,6 @@ PowerDiagnostics/
 │   ├── CustomEventSource/                   # Custom ETW/EventSource provider
 │   ├── Fusion/                              # AssemblyLoadContext leak producer
 │   ├── FusionDebuggee/                      # ALC leak target
-│   └── Microsoft.Diagnostics.NETCore.Client/ # Slightly modified DiagnosticClient
 │
 ├── docs/                                    # Documentation (this file)
 │   └── ARCHITECTURE.md
