@@ -1,6 +1,0 @@
-@TemplateToDelete_HostAddress = http://localhost:5057
-
-GET {{TemplateToDelete_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
