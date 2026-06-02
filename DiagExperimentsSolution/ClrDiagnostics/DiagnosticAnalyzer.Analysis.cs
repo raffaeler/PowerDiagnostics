@@ -49,9 +49,10 @@ namespace ClrDiagnostics
                     if (_objectsWithInstanceFields == null)
                     {
                         _objectsWithInstanceFields = Objects
-                                .SelectMany(o => o.Type.Fields, (o, f) => (obj: o, field: f))
-                                .Where(t => t.field.IsObjectReference)
-                                .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(t.obj.Address, false)))
+                                .SelectMany(o => o.Type.Fields,
+                                        (o, f) => (obj: o, @field: f))
+                                .Where(t => t.@field.IsObjectReference)
+                                .Select(t => (@object: t.obj, @field: t.@field, address: t.@field.Read<ulong>(t.obj.Address, false)))
                                 .ToList();
                     }
 
@@ -59,9 +60,9 @@ namespace ClrDiagnostics
                 }
 
                 return Objects
-                    .SelectMany(o => o.Type.Fields, (o, f) => (obj: o, field: f))
-                    .Where(t => t.field.IsObjectReference)
-                    .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(t.obj.Address, false)));
+                    .SelectMany(o => o.Type.Fields, (o, f) => (obj: o, @field: f))
+                    .Where(t => t.@field.IsObjectReference)
+                    .Select(t => (@object: t.obj, @field: t.@field, address: t.@field.Read<ulong>(t.obj.Address, false)));
             }
         }
 
@@ -74,9 +75,9 @@ namespace ClrDiagnostics
                     if (_objectsWithStaticFields == null)
                     {
                         _objectsWithStaticFields = Objects
-                            .SelectMany(o => o.Type.StaticFields, (o, f) => (obj: o, field: f))
-                            .Where(t => t.field.IsObjectReference)
-                            .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(MainAppDomain)))
+                            .SelectMany(o => o.Type.StaticFields, (o, f) => (obj: o, @field: f))
+                            .Where(t => t.@field.IsObjectReference)
+                            .Select(t => (@object: t.obj, @field: t.@field, address: t.@field.Read<ulong>(MainAppDomain)))
                             .ToList();
                     }
 
@@ -84,9 +85,9 @@ namespace ClrDiagnostics
                 }
 
                 return Objects
-                    .SelectMany(o => o.Type.StaticFields, (o, f) => (obj: o, field: f))
-                    .Where(t => t.field.IsObjectReference)
-                    .Select(t => (@object: t.obj, field: t.field, address: t.field.Read<ulong>(MainAppDomain)));
+                    .SelectMany(o => o.Type.StaticFields, (o, f) => (obj: o, @field: f))
+                    .Where(t => t.@field.IsObjectReference)
+                    .Select(t => (@object: t.obj, @field: t.@field, address: t.@field.Read<ulong>(MainAppDomain)));
 
             }
         }
