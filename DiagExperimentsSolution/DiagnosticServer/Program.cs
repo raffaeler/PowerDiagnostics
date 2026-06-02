@@ -1,37 +1,41 @@
 ﻿using DiagnosticInvestigations;
 using DiagnosticInvestigations.Configurations;
 
-using DiagnosticModels.Converters;
-
+using DiagnosticServer.Extensions;
 using DiagnosticServer.Hubs;
 using DiagnosticServer.Services;
 
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+
+using Scalar.AspNetCore;
+
 namespace DiagnosticServer;
+
 public class Program
 {
     public static void Main(string[] args)
     {
-        var corsPolicy = "CorsPolicy";
+        const string corsPolicy = "CorsPolicy";
 
         var builder = WebApplication.CreateBuilder(args);
 
+        // ── Configuration ──────────────────────────────────────────────
         var generalSection = builder.Configuration.GetSection("General");
-        //var generalConfiguration = generalSection.Get<GeneralConfiguration>();
         builder.Services.Configure<GeneralConfiguration>(generalSection);
 
-        builder.Services.AddControllers()
-            .AddJsonOptions(options => SetupConverters.ConfigureOptions(options.JsonSerializerOptions));
+        // ── OpenAPI ────────────────────────────────────────────────────
+        builder.Services.AddOpenApi();
 
+        // ── SignalR ────────────────────────────────────────────────────
         builder.Services.AddSignalR();
-        // Cors configuration is needed during front-end development
-        // because react is hosted in a different domain 
-        // which is typically localhost:3000
+
+        // ── CORS (required during front-end development with React at localhost:3000) ──
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(corsPolicy, policy =>
             {
                 policy
-                    //.AllowAnyOrigin()
                     .AllowCredentials()
                     .WithOrigins("https://localhost:3000", "http://localhost:3000")
                     .AllowAnyHeader()
@@ -39,35 +43,62 @@ public class Program
             });
         });
 
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        // ── Problem Details (RFC 7807) ─────────────────────────────────
+        builder.Services.AddProblemDetails();
 
-        //builder.Services.AddHostedService<DebuggingSessionService>();
+        // ── Application Services ───────────────────────────────────────
         builder.Services.AddSingleton<DebuggingSessionService>();
         builder.Services.AddHostedService<DebuggingSessionService>(
-            provider => provider.GetService<DebuggingSessionService>() ?? throw new Exception($"Service not found ({nameof(DebuggingSessionService)})"));
+            provider => provider.GetRequiredService<DebuggingSessionService>());
         builder.Services.AddSingleton<QueriesService>();
         builder.Services.AddSingleton<InvestigationState>();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        // ── Middleware Pipeline ────────────────────────────────────────
+
+        // Global exception handler — returns ProblemDetails JSON
+        app.UseExceptionHandler(exceptionHandlerApp =>
+        {
+            exceptionHandlerApp.Run(async context =>
+            {
+                var env = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
+                var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+
+                logger.LogError(exceptionHandlerFeature?.Error, "Unhandled exception");
+
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                context.Response.ContentType = "application/problem+json";
+
+                var problemDetails = new ProblemDetails
+                {
+                    Status = StatusCodes.Status500InternalServerError,
+                    Title = "An error occurred processing your request.",
+                    Detail = env.IsDevelopment() ? exceptionHandlerFeature?.Error?.ToString() : null,
+                };
+
+                await context.Response.WriteAsJsonAsync(problemDetails);
+            });
+        });
+
+        // OpenAPI and Scalar UI (development only)
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.MapOpenApi();
+            app.MapScalarApiReference();
         }
 
-        //app.UseHttpsRedirection();    // testing
-        app.UseCors(corsPolicy);    // raf
-        app.UseRouting();           // raf
-        app.UseStaticFiles();       // raf
-
+        app.UseCors(corsPolicy);
+        app.UseRouting();
         app.UseAuthorization();
 
-        app.MapControllers();
-        app.MapFallbackToFile("/index.html");
+        // ── Endpoint Mapping ───────────────────────────────────────────
+
+        // Minimal API endpoints (replaces controllers)
+        app.MapDiagnosticApi();
+
+        // SignalR hub for real-time diagnostics notifications
         app.MapHub<DiagnosticHub>("/diagnosticHub");
 
         app.Run();

@@ -18,7 +18,6 @@ using DiagnosticModels.Converters;
 using DiagnosticServer.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Diagnostics.Tracing.AutomatedAnalysis;
 using Microsoft.Extensions.Hosting;
 
 namespace DiagnosticServer.Services;
