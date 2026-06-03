@@ -1,4 +1,5 @@
-import { useMemo, useCallback, useState } from 'react'
+import { useMemo, useCallback, useState, type CSSProperties } from 'react'
+import { useTheme } from '@mui/material/styles'
 import styles from './HexViewer.module.css'
 
 interface HexViewerProps {
@@ -16,6 +17,7 @@ const LOAD_MORE_ROWS = 100
  * Uses incremental rendering for large buffers (> 100 rows).
  */
 export default function HexViewer({ bytes, baseAddress = 0 }: HexViewerProps) {
+  const theme = useTheme()
   const [visibleRows, setVisibleRows] = useState(INITIAL_ROWS)
   const totalRows = Math.ceil(bytes.length / BYTES_PER_ROW)
 
@@ -42,8 +44,26 @@ export default function HexViewer({ bytes, baseAddress = 0 }: HexViewerProps) {
     return <div className={styles.empty}>No data to display</div>
   }
 
+  const isDark = theme.palette.mode === 'dark'
+
   return (
-    <div className={styles.hexViewer}>
+    <div
+      className={styles.hexViewer}
+      style={{
+        '--hex-bg': isDark ? theme.palette.grey[900] : theme.palette.grey[50],
+        '--hex-fg': theme.palette.text.primary,
+        '--hex-row-hover': isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
+        '--hex-offset': theme.palette.primary.main,
+        '--hex-ascii': isDark ? '#8BC34A' : '#2E7D32',
+        '--hex-non-printable': theme.palette.text.disabled,
+        '--hex-header': theme.palette.text.secondary,
+        '--hex-border': theme.palette.divider,
+        '--hex-button-bg': isDark ? theme.palette.grey[800] : theme.palette.grey[200],
+        '--hex-button-bg-hover': isDark ? theme.palette.grey[700] : theme.palette.grey[300],
+        '--hex-button-fg': theme.palette.text.secondary,
+        '--hex-button-fg-hover': theme.palette.text.primary,
+      } as CSSProperties}
+    >
       {/* Header */}
       <div className={`${styles.row} ${styles.header}`}>
         <span className={styles.offset}>Offset</span>

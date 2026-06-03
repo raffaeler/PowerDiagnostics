@@ -79,6 +79,7 @@ export interface GcRootPathResult {
 export interface HexDataResult {
   objectAddress: string
   typeName: string
+  mt: string
   size: number
   bytesBase64: string
 }

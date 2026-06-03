@@ -2,8 +2,8 @@
   font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
   font-size: 13px;
   line-height: 1.4;
-  background: #1e1e1e;
-  color: #d4d4d4;
+  background: var(--hex-bg, #f5f5f5);
+  color: var(--hex-fg, #1f1f1f);
   overflow: auto;
   border-radius: 4px;
   user-select: text;
@@ -15,11 +15,11 @@
 }
 
 .row:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--hex-row-hover, rgba(0, 0, 0, 0.04));
 }
 
 .offset {
-  color: #569cd6;
+  color: var(--hex-offset, #1976d2);
   min-width: 9ch;
   padding-right: 2ch;
   text-align: right;
@@ -27,7 +27,7 @@
 }
 
 .hexBytes {
-  color: #d4d4d4;
+  color: var(--hex-fg, #1f1f1f);
   min-width: 50ch;
   padding-right: 2ch;
   flex-shrink: 0;
@@ -40,17 +40,17 @@
 }
 
 .ascii {
-  color: #6a9955;
+  color: var(--hex-ascii, #2e7d32);
 }
 
 .nonPrintable {
-  color: #555;
+  color: var(--hex-non-printable, #6b7280);
 }
 
 .header {
-  color: #888;
+  color: var(--hex-header, #6b7280);
   padding-bottom: 2px;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--hex-border, #d0d7de);
   margin-bottom: 2px;
 }
 
@@ -61,9 +61,9 @@
 }
 
 .loadMoreBtn {
-  background: #333;
-  color: #aaa;
-  border: 1px solid #444;
+  background: var(--hex-button-bg, #e5e7eb);
+  color: var(--hex-button-fg, #6b7280);
+  border: 1px solid var(--hex-border, #d0d7de);
   border-radius: 3px;
   padding: 2px 16px;
   cursor: pointer;
@@ -72,8 +72,8 @@
 }
 
 .loadMoreBtn:hover {
-  background: #444;
-  color: #fff;
+  background: var(--hex-button-bg-hover, #d1d5db);
+  color: var(--hex-button-fg-hover, #111827);
 }
 
 .empty {
@@ -82,6 +82,6 @@
   justify-content: center;
   height: 100%;
   min-height: 200px;
-  color: #666;
+  color: var(--hex-header, #6b7280);
   font-family: inherit;
 }

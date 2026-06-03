@@ -25,6 +25,23 @@ import type {
   GcRootProgress,
 } from '@/types/api'
 
+const ACTIVE_SESSION_ID_STORAGE_KEY = 'uidiag_active_session_id'
+
+function readStoredActiveSessionId(): string | null {
+  if (typeof window === 'undefined') return null
+  const value = window.sessionStorage.getItem(ACTIVE_SESSION_ID_STORAGE_KEY)
+  return value && value.trim().length > 0 ? value : null
+}
+
+function writeStoredActiveSessionId(sessionId: string | null): void {
+  if (typeof window === 'undefined') return
+  if (!sessionId) {
+    window.sessionStorage.removeItem(ACTIVE_SESSION_ID_STORAGE_KEY)
+    return
+  }
+  window.sessionStorage.setItem(ACTIVE_SESSION_ID_STORAGE_KEY, sessionId)
+}
+
 interface DiagnosticsState {
   processes: ProcessInfo[]
   selectedProcess: ProcessInfo | null
@@ -73,7 +90,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   selectedProcess: null,
   isAttached: false,
   sessions: [],
-  activeSessionId: null,
+  activeSessionId: readStoredActiveSessionId(),
   queries: [],
   selectedQuery: null,
   queryResults: null,
@@ -97,7 +114,26 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     }
   },
 
-  selectProcess: (p) => set({ selectedProcess: p }),
+  selectProcess: (p) =>
+    set((state) => {
+      const prevPid = state.selectedProcess?.id ?? null
+      const nextPid = p?.id ?? null
+      const isDifferentProcess = prevPid !== null && nextPid !== null && prevPid !== nextPid
+
+      if (isDifferentProcess) {
+        writeStoredActiveSessionId(null)
+        return {
+          selectedProcess: p,
+          activeSessionId: null,
+          queryResult: null,
+          detailGridData: null,
+          gcRootResult: null,
+          hexData: null,
+        }
+      }
+
+      return { selectedProcess: p }
+    }),
 
   attachToProcess: async (pid) => {
     const res = await apiService.post<unknown>(`${API_PROCESS_ATTACH}/${pid}`)
@@ -120,6 +156,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   takeSnapshot: async (pid) => {
     const res = await apiService.post<string>(`${API_PROCESS_SNAPSHOT}/${pid}`)
     if (!res.isError && typeof res.result === 'string') {
+      writeStoredActiveSessionId(res.result)
       set({ activeSessionId: res.result })
       return res.result
     }
@@ -129,6 +166,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   createDump: async (pid) => {
     const res = await apiService.post<string>(`${API_PROCESS_DUMP}/${pid}`)
     if (!res.isError && typeof res.result === 'string') {
+      writeStoredActiveSessionId(res.result)
       set({ activeSessionId: res.result })
       return res.result
     }
@@ -139,6 +177,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     const res = await apiService.upload<{ sessionId: string }>(API_SESSIONS_OPEN_DUMP, file)
     if (!res.isError && typeof res.result === 'object') {
       toastSuccess('Dump file uploaded successfully')
+      writeStoredActiveSessionId(res.result.sessionId)
       set({ activeSessionId: res.result.sessionId })
       return res.result.sessionId
     }
@@ -149,6 +188,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     const res = await apiService.post<{ sessionId: string }>(API_SESSIONS_OPEN_DUMP_PATH, { path })
     if (!res.isError && typeof res.result === 'object') {
       toastSuccess('Dump file opened from server path')
+      writeStoredActiveSessionId(res.result.sessionId)
       set({ activeSessionId: res.result.sessionId })
       return res.result.sessionId
     }
@@ -158,6 +198,9 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   closeSession: async (sessionId) => {
     const res = await apiService.delete<unknown>(`${API_SESSIONS}/${sessionId}`)
     if (!res.isError) {
+      if (sessionId === readStoredActiveSessionId()) {
+        writeStoredActiveSessionId(null)
+      }
       toastSuccess('Session closed')
       return true
     }
@@ -247,7 +290,10 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     }
   },
 
-  setActiveSessionId: (id) => set({ activeSessionId: id }),
+  setActiveSessionId: (id) => {
+    writeStoredActiveSessionId(id)
+    set({ activeSessionId: id })
+  },
 
   setMasterFilter: (filter) => set({ masterGridFilter: filter }),
 

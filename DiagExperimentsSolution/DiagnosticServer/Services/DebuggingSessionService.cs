@@ -226,6 +226,7 @@ public class DebuggingSessionService : BackgroundService
         {
             ObjectAddress = $"0x{address:X16}",
             TypeName = resolved.Type?.Name ?? "Unknown",
+            Mt = resolved.Type is not null ? $"0x{resolved.Type.MethodTable:X16}" : string.Empty,
             Size = (long)resolved.Size,
             BytesBase64 = Convert.ToBase64String(bytes),
         };

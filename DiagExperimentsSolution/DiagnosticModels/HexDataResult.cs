@@ -11,6 +11,9 @@ public class HexDataResult
     /// <summary>Type name of the object.</summary>
     public string TypeName { get; set; } = string.Empty;
 
+    /// <summary>MethodTable address of the object's type (e.g., "0x00007FFA12345678").</summary>
+    public string Mt { get; set; } = string.Empty;
+
     /// <summary>Size of the object in bytes.</summary>
     public long Size { get; set; }
 

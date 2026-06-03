@@ -46,16 +46,6 @@ export default function HomePage() {
     }
   }, [selectedProcess, attachToProcess, detachFromProcess, clearEvents])
 
-  // Detach on unmount (navigating away from HomePage)
-  useEffect(() => {
-    return () => {
-      if (prevPidRef.current !== null) {
-        detachFromProcess()
-        clearEvents()
-      }
-    }
-  }, [detachFromProcess, clearEvents])
-
   const handleSessionCreated = (sessionId: string) => {
     navigate(`/debug/${sessionId}`)
   }

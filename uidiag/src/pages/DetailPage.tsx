@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { Box, Typography, Button, Paper, Breadcrumbs, Link } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import GenericDataGrid from '@/components/shared/GenericDataGrid'
@@ -22,6 +22,7 @@ export default function DetailPage() {
     rowIndex: string
   }>()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const detailGridData = useDiagnosticsStore((s) => s.detailGridData)
   const queryMetadata = useDiagnosticsStore((s) => s.queryMetadata)
@@ -34,21 +35,21 @@ export default function DetailPage() {
     // Prefer server metadata
     const meta = queryMetadata.find((m) => m.queryName === queryName)
     if (meta && meta.detailColumns.length > 0) {
-      return buildGridColumns(meta.detailColumns, detailGridData ?? [])
+      return buildGridColumns(meta.detailColumns, detailGridData ?? [], sessionId, location.pathname)
     }
 
     // Fall back to client gridRegistry — we need the resultType to find detail columns
     if (meta?.detailType) {
       const cfg = getGridConfig(meta.detailType)
-      if (cfg.detailColumns.length > 0) return buildGridColumns(cfg.detailColumns, detailGridData ?? [])
+      if (cfg.detailColumns.length > 0) return buildGridColumns(cfg.detailColumns, detailGridData ?? [], sessionId, location.pathname)
     }
 
     // Try gridRegistry by queryName
     const cfg = getGridConfig(queryName ?? '')
-    if (cfg.detailColumns.length > 0) return buildGridColumns(cfg.detailColumns, detailGridData ?? [])
+    if (cfg.detailColumns.length > 0) return buildGridColumns(cfg.detailColumns, detailGridData ?? [], sessionId, location.pathname)
 
     return []
-  }, [queryMetadata, queryName, detailGridData])
+  }, [queryMetadata, queryName, detailGridData, sessionId, location.pathname])
 
   // ── Row click → select object for GC root ──
   const handleRowClick = useCallback(
@@ -71,6 +72,14 @@ export default function DetailPage() {
     [activeSessionId],
   )
 
+  const backTarget =
+    typeof location.state === 'object' &&
+    location.state !== null &&
+    'from' in location.state &&
+    typeof (location.state as { from?: unknown }).from === 'string'
+      ? (location.state as { from: string }).from
+      : `/debug/${sessionId}`
+
   // ── Empty / error states ──
   if (!detailGridData || detailGridData.length === 0) {
     return (
@@ -81,7 +90,7 @@ export default function DetailPage() {
         <Typography variant="body2" color="text.secondary">
           The detail data may have been lost. Return to the query results and click the row again.
         </Typography>
-        <Button variant="contained" startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>
+        <Button variant="contained" startIcon={<ArrowBackIcon />} onClick={() => navigate(backTarget)}>
           Back to results
         </Button>
       </Box>
@@ -95,7 +104,7 @@ export default function DetailPage() {
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(backTarget)}
           size="small"
         >
           Back
