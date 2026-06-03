@@ -54,20 +54,33 @@ export default function GenericDataGrid({
   // Grid API ref for programmatic control (auto-resize columns, etc.)
   const apiRef = useGridApiRef()
 
-  // ── Auto-resize columns when data loads ──
-  // Runs after rows change (query completes) to size columns to content.
+  // ── Auto-resize columns when data loads or grid mounts/updates ──
+  // Runs after rows/columns change (query completes/reloads) to size columns to content.
   useEffect(() => {
     if (rows.length > 0) {
-      // setTimeout(0) defers to next tick so the grid has rendered rows before measuring
-      const timer = setTimeout(() => {
+      // Immediate resize on next tick
+      const timer1 = setTimeout(() => {
         apiRef.current?.autosizeColumns({
           includeOutliers: true,
           includeHeaders: true,
         })
       }, 0)
-      return () => clearTimeout(timer)
+
+      // Delayed resize (150ms) to ensure layout has fully settled and styles are injected.
+      // This handles page transitions, routing animation, or DOM dimension reflows.
+      const timer2 = setTimeout(() => {
+        apiRef.current?.autosizeColumns({
+          includeOutliers: true,
+          includeHeaders: true,
+        })
+      }, 150)
+
+      return () => {
+        clearTimeout(timer1)
+        clearTimeout(timer2)
+      }
     }
-  }, [rows.length, apiRef])
+  }, [rows, columns, apiRef])
 
   // Dedup map: track how many times each base ID has been seen in this render pass.
   // MUI DataGrid's row virtualization breaks catastrophically (wrong data, duplicates)

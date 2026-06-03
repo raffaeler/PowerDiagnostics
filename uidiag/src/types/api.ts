@@ -84,6 +84,22 @@ export interface HexDataResult {
   bytesBase64: string
 }
 
+/** MethodTable result returned by POST /api/sessions/{id}/methodTable/{mt}. */
+export interface MethodTableResult {
+  mt: string
+  typeName: string
+  graphSize: number
+  objectCount: number
+  objects: MethodTableObject[]
+}
+
+/** Individual object entry in a MethodTable result. */
+export interface MethodTableObject {
+  address: string
+  size: string
+  type: { name: string }
+}
+
 /** GC root progress payload from SignalR onGcRootProgress. */
 export interface GcRootProgress {
   sessionId: string

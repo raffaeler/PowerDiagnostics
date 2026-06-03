@@ -131,10 +131,32 @@ export function buildGridColumns(
       renderCell: (params) => {
         const raw = params.value
         if (isHexColumn && sessionId && raw != null && raw !== '') {
-          // Use router navigation (instead of <a href>) to preserve in-memory session and detail state.
           const addr = typeof raw === 'number'
             ? raw.toString(16).toUpperCase()
             : String(raw).replace(/^0x/i, '')
+
+          // MT (MethodTable) columns link to the MethodTable page showing all objects for this MT.
+          // Other hex columns (Address, etc.) link to the single-object address viewer.
+          if (col.header === 'MT') {
+            return (
+              <RouterLink
+                to={`/debug/${sessionId}/MethodTable/${addr}`}
+                state={returnToPath ? { from: returnToPath } : undefined}
+                style={{
+                  color: 'var(--mui-palette-primary-main, #1976d2)',
+                  textDecoration: 'none',
+                  fontFamily: 'monospace',
+                  cursor: 'pointer',
+                }}
+                onClick={(e) => e.stopPropagation()}
+                title={`View all objects with MT 0x${addr}`}
+              >
+                {`0x${addr.toUpperCase().padStart(16, '0')}`}
+              </RouterLink>
+            )
+          }
+
+          // Use router navigation (instead of <a href>) to preserve in-memory session and detail state.
           return (
             <RouterLink
               to={`/debug/${sessionId}/address/${addr}`}

@@ -13,6 +13,7 @@ import {
   API_SESSIONS_QUERIES_METADATA,
   API_SESSIONS_OPEN_DUMP,
   API_SESSIONS_OPEN_DUMP_PATH,
+  API_SESSIONS_METHODTABLE,
 } from '@/config'
 import type {
   ProcessInfo,
@@ -22,6 +23,7 @@ import type {
   QueryResultData,
   GcRootPathResult,
   HexDataResult,
+  MethodTableResult,
   GcRootProgress,
 } from '@/types/api'
 
@@ -56,6 +58,7 @@ interface DiagnosticsState {
   gcRootResult: GcRootPathResult | null
   gcRootProgress: GcRootProgress | null
   hexData: HexDataResult | null
+  methodTableData: MethodTableResult | null
   masterGridFilter: string
   detailGridData: unknown[] | null
   masterPaginationModel: { pageSize: number; page: number }
@@ -79,6 +82,7 @@ interface DiagnosticsState {
   runQuery: (sessionId: string, queryName: string, filter?: string) => Promise<void>
   fetchGcRootPath: (sessionId: string, objectAddress: string) => Promise<void>
   fetchHexData: (sessionId: string, objectAddress: string) => Promise<void>
+  fetchMethodTableObjects: (sessionId: string, mt: string) => Promise<void>
   setActiveSessionId: (id: string | null) => void
   setMasterFilter: (filter: string) => void
   setMasterPaginationModel: (model: { pageSize: number; page: number }) => void
@@ -99,6 +103,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   gcRootResult: null,
   gcRootProgress: null,
   hexData: null,
+  methodTableData: null,
   masterGridFilter: '',
   detailGridData: null,
   masterPaginationModel: { pageSize: 50, page: 0 },
@@ -288,6 +293,16 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     if (!res.isError) {
       set({ hexData: res.result as HexDataResult })
     }
+  },
+
+  fetchMethodTableObjects: async (sessionId, mt) => {
+    set({ methodTableData: null, isLoading: true })
+    const url = `${API_SESSIONS_METHODTABLE}/${sessionId}/methodTable/${encodeURIComponent(mt)}`
+    const res = await apiService.post<MethodTableResult>(url)
+    if (!res.isError) {
+      set({ methodTableData: res.result as MethodTableResult })
+    }
+    set({ isLoading: false })
   },
 
   setActiveSessionId: (id) => {

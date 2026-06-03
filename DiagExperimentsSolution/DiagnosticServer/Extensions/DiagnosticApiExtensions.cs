@@ -259,6 +259,29 @@ public static class DiagnosticApiExtensions
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
         /// <summary>
+        /// Returns all heap objects for a specific MethodTable address.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/methodTable/{mt}",
+            (string sessionId, string mt, DebuggingSessionService svc) =>
+        {
+            if (!Guid.TryParse(sessionId, out Guid id))
+                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
+
+            if (!TryParseHexAddress(mt, out var mtAddr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid MT address", Detail = $"'{mt}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetMethodTableObjects(id, mtAddr);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "MethodTable not found", Detail = $"No objects found for MT '{mt}' in session.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetMethodTableObjects")
+        .Produces<MethodTableResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
         /// Gets GC root paths for a heap object.
         /// </summary>
         endpoints.MapPost("/api/sessions/{sessionId}/gcroot/{objectAddress}",

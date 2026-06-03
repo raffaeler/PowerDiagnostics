@@ -16,5 +16,6 @@ export const API_SESSIONS_QUERIES = '/api/sessions/queries'
 export const API_SESSIONS_QUERIES_METADATA = '/api/sessions/queries/metadata'
 export const API_SESSIONS_OPEN_DUMP = '/api/sessions/open-dump'
 export const API_SESSIONS_OPEN_DUMP_PATH = '/api/sessions/open-dump-path'
+export const API_SESSIONS_METHODTABLE = '/api/sessions'
 
 export const HUB_PATH = '/diagnosticHub'

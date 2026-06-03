@@ -26,11 +26,11 @@ const stackFrameDetail: ColumnDefinition[] = [
 ]
 
 const registry: Record<string, GridConfig> = {
-  // §5.1 DbmDumpHeapStat → ClrObject details
+  // §5.1 DbmDumpHeapStat → MethodTable page for detail (MT column navigates to /MethodTable/<hex>)
   DbmDumpHeapStat: {
     masterColumns: [
       { header: 'Type', path: 'typeName', tooltip: 'Type' },
-      { header: 'MT', path: 'mt', format: '0:X16', tooltip: 'MethodTable' },
+      { header: 'MT', path: 'mt', format: '0:X16', tooltip: 'MethodTable — click to see all objects with this MT' },
       { header: 'Graph Size', path: 'graphSize', format: '0:N0', alignRight: true, tooltip: 'GraphSize' },
     ],
     detailColumns: clrObjectDetail,

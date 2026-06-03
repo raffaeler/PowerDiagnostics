@@ -270,6 +270,34 @@ public class DebuggingSessionService : BackgroundService
         return await Task.Run(() => query.ToQueryResult(scope.DiagnosticAnalyzer, filter));
     }
 
+    /// <summary>
+    /// Returns all heap objects for a specific MethodTable address.
+    /// Runs the DumpHeapStat query internally and locates the matching MT entry.
+    /// </summary>
+    public MethodTableResult? GetMethodTableObjects(Guid sessionId, ulong mt)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var stats = scope.DiagnosticAnalyzer.DumpHeapStat(0);
+        foreach (var (type, objects, size) in stats)
+        {
+            if (type?.MethodTable == mt)
+            {
+                return new MethodTableResult
+                {
+                    Mt = $"0x{mt:X16}",
+                    TypeName = type.Name,
+                    GraphSize = size,
+                    ObjectCount = objects.Count,
+                    Objects = objects,
+                };
+            }
+        }
+
+        return null; // MT not found
+    }
+
     private static ClrObject? FindClrObject(DiagnosticAnalyzer analyzer, ulong address)
     {
         foreach (var obj in analyzer.Objects)
