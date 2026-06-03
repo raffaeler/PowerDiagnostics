@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { apiService } from '@/services/apiService'
 import { toastSuccess, toastWarning } from '@/stores/useToastStore'
+import { debugLog, debugError, debugWarn } from '@/utils/debug'
 import {
   API_PROCESSES,
   API_PROCESS_ATTACH,
@@ -40,6 +41,7 @@ interface DiagnosticsState {
   hexData: HexDataResult | null
   masterGridFilter: string
   detailGridData: unknown[] | null
+  masterPaginationModel: { pageSize: number; page: number }
   isLoading: boolean
   processesFetched: boolean
 
@@ -62,6 +64,7 @@ interface DiagnosticsState {
   fetchHexData: (sessionId: string, objectAddress: string) => Promise<void>
   setActiveSessionId: (id: string | null) => void
   setMasterFilter: (filter: string) => void
+  setMasterPaginationModel: (model: { pageSize: number; page: number }) => void
   setGcRootProgress: (progress: GcRootProgress | null) => void
 }
 
@@ -81,6 +84,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   hexData: null,
   masterGridFilter: '',
   detailGridData: null,
+  masterPaginationModel: { pageSize: 50, page: 0 },
   isLoading: false,
   processesFetched: false,
 
@@ -177,6 +181,13 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   fetchQueriesMetadata: async () => {
     const res = await apiService.get<QueryMetadata[]>(API_SESSIONS_QUERIES_METADATA)
     if (!res.isError && Array.isArray(res.result)) {
+      debugLog('query', `Fetched metadata for ${res.result.length} queries`)
+      debugLog('query', 'Query names:', res.result.map((m: QueryMetadata) => m.queryName))
+      // Log first query's columns for debugging casing
+      if (res.result.length > 0) {
+        const firstMeta = res.result[0]
+        debugLog('query', `Metadata for "${firstMeta.queryName}": columns=[${firstMeta.columns.map((c: { path: string }) => c.path).join(', ')}], detailColumns=[${firstMeta.detailColumns.map((c: { path: string }) => c.path).join(', ')}]`)
+      }
       set({ queryMetadata: res.result })
     }
   },
@@ -185,6 +196,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
 
   runQuery: async (sessionId, queryName, filter) => {
     set({ isLoading: true, queryResult: null })
+    debugLog('query', `Running query: "${queryName}" on session "${sessionId}"${filter ? ` with filter "${filter}"` : ''}`)
     try {
       const url = filter
         ? `${API_SESSIONS}/${sessionId}/${queryName}?filter=${encodeURIComponent(filter)}`
@@ -192,9 +204,22 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
       const res = await apiService.post<QueryResultData>(url)
       if (!res.isError) {
         const data = res.result as QueryResultData
+        const rows = data.rows as unknown[]
+        debugLog('query', `Query "${queryName}" succeeded: ${rows?.length ?? 0} rows, resultType="${data.resultType}", hasDetails=${data.hasDetails}`)
+        if (rows && rows.length > 0) {
+          const firstRow = rows[0] as Record<string, unknown>
+          debugLog('query', `First row type: ${typeof firstRow}, isArray: ${Array.isArray(firstRow)}, keys: ${typeof firstRow === 'object' && firstRow !== null ? Object.keys(firstRow).join(', ') : 'N/A'}`)
+          debugLog('query', 'First row sample:', firstRow)
+        } else {
+          debugWarn('query', `Query "${queryName}" returned zero rows`)
+        }
         toastSuccess(`Query "${queryName}" completed`)
         set({ queryResult: data, detailGridData: null, gcRootResult: null })
+      } else {
+        debugError('query', `Query "${queryName}" failed: ${String(res.result)}`)
       }
+    } catch (err) {
+      debugError('query', `Query "${queryName}" exception:`, err)
     } finally {
       set({ isLoading: false })
     }
@@ -225,6 +250,8 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   setActiveSessionId: (id) => set({ activeSessionId: id }),
 
   setMasterFilter: (filter) => set({ masterGridFilter: filter }),
+
+  setMasterPaginationModel: (model) => set({ masterPaginationModel: model }),
 
   setGcRootProgress: (progress) => set({ gcRootProgress: progress }),
 }))

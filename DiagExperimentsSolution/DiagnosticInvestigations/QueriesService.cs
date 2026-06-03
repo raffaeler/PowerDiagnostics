@@ -31,14 +31,16 @@ public class QueriesService
                             .Select(t => new DbmDumpHeapStat()
                             {
                                 Type = t.type,
+                                TypeName = t.type?.Name,
+                                MT = t.type?.MethodTable ?? 0,
                                 Objects = t.objects,
                                 GraphSize = t.size,
                             })
                             .ToList(),
-            Filter = (o, f) => ((DbmDumpHeapStat)o)?.Type?.Name?.FilterBy(f),
+            Filter = (o, f) => ((DbmDumpHeapStat)o)?.TypeName?.FilterBy(f),
             HasDetails = true,
             DetailType = typeof(ClrObject),
-            DetailProperty = "Objects",
+            DetailProperty = "objects",
         });
 
         queries.Add(new()
@@ -56,7 +58,7 @@ public class QueriesService
             Filter = (o, f) => ((DbmStaticFields)o)?.Obj.Type?.Name?.FilterBy(f),
             HasDetails = true,
             DetailType = typeof(ClrObject),
-            DetailProperty = "Obj",
+            DetailProperty = "obj",
         });
 
         queries.Add(new()
@@ -109,7 +111,7 @@ public class QueriesService
             Filter = (o, f) => ((DbmStackFrame)o)?.Thread?.Address.ToString("x")?.FilterBy(f),
             HasDetails = true,
             DetailType = typeof(ClrStackFrame),
-            DetailProperty = "StackFrames",
+            DetailProperty = "stackFrames",
         });
 
         queries.Add(new()
@@ -159,7 +161,7 @@ public class QueriesService
             Filter = (o, f) => ((DbmAllocatorGroup)o)?.Name?.FilterBy(f),
             HasDetails = true,
             DetailType = typeof(ClrObject),
-            DetailProperty = "Objects",
+            DetailProperty = "objects",
         });
 
         //queries.Add(new()

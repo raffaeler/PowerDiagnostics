@@ -47,6 +47,7 @@ npm run build       # production output
 - **Threading**: Long-running diagnostics work runs on `ThreadPriority.BelowNormal` via `BackgroundService`
 - **Testing**: Always create new tests for new functionalities. Test projects use the same conventions (net6.0, Nullable, ImplicitUsings)
 - **Build & verify**: Always build and test the solution after modifying or adding any code
+- **Build frontend**: Always build the React frontend after modifying any UI code
 - **Docs & README**: Always keep `docs/` documentation and `README.md` up to date with code changes
 - **Dispose**: Standard `Dispose()` → `GC.SuppressFinalize()` → `protected virtual Dispose(bool)` pattern
 

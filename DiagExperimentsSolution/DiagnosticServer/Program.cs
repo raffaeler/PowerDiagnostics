@@ -1,6 +1,8 @@
 ﻿using DiagnosticInvestigations;
 using DiagnosticInvestigations.Configurations;
 
+using DiagnosticModels.Converters;
+
 using DiagnosticServer.Extensions;
 using DiagnosticServer.Hubs;
 using DiagnosticServer.Services;
@@ -52,10 +54,10 @@ public class Program
         // Problem Details (RFC 7807)
         builder.Services.AddProblemDetails();
 
-        // JSON: use camelCase property names (JavaScript convention)
+        // JSON: camelCase naming + custom converters for ClrMD types (ClrStackFrame, etc.)
         builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
         {
-            options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+            SetupConverters.ConfigureOptions(options.SerializerOptions);
         });
 
         // Application Services

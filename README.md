@@ -49,6 +49,9 @@ To test this scenario, you have to capture a .NET 5 using more than one Assembly
 ## Notes
 These projects assume running on Windows 10 + x64 CPU. The code can easily be migrated to support the other platforms and architectures.
 
+## Web UI Debug Console
+The `uidiag` React frontend includes a built-in debug utility accessible from the browser DevTools (F12). Use `__uidiag_debug.enable()` in the console to trace data flow, column resolution, and query execution. See `docs/ARCHITECTURE.md` §5.4 for full documentation.
+
 ---
 ## Questions / Suggestions / Wishes / ...
 Feel free to open an issue :)

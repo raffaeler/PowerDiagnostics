@@ -29,8 +29,8 @@ const registry: Record<string, GridConfig> = {
   // §5.1 DbmDumpHeapStat → ClrObject details
   DbmDumpHeapStat: {
     masterColumns: [
-      { header: 'Type', path: 'type', tooltip: 'Type' },
-      { header: 'MT', path: 'type.methodTable', format: '0:X16', tooltip: 'MethodTable' },
+      { header: 'Type', path: 'typeName', tooltip: 'Type' },
+      { header: 'MT', path: 'mt', format: '0:X16', tooltip: 'MethodTable' },
       { header: 'Graph Size', path: 'graphSize', format: '0:N0', alignRight: true, tooltip: 'GraphSize' },
     ],
     detailColumns: clrObjectDetail,

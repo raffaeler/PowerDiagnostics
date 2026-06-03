@@ -8,11 +8,19 @@ using Microsoft.Diagnostics.Runtime;
 namespace ClrDiagnostics.Extensions;
 public static class ClrObjectExtensions
 {
+    /// <summary>
+    /// Returns true when <see cref="ClrObject.Size"/> can be safely accessed.
+    /// <see cref="ClrObject.Size"/> throws <see cref="InvalidOperationException"/>
+    /// when the type information is incomplete (e.g., <see cref="ClrObject.Type"/> is null).
+    /// </summary>
+    public static bool HasValidSize(this ClrObject clrObject)
+        => clrObject.Type is not null;
+
     public static string PrintAddressAndType(this ClrObject clrObject,
         string prefix) => $"{prefix}{clrObject.Address:X16} {clrObject.Type}";
 
     public static string PrintAddressTypeAndSize(this ClrObject clrObject,
-        string prefix) => $"{prefix}{clrObject.Address:X16} {clrObject.Type} Size:{clrObject.Size}";
+        string prefix) => $"{prefix}{clrObject.Address:X16} {clrObject.Type} Size:{(clrObject.HasValidSize() ? clrObject.Size : 0)}";
 
     public static string? GetStringValue(this ClrObject clrObject, int maxLength = int.MaxValue)
     {
@@ -30,7 +38,8 @@ public static class ClrObjectExtensions
             if (clrObject.IsNull) return;
             if (visited.Contains(clrObject.Address)) return;
 
-            size += clrObject.Size;
+            if (clrObject.HasValidSize())
+                size += clrObject.Size;
             visited.Add(clrObject.Address);
             foreach (var childReference in clrObject.EnumerateReferencesWithFields())
             {

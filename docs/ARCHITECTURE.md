@@ -303,6 +303,59 @@ diagnostic-ui (React)
                     (real-time query results, events, state changes)
 ```
 
+### 5.4 Browser Debug Console (`__uidiag_debug`)
+
+The React frontend includes a debug utility exposed on `window.__uidiag_debug`. Open the browser DevTools (F12) and use these commands to trace data flow through the UI:
+
+```js
+// Enable all debug logging
+__uidiag_debug.enable()
+
+// Disable all debug logging
+__uidiag_debug.disable()
+
+// Quick toggle on/off
+__uidiag_debug.toggle()
+
+// Enable only specific categories (grid, data, signalr, query, api, store)
+__uidiag_debug.enable("grid,data")
+
+// Set verbosity level (0=off, 1=error, 2=warn, 3=info, 4=debug, 5=trace)
+__uidiag_debug.level(5)
+
+// Check current status
+__uidiag_debug.status()
+
+// List all available categories
+__uidiag_debug.categories()
+
+// Persist debug settings across page reloads (localStorage)
+__uidiag_debug.persist()
+__uidiag_debug.clearPersist()
+
+// Dump first N rows of any data array to inspect shape
+__uidiag_debug.dump(data, 3)
+```
+
+**Debug categories and what they trace:**
+
+| Category | What's logged |
+|----------|--------------|
+| `grid` | Column definitions (server metadata vs client registry), column-to-row key matching, `valueGetter` resolution results for the first row |
+| `data` | `queryResult` changes: row count, first-row keys and sample data |
+| `query` | Query execution start/end, row count, first-row sampling, metadata fetch results with column paths |
+| `api` | (reserved for future use) |
+| `store` | (reserved for future use) |
+| `signalr` | Real-time event parsing, state snapshots (see `useSignalRStore.ts`) |
+
+**Common troubleshooting workflow:**
+
+1. Open console, run `__uidiag_debug.enable()` then `__uidiag_debug.persist()`
+2. Run a query from the UI
+3. Look for `[QUERY]` logs showing the query result row count and first-row keys
+4. Look for `[GRID]` logs showing which column source is used (server metadata vs client registry)
+5. Look for `[GRID]` logs showing `column-to-row matching` — this reveals case mismatches between column `path` values and actual JSON property names on the row data
+
 ---
 
 ## 6. Communication Mechanisms

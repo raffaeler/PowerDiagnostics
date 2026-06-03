@@ -11,6 +11,8 @@ namespace DiagnosticModels;
 public class DbmDumpHeapStat
 {
     public ClrType? Type { get; set; }
+    public string? TypeName { get; set; }
+    public ulong MT { get; set; }
     public List<ClrObject> Objects { get; set; } = new List<ClrObject>();
     public long GraphSize { get; set; }
 }

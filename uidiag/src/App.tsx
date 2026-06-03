@@ -4,6 +4,7 @@ import { theme } from '@/theme'
 import AppLayout from '@/components/layout/AppLayout'
 import HomePage from '@/pages/HomePage'
 import DebugPage from '@/pages/DebugPage'
+import DetailPage from '@/pages/DetailPage'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="debug" element={<DebugPage />} />
             <Route path="debug/:sessionId" element={<DebugPage />} />
+            <Route path="debug/:sessionId/detail/:queryName/:rowIndex" element={<DetailPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

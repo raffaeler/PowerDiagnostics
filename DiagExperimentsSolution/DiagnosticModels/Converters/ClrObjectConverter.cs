@@ -22,7 +22,13 @@ public class ClrObjectConverter : JsonConverter<ClrObject>
         writer.WriteStartObject();
 
         writer.WriteString("Address", value.Address.ToString("X16"));
-        writer.WriteString("Size", value.Size.ToString());
+
+        // ClrObject.Size throws InvalidOperationException when Type is null
+        // (incomplete type information). Check Type first to guard against this.
+        if (value.Type is not null)
+        {
+            writer.WriteString("Size", value.Size.ToString());
+        }
 
         if (value.Type is not null)
         {

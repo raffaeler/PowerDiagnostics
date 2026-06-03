@@ -50,8 +50,8 @@ public static class QueryMetadataFactory
     {
         m.Columns = new List<ColumnDefinition>
         {
-            new() { Header = "Type", Path = "Type", Tooltip = "Type" },
-            new() { Header = "MT", Path = "Type.MethodTable", Format = "0:X16", Tooltip = "MethodTable" },
+            new() { Header = "Type", Path = "TypeName", Tooltip = "Type" },
+            new() { Header = "MT", Path = "MT", Format = "0:X16", Tooltip = "MethodTable" },
             new() { Header = "Graph Size", Path = "GraphSize", Format = "0:N0", AlignRight = true, Tooltip = "GraphSize" },
         };
         m.DetailColumns = ClrObjectDetailColumns();
