@@ -1,59 +1,95 @@
 .hexViewer {
-  font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
   font-size: 13px;
   line-height: 1.4;
   background: var(--hex-bg, #f5f5f5);
   color: var(--hex-fg, #1f1f1f);
   overflow: auto;
   border-radius: 4px;
-  user-select: text;
+  font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+  font-variant-ligatures: none;
+  font-variant-numeric: tabular-nums;
 }
 
-.row {
+/* ── Header row ── */
+.headerRow {
   display: flex;
+  flex-direction: row;
+  color: var(--hex-header, #6b7280);
+  user-select: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--hex-border, #d0d7de);
   white-space: pre;
+  position: sticky;
+  top: 0;
+  background: var(--hex-bg, #f5f5f5);
+  z-index: 2;
 }
 
-.row:hover {
+.offsetHdr {
+  padding-right: 2ch;
+  text-align: right;
+  width: 12ch;
+  flex-shrink: 0;
+}
+
+.hexHdr {
+  padding-right: 2ch;
+  flex-shrink: 0;
+}
+
+.asciiHdr {
+  flex: 1;
+}
+
+/* ── Three-column data body ── */
+.columnsBody {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  user-select: text;
+  overflow: hidden; /* keep the highlight overlay clipped */
+}
+
+.col {
+  white-space: pre;
+  position: relative;
+  z-index: 1;
+}
+
+/* Offset column */
+.offsetCol {
+  color: var(--hex-offset, #1976d2);
+  padding-right: 2ch;
+  text-align: right;
+  width: 12ch;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Hex bytes column */
+.hexCol {
+  color: var(--hex-fg, #1f1f1f);
+  padding-right: 2ch;
+  flex-shrink: 0;
+}
+
+/* ASCII column */
+.asciiCol {
+  color: var(--hex-ascii, #2e7d32);
+  flex: 1;
+}
+
+/* ── Synchronized row-hover highlight ── */
+.hoverHighlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 0;
   background: var(--hex-row-hover, rgba(0, 0, 0, 0.04));
 }
 
-.offset {
-  color: var(--hex-offset, #1976d2);
-  min-width: 9ch;
-  padding-right: 2ch;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.hexBytes {
-  color: var(--hex-fg, #1f1f1f);
-  min-width: 50ch;
-  padding-right: 2ch;
-  flex-shrink: 0;
-}
-
-.hexByte {
-  display: inline-block;
-  width: 2.3ch;
-  text-align: center;
-}
-
-.ascii {
-  color: var(--hex-ascii, #2e7d32);
-}
-
-.nonPrintable {
-  color: var(--hex-non-printable, #6b7280);
-}
-
-.header {
-  color: var(--hex-header, #6b7280);
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--hex-border, #d0d7de);
-  margin-bottom: 2px;
-}
-
+/* ── Load more ── */
 .loadMore {
   display: flex;
   justify-content: center;
@@ -76,6 +112,7 @@
   color: var(--hex-button-fg-hover, #111827);
 }
 
+/* ── Empty state ── */
 .empty {
   display: flex;
   align-items: center;

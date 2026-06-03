@@ -83,9 +83,9 @@ const registry: Record<string, GridConfig> = {
   // §5.10 ClrRoot — no details
   ClrRoot: {
     masterColumns: [
-      { header: 'Address', path: 'address', format: '0:X16', alignRight: true, tooltip: 'Address' },
-      { header: 'Object', path: 'object', tooltip: 'Object' },
       { header: 'IsPinned', path: 'isPinned', tooltip: 'IsPinned' },
+      { header: 'Address', path: 'object.address', format: '0:X16', alignRight: true, tooltip: 'Object Address' },
+      { header: 'Object', path: 'object', tooltip: 'Object' },
     ],
     detailColumns: [],
   },

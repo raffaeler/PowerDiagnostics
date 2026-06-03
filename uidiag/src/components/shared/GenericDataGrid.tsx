@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useRef, useEffect } from 'react'
 import { Box, Typography } from '@mui/material'
 import { DataGrid, type GridColDef, type GridRowParams, type GridPaginationModel } from '@mui/x-data-grid'
 import { extractAddress } from '@/utils/gridUtils'
@@ -54,11 +54,29 @@ export default function GenericDataGrid({
   defaultPageSize = 50,
   emptyMessage = 'No data.',
 }: GenericDataGridProps) {
+  // Dedup map: track how many times each base ID has been seen in this render pass.
+  // MUI DataGrid's row virtualization breaks catastrophically (wrong data, duplicates)
+  // when getRowId returns the same value for multiple rows. This guarantees uniqueness.
+  const dedupRef = useRef<Map<string, number>>(new Map())
+  useEffect(() => { dedupRef.current.clear() })
+
   const getRowId = useCallback(
     (row: unknown) => {
       const r = row as Record<string, unknown>
-      const addr = extractAddress(r)
-      return addr ?? JSON.stringify(r)
+      const ownAddr = r.address ?? r.Address
+      let baseId: string
+      if (typeof ownAddr === 'string' && /^[0-9a-fA-F]+$/.test(ownAddr)) {
+        baseId = ownAddr
+      } else if (typeof ownAddr === 'number') {
+        baseId = ownAddr.toString(16)
+      } else {
+        const addr = extractAddress(r)
+        baseId = addr ?? JSON.stringify(r)
+      }
+      // Ensure uniqueness: if this baseId was already seen, append a suffix
+      const count = dedupRef.current.get(baseId) ?? 0
+      dedupRef.current.set(baseId, count + 1)
+      return count === 0 ? baseId : `${baseId}_${count}`
     },
     [],
   )
@@ -103,7 +121,7 @@ export default function GenericDataGrid({
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, height: '100%' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, flex: 1, minHeight: 0 }}>
       {(title || subtitle) && (
         <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, px: 0.5 }}>
           {title && <Typography variant="subtitle2">{title}</Typography>}

@@ -21,21 +21,54 @@ public class ClrObjectConverter : JsonConverter<ClrObject>
     {
         writer.WriteStartObject();
 
-        writer.WriteString("Address", value.Address.ToString("X16"));
+        WriteSafeString(writer, "Address", () => value.Address.ToString("X16"));
 
         // ClrObject.Size throws InvalidOperationException when Type is null
         // (incomplete type information). Check Type first to guard against this.
         if (value.Type is not null)
         {
-            writer.WriteString("Size", value.Size.ToString());
+            try
+            {
+                writer.WriteString("Size", value.Size.ToString());
+            }
+            catch
+            {
+                writer.WriteString("Size", "0");
+            }
         }
 
         if (value.Type is not null)
         {
             writer.WritePropertyName("Type");
-            JsonSerializer.Serialize(writer, value.Type, options);
+            try
+            {
+                JsonSerializer.Serialize(writer, value.Type, options);
+            }
+            catch (Exception ex)
+            {
+                // Type serialization failed (e.g., Module access issue).
+                // Write a minimal safe type to avoid breaking the entire response.
+                writer.WriteStartObject();
+                writer.WriteString("Name", $"(error: {ex.Message})");
+                writer.WriteString("Address", "0000000000000000");
+                writer.WriteBoolean("IsFree", false);
+                writer.WriteString("AssemblyLoadContextAddress", "0000000000000000");
+                writer.WriteEndObject();
+            }
         }
 
         writer.WriteEndObject();
+    }
+
+    private static void WriteSafeString(Utf8JsonWriter writer, string propertyName, Func<string> getValue)
+    {
+        try
+        {
+            writer.WriteString(propertyName, getValue());
+        }
+        catch
+        {
+            writer.WriteString(propertyName, "");
+        }
     }
 }

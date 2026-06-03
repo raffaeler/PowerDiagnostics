@@ -147,16 +147,18 @@ export default function DebugPage() {
         </Stack>
       </Paper>
 
-      {/* Master-Detail Grid */}
-      <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto', mb: 1 }}>
-        <MasterDetailGrid
-          onObjectDoubleClick={handleObjectDoubleClick}
-          onObjectSelect={handleObjectSelect}
-        />
-      </Box>
+      {/* Master-Detail Grid + GC Root Path Panel — share remaining space */}
+      <Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+          <MasterDetailGrid
+            onObjectDoubleClick={handleObjectDoubleClick}
+            onObjectSelect={handleObjectSelect}
+          />
+        </Box>
 
-      {/* GC Root Path Panel */}
-      <GcRootPanel />
+        {/* GC Root Path Panel */}
+        <GcRootPanel />
+      </Box>
 
       {/* Hex Viewer Dialog */}
       <HexViewerDialog open={hexDialogOpen} onClose={() => setHexDialogOpen(false)} />

@@ -21,11 +21,23 @@ public class ClrModuleConverter : JsonConverter<ClrModule>
     {
         writer.WriteStartObject();
 
-        writer.WriteString("Name", value.Name);
-        writer.WriteString("AssemblyName", value.AssemblyName);
-        writer.WriteString("Address", value.Address.ToString("X16"));
-        writer.WriteString("Size", value.Size.ToString());
+        WriteSafeString(writer, "Name", () => value.Name);
+        WriteSafeString(writer, "AssemblyName", () => value.AssemblyName);
+        WriteSafeString(writer, "Address", () => value.Address.ToString("X16"));
+        WriteSafeString(writer, "Size", () => value.Size.ToString());
 
         writer.WriteEndObject();
+    }
+
+    private static void WriteSafeString(Utf8JsonWriter writer, string propertyName, Func<string> getValue)
+    {
+        try
+        {
+            writer.WriteString(propertyName, getValue());
+        }
+        catch
+        {
+            writer.WriteString(propertyName, "");
+        }
     }
 }

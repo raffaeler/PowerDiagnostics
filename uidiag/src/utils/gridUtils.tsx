@@ -13,6 +13,15 @@ import { debugLog } from '@/utils/debug'
 
 /** Extract an address/hex string from a row object. */
 export function extractAddress(row: Record<string, unknown>): string | null {
+  // For rows where 'object' is a nested object (e.g., ClrRoot), prefer the
+  // nested Object.Address since it's the actual managed heap object address.
+  if (typeof row.object === 'object' && row.object !== null) {
+    const obj = row.object as Record<string, unknown>
+    const addr = obj.address ?? obj.Address
+    if (typeof addr === 'string' && /^[0-9a-fA-F]+$/.test(addr)) return addr
+    if (typeof addr === 'number') return addr.toString(16)
+  }
+
   const candidates = [
     row.address,
     row.obj,

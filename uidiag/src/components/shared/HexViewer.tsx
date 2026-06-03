@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, type CSSProperties } from 'react'
+import { useMemo, useCallback, useState, useRef, type CSSProperties } from 'react'
 import { useTheme } from '@mui/material/styles'
 import styles from './HexViewer.module.css'
 
@@ -10,35 +10,88 @@ interface HexViewerProps {
 const BYTES_PER_ROW = 16
 const INITIAL_ROWS = 100
 const LOAD_MORE_ROWS = 100
+const HEADER_BYTES = formatHex(Uint8Array.from({ length: BYTES_PER_ROW }, (_, i) => i))
 
 /**
  * Custom hex viewer component — zero npm dependencies, self-contained CSS module.
  * Renders a 3-column layout: Offset | Hex (16 bytes/row) | ASCII preview.
- * Uses incremental rendering for large buffers (> 100 rows).
+ *
+ * Each column is an independent &lt;div&gt; so the browser's native text selection
+ * is confined to a single column. Selecting hex bytes across rows will NEVER
+ * spill into the offset or ASCII columns.
+ *
+ * Row-hover highlighting is synchronized across all three columns via JS
+ * (onMouseMove in the container), because the three columns are independent
+ * DOM elements.
+ *
+ * Incremental rendering for large buffers (> 100 rows).
  */
 export default function HexViewer({ bytes, baseAddress = 0 }: HexViewerProps) {
   const theme = useTheme()
   const [visibleRows, setVisibleRows] = useState(INITIAL_ROWS)
+  const [hoverRow, setHoverRow] = useState(-1)
+  const containerRef = useRef<HTMLDivElement>(null)
   const totalRows = Math.ceil(bytes.length / BYTES_PER_ROW)
+  const maxAddress = baseAddress + Math.max(0, bytes.length - 1)
+  const offsetDigits = Math.max(8, maxAddress.toString(16).toUpperCase().length)
 
   const rows = useMemo(() => {
-    const result: { offset: number; hex: string; ascii: string }[] = []
+    const result: { offset: string; hex: string; ascii: string }[] = []
     const maxRows = Math.min(visibleRows, totalRows)
     for (let i = 0; i < maxRows; i++) {
       const offset = i * BYTES_PER_ROW
       const slice = bytes.slice(offset, Math.min(offset + BYTES_PER_ROW, bytes.length))
       result.push({
-        offset: baseAddress + offset,
+        offset: (baseAddress + offset).toString(16).toUpperCase().padStart(offsetDigits, '0'),
         hex: formatHex(slice),
         ascii: formatAscii(slice),
       })
     }
     return result
-  }, [bytes, baseAddress, visibleRows, totalRows])
+  }, [bytes, baseAddress, visibleRows, totalRows, offsetDigits])
 
   const loadMore = useCallback(() => {
     setVisibleRows((prev) => Math.min(prev + LOAD_MORE_ROWS, totalRows))
   }, [totalRows])
+
+  // Compute per-column text blocks — each is a single string with \n line breaks.
+  // Because they're separate <div> elements, browser text selection cannot cross
+  // between columns.
+  const { offsetText, hexText, asciiText } = useMemo(() => {
+    const offsets: string[] = []
+    const hexes: string[] = []
+    const asciis: string[] = []
+    for (const row of rows) {
+      offsets.push(row.offset)
+      hexes.push(row.hex)
+      asciis.push(row.ascii)
+    }
+    return {
+      offsetText: offsets.join('\n'),
+      hexText: hexes.join('\n'),
+      asciiText: asciis.join('\n'),
+    }
+  }, [rows])
+
+  // Row-hover syncing: on mouse move, figure out which line the cursor is on
+  // from the mouse Y relative to any column div, then highlight that row across
+  // all three columns.
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.currentTarget
+    // Find the first child column that has data lines
+    const hexCol = target.querySelector(`.${styles.hexCol}`) as HTMLElement | null
+    if (!hexCol) return
+    const style = window.getComputedStyle(hexCol)
+    const lineHeight = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.4
+    const rect = hexCol.getBoundingClientRect()
+    const y = e.clientY - rect.top
+    const row = Math.floor(y / lineHeight)
+    setHoverRow(row >= 0 && row < rows.length ? row : -1)
+  }, [rows.length])
+
+  const handleMouseLeave = useCallback(() => {
+    setHoverRow(-1)
+  }, [])
 
   if (bytes.length === 0) {
     return <div className={styles.empty}>No data to display</div>
@@ -48,6 +101,7 @@ export default function HexViewer({ bytes, baseAddress = 0 }: HexViewerProps) {
 
   return (
     <div
+      ref={containerRef}
       className={styles.hexViewer}
       style={{
         '--hex-bg': isDark ? theme.palette.grey[900] : theme.palette.grey[50],
@@ -62,27 +116,40 @@ export default function HexViewer({ bytes, baseAddress = 0 }: HexViewerProps) {
         '--hex-button-bg-hover': isDark ? theme.palette.grey[700] : theme.palette.grey[300],
         '--hex-button-fg': theme.palette.text.secondary,
         '--hex-button-fg-hover': theme.palette.text.primary,
+        '--hex-line-height': '1.4',
       } as CSSProperties}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      {/* Header */}
-      <div className={`${styles.row} ${styles.header}`}>
-        <span className={styles.offset}>Offset</span>
-        <span className={styles.hexBytes}>
-          00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
-        </span>
-        <span className={styles.ascii}>ASCII</span>
+      {/* Header row */}
+      <div className={styles.headerRow}>
+        <span className={styles.offsetHdr}>Offset</span>
+        <span className={styles.hexHdr}>{HEADER_BYTES}</span>
+        <span className={styles.asciiHdr}>ASCII</span>
       </div>
 
-      {/* Data rows */}
-      {rows.map((row) => (
-        <div key={row.offset} className={styles.row}>
-          <span className={styles.offset}>
-            {row.offset.toString(16).toUpperCase().padStart(8, '0')}
-          </span>
-          <span className={styles.hexBytes}>{row.hex}</span>
-          <span className={styles.ascii}>{row.ascii}</span>
+      {/* Three independent columns — text selection is isolated per column */}
+      <div className={styles.columnsBody}>
+        <div className={`${styles.col} ${styles.offsetCol}`}>
+          {offsetText}
         </div>
-      ))}
+        <div className={`${styles.col} ${styles.hexCol}`}>
+          {hexText}
+        </div>
+        <div className={`${styles.col} ${styles.asciiCol}`}>
+          {asciiText}
+        </div>
+        {/* Synchronized row-hover highlight strip across all three columns */}
+        {hoverRow >= 0 && (
+          <div
+            className={styles.hoverHighlight}
+            style={{
+              top: `calc(${hoverRow} * 1.4em)`,
+              height: '1.4em',
+            }}
+          />
+        )}
+      </div>
 
       {/* Load more button for large buffers */}
       {visibleRows < totalRows && (

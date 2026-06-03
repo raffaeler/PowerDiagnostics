@@ -50,17 +50,45 @@ public class KnownQuery
     /// <summary>
     /// Executes the query against the given analyzer, optionally filtering results,
     /// and wraps the output in a serializable QueryResult.
+    /// Exceptions during populate/filter are caught and returned with empty rows
+    /// so the client always receives a valid response.
     /// </summary>
     public QueryResult ToQueryResult(DiagnosticAnalyzer analyzer, string? filter)
     {
         if (Populate is null)
             throw new InvalidOperationException($"Query '{Name}' has no Populate function.");
 
-        var rows = Populate(analyzer);
+        IEnumerable rows;
+        try
+        {
+            rows = Populate(analyzer);
+        }
+        catch (Exception ex)
+        {
+            // Populate can fail if the ClrMD heap is in an inconsistent state
+            // or if the underlying data target has been disposed.
+            return new QueryResult
+            {
+                QueryName = Name ?? string.Empty,
+                ResultType = Type?.FullName ?? string.Empty,
+                Rows = Array.Empty<object>(),
+                HasDetails = HasDetails,
+                DetailType = DetailType?.FullName,
+                DetailProperty = DetailProperty,
+            };
+        }
 
         if (!string.IsNullOrWhiteSpace(filter) && Filter is not null)
         {
-            rows = rows.Cast<object>().Where(o => Filter(o, filter) == true).ToList();
+            try
+            {
+                rows = rows.Cast<object>().Where(o => Filter(o, filter) == true).ToList();
+            }
+            catch
+            {
+                // Filter evaluation can fail for objects with inaccessible properties.
+                // Return unfiltered rows as a fallback.
+            }
         }
 
         return new QueryResult

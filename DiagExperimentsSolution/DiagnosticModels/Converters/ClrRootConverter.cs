@@ -22,13 +22,46 @@ public class ClrRootConverter : JsonConverter<ClrRoot>
     {
         writer.WriteStartObject();
 
-        writer.WriteString("Address", value.Address.ToString("X16"));
-        writer.WriteBoolean("IsPinned", value.IsPinned);
-        writer.WriteString("RootKind", value.RootKind.ToString());
+        WriteSafeString(writer, "Address", () => value.Address.ToString("X16"));
+        WriteSafe(writer, () => writer.WriteBoolean("IsPinned", value.IsPinned));
+        WriteSafeString(writer, "RootKind", () => value.RootKind.ToString());
 
         writer.WritePropertyName("Object");
-        JsonSerializer.Serialize(writer, value.Object, options);
+        try
+        {
+            JsonSerializer.Serialize(writer, value.Object, options);
+        }
+        catch (Exception)
+        {
+            // Object resolution can fail for roots pointing to invalid/unreadable memory.
+            // Write null so the client can easily filter these roots out.
+            writer.WriteNullValue();
+        }
 
         writer.WriteEndObject();
+    }
+
+    private static void WriteSafeString(Utf8JsonWriter writer, string propertyName, Func<string> getValue)
+    {
+        try
+        {
+            writer.WriteString(propertyName, getValue());
+        }
+        catch
+        {
+            writer.WriteString(propertyName, "");
+        }
+    }
+
+    private static void WriteSafe(Utf8JsonWriter writer, Action writeAction)
+    {
+        try
+        {
+            writeAction();
+        }
+        catch
+        {
+            // Skip property on error
+        }
     }
 }

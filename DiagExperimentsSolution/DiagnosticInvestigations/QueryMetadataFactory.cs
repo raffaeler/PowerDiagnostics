@@ -125,9 +125,9 @@ public static class QueryMetadataFactory
     {
         m.Columns = new List<ColumnDefinition>
         {
-            new() { Header = "Address", Path = "Address", Format = "0:X16", AlignRight = true, Tooltip = "Address" },
-            new() { Header = "Object", Path = "Object", Tooltip = "Object" },
             new() { Header = "IsPinned", Path = "IsPinned", Tooltip = "IsPinned" },
+            new() { Header = "Address", Path = "Object.Address", Format = "0:X16", AlignRight = true, Tooltip = "Object Address" },
+            new() { Header = "Object", Path = "Object", Tooltip = "Object" },
         };
     }
 

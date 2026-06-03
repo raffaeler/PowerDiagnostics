@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DiagnosticModels.Converters;
@@ -13,6 +14,7 @@ public static class SetupConverters
         => new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
             Converters =
             {
                 new ClrExceptionConverter(),
@@ -30,6 +32,7 @@ public static class SetupConverters
     public static void ConfigureOptions(JsonSerializerOptions options)
     {
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.Converters.Clear();
         options.Converters.Add(new ClrExceptionConverter());
         options.Converters.Add(new ClrInstanceFieldConverter());
