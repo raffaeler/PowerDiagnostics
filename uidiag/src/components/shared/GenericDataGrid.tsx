@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react'
 import { Box, Typography } from '@mui/material'
-import { DataGrid, type GridColDef, type GridRowParams, type GridPaginationModel } from '@mui/x-data-grid'
+import { DataGrid, useGridApiRef, type GridColDef, type GridRowParams, type GridPaginationModel } from '@mui/x-data-grid'
 import { extractAddress } from '@/utils/gridUtils'
 
 export interface GenericDataGridProps {
@@ -54,6 +54,24 @@ export default function GenericDataGrid({
   defaultPageSize = 50,
   emptyMessage = 'No data.',
 }: GenericDataGridProps) {
+  // Grid API ref for programmatic control (auto-resize columns, etc.)
+  const apiRef = useGridApiRef()
+
+  // ── Auto-resize columns when data loads ──
+  // Runs after rows change (query completes) to size columns to content.
+  useEffect(() => {
+    if (rows.length > 0) {
+      // setTimeout(0) defers to next tick so the grid has rendered rows before measuring
+      const timer = setTimeout(() => {
+        apiRef.current?.autosizeColumns({
+          includeOutliers: true,
+          includeHeaders: true,
+        })
+      }, 0)
+      return () => clearTimeout(timer)
+    }
+  }, [rows.length, apiRef])
+
   // Dedup map: track how many times each base ID has been seen in this render pass.
   // MUI DataGrid's row virtualization breaks catastrophically (wrong data, duplicates)
   // when getRowId returns the same value for multiple rows. This guarantees uniqueness.
@@ -134,6 +152,7 @@ export default function GenericDataGrid({
       )}
       <Box sx={{ flex: 1, minHeight: 0 }}>
         <DataGrid
+          apiRef={apiRef}
           rows={rows as Record<string, unknown>[]}
           columns={columns}
           getRowId={getRowId}
