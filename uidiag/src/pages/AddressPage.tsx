@@ -13,17 +13,18 @@ import {
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import HexViewer from '@/components/shared/HexViewer'
+import GcRootPanel from '@/components/debug/GcRootPanel'
 import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
 import type { HexDataResult } from '@/types/api'
 
 /**
- * Dedicated hex editor page — navigated to when clicking an address in any grid.
- * Route: /debug/:sessionId/hex/:address
+ * Dedicated address detail page — navigated to when clicking an address in any grid.
+ * Route: /debug/:sessionId/address/:address
  *
- * Shows a prominent object details panel (type, size, MT, address) above
- * the raw hex content. Fetches data from the backend on mount.
+ * Shows object details (type, size, MT, address), GC root paths,
+ * and the raw hex content. Fetches data from the backend on mount.
  */
-export default function HexEditorPage() {
+export default function AddressPage() {
   const { sessionId, address } = useParams<{
     sessionId: string
     address: string
@@ -33,6 +34,7 @@ export default function HexEditorPage() {
 
   const hexData = useDiagnosticsStore((s) => s.hexData)
   const fetchHexData = useDiagnosticsStore((s) => s.fetchHexData)
+  const fetchGcRootPath = useDiagnosticsStore((s) => s.fetchGcRootPath)
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -45,10 +47,14 @@ export default function HexEditorPage() {
     }
     setLoading(true)
     setError(null)
-    fetchHexData(sessionId, address).then(() => {
+    // Fetch both hex data and GC root paths in parallel
+    Promise.all([
+      fetchHexData(sessionId, address),
+      fetchGcRootPath(sessionId, address),
+    ]).then(() => {
       setLoading(false)
     })
-  }, [sessionId, address, fetchHexData])
+  }, [sessionId, address, fetchHexData, fetchGcRootPath])
 
   const backTarget =
     typeof location.state === 'object' &&
@@ -67,7 +73,7 @@ export default function HexEditorPage() {
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: 2 }}>
         <CircularProgress />
         <Typography variant="body2" color="text.secondary">
-          Loading hex data for 0x{address}…
+          Loading object data for 0x{address}…
         </Typography>
       </Box>
     )
@@ -78,7 +84,7 @@ export default function HexEditorPage() {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: 2 }}>
         <Typography variant="h6" color="error">
-          {error || 'Unable to load hex data'}
+          {error || 'Unable to load object data'}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           The object at 0x{address} may not be available.
@@ -91,7 +97,7 @@ export default function HexEditorPage() {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 120px)' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {/* Breadcrumb + Back */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
         <Button
@@ -114,15 +120,20 @@ export default function HexEditorPage() {
           >
             Debug: {sessionId?.substring(0, 8)}…
           </Link>
-          <Typography color="text.primary">Hex View</Typography>
+          <Typography color="text.primary">Address View</Typography>
         </Breadcrumbs>
       </Box>
 
       {/* Object Details Panel */}
       <ObjectDetailsPanel hexData={hexData} />
 
+      {/* GC Root Paths */}
+      <Box sx={{ mb: 2 }}>
+        <GcRootPanel />
+      </Box>
+
       {/* Hex Viewer */}
-      <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+      <Box sx={{ mb: 1 }}>
         {bytes ? (
           <HexViewer
             bytes={bytes}

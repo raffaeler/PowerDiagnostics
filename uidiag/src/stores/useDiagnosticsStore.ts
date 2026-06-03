@@ -283,7 +283,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
 
   fetchHexData: async (sessionId, objectAddress) => {
     set({ hexData: null })
-    const url = `${API_SESSIONS}/${sessionId}/hex/${encodeURIComponent(objectAddress)}`
+    const url = `${API_SESSIONS}/${sessionId}/address/${encodeURIComponent(objectAddress)}`
     const res = await apiService.post<HexDataResult>(url)
     if (!res.isError) {
       set({ hexData: res.result as HexDataResult })

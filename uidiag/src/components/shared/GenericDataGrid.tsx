@@ -22,8 +22,6 @@ export interface GenericDataGridProps {
   onPaginationModelChange?: (model: GridPaginationModel) => void
   /** Row density */
   density?: 'compact' | 'standard' | 'comfortable'
-  /** Maximum height before scrolling */
-  maxHeight?: number | string
   /** Page size options */
   pageSizeOptions?: number[]
   /** Default page size */
@@ -49,7 +47,6 @@ export default function GenericDataGrid({
   paginationModel,
   onPaginationModelChange,
   density = 'compact',
-  maxHeight = '100%',
   pageSizeOptions = [25, 50, 100],
   defaultPageSize = 50,
   emptyMessage = 'No data.',
@@ -139,7 +136,7 @@ export default function GenericDataGrid({
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, flex: 1, minHeight: 0 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
       {(title || subtitle) && (
         <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, px: 0.5 }}>
           {title && <Typography variant="subtitle2">{title}</Typography>}
@@ -150,7 +147,7 @@ export default function GenericDataGrid({
           )}
         </Box>
       )}
-      <Box sx={{ flex: 1, minHeight: 0 }}>
+      <Box sx={{ width: '100%' }}>
         <DataGrid
           apiRef={apiRef}
           rows={rows as Record<string, unknown>[]}
@@ -166,8 +163,8 @@ export default function GenericDataGrid({
           initialState={{
             pagination: { paginationModel: { pageSize: defaultPageSize, page: 0 } },
           }}
+          autoHeight
           sx={{
-            maxHeight,
             border: 'none',
             '& .MuiDataGrid-row:hover': { cursor: 'pointer' },
             '& .MuiDataGrid-cell': { fontFamily: "'Segoe UI', sans-serif", fontSize: 13 },

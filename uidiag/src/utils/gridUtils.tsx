@@ -137,7 +137,7 @@ export function buildGridColumns(
             : String(raw).replace(/^0x/i, '')
           return (
             <RouterLink
-              to={`/debug/${sessionId}/hex/${addr}`}
+              to={`/debug/${sessionId}/address/${addr}`}
               state={returnToPath ? { from: returnToPath } : undefined}
               style={{
                 color: 'var(--mui-palette-primary-main, #1976d2)',
@@ -146,7 +146,7 @@ export function buildGridColumns(
                 cursor: 'pointer',
               }}
               onClick={(e) => e.stopPropagation()}
-              title={`Open hex viewer for 0x${addr}`}
+              title={`Open address viewer for 0x${addr}`}
             >
               {`0x${addr.toUpperCase().padStart(16, '0')}`}
             </RouterLink>

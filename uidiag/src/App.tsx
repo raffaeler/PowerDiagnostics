@@ -5,7 +5,7 @@ import AppLayout from '@/components/layout/AppLayout'
 import HomePage from '@/pages/HomePage'
 import DebugPage from '@/pages/DebugPage'
 import DetailPage from '@/pages/DetailPage'
-import HexEditorPage from '@/pages/HexEditorPage'
+import AddressPage from '@/pages/AddressPage'
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
             <Route path="debug" element={<DebugPage />} />
             <Route path="debug/:sessionId" element={<DebugPage />} />
             <Route path="debug/:sessionId/detail/:queryName/:rowIndex" element={<DetailPage />} />
-            <Route path="debug/:sessionId/hex/:address" element={<HexEditorPage />} />
+            <Route path="debug/:sessionId/address/:address" element={<AddressPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

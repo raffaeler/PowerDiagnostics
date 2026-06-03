@@ -75,7 +75,7 @@ export interface GcRootPathResult {
   totalReferences: number
 }
 
-/** Hex viewer data returned by POST /api/sessions/{id}/hex/{addr}. */
+/** Address object data returned by POST /api/sessions/{id}/address/{addr}. */
 export interface HexDataResult {
   objectAddress: string
   typeName: string

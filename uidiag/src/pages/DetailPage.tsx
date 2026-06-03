@@ -98,7 +98,7 @@ export default function DetailPage() {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 120px)' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {/* Breadcrumb + Back */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
         <Button
@@ -138,7 +138,7 @@ export default function DetailPage() {
       </Paper>
 
       {/* Detail grid */}
-      <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto', mb: 1 }}>
+      <Box sx={{ mb: 1 }}>
         <GenericDataGrid
           rows={detailGridData}
           columns={detailColumns}

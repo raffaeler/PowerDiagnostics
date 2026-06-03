@@ -93,7 +93,7 @@ export default function DebugPage() {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 120px)' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Typography variant="h5">
@@ -147,14 +147,12 @@ export default function DebugPage() {
         </Stack>
       </Paper>
 
-      {/* Master-Detail Grid + GC Root Path Panel — share remaining space */}
-      <Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <MasterDetailGrid
-            onObjectDoubleClick={handleObjectDoubleClick}
-            onObjectSelect={handleObjectSelect}
-          />
-        </Box>
+      {/* Master-Detail Grid + GC Root Path Panel — share space naturally */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <MasterDetailGrid
+          onObjectDoubleClick={handleObjectDoubleClick}
+          onObjectSelect={handleObjectSelect}
+        />
 
         {/* GC Root Path Panel */}
         <GcRootPanel />

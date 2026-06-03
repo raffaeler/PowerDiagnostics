@@ -236,9 +236,9 @@ public static class DiagnosticApiExtensions
         .ProducesProblem(StatusCodes.Status404NotFound);
 
         /// <summary>
-        /// Gets raw bytes for a heap object (hex viewer).
+        /// Gets detailed information for a heap object at the given address (hex data + metadata).
         /// </summary>
-        endpoints.MapPost("/api/sessions/{sessionId}/hex/{objectAddress}",
+        endpoints.MapPost("/api/sessions/{sessionId}/address/{objectAddress}",
             (string sessionId, string objectAddress, DebuggingSessionService svc) =>
         {
             if (!Guid.TryParse(sessionId, out Guid id))
@@ -253,7 +253,7 @@ public static class DiagnosticApiExtensions
 
             return Results.Ok(result);
         })
-        .WithName("GetHexData")
+        .WithName("GetAddressData")
         .Produces<HexDataResult>()
         .ProducesProblem(StatusCodes.Status404NotFound)
         .ProducesProblem(StatusCodes.Status400BadRequest);
