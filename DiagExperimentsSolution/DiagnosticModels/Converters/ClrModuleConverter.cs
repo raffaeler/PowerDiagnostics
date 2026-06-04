@@ -21,8 +21,8 @@ public class ClrModuleConverter : JsonConverter<ClrModule>
     {
         writer.WriteStartObject();
 
-        WriteSafeString(writer, "Name", () => value.Name);
-        WriteSafeString(writer, "AssemblyName", () => value.AssemblyName);
+        WriteSafeString(writer, "Name", () => value.Name ?? string.Empty);
+        WriteSafeString(writer, "AssemblyName", () => value.AssemblyName ?? string.Empty);
         WriteSafeString(writer, "Address", () => value.Address.ToString("X16"));
         WriteSafeString(writer, "Size", () => value.Size.ToString());
 

@@ -27,4 +27,9 @@ public class QueryResult
     /// Null if HasDetails is false.
     /// </summary>
     public string? DetailProperty { get; set; }
+
+    /// <summary>
+    /// Error message if the query execution failed.
+    /// </summary>
+    public string? ErrorMessage { get; set; }
 }

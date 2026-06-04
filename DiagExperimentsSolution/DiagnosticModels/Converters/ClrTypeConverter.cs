@@ -21,7 +21,7 @@ public class ClrTypeConverter : JsonConverter<ClrType>
     {
         writer.WriteStartObject();
 
-        WriteSafeString(writer, "Name", () => value.Name);
+        WriteSafeString(writer, "Name", () => value.Name ?? string.Empty);
         WriteSafeString(writer, "Address", () => value.MethodTable.ToString("X16"));
         WriteSafe(writer, "IsFree", () => writer.WriteBoolean("IsFree", value.IsFree));
         WriteSafe(writer, "AssemblyLoadContextAddress", () => writer.WriteString("AssemblyLoadContextAddress", value.AssemblyLoadContextAddress.ToString("X16")));

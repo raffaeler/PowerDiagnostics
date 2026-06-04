@@ -54,7 +54,10 @@ export default function Footer() {
       <Box sx={{ flexGrow: 1 }} />
 
       <Typography variant="caption" color="text.secondary">
-        Built with React + Vite + MUI + Zustand
+        Engineered by Raffaele Rialdi,{' '}
+        <a href="https://github.com/raffaeler/PowerDiagnostics" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+          https://github.com/raffaeler/PowerDiagnostics
+        </a>
       </Typography>
     </Box>
   )

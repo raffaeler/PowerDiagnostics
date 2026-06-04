@@ -75,6 +75,8 @@ public class KnownQuery
                 HasDetails = HasDetails,
                 DetailType = DetailType?.FullName,
                 DetailProperty = DetailProperty,
+
+                ErrorMessage = $"Error executing query: {ex.Message}",
             };
         }
 
