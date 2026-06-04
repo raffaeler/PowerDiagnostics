@@ -1,12 +1,14 @@
 using ClrDiagnostics.Helpers;
 
 using DiagnosticInvestigations;
+using DiagnosticInvestigations.Configurations;
 using DiagnosticModels;
 
 using DiagnosticServer.Services;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace DiagnosticServer.Extensions;
 
@@ -91,25 +93,68 @@ public static class DiagnosticApiExtensions
     private static void MapSessionEndpoints(IEndpointRouteBuilder endpoints)
     {
         /// <summary>
-        /// Opens a dump file from a server-side path.
+        /// Returns a list of all .dmp and .mdmp files in the configured dumps folder.
         /// </summary>
-        endpoints.MapPost("/api/sessions/open-dump-path", async (DumpPathRequest request, DebuggingSessionService svc) =>
+        endpoints.MapGet("/api/sessions/dumps", (IOptions<GeneralConfiguration> config) =>
         {
-            if (string.IsNullOrWhiteSpace(request.Path) || !File.Exists(request.Path))
+            var folder = config.Value.DumpsFolder;
+            if (!Directory.Exists(folder))
+            {
+                return Results.Ok(Array.Empty<string>());
+            }
+
+            var dmpFiles = Directory.EnumerateFiles(folder, "*.dmp").Select(Path.GetFileName);
+            var mdmpFiles = Directory.EnumerateFiles(folder, "*.mdmp").Select(Path.GetFileName);
+            var allFiles = dmpFiles.Concat(mdmpFiles).OrderBy(f => f).ToArray();
+            return Results.Ok(allFiles);
+        })
+        .WithName("GetDumps")
+        .Produces<string[]>();
+
+        /// <summary>
+        /// Opens a dump file from the configured dumps folder.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/open-dump-path", async (DumpPathRequest request, DebuggingSessionService svc, IOptions<GeneralConfiguration> config) =>
+        {
+            if (string.IsNullOrWhiteSpace(request.Path))
+            {
+                return Results.BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid path",
+                    Detail = "The dump file path must not be empty.",
+                    Status = StatusCodes.Status400BadRequest,
+                });
+            }
+
+            var dumpsFolder = Path.GetFullPath(config.Value.DumpsFolder);
+            var resolved = Path.GetFullPath(Path.Combine(dumpsFolder, request.Path));
+
+            if (!resolved.StartsWith(dumpsFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                return Results.BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid path",
+                    Detail = "The dump file must be inside the configured dumps folder.",
+                    Status = StatusCodes.Status400BadRequest,
+                });
+            }
+
+            if (!File.Exists(resolved))
             {
                 return Results.NotFound(new ProblemDetails
                 {
                     Title = "File not found",
-                    Detail = $"The file '{request.Path}' does not exist on the server.",
+                    Detail = $"The file '{request.Path}' does not exist in the dumps folder.",
                     Status = StatusCodes.Status404NotFound,
                 });
             }
 
-            var sessionId = await svc.OpenDumpFromFile(request.Path);
+            var sessionId = await svc.OpenDumpFromFile(resolved);
             return Results.Ok(new { sessionId, investigationKind = InvestigationKind.Dump.ToString(), created = DateTime.Now });
         })
         .WithName("OpenDumpPath")
         .Produces<object>()
+        .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status404NotFound);
 
         /// <summary>

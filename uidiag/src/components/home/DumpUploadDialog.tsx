@@ -8,10 +8,13 @@ import {
   Tabs,
   Tab,
   Box,
-  TextField,
   Typography,
   LinearProgress,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import FolderOpenIcon from '@mui/icons-material/FolderOpen'
@@ -27,7 +30,7 @@ interface DumpUploadDialogProps {
  * Dialog for opening a crash dump file.
  * Two modes:
  * - Upload: drag-and-drop or file picker for .dmp files (multipart upload to server)
- * - Server path: text input for a file path on the server
+ * - Server dumps: dropdown of .dmp files available on the server
  */
 export default function DumpUploadDialog({
   open,
@@ -36,9 +39,11 @@ export default function DumpUploadDialog({
 }: DumpUploadDialogProps) {
   const uploadDump = useDiagnosticsStore((s) => s.uploadDump)
   const openDumpPath = useDiagnosticsStore((s) => s.openDumpPath)
+  const availableDumps = useDiagnosticsStore((s) => s.availableDumps)
+  const fetchAvailableDumps = useDiagnosticsStore((s) => s.fetchAvailableDumps)
   const [tab, setTab] = useState(0)
   const [file, setFile] = useState<File | null>(null)
-  const [serverPath, setServerPath] = useState('')
+  const [selectedDump, setSelectedDump] = useState('')
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -71,8 +76,8 @@ export default function DumpUploadDialog({
 
       if (tab === 0 && file) {
         sessionId = await uploadDump(file)
-      } else if (tab === 1 && serverPath.trim()) {
-        sessionId = await openDumpPath(serverPath.trim())
+      } else if (tab === 1 && selectedDump) {
+        sessionId = await openDumpPath(selectedDump)
       }
 
       if (sessionId) {
@@ -80,7 +85,7 @@ export default function DumpUploadDialog({
         onClose()
         // Reset form
         setFile(null)
-        setServerPath('')
+        setSelectedDump('')
         setError(null)
       } else {
         setError('Failed to open dump file. Check server logs for details.')
@@ -88,12 +93,12 @@ export default function DumpUploadDialog({
     } finally {
       setUploading(false)
     }
-  }, [tab, file, serverPath, uploadDump, openDumpPath, onSessionCreated, onClose])
+  }, [tab, file, selectedDump, uploadDump, openDumpPath, onSessionCreated, onClose])
 
   const handleClose = useCallback(() => {
     if (!uploading) {
       setFile(null)
-      setServerPath('')
+      setSelectedDump('')
       setError(null)
       onClose()
     }
@@ -101,16 +106,16 @@ export default function DumpUploadDialog({
 
   const canSubmit =
     !uploading &&
-    ((tab === 0 && !!file) || (tab === 1 && serverPath.trim().length > 0))
+    ((tab === 0 && !!file) || (tab === 1 && selectedDump.length > 0))
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>Open Crash Dump</DialogTitle>
 
       <DialogContent>
-        <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
+        <Tabs value={tab} onChange={(_, v) => { setTab(v); if (v === 1) { fetchAvailableDumps() } }} sx={{ mb: 2 }}>
           <Tab icon={<CloudUploadIcon />} label="Upload" />
-          <Tab icon={<FolderOpenIcon />} label="Server Path" />
+          <Tab icon={<FolderOpenIcon />} label="Server Dumps" />
         </Tabs>
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -163,15 +168,26 @@ export default function DumpUploadDialog({
         )}
 
         {tab === 1 && (
-          <TextField
-            fullWidth
-            label="Server file path"
-            placeholder="C:\dumps\myapp.dmp"
-            value={serverPath}
-            onChange={(e) => setServerPath(e.target.value)}
-            helperText="Path to a .dmp file on the server filesystem"
-            disabled={uploading}
-          />
+          <FormControl fullWidth disabled={uploading || availableDumps.length === 0}>
+            <InputLabel id="dump-select-label">Select dump</InputLabel>
+            <Select
+              labelId="dump-select-label"
+              value={selectedDump}
+              label="Select dump"
+              onChange={(e) => setSelectedDump(e.target.value)}
+            >
+              {availableDumps.length === 0 && (
+                <MenuItem disabled value="">
+                  No dump files found
+                </MenuItem>
+              )}
+              {availableDumps.map((dump) => (
+                <MenuItem key={dump} value={dump}>
+                  {dump}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         )}
 
         {uploading && <LinearProgress sx={{ mt: 2 }} />}

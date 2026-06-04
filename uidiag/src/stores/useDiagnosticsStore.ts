@@ -13,6 +13,7 @@ import {
   API_SESSIONS_QUERIES_METADATA,
   API_SESSIONS_OPEN_DUMP,
   API_SESSIONS_OPEN_DUMP_PATH,
+  API_SESSIONS_DUMPS,
   API_SESSIONS_METHODTABLE,
 } from '@/config'
 import type {
@@ -64,6 +65,7 @@ interface DiagnosticsState {
   masterPaginationModel: { pageSize: number; page: number }
   isLoading: boolean
   processesFetched: boolean
+  availableDumps: string[]
 
   // Actions
   fetchProcesses: () => Promise<void>
@@ -76,6 +78,7 @@ interface DiagnosticsState {
   openDumpPath: (path: string) => Promise<string | null>
   closeSession: (sessionId: string) => Promise<boolean>
   fetchSessions: () => Promise<void>
+  fetchAvailableDumps: () => Promise<void>
   fetchQueries: () => Promise<void>
   fetchQueriesMetadata: () => Promise<void>
   selectQuery: (name: string | null) => void
@@ -109,6 +112,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   masterPaginationModel: { pageSize: 50, page: 0 },
   isLoading: false,
   processesFetched: false,
+  availableDumps: [],
 
   fetchProcesses: async () => {
     const res = await apiService.get<ProcessInfo[]>(API_PROCESSES)
@@ -216,6 +220,13 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     const res = await apiService.get<SessionInfo[]>(API_SESSIONS)
     if (!res.isError && Array.isArray(res.result)) {
       set({ sessions: res.result })
+    }
+  },
+
+  fetchAvailableDumps: async () => {
+    const res = await apiService.get<string[]>(API_SESSIONS_DUMPS)
+    if (!res.isError && Array.isArray(res.result)) {
+      set({ availableDumps: res.result })
     }
   },
 
