@@ -10,7 +10,11 @@ import {
   DialogActions,
   TextField,
   Box,
+  IconButton,
+  useTheme,
 } from '@mui/material'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppStore } from '@/stores/useAppStore'
 import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
@@ -18,7 +22,8 @@ import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
 export default function Header() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { username, isLoggedIn, login, logout } = useAppStore()
+  const theme = useTheme()
+  const { username, isLoggedIn, login, logout, darkMode, toggleDarkMode } = useAppStore()
   const activeSessionId = useDiagnosticsStore((s) => s.activeSessionId)
 
   const [loginOpen, setLoginOpen] = useState(false)
@@ -65,7 +70,7 @@ export default function Header() {
                       : 400,
                   borderBottom:
                     location.pathname === item.path || location.pathname.startsWith(item.path + '/')
-                      ? '2px solid white'
+                      ? `2px solid ${theme.palette.primary.contrastText}`
                       : '2px solid transparent',
                   borderRadius: 0,
                 }}
@@ -75,21 +80,26 @@ export default function Header() {
             ))}
           </Box>
 
-          {/* Right: Username / Login */}
-          {isLoggedIn ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                {username}
-              </Typography>
-              <Button color="inherit" size="small" onClick={handleLogout} sx={{ textTransform: 'none' }}>
-                Logout
+          {/* Right: Theme toggle + Username / Login */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton color="inherit" onClick={toggleDarkMode} size="small" aria-label="toggle dark mode">
+              {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+            {isLoggedIn ? (
+              <>
+                <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                  {username}
+                </Typography>
+                <Button color="inherit" size="small" onClick={handleLogout} sx={{ textTransform: 'none' }}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button color="inherit" size="small" onClick={() => setLoginOpen(true)} sx={{ textTransform: 'none' }}>
+                Login
               </Button>
-            </Box>
-          ) : (
-            <Button color="inherit" size="small" onClick={() => setLoginOpen(true)} sx={{ textTransform: 'none' }}>
-              Login
-            </Button>
-          )}
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
 

@@ -1,6 +1,8 @@
+import { useMemo } from 'react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { theme } from '@/theme'
+import { createAppTheme } from '@/theme'
+import { useAppStore } from '@/stores/useAppStore'
 import AppLayout from '@/components/layout/AppLayout'
 import HomePage from '@/pages/HomePage'
 import DebugPage from '@/pages/DebugPage'
@@ -9,6 +11,9 @@ import AddressPage from '@/pages/AddressPage'
 import MethodTablePage from '@/pages/MethodTablePage'
 
 function App() {
+  const darkMode = useAppStore((s) => s.darkMode)
+  const theme = useMemo(() => createAppTheme(darkMode ? 'dark' : 'light'), [darkMode])
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
