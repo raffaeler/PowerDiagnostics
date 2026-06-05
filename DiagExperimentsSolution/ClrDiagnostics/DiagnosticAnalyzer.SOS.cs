@@ -87,16 +87,14 @@ public partial class DiagnosticAnalyzer
         sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} MT:0x{objectType.MethodTable:X} Size:{clrObject.Size}");
         sb.AppendLine();
         var roots = RootPaths(clrObject);
-        bool isFirst = true;
         int i = 0;
         int count = 0;
         foreach (var tplRoot in roots)
         {
-            if (isFirst)
-            {
-                sb.AppendLine($"Root {tplRoot.Root.RootKind} Addr:{tplRoot.Root.Address:X16} {tplRoot.Root.Object.Type?.Name ?? "?"} ");
-                isFirst = false;
-            }
+            var rootKindLabel = tplRoot.Root.Address == 0
+                ? "Register"
+                : tplRoot.Root.RootKind.ToString();
+            sb.AppendLine($"Root {rootKindLabel} Addr:{tplRoot.Root.Address:X16} {tplRoot.Root.Object.Type?.Name ?? "?"} ");
 
             // new in v3
             var root = tplRoot.Root;

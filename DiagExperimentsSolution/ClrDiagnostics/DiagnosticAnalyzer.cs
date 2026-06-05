@@ -134,8 +134,15 @@ public partial class DiagnosticAnalyzer : IDisposable
         return FromProcess(process.Id, cacheObjects);
     }
 
-    public Action<(long processed, CancellationToken token)>? OnGCRoot { get; set; }
     public bool CacheAllObjects { get; }
+
+    /// <summary>
+    /// When true, <see cref="RootPaths(ClrObject)"/> will deduplicate GC root paths
+    /// and filter out register roots (roots whose <see cref="ClrRoot.Address"/> is zero).
+    /// Defaults to <see langword="false"/> so that WPF shows all roots including registers.
+    /// </summary>
+    public bool DeduplicateRegisterRoots { get; set; }
+
     public CancellationToken Token { get; private set; }
 
     public void Cancel()
@@ -174,12 +181,12 @@ public partial class DiagnosticAnalyzer : IDisposable
 
     /// <summary>
     /// Creates a new <see cref="GCRoot"/> instance for the given target address.
-    /// v3: GCRoot targets are specified at construction, not per-call.
+    /// v3/v4: GCRoot targets are specified at construction, not per-call.
     /// A new instance is created per call because <see cref="GCRoot"/> is not thread-safe.
     /// </summary>
     private GCRoot CreateGCRoot(ulong targetAddress)
     {
-        return new GCRoot(_clrRuntime.Heap, o => o.Address == targetAddress);
+        return new GCRoot(_clrRuntime.Heap, new[] { targetAddress });
     }
 
     #region Dispose pattern

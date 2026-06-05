@@ -114,30 +114,95 @@ public partial class DiagnosticAnalyzer
     public IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths(ClrObject @object)
     {
         var gcroot = CreateGCRoot(@object.Address);
-        return SafeEnumerateRootPaths(gcroot, @object.Address);
+        return SafeEnumerateRootPaths(gcroot, @object.Address, DeduplicateRegisterRoots, Token);
     }
 
     [Obsolete("Use RootPaths(ClrObject) instead")]
     public IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths(ulong address)
     {
         var gcroot = CreateGCRoot(address);
-        return SafeEnumerateRootPaths(gcroot, address);
+        return SafeEnumerateRootPaths(gcroot, address, DeduplicateRegisterRoots, Token);
     }
 
-    private static IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> SafeEnumerateRootPaths(GCRoot gcroot, ulong targetAddress)
+    private static IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> SafeEnumerateRootPaths(
+        GCRoot gcroot, ulong targetAddress, bool deduplicateRegisterRoots, CancellationToken cancellationToken)
     {
         // GCRoot can throw when the heap is in an inconsistent state or
-        // when walking certain corrupted objects (ClrMD v3 known issue).
-        // We catch here so a single bad object doesn't crash the whole request.
+        // when walking certain corrupted objects (ClrMD known issue).
+        // We use ToList() to eagerly enumerate so exceptions during the walk
+        // are caught here instead of propagating to the caller.
         try
         {
-            return gcroot.EnumerateRootPaths();
+            var all = gcroot.EnumerateRootPaths(cancellationToken).ToList();
+            return FilterAndDeduplicatePaths(all, deduplicateRegisterRoots);
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
         {
             Debug.WriteLine($"[ClrDiagnostics] GCRoot enumeration failed for object 0x{targetAddress:X16}: {ex.Message}");
             return Enumerable.Empty<(ClrRoot, GCRoot.ChainLink)>();
         }
+    }
+
+    /// <summary>
+    /// Filters out register roots (Address == 0) and deduplicates when
+    /// <paramref name="deduplicateRegisterRoots"/> is <see langword="true"/>.
+    /// Otherwise returns the input unchanged.
+    /// </summary>
+    internal static IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> FilterAndDeduplicatePaths(
+        List<(ClrRoot Root, GCRoot.ChainLink Path)> all, bool deduplicateRegisterRoots)
+    {
+        if (!deduplicateRegisterRoots)
+            return all;
+
+        var memoryRoots = all.Where(r => r.Root.Address != 0).ToList();
+        return DeduplicatePaths(memoryRoots);
+    }
+
+    /// <summary>
+    /// Removes duplicate GC root paths. ClrMD's <see cref="GCRoot.EnumerateRootPaths"/>
+    /// may return the same root (or equal roots) more than once in some scenarios,
+    /// producing tuples with identical addresses.
+    /// <para>
+    /// Deduplication is based on <see cref="ClrRoot.RootKind"/> and the chain of objects
+    /// from the root to the target. Different root storage addresses (e.g. two stack slots
+    /// pointing to the same object) are treated as duplicates because the diagnostic value
+    /// is in the unique path, not in how many locations reference it.
+    /// </para>
+    /// </summary>
+    internal static List<(ClrRoot Root, GCRoot.ChainLink Path)> DeduplicatePaths(
+        List<(ClrRoot Root, GCRoot.ChainLink Path)> paths)
+    {
+        if (paths.Count < 2)
+            return paths;
+
+        var seen = new HashSet<string>(paths.Count);
+        var result = new List<(ClrRoot Root, GCRoot.ChainLink Path)>(paths.Count);
+
+        foreach (var item in paths)
+        {
+            var key = GetPathKey(item.Root, item.Path);
+            if (seen.Add(key))
+                result.Add(item);
+        }
+
+        return result;
+    }
+
+    internal static string GetPathKey(ClrRoot root, GCRoot.ChainLink path)
+    {
+        var sb = new StringBuilder();
+        sb.Append(((int)root.RootKind).ToString());
+        sb.Append('|');
+        for (var link = path; link != null; link = link.Next)
+        {
+            sb.Append(link.Object.ToString("X16"));
+            sb.Append(',');
+        }
+        return sb.ToString();
     }
 
     // EnumerateAllPaths — no direct replacement in v3

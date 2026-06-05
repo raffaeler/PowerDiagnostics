@@ -35,15 +35,13 @@ public class UseCase1
             Console.WriteLine($"{loaderAllocatorType.Name} Addr:0x{loaderAllocator.Address:X} Size:{loaderAllocator.Size} MT:0x{loaderAllocatorType.MethodTable:X}");
 
             var roots = analyzer.RootPaths(loaderAllocator.Address);
-            bool isFirst = true;
             int i = 0;
             foreach (var tplRoot in roots)
             {
-                if (isFirst)
-                {
-                    Console.WriteLine($"Root {tplRoot.Root.RootKind} Addr:{tplRoot.Root.Address} {tplRoot.Root.Object.Type!.Name} Addr:{tplRoot.Root.Address}");
-                    isFirst = false;
-                }
+                var rootKindLabel = tplRoot.Root.Address == 0
+                    ? "Register"
+                    : tplRoot.Root.RootKind.ToString();
+                Console.WriteLine($"Root {rootKindLabel} Addr:{tplRoot.Root.Address} {tplRoot.Root.Object.Type!.Name} Addr:{tplRoot.Root.Address}");
 
                 // new in v3
                 var root = tplRoot.Root;

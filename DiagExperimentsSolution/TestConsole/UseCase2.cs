@@ -39,15 +39,13 @@ public class UseCase2
             Console.WriteLine($"{leakedType.Name} Addr:0x{leakedObj.Address:X} Size:{leakedObj.Size} MT:0x{leakedType.MethodTable:X}");
 
             var roots = analyzer.RootPaths(leakedObj.Address);
-            bool isFirst = true;
             int i = 0;
             foreach (var tplRoot in roots)
             {
-                if (isFirst)
-                {
-                    Console.WriteLine($"Root {tplRoot.Root.RootKind} Addr:{tplRoot.Root.Address} {tplRoot.Root.Object.Type!.Name} Addr:{tplRoot.Root.Address}  alloc:{tplRoot.Root.Object.Type!.LoaderAllocatorHandle:X16}");
-                    isFirst = false;
-                }
+                var rootKindLabel = tplRoot.Root.Address == 0
+                    ? "Register"
+                    : tplRoot.Root.RootKind.ToString();
+                Console.WriteLine($"Root {rootKindLabel} Addr:{tplRoot.Root.Address} {tplRoot.Root.Object.Type!.Name} Addr:{tplRoot.Root.Address}  alloc:{tplRoot.Root.Object.Type!.LoaderAllocatorHandle:X16}");
 
                 // new in v3
                 var root = tplRoot.Root;

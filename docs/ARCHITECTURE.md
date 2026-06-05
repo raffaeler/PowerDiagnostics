@@ -389,6 +389,41 @@ All async diagnostic operations accept `CancellationToken` and use `Cancellation
 ### 7.6 Thread Priority
 Long-running diagnostic work runs on `ThreadPriority.BelowNormal` via the `BackgroundService` worker thread, preventing it from starving the main application thread.
 
+### 7.7 Register Root Deduplication
+
+ClrMD's `GCRoot.EnumerateRootPaths` may yield duplicate-looking paths because the same object can be reported as both a **register root** (kept in a CPU register by the JIT) and a **stack root** (living in an actual stack slot). Both have `RootKind == Stack`, so they are indistinguishable by kind alone.
+
+**How register roots are identified:** Register roots have `Address == 0`. This is documented in the ClrMD source:
+
+```csharp
+// From: src/Microsoft.Diagnostics.Runtime/AbstractDac/IAbstractThreadHelpers.cs
+// https://github.com/microsoft/clrmd/blob/main/src/Microsoft.Diagnostics.Runtime/AbstractDac/IAbstractThreadHelpers.cs
+
+/// <summary>
+/// The address of the stack slot this root is contained in (maybe 0 if the object is
+/// enregistered).
+/// </summary>
+public ulong Address { get; set; }
+```
+
+When `Address == 0`, `PrintRoots` renders `"Register"` instead of the `RootKind` name. The `ClrStackRoot` constructor also carries `RegisterName` and `RegisterOffset` for diagnostic purposes:
+
+```csharp
+// From: src/Microsoft.Diagnostics.Runtime/ClrStackRoot.cs
+// https://github.com/microsoft/clrmd/blob/main/src/Microsoft.Diagnostics.Runtime/ClrStackRoot.cs
+
+internal ClrStackRoot(ulong address, ClrObject obj, bool isInterior, bool isPinned,
+                      ClrHeap heap, ClrStackFrame? frame, string? regName, int regOffset)
+    : base(address, obj, ClrRootKind.Stack, isInterior, isPinned)
+```
+
+**Conditional deduplication:** `DiagnosticAnalyzer.DeduplicateRegisterRoots` (default `false`) controls whether register roots are filtered and duplicate paths are collapsed:
+
+- **WPF** (`false`): Shows every root, including registers. Useful for interactive debugging.
+- **DiagnosticServer** (`true` via `appsettings.json`): Filters register roots and deduplicates paths to reduce noise for the web UI.
+
+The deduplication key is based on `RootKind` plus the full object chain (`GetPathKey`), so two stack slots pointing to the same object via the same path are treated as one entry.
+
 ---
 
 ## 8. Dependency Graph
@@ -425,13 +460,22 @@ Configuration follows standard ASP.NET Core patterns:
 // appsettings.json — DiagnosticServer
 {
   "General": {
-    "ProcessId": 0,           // Target process (0 = pick interactively)
-    "LoopTimeoutSeconds": 15  // Wait between diagnostic cycles
+    "DebuggingSessionsExpirationMinutes": 1,
+    "DumpsFolder": "H:\\_dumps"
+  },
+  "Diagnostics": {
+    "DeduplicateRegisterRoots": true
   }
 }
 ```
 
-The `GeneralConfiguration` class in `DiagnosticInvestigations/Configurations/` binds to this section via `IOptions<T>`.
+| Section | Key | Description |
+|---------|-----|-------------|
+| `General` | `DebuggingSessionsExpirationMinutes` | How long before an idle session is cleaned up |
+| `General` | `DumpsFolder` | Server-side folder for dump files |
+| `Diagnostics` | `DeduplicateRegisterRoots` | When `true`, register roots (`Address == 0`) are filtered out and duplicate GC paths are deduplicated |
+
+The `GeneralConfiguration` class in `DiagnosticInvestigations/Configurations/` binds to the `General` section via `IOptions<T>`. The `Diagnostics` section is read directly by `DebuggingSessionService` through `IConfiguration`.
 
 ---
 
