@@ -276,6 +276,36 @@ public class DebuggingSessionService : BackgroundService
         return result;
     }
 
+    /// <summary>Returns GC root paths passing through a target address, walking up to roots
+    /// and down to referenced objects, streaming progress via SignalR.</summary>
+    public async Task<GcRootPathResult?> GetAddressPathAsync(Guid sessionId, ulong address, int maxPaths = -1)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+        var obj = FindClrObject(scope.DiagnosticAnalyzer, address);
+        if (obj is not { } resolved) return null;
+
+        using var cts = new CancellationTokenSource();
+        var lastSentCount = 0;
+        var sid = sessionId.ToString();
+        var addr = $"0x{address:X16}";
+
+        var result = await scope.DiagnosticAnalyzer.GetAddressPathAsync(resolved.Address, count =>
+        {
+            if (count - lastSentCount >= 100)
+            {
+                lastSentCount = count;
+                // Fire-and-forget: progress callback is synchronous, we must not block the trace pipeline.
+                _ = _diagnosticHubContext.Clients.All.SendAsync("onAddressPathProgress",
+                    new { sessionId = sid, objectAddress = addr, count = count, status = $"Processing... {count}" });
+            }
+        }, cts.Token, maxPaths);
+
+        await _diagnosticHubContext.Clients.All.SendAsync("onAddressPathComplete",
+            new { sessionId = sid, objectAddress = addr, pathCount = result.TotalReferences });
+        return result;
+    }
+
     /// <summary>Runs a query and returns QueryResult with metadata, streaming progress via SignalR.</summary>
     public async Task<QueryResult?> GetQueryResultAsync(
         Guid sessionId,

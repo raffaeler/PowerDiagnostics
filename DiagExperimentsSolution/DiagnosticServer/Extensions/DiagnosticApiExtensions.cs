@@ -354,6 +354,31 @@ public static class DiagnosticApiExtensions
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
         /// <summary>
+        /// Gets GC root paths passing through a target address, walking both up to roots
+        /// and down to referenced objects.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/addresspath/{objectAddress}",
+            async (string sessionId, string objectAddress, int? maxPaths, DebuggingSessionService svc) =>
+        {
+            if (!Guid.TryParse(sessionId, out Guid id))
+                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
+
+            if (!TryParseHexAddress(objectAddress, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{objectAddress}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = await svc.GetAddressPathAsync(
+                id, addr, maxPaths ?? -1);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{objectAddress}' in session.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetAddressPath")
+        .Produces<GcRootPathResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
         /// Closes a diagnostic session and releases resources.
         /// </summary>
         endpoints.MapDelete("/api/sessions/{sessionId}",
