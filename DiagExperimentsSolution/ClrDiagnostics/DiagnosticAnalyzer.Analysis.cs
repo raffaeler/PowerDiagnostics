@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -112,21 +113,31 @@ public partial class DiagnosticAnalyzer
 
     public IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths(ClrObject @object)
     {
-        var gcroot = GetOrCreateGCRoot(@object.Address);
-        return gcroot.EnumerateRootPaths();
+        var gcroot = CreateGCRoot(@object.Address);
+        return SafeEnumerateRootPaths(gcroot, @object.Address);
     }
 
     [Obsolete("Use RootPaths(ClrObject) instead")]
     public IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths(ulong address)
     {
-        var gcroot = GetOrCreateGCRoot(address);
-        return gcroot.EnumerateRootPaths();
+        var gcroot = CreateGCRoot(address);
+        return SafeEnumerateRootPaths(gcroot, address);
     }
 
-    private IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> RootPaths()
+    private static IEnumerable<(ClrRoot Root, GCRoot.ChainLink Path)> SafeEnumerateRootPaths(GCRoot gcroot, ulong targetAddress)
     {
-        return _gcroot?.EnumerateRootPaths()
-            ?? Enumerable.Empty<(ClrRoot, GCRoot.ChainLink)>();
+        // GCRoot can throw when the heap is in an inconsistent state or
+        // when walking certain corrupted objects (ClrMD v3 known issue).
+        // We catch here so a single bad object doesn't crash the whole request.
+        try
+        {
+            return gcroot.EnumerateRootPaths();
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Debug.WriteLine($"[ClrDiagnostics] GCRoot enumeration failed for object 0x{targetAddress:X16}: {ex.Message}");
+            return Enumerable.Empty<(ClrRoot, GCRoot.ChainLink)>();
+        }
     }
 
     // EnumerateAllPaths — no direct replacement in v3

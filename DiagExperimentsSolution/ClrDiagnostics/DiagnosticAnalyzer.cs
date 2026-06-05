@@ -21,8 +21,6 @@ public partial class DiagnosticAnalyzer : IDisposable
     private ClrRuntime _clrRuntime;
     private DebugLibraryInfo _debugLibraryInfo;
 
-    private ulong _gcrootTarget;
-    private GCRoot? _gcroot;
     private IList<ClrObject>? _cachedAllObjects;
     private IList<(ClrObject, ClrInstanceField, ulong)>? _objectsWithInstanceFields;
     private IList<(ClrObject, ClrStaticField, ulong)>? _objectsWithStaticFields;
@@ -175,19 +173,13 @@ public partial class DiagnosticAnalyzer : IDisposable
     }
 
     /// <summary>
-    /// Returns a <see cref="GCRoot"/> instance for the given target address.
-    /// Caches and reuses the instance for sequential calls on the same target.
+    /// Creates a new <see cref="GCRoot"/> instance for the given target address.
     /// v3: GCRoot targets are specified at construction, not per-call.
+    /// A new instance is created per call because <see cref="GCRoot"/> is not thread-safe.
     /// </summary>
-    private GCRoot GetOrCreateGCRoot(ulong targetAddress)
+    private GCRoot CreateGCRoot(ulong targetAddress)
     {
-        if (_gcroot == null || _gcrootTarget != targetAddress)
-        {
-            _gcrootTarget = targetAddress;
-            _gcroot = new GCRoot(_clrRuntime.Heap, o => o.Address == targetAddress);
-        }
-
-        return _gcroot;
+        return new GCRoot(_clrRuntime.Heap, o => o.Address == targetAddress);
     }
 
     #region Dispose pattern
