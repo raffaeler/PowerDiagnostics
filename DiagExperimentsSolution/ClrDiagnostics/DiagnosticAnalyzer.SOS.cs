@@ -86,12 +86,16 @@ public partial class DiagnosticAnalyzer
         ClrObject clrObject,
         Action<int> onProgress,
         CancellationToken cancellationToken,
-        int maxPaths = 75)
+        int maxPaths = -1)
     {
         return Task.Run(() =>
         {
             var result = new GcRootPathResult();
-            var roots = RootPaths(clrObject).Take(maxPaths).ToList();
+            List<(ClrRoot Root, GCRoot.ChainLink Path)> roots;
+            if (maxPaths == -1)
+                roots = RootPaths(clrObject).ToList();
+            else
+                roots = RootPaths(clrObject).Take(maxPaths).ToList();
             int progressCount = 0;
 
             foreach (var tplRoot in roots)
@@ -129,7 +133,7 @@ public partial class DiagnosticAnalyzer
                         Depth = currentParent.Depth + 1,
                     };
 
-                    var refs = FindReferencing(false, address);
+                    var refs = FindReferencing(true, address);
                     if (refs != null)
                     {
                         foreach (var res in refs)
@@ -196,7 +200,7 @@ public partial class DiagnosticAnalyzer
                     throw new OperationCanceledException("Canceled by user request");
                 onProgress(count);
                 sb.AppendLine($"     {address:X16} {type?.Name ?? "?"}");
-                var result = FindReferencing(false, address);
+                var result = FindReferencing(true, address);
                 if (result != null && result.Count > 0)
                 {
                     sb.AppendLine($"          Objects whose fields point to {address:X16}");
@@ -269,7 +273,7 @@ public partial class DiagnosticAnalyzer
                 //var mi = frame.Method.Type!.Module.MetadataImport;
                 //if (mi != null)
                 //{
-                    
+
                 //}
 
                 Console.WriteLine($"{frame.StackPointer:X16} {frame.InstructionPointer:X16} {callSite} {frame.Method?.ToString()}");

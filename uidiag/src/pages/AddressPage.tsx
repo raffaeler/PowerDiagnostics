@@ -47,13 +47,13 @@ export default function AddressPage() {
     }
     setLoading(true)
     setError(null)
-    // Fetch both hex data and GC root paths in parallel
-    Promise.all([
-      fetchHexData(sessionId, address),
-      fetchGcRootPath(sessionId, address),
-    ]).then(() => {
+    // Fetch hex data first (fast) so the page content renders immediately.
+    fetchHexData(sessionId, address).finally(() => {
       setLoading(false)
     })
+    // Fetch GC root paths in the background — progress is streamed via SignalR
+    // and displayed by GcRootPanel, so we don't block the page on it.
+    fetchGcRootPath(sessionId, address)
   }, [sessionId, address, fetchHexData, fetchGcRootPath])
 
   const backTarget =

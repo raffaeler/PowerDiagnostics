@@ -3,7 +3,7 @@ import { HubConnectionState } from '@microsoft/signalr'
 import { signalRService } from '@/services/signalRService'
 import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
 import type { EvsEvent } from '@/types/signalr'
-import type { GcRootProgress } from '@/types/api'
+import type { GcRootProgress, QueryProgress } from '@/types/api'
 
 interface SignalRState {
   connectionState: HubConnectionState
@@ -52,6 +52,16 @@ export const useSignalRStore = create<SignalRState>((set, get) => {
   // Clear progress when GC root path completes
   signalRService.onEvent('onGcRootComplete', () => {
     useDiagnosticsStore.getState().setGcRootProgress(null)
+  })
+
+  // Subscribe to query progress
+  signalRService.onEvent('onQueryProgress', (progress: unknown) => {
+    useDiagnosticsStore.getState().setQueryProgress(progress as QueryProgress)
+  })
+
+  // Clear progress when query completes
+  signalRService.onEvent('onQueryComplete', () => {
+    useDiagnosticsStore.getState().setQueryProgress(null)
   })
 
   // Refresh session list when sessions are created or closed

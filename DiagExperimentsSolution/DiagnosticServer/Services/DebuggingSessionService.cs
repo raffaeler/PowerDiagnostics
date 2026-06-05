@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 using ClrDiagnostics;
 using ClrDiagnostics.Triggers;
@@ -247,7 +248,7 @@ public class DebuggingSessionService : BackgroundService
     }
 
     /// <summary>Returns GC root paths, streaming progress via SignalR.</summary>
-    public async Task<GcRootPathResult?> GetGcRootPathAsync(Guid sessionId, ulong address, int maxPaths = 75)
+    public async Task<GcRootPathResult?> GetGcRootPathAsync(Guid sessionId, ulong address, int maxPaths = -1)
     {
         var scope = _investigationState.GetInvestigationScope(sessionId);
         if (scope is null) return null;
@@ -255,18 +256,18 @@ public class DebuggingSessionService : BackgroundService
         if (obj is not { } resolved) return null;
 
         using var cts = new CancellationTokenSource();
-        var lastPct = 0;
+        var lastSentCount = 0;
         var sid = sessionId.ToString();
         var addr = $"0x{address:X16}";
 
-        var result = await scope.DiagnosticAnalyzer.GetRootPathsAsync(resolved, pct =>
+        var result = await scope.DiagnosticAnalyzer.GetRootPathsAsync(resolved, count =>
         {
-            if (pct > lastPct)
+            if (count - lastSentCount >= 100)
             {
-                lastPct = pct;
+                lastSentCount = count;
                 // Fire-and-forget: progress callback is synchronous, we must not block the trace pipeline.
                 _ = _diagnosticHubContext.Clients.All.SendAsync("onGcRootProgress",
-                    new { sessionId = sid, objectAddress = addr, percent = pct, status = $"Processing... {pct}%" });
+                    new { sessionId = sid, objectAddress = addr, count = count, status = $"Processing... {count}" });
             }
         }, cts.Token, maxPaths);
 
@@ -275,12 +276,38 @@ public class DebuggingSessionService : BackgroundService
         return result;
     }
 
-    /// <summary>Runs a query and returns QueryResult with metadata.</summary>
-    public async Task<QueryResult?> GetQueryResultAsync(Guid sessionId, KnownQuery query, string? filter)
+    /// <summary>Runs a query and returns QueryResult with metadata, streaming progress via SignalR.</summary>
+    public async Task<QueryResult?> GetQueryResultAsync(
+        Guid sessionId,
+        KnownQuery query,
+        string? filter,
+        CancellationToken cancellationToken = default)
     {
         var scope = _investigationState.GetInvestigationScope(sessionId);
         if (scope is null) return null;
-        return await Task.Run(() => query.ToQueryResult(scope.DiagnosticAnalyzer, filter));
+
+        var lastSentCount = 0;
+        var sid = sessionId.ToString();
+        var queryName = query.Name ?? "Query";
+
+        var result = await query.ToQueryResultAsync(
+            scope.DiagnosticAnalyzer,
+            filter,
+            count =>
+            {
+                if (count - lastSentCount >= 10)
+                {
+                    lastSentCount = count;
+                    // Fire-and-forget: progress callback is synchronous, we must not block.
+                    _ = _diagnosticHubContext.Clients.All.SendAsync("onQueryProgress",
+                        new { sessionId = sid, queryName = queryName, count = count, status = $"Processing... {count}" });
+                }
+            },
+            cancellationToken);
+
+        await _diagnosticHubContext.Clients.All.SendAsync("onQueryComplete",
+            new { sessionId = sid, queryName = queryName, rowCount = result.Rows.Cast<object>().Count() });
+        return result;
     }
 
     /// <summary>

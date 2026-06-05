@@ -1,3 +1,5 @@
+using System.Threading;
+
 using ClrDiagnostics.Helpers;
 
 using DiagnosticInvestigations;
@@ -239,7 +241,8 @@ public static class DiagnosticApiExtensions
             async (string sessionId, string query, string? filter,
                    DebuggingSessionService debuggingSessionService,
                    QueriesService queriesService,
-                   ILogger<Program> logger) =>
+                   ILogger<Program> logger,
+                   CancellationToken cancellationToken) =>
         {
             if (!queriesService.Queries.TryGetValue(query, out var knownQuery))
             {
@@ -262,7 +265,7 @@ public static class DiagnosticApiExtensions
             }
 
             logger.LogInformation("Running query {QueryName} on session {SessionId}", query, sessionId);
-            var result = await debuggingSessionService.GetQueryResultAsync(id, knownQuery, filter);
+            var result = await debuggingSessionService.GetQueryResultAsync(id, knownQuery, filter, cancellationToken);
 
             if (result is null)
             {
@@ -338,7 +341,8 @@ public static class DiagnosticApiExtensions
             if (!TryParseHexAddress(objectAddress, out var addr))
                 return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{objectAddress}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
 
-            var result = await svc.GetGcRootPathAsync(id, addr, maxPaths ?? 75);
+            var result = await svc.GetGcRootPathAsync(
+                id, addr, maxPaths ?? -1);
             if (result is null)
                 return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{objectAddress}' in session.", Status = StatusCodes.Status404NotFound });
 

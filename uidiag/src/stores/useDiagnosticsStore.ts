@@ -26,6 +26,7 @@ import type {
   HexDataResult,
   MethodTableResult,
   GcRootProgress,
+  QueryProgress,
 } from '@/types/api'
 
 const ACTIVE_SESSION_ID_STORAGE_KEY = 'uidiag_active_session_id'
@@ -58,6 +59,7 @@ interface DiagnosticsState {
   queryResult: QueryResultData | null
   gcRootResult: GcRootPathResult | null
   gcRootProgress: GcRootProgress | null
+  queryProgress: QueryProgress | null
   hexData: HexDataResult | null
   methodTableData: MethodTableResult | null
   masterGridFilter: string
@@ -90,6 +92,7 @@ interface DiagnosticsState {
   setMasterFilter: (filter: string) => void
   setMasterPaginationModel: (model: { pageSize: number; page: number }) => void
   setGcRootProgress: (progress: GcRootProgress | null) => void
+  setQueryProgress: (progress: QueryProgress | null) => void
 }
 
 export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
@@ -105,6 +108,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   queryResult: null,
   gcRootResult: null,
   gcRootProgress: null,
+  queryProgress: null,
   hexData: null,
   methodTableData: null,
   masterGridFilter: '',
@@ -254,7 +258,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   selectQuery: (name) => set({ selectedQuery: name }),
 
   runQuery: async (sessionId, queryName, filter) => {
-    set({ isLoading: true, queryResult: null })
+    set({ isLoading: true, queryResult: null, queryProgress: null })
     debugLog('query', `Running query: "${queryName}" on session "${sessionId}"${filter ? ` with filter "${filter}"` : ''}`)
     try {
       const url = filter
@@ -280,7 +284,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     } catch (err) {
       debugError('query', `Query "${queryName}" exception:`, err)
     } finally {
-      set({ isLoading: false })
+      set({ isLoading: false, queryProgress: null })
     }
   },
 
@@ -326,4 +330,6 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   setMasterPaginationModel: (model) => set({ masterPaginationModel: model }),
 
   setGcRootProgress: (progress) => set({ gcRootProgress: progress }),
+
+  setQueryProgress: (progress) => set({ queryProgress: progress }),
 }))

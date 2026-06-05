@@ -55,6 +55,16 @@ public class QueriesService
                                 Size = (long)t.size,
                             })
                             .ToList(),
+            PopulateAsync = async (a, onProgress, cancellationToken) =>
+            {
+                var list = await a.GetStaticFieldsWithGraphAndSizeAsync(onProgress, cancellationToken);
+                return list.Select(t => new DbmStaticFields()
+                {
+                    Field = t.field,
+                    Obj = t.obj,
+                    Size = (long)t.size,
+                }).ToList();
+            },
             Filter = (o, f) => ((DbmStaticFields)o)?.Obj.Type?.Name?.FilterBy(f),
             HasDetails = true,
             DetailType = typeof(ClrObject),

@@ -15,6 +15,7 @@ public static class SetupConverters
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            MaxDepth = 512,
             Converters =
             {
                 new ClrExceptionConverter(),
@@ -33,6 +34,7 @@ public static class SetupConverters
     {
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.MaxDepth = 512;
         options.Converters.Clear();
         options.Converters.Add(new ClrExceptionConverter());
         options.Converters.Add(new ClrInstanceFieldConverter());

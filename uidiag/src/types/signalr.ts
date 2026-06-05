@@ -13,6 +13,8 @@ export type SignalRServerEvent =
   | 'onAlert'
   | 'onGcRootProgress'
   | 'onGcRootComplete'
+  | 'onQueryProgress'
+  | 'onQueryComplete'
   | 'onSessionCreated'
   | 'onSessionClosed'
 

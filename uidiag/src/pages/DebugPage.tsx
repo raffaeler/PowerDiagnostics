@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Box, Typography, Button, Stack, Paper, Alert } from '@mui/material'
+import { Box, Typography, Button, Stack, Paper, Alert, LinearProgress } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import CloseIcon from '@mui/icons-material/Close'
 import QueryPicker from '@/components/debug/QueryPicker'
@@ -17,6 +17,7 @@ export default function DebugPage() {
     activeSessionId,
     selectedQuery,
     isLoading,
+    queryProgress,
     sessions,
     fetchSessions,
     setActiveSessionId,
@@ -145,6 +146,14 @@ export default function DebugPage() {
             </Button>
           )}
         </Stack>
+        {queryProgress && (
+          <Box sx={{ mt: 1.5 }}>
+            <Typography variant="caption" color="text.secondary">
+              {queryProgress.status}
+            </Typography>
+            <LinearProgress sx={{ mt: 0.5 }} />
+          </Box>
+        )}
       </Paper>
 
       {/* Master-Detail Grid + GC Root Path Panel — share space naturally */}

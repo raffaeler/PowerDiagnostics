@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 using ClrDiagnostics;
 using DiagnosticModels;
@@ -26,6 +28,13 @@ public class KnownQuery
     public Type? Type { get; set; }
     public string? Name { get; set; }
     public Func<DiagnosticAnalyzer, IEnumerable>? Populate { get; set; }
+
+    /// <summary>
+    /// Optional async populate that supports progress notifications and cancellation.
+    /// When provided, takes precedence over <see cref="Populate"/> for async execution paths.
+    /// </summary>
+    public Func<DiagnosticAnalyzer, Action<int>, CancellationToken, Task<IEnumerable>>? PopulateAsync { get; set; }
+
     public Func<object, string, bool?>? Filter { get; set; }
 
     /// <summary>
@@ -90,6 +99,68 @@ public class KnownQuery
             {
                 // Filter evaluation can fail for objects with inaccessible properties.
                 // Return unfiltered rows as a fallback.
+            }
+        }
+
+        return new QueryResult
+        {
+            QueryName = Name ?? string.Empty,
+            ResultType = Type?.FullName ?? string.Empty,
+            Rows = rows,
+            HasDetails = HasDetails,
+            DetailType = DetailType?.FullName,
+            DetailProperty = DetailProperty,
+        };
+    }
+
+    /// <summary>
+    /// Executes the query asynchronously against the given analyzer, streaming progress,
+    /// optionally filtering results, and wraps the output in a serializable QueryResult.
+    /// </summary>
+    public async Task<QueryResult> ToQueryResultAsync(
+        DiagnosticAnalyzer analyzer,
+        string? filter,
+        Action<int> onProgress,
+        CancellationToken cancellationToken)
+    {
+        if (PopulateAsync is null)
+        {
+            // Fall back to synchronous populate on a background thread
+            return await Task.Run(() => ToQueryResult(analyzer, filter), cancellationToken);
+        }
+
+        IEnumerable rows;
+        try
+        {
+            rows = await PopulateAsync(analyzer, onProgress, cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return new QueryResult
+            {
+                QueryName = Name ?? string.Empty,
+                ResultType = Type?.FullName ?? string.Empty,
+                Rows = Array.Empty<object>(),
+                HasDetails = HasDetails,
+                DetailType = DetailType?.FullName,
+                DetailProperty = DetailProperty,
+                ErrorMessage = $"Error executing query: {ex.Message}",
+            };
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter) && Filter is not null)
+        {
+            try
+            {
+                rows = rows.Cast<object>().Where(o => Filter(o, filter) == true).ToList();
+            }
+            catch
+            {
+                // Filter evaluation can fail for objects with inaccessible properties.
             }
         }
 

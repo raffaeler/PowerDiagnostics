@@ -105,6 +105,14 @@ export interface MethodTableObject {
 export interface GcRootProgress {
   sessionId: string
   objectAddress: string
-  percent: number
+  count: number
+  status: string
+}
+
+/** Query progress payload from SignalR onQueryProgress. */
+export interface QueryProgress {
+  sessionId: string
+  queryName: string
+  count: number
   status: string
 }
