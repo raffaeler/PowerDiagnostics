@@ -17,6 +17,16 @@ public class SerializationTests
             TypeName = "System.String",
             RootKind = "StaticVar",
             Depth = 3,
+            Children = new List<GcRootPathNode>
+            {
+                new()
+                {
+                    ObjectAddress = "0x000001A2B3C4D5E8",
+                    TypeName = "System.Object",
+                    RootKind = "StaticVar",
+                    Depth = 4,
+                },
+            },
             ReferencingObjects = new List<GcReferenceInfo>
             {
                 new()
@@ -37,6 +47,8 @@ public class SerializationTests
         deserialized.TypeName.Should().Be("System.String");
         deserialized.RootKind.Should().Be("StaticVar");
         deserialized.Depth.Should().Be(3);
+        deserialized.Children.Should().HaveCount(1);
+        deserialized.Children[0].ObjectAddress.Should().Be("0x000001A2B3C4D5E8");
         deserialized.ReferencingObjects.Should().HaveCount(1);
         deserialized.ReferencingObjects[0].FieldName.Should().Be("_config");
         deserialized.ReferencingObjects[0].IsStatic.Should().BeTrue();
@@ -72,8 +84,17 @@ public class SerializationTests
             TotalReferences = 42,
             Paths = new List<GcRootPathNode>
             {
-                new() { ObjectAddress = "0x100", TypeName = "Foo", Depth = 0 },
-                new() { ObjectAddress = "0x200", TypeName = "Bar", Depth = 1 },
+                new()
+                {
+                    ObjectAddress = "0x100",
+                    TypeName = "Foo",
+                    Depth = 0,
+                    Children = new List<GcRootPathNode>
+                    {
+                        new() { ObjectAddress = "0x101", TypeName = "FooChild", Depth = 1 },
+                    },
+                },
+                new() { ObjectAddress = "0x200", TypeName = "Bar", Depth = 0 },
             },
         };
 
@@ -84,6 +105,8 @@ public class SerializationTests
         deserialized!.TotalPaths.Should().Be(2);
         deserialized.TotalReferences.Should().Be(42);
         deserialized.Paths.Should().HaveCount(2);
+        deserialized.Paths[0].Children.Should().HaveCount(1);
+        deserialized.Paths[0].Children[0].ObjectAddress.Should().Be("0x101");
     }
 
     [Fact]

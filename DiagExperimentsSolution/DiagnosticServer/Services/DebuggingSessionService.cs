@@ -254,13 +254,12 @@ public class DebuggingSessionService : BackgroundService
         var obj = FindClrObject(scope.DiagnosticAnalyzer, address);
         if (obj is not { } resolved) return null;
 
-        var total = scope.DiagnosticAnalyzer.GetGraphPathsCount(resolved);
         using var cts = new CancellationTokenSource();
         var lastPct = 0;
         var sid = sessionId.ToString();
         var addr = $"0x{address:X16}";
 
-        var text = await scope.DiagnosticAnalyzer.PrintRootsAsync(resolved, pct =>
+        var result = await scope.DiagnosticAnalyzer.GetRootPathsAsync(resolved, pct =>
         {
             if (pct > lastPct)
             {
@@ -269,10 +268,10 @@ public class DebuggingSessionService : BackgroundService
                 _ = _diagnosticHubContext.Clients.All.SendAsync("onGcRootProgress",
                     new { sessionId = sid, objectAddress = addr, percent = pct, status = $"Processing... {pct}%" });
             }
-        }, cts.Token);
+        }, cts.Token, maxPaths);
 
-        var result = new GcRootPathResult { TotalPaths = 1, TotalReferences = total, Paths = ParseRootPaths(text) };
-        await _diagnosticHubContext.Clients.All.SendAsync("onGcRootComplete", new { sessionId = sid, objectAddress = addr, pathCount = total });
+        await _diagnosticHubContext.Clients.All.SendAsync("onGcRootComplete",
+            new { sessionId = sid, objectAddress = addr, pathCount = result.TotalReferences });
         return result;
     }
 
@@ -317,101 +316,6 @@ public class DebuggingSessionService : BackgroundService
         foreach (var obj in analyzer.Objects)
             if (obj.Address == address) return obj;
         return null;
-    }
-
-    /// <summary>
-    /// Parses the text output from DiagnosticAnalyzer.PrintRoots into structured GcRootPathNode objects.
-    ///
-    /// PrintRoots output format:
-    ///   {TypeName} Addr:0x{addr} MT:0x{mt} Size:{size}        ← header (skip)
-    ///   {empty}
-    ///   Root {RootKind} Addr:{rootAddr} {RootType}             ← root kind tracker
-    ///     Path {n}                                              ← 2 spaces (skip)
-    ///         {hexAddr} {typeName}                              ← 5 spaces = chain link → new node
-    ///             Objects whose fields point to {hexAddr}       ← 10 spaces (skip)
-    ///                   {hexAddr} Type:{type} [static] field:{f} ← 15 spaces = reference
-    /// </summary>
-    private static List<GcRootPathNode> ParseRootPaths(string text)
-    {
-        var nodes = new List<GcRootPathNode>();
-        if (string.IsNullOrWhiteSpace(text)) return nodes;
-
-        string? currentRootKind = null;
-        GcRootPathNode? cur = null;
-
-        foreach (var line in text.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-        {
-            var t = line.Trim();
-            if (t.Length == 0) continue;
-
-            var leadingSpaces = line.Length - line.TrimStart().Length;
-
-            // Header line (contains "MT:0x") → skip
-            if (leadingSpaces == 0 && t.Contains("MT:0x", StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            // Root kind announcement: "Root Stack Addr:..." → track kind
-            if (leadingSpaces == 0 && t.StartsWith("Root "))
-            {
-                var parts = t.Split(' ');
-                currentRootKind = parts.Length > 1 ? parts[1] : "Unknown";
-                continue;
-            }
-
-            // "  Path N" → skip
-            if (leadingSpaces == 2) continue;
-
-            // "     {hexAddr} {typeName}" → chain link → new node
-            if (leadingSpaces == 5)
-            {
-                var spaceIdx = t.IndexOf(' ');
-                var addr = spaceIdx > 0 ? t.Substring(0, spaceIdx) : t;
-                var typeName = spaceIdx > 0 ? t.Substring(spaceIdx + 1) : "Unknown";
-                cur = new GcRootPathNode
-                {
-                    ObjectAddress = addr,
-                    TypeName = typeName,
-                    RootKind = currentRootKind ?? "Unknown",
-                    Depth = nodes.Count,
-                };
-                nodes.Add(cur);
-                continue;
-            }
-
-            // "          Objects whose fields point to..." → skip
-            if (leadingSpaces == 10 && t.StartsWith("Objects whose fields")) continue;
-
-            // "               0x{addr} Type:{type} [static/instance] field:{field}" → reference
-            if (leadingSpaces >= 12 && cur is not null)
-            {
-                cur.ReferencingObjects.Add(ParseRefLine(t));
-                continue;
-            }
-        }
-
-        return nodes;
-    }
-
-    private static GcReferenceInfo ParseRefLine(string line)
-    {
-        var p = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var isStatic = line.Contains("[static]");
-        var fi = Array.FindIndex(p, x => x.StartsWith("field:"));
-        return new GcReferenceInfo
-        {
-            Address = p.Length > 0 ? p[0] : "",
-            TypeName = p.Length > 1 ? p[1].Replace("Type:", "") : "Unknown",
-            FieldName = fi >= 0 ? p[fi].Replace("field:", "") : "",
-            IsStatic = isStatic,
-        };
-    }
-
-    private static string? ExtractAddr(string line)
-    {
-        var i = line.IndexOf("Addr:", StringComparison.OrdinalIgnoreCase);
-        if (i >= 0) { var e = line.IndexOf(' ', i + 5); return line[(i + 5)..(e < 0 ? line.Length : e)]; }
-        var p = line.Split(' ')[0];
-        return p.StartsWith("0x") ? p : null;
     }
 
     public IList<InvestigationScope> GetActiveSessions()

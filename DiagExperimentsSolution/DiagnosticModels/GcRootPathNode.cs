@@ -17,6 +17,9 @@ public class GcRootPathNode
     /// <summary>Depth from the root (0 = root itself).</summary>
     public int Depth { get; set; }
 
+    /// <summary>Child nodes representing the chain from this node toward the target object.</summary>
+    public List<GcRootPathNode> Children { get; set; } = new();
+
     /// <summary>Objects that hold references to this node.</summary>
     public List<GcReferenceInfo> ReferencingObjects { get; set; } = new();
 }

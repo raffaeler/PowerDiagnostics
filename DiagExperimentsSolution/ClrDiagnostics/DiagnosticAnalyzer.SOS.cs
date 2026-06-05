@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
+using DiagnosticModels;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
@@ -71,6 +72,89 @@ public partial class DiagnosticAnalyzer
         }
 
         return count;
+    }
+
+    /// <summary>
+    /// Builds a structured GC root path tree directly from ClrMD data without string intermediates.
+    /// </summary>
+    /// <param name="clrObject">The object to analyze.</param>
+    /// <param name="onProgress">Callback fired once per chain link processed.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <param name="maxPaths">Maximum number of root paths to enumerate.</param>
+    /// <returns>A <see cref="GcRootPathResult"/> containing nested root nodes.</returns>
+    public Task<GcRootPathResult> GetRootPathsAsync(
+        ClrObject clrObject,
+        Action<int> onProgress,
+        CancellationToken cancellationToken,
+        int maxPaths = 75)
+    {
+        return Task.Run(() =>
+        {
+            var result = new GcRootPathResult();
+            var roots = RootPaths(clrObject).Take(maxPaths).ToList();
+            int progressCount = 0;
+
+            foreach (var tplRoot in roots)
+            {
+                var rootKindLabel = tplRoot.Root.Address == 0
+                    ? "Register"
+                    : tplRoot.Root.RootKind.ToString();
+
+                var rootNode = new GcRootPathNode
+                {
+                    ObjectAddress = $"0x{tplRoot.Root.Address:X16}",
+                    TypeName = tplRoot.Root.Object.Type?.Name ?? "?",
+                    RootKind = rootKindLabel,
+                    Depth = 0,
+                };
+
+                GcRootPathNode currentParent = rootNode;
+
+                for (GCRoot.ChainLink? link = tplRoot.Path; link != null; link = link.Next)
+                {
+                    var address = link.Object;
+                    var type = _clrRuntime.Heap.GetObjectType(address);
+
+                    progressCount++;
+                    if (cancellationToken.IsCancellationRequested)
+                        throw new OperationCanceledException("Canceled by user request");
+
+                    onProgress(progressCount);
+
+                    var node = new GcRootPathNode
+                    {
+                        ObjectAddress = $"0x{address:X16}",
+                        TypeName = type?.Name ?? "?",
+                        RootKind = "",
+                        Depth = currentParent.Depth + 1,
+                    };
+
+                    var refs = FindReferencing(false, address);
+                    if (refs != null)
+                    {
+                        foreach (var res in refs)
+                        {
+                            node.ReferencingObjects.Add(new GcReferenceInfo
+                            {
+                                Address = $"0x{res.address:X16}",
+                                TypeName = res.typeName,
+                                FieldName = res.fieldName,
+                                IsStatic = res.isStatic,
+                            });
+                        }
+                    }
+
+                    currentParent.Children.Add(node);
+                    currentParent = node;
+                }
+
+                result.Paths.Add(rootNode);
+            }
+
+            result.TotalPaths = roots.Count;
+            result.TotalReferences = progressCount;
+            return result;
+        }, cancellationToken);
     }
 
     /// <summary>

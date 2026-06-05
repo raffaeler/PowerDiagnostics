@@ -65,6 +65,7 @@ export interface GcRootPathNode {
   typeName: string
   rootKind: string
   depth: number
+  children: GcRootPathNode[]
   referencingObjects: GcReferenceInfo[]
 }
 
