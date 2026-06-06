@@ -58,7 +58,9 @@ public class GraphRoot
             Child.Add(new Child1());
     }
 
+#pragma warning disable IDE1006 // Naming Styles
     private byte[] Data = new byte[10240];
+#pragma warning restore IDE1006 // Naming Styles
 
     public string Name { get; set; }
     public IList<Child1> Child { get; private set; } = new List<Child1>();

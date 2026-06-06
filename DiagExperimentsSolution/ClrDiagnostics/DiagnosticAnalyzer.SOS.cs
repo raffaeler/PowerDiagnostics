@@ -63,7 +63,7 @@ public partial class DiagnosticAnalyzer
     {
         int count = 0;
         var objectType = clrObject.Type;
-        var roots = RootPaths(clrObject);
+        var roots = GetRootPaths(clrObject);
         foreach (var root in roots)
         {
             // v3: GCRoot.ChainLink is a linked list; walk to count
@@ -92,44 +92,55 @@ public partial class DiagnosticAnalyzer
         {
             var result = new GcRootPathResult();
 
-            // Create GCRoot per-call (not thread-safe) and enumerate paths directly
-            // using the method's cancellationToken rather than the analyzer's global Token.
-            var targetAddr = clrObject.Address;
-            var gcroot = new GCRoot(_clrRuntime.Heap, (ClrObject o) => o.Address == targetAddr);
-            var allPaths = SafeEnumerateRootPaths(
-                gcroot, targetAddr, DeduplicateRegisterRoots, cancellationToken);
+            // Use GetRootPaths to enumerate GCRoot paths + static field fallback
+            IList<(ClrRoot? Root, ClrStaticField? StaticField, GCRoot.ChainLink Path)> allPaths;
+            allPaths = GetRootPaths(clrObject);
 
-            List<(ClrRoot Root, GCRoot.ChainLink Path)> roots;
-            if (maxPaths == -1)
-                roots = allPaths.ToList();
-            else
-                roots = allPaths.Take(maxPaths).ToList();
-
-            // .NET 10+ static field fallback (same as GetAddressPathAsync)
-            if (roots.Count == 0)
-            {
-                roots = BuildStaticRootPaths(targetAddr, clrObject, cancellationToken);
-            }
+            if (maxPaths > 0)
+                allPaths = allPaths.Take(maxPaths).ToList();
 
             int progressCount = 0;
 
-            foreach (var tplRoot in roots)
+            foreach (var path in allPaths)
             {
-                var rootKindLabel = tplRoot.Root.Address == 0
-                    ? "Register"
-                    : tplRoot.Root.RootKind.ToString();
+                string rootKindLabel;
+                string objectAddress;
+                string typeName;
+
+                if (path.Root != null)
+                {
+                    rootKindLabel = path.Root.Address == 0
+                        ? "Register"
+                        : path.Root.RootKind.ToString();
+                    objectAddress = $"0x{path.Root.Address:X16}";
+                    typeName = path.Root.Object.Type?.Name ?? "?";
+                }
+                else
+                {
+                    // Static field root: derive info from the StaticField and first chain link
+                    rootKindLabel = path.StaticField != null
+                        ? $"Static {path.StaticField.Type?.Name ?? "?"}.{path.StaticField.Name ?? "?"}"
+                        : "StaticField";
+                    var firstLink = path.Path;
+                    objectAddress = firstLink != null
+                        ? $"0x{firstLink.Object:X16}"
+                        : "0x????????????????";
+                    typeName = firstLink != null
+                        ? _clrRuntime.Heap.GetObjectType(firstLink.Object)?.Name ?? "?"
+                        : "?";
+                }
 
                 var rootNode = new GcRootPathNode
                 {
-                    ObjectAddress = $"0x{tplRoot.Root.Address:X16}",
-                    TypeName = tplRoot.Root.Object.Type?.Name ?? "?",
+                    ObjectAddress = objectAddress,
+                    TypeName = typeName,
                     RootKind = rootKindLabel,
                     Depth = 0,
                 };
 
                 GcRootPathNode currentParent = rootNode;
 
-                for (GCRoot.ChainLink? link = tplRoot.Path; link != null; link = link.Next)
+                for (GCRoot.ChainLink? link = path.Path; link != null; link = link.Next)
                 {
                     var address = link.Object;
                     var type = _clrRuntime.Heap.GetObjectType(address);
@@ -170,383 +181,10 @@ public partial class DiagnosticAnalyzer
                 result.Paths.Add(rootNode);
             }
 
-            result.TotalPaths = roots.Count;
+            result.TotalPaths = allPaths.Count;
             result.TotalReferences = progressCount;
             return result;
         }, cancellationToken);
-    }
-
-    /// <summary>
-    /// Builds a structured GC root path tree that passes through the given target address.
-    /// Walks upward from the target to its GC roots, then forward from the target
-    /// to objects it references.
-    /// </summary>
-    /// <param name="targetAddress">The object address to center the search on.</param>
-    /// <param name="onProgress">Callback fired once per chain link or forward reference processed.</param>
-    /// <param name="cancellationToken">Token to cancel the operation.</param>
-    /// <param name="maxPaths">Maximum number of root paths to enumerate.</param>
-    /// <returns>A <see cref="GcRootPathResult"/> containing nested root nodes with the target in the middle.</returns>
-    public Task<GcRootPathResult> GetAddressPathAsync(
-        ulong targetAddress,
-        Action<int> onProgress,
-        CancellationToken cancellationToken,
-        int maxPaths = -1)
-    {
-        return Task.Run(() =>
-        {
-            var result = new GcRootPathResult();
-            var targetObj = _clrRuntime.Heap.GetObject(targetAddress);
-            if (targetObj.IsNull || targetObj.Type is null)
-                return result;
-
-            // Create GCRoot per-call (not thread-safe) and enumerate paths directly
-            // using the method's cancellationToken rather than the analyzer's global Token.
-            var gcroot = new GCRoot(_clrRuntime.Heap, (ClrObject o) => o.Address == targetAddress);
-            var allPaths = SafeEnumerateRootPaths(
-                gcroot, targetAddress, DeduplicateRegisterRoots, cancellationToken);
-
-            List<(ClrRoot Root, GCRoot.ChainLink Path)> roots;
-            if (maxPaths == -1)
-                roots = allPaths.ToList();
-            else
-                roots = allPaths.Take(maxPaths).ToList();
-
-            // .NET 10+ stores static fields in per-module Object[] arrays that are
-            // NOT exposed as ClrRoot via EnumerateRoots().  When GCRoot returns empty
-            // but the object is alive via a static field chain, fall back to tracing
-            // upward through FindReferencing (which scans ObjectsWithStaticFields).
-            if (roots.Count == 0)
-            {
-                roots = BuildStaticRootPaths(targetAddress, targetObj, cancellationToken);
-            }
-
-            int progressCount = 0;
-
-            foreach (var tplRoot in roots)
-            {
-                var rootKindLabel = tplRoot.Root.Address == 0
-                    ? "Register"
-                    : tplRoot.Root.RootKind.ToString();
-
-                var rootNode = new GcRootPathNode
-                {
-                    ObjectAddress = $"0x{tplRoot.Root.Address:X16}",
-                    TypeName = tplRoot.Root.Object.Type?.Name ?? "?",
-                    RootKind = rootKindLabel,
-                    Depth = 0,
-                };
-
-                GcRootPathNode currentParent = rootNode;
-
-                // Walk upstream: root → ... → target
-                for (GCRoot.ChainLink? link = tplRoot.Path; link != null; link = link.Next)
-                {
-                    var address = link.Object;
-                    var type = _clrRuntime.Heap.GetObjectType(address);
-
-                    progressCount++;
-                    if (cancellationToken.IsCancellationRequested)
-                        throw new OperationCanceledException("Canceled by user request");
-
-                    onProgress(progressCount);
-
-                    var node = new GcRootPathNode
-                    {
-                        ObjectAddress = $"0x{address:X16}",
-                        TypeName = type?.Name ?? "?",
-                        RootKind = "",
-                        Depth = currentParent.Depth + 1,
-                    };
-
-                    var refs = FindReferencing(true, address);
-                    if (refs != null)
-                    {
-                        foreach (var res in refs)
-                        {
-                            node.ReferencingObjects.Add(new GcReferenceInfo
-                            {
-                                Address = $"0x{res.address:X16}",
-                                TypeName = res.typeName,
-                                FieldName = res.fieldName,
-                                IsStatic = res.isStatic,
-                            });
-                        }
-                    }
-
-                    currentParent.Children.Add(node);
-                    currentParent = node;
-                }
-
-                // Ensure target is the last upstream node
-                if (currentParent.ObjectAddress != $"0x{targetAddress:X16}")
-                {
-                    progressCount++;
-                    if (cancellationToken.IsCancellationRequested)
-                        throw new OperationCanceledException("Canceled by user request");
-
-                    onProgress(progressCount);
-
-                    var targetNode = new GcRootPathNode
-                    {
-                        ObjectAddress = $"0x{targetAddress:X16}",
-                        TypeName = targetObj.Type?.Name ?? "?",
-                        RootKind = "",
-                        Depth = currentParent.Depth + 1,
-                    };
-
-                    var refs = FindReferencing(true, targetAddress);
-                    if (refs != null)
-                    {
-                        foreach (var res in refs)
-                        {
-                            targetNode.ReferencingObjects.Add(new GcReferenceInfo
-                            {
-                                Address = $"0x{res.address:X16}",
-                                TypeName = res.typeName,
-                                FieldName = res.fieldName,
-                                IsStatic = res.isStatic,
-                            });
-                        }
-                    }
-
-                    currentParent.Children.Add(targetNode);
-                    currentParent = targetNode;
-                }
-
-                // Walk forward from target
-                var visited = new HashSet<ulong>();
-                visited.Add(targetAddress);
-                WalkForward(currentParent, targetAddress, visited, ref progressCount, onProgress, cancellationToken);
-
-                result.Paths.Add(rootNode);
-            }
-
-            result.TotalPaths = roots.Count;
-            result.TotalReferences = progressCount;
-            return result;
-        }, cancellationToken);
-    }
-
-    /// <summary>
-    /// Fallback root-path builder for objects kept alive by static fields
-    /// (whose static Object[] holders are not exposed as ClrRoot in .NET 10+).
-    /// Builds a SINGLE chain from the target upward through instance and static
-    /// field references.  Finds the first parent at each level — no branching.
-    /// </summary>
-    private List<(ClrRoot Root, GCRoot.ChainLink Path)> BuildStaticRootPaths(
-        ulong targetAddress,
-        ClrObject targetObj,
-        CancellationToken cancellationToken)
-    {
-        var result = new List<(ClrRoot Root, GCRoot.ChainLink Path)>();
-
-        // Build a single chain: chain[0]=immediate parent, chain[^1]=top
-        var chain = TraceSingleChain(targetAddress, new HashSet<ulong> { targetAddress }, cancellationToken);
-        if (chain.Count == 0)
-            return result;
-
-        // Find the first static-field reference in the chain (closest to target).
-        // chain[i].isStatic means chain[i] OWNS a static field whose value is the
-        // next node down (chain[i-1] or the target).  For leak detection, the
-        // static field IS the root — trim everything above it including the owner,
-        // and start the chain from the static field's VALUE.
-        int rootIdx = chain.Count;  // default: no static field, use full chain
-        for (int i = 0; i < chain.Count; i++)
-        {
-            if (chain[i].isStatic)
-            {
-                rootIdx = i;
-                break;
-            }
-        }
-
-        // buildLength = number of chain entries to include in the ChainLink.
-        // If we found a static field, exclude the owner (rootIdx itself) and
-        // everything above it.  The ChainLink starts from the static field's VALUE.
-        int buildLength = rootIdx < chain.Count ? rootIdx : chain.Count;
-
-        // The top of the visible chain is the object the static field points to
-        // (or the original top if no static field was found).
-        ulong topAddress;
-        ClrObject topObj;
-        if (rootIdx < chain.Count && rootIdx > 0)
-        {
-            topAddress = chain[rootIdx - 1].address;
-            topObj = _clrRuntime.Heap.GetObject(topAddress);
-        }
-        else if (buildLength > 0)
-        {
-            topAddress = chain[buildLength - 1].address;
-            topObj = _clrRuntime.Heap.GetObject(topAddress);
-        }
-        else
-        {
-            topAddress = targetAddress;
-            topObj = targetObj;
-        }
-
-        // Try to find a real ClrRoot for the top, otherwise create a synthetic one
-        ClrRoot? matchingRoot = null;
-        foreach (var r in _clrRuntime.Heap.EnumerateRoots())
-        {
-            if (r.Object.Address == topAddress)
-            {
-                matchingRoot = r;
-                break;
-            }
-        }
-
-        if (matchingRoot == null)
-        {
-            matchingRoot = new ClrRoot(
-                topAddress, topObj, ClrRootKind.StrongHandle,
-                isPinned: false, isInterior: false);
-        }
-
-        // Build ChainLink: top → ... → immediateParent → target → null
-        GCRoot.ChainLink? path = new GCRoot.ChainLink { Object = targetAddress };
-        for (int i = 0; i < buildLength; i++)
-        {
-            path = new GCRoot.ChainLink { Object = chain[i].address, Next = path };
-        }
-
-        result.Add((matchingRoot, path!));
-        return result;
-    }
-
-    /// <summary>
-    /// Traces a SINGLE upward chain from <paramref name="address"/> using the
-    /// first available back-reference at each level.  Does NOT explore branches —
-    /// one parent per level, greedy.
-    /// Returns chain[0]=immediate parent ... chain[^1]=top.
-    /// </summary>
-    private List<(ulong address, string typeName, string fieldName, bool isStatic)> TraceSingleChain(
-        ulong address,
-        HashSet<ulong> visited,
-        CancellationToken cancellationToken,
-        int depth = 0)
-    {
-        const int maxDepth = 30;
-        if (depth >= maxDepth)
-            return new List<(ulong, string, string, bool)>();
-
-        // Find objects whose named fields point to 'address'
-        var refs = FindReferencing(true, address);
-
-        // If nothing found via named fields, try to find the array that contains
-        // this address as an element (list/array element case).
-        (ulong, string, string, bool)? arrayRef = null;
-        if (refs == null || refs.Count == 0)
-        {
-            arrayRef = FindSingleArrayContainer(address);
-        }
-
-        // No parent found at all — this is the top of the chain
-        if ((refs == null || refs.Count == 0) && arrayRef == null)
-            return new List<(ulong, string, string, bool)>();
-
-        // Pick the first available parent (field ref takes priority over array ref)
-        (ulong refAddr, string refType, string refField, bool refIsStatic) first;
-        if (refs != null && refs.Count > 0)
-            first = refs[0];
-        else
-            first = arrayRef!.Value;
-
-        cancellationToken.ThrowIfCancellationRequested();
-
-        if (!visited.Add(first.refAddr))
-            return new List<(ulong, string, string, bool)>();
-
-        var upper = TraceSingleChain(first.refAddr, visited, cancellationToken, depth + 1);
-        visited.Remove(first.refAddr);
-
-        var chain = new List<(ulong, string, string, bool)> { first };
-        chain.AddRange(upper);
-        return chain;
-    }
-
-    /// <summary>
-    /// Finds a single array that contains <paramref name="targetAddress"/> as an
-    /// element.  Stops at the first match (does not scan the entire heap).
-    /// </summary>
-    private (ulong address, string typeName, string fieldName, bool isStatic)?
-        FindSingleArrayContainer(ulong targetAddress)
-    {
-        foreach (var obj in Objects)
-        {
-            if (!obj.IsArray || obj.IsNull)
-                continue;
-            if (obj.Type?.ComponentType is null || !obj.Type.ComponentType.IsObjectReference)
-                continue;
-
-            var array = obj.AsArray();
-            var length = array.Length;
-            if (length > 10_000)
-                continue;
-
-            for (int i = 0; i < length; i++)
-            {
-                if (array.GetObjectValue(i).Address == targetAddress)
-                {
-                    var typeName = obj.Type!.Name ?? "?";
-                    return (obj.Address, typeName, $"[{i}]", false);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private void WalkForward(
-        GcRootPathNode parent,
-        ulong parentAddress,
-        HashSet<ulong> visited,
-        ref int progressCount,
-        Action<int> onProgress,
-        CancellationToken cancellationToken)
-    {
-        var refs = FindReferenced(false, parentAddress);
-        if (refs == null)
-            return;
-
-        foreach (var res in refs)
-        {
-            progressCount++;
-            if (cancellationToken.IsCancellationRequested)
-                throw new OperationCanceledException("Canceled by user request");
-
-            onProgress(progressCount);
-
-            var node = new GcRootPathNode
-            {
-                ObjectAddress = $"0x{res.address:X16}",
-                TypeName = res.typeName,
-                RootKind = "",
-                Depth = parent.Depth + 1,
-            };
-
-            var backRefs = FindReferencing(true, res.address);
-            if (backRefs != null)
-            {
-                foreach (var backRef in backRefs)
-                {
-                    node.ReferencingObjects.Add(new GcReferenceInfo
-                    {
-                        Address = $"0x{backRef.address:X16}",
-                        TypeName = backRef.typeName,
-                        FieldName = backRef.fieldName,
-                        IsStatic = backRef.isStatic,
-                    });
-                }
-            }
-
-            parent.Children.Add(node);
-
-            if (visited.Add(res.address))
-            {
-                WalkForward(node, res.address, visited, ref progressCount, onProgress, cancellationToken);
-            }
-        }
     }
 
     /// <summary>
@@ -562,18 +200,40 @@ public partial class DiagnosticAnalyzer
         if (objectType == null) return string.Empty;
         sb.AppendLine($"{objectType.Name} Addr:0x{clrObject.Address:X} MT:0x{objectType.MethodTable:X} Size:{clrObject.Size}");
         sb.AppendLine();
-        var roots = RootPaths(clrObject);
+        var roots = GetRootPaths(clrObject);
         int i = 0;
         int count = 0;
         foreach (var tplRoot in roots)
         {
-            var rootKindLabel = tplRoot.Root.Address == 0
-                ? "Register"
-                : tplRoot.Root.RootKind.ToString();
-            sb.AppendLine($"Root {rootKindLabel} Addr:{tplRoot.Root.Address:X16} {tplRoot.Root.Object.Type?.Name ?? "?"} ");
+            string rootKindLabel;
+            string rootAddr;
+            string rootTypeName;
+
+            if (tplRoot.Root != null)
+            {
+                rootKindLabel = tplRoot.Root.Address == 0
+                    ? "Register"
+                    : tplRoot.Root.RootKind.ToString();
+                rootAddr = $"0x{tplRoot.Root.Address:X16}";
+                rootTypeName = tplRoot.Root.Object.Type?.Name ?? "?";
+            }
+            else
+            {
+                rootKindLabel = tplRoot.StaticField != null
+                    ? $"Static {tplRoot.StaticField.Type?.Name ?? "?"}.{tplRoot.StaticField.Name ?? "?"}"
+                    : "StaticField";
+                var firstLink = tplRoot.Path;
+                rootAddr = firstLink != null
+                    ? $"0x{firstLink.Object:X16}"
+                    : "0x????????????????";
+                rootTypeName = firstLink != null
+                    ? _clrRuntime.Heap.GetObjectType(firstLink.Object)?.Name ?? "?"
+                    : "?";
+            }
+
+            sb.AppendLine($"Root {rootKindLabel} Addr:{rootAddr} {rootTypeName} ");
 
             // new in v3
-            var root = tplRoot.Root;
             var path = tplRoot.Path;
 
             sb.AppendLine($"  Path {i++}");
@@ -607,7 +267,7 @@ public partial class DiagnosticAnalyzer
         return sb.ToString();
     }
 
-    private List<(ulong address, string typeName, string fieldName, bool isStatic)>? FindReferencing(
+    internal List<(ulong address, string typeName, string fieldName, bool isStatic)>? FindReferencing(
         bool includeInstance, params ulong[] leakedAddresses)
     {
         List<(ulong address, string typeName, string fieldName, bool isStatic)>? result = null;
@@ -651,7 +311,7 @@ public partial class DiagnosticAnalyzer
     /// the field name on the source object, and whether the field is static;
     /// or <see langword="null"/> if no references were found.
     /// </returns>
-    private List<(ulong address, string typeName, string fieldName, bool isStatic)>? FindReferenced(
+    internal List<(ulong address, string typeName, string fieldName, bool isStatic)>? FindReferenced(
         bool includeStatic, params ulong[] sourceAddresses)
     {
         List<(ulong address, string typeName, string fieldName, bool isStatic)>? result = null;

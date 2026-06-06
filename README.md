@@ -46,45 +46,6 @@ With .NET 5 a new interface has landed in the CLR. This allows diagnosing the le
 To test this scenario, you have to capture a .NET 5 using more than one AssemblyLoadContext and then select the last query in the combobox.
 
 ---
-## GC Root Deduplication & Register Roots
-
-When analyzing GC roots with `GCRoot.EnumerateRootPaths`, ClrMD may report the same object multiple times — once as a **register root** (the JIT compiler keeps the object reference in a CPU register) and once as a **stack root** (the object lives in an actual stack slot). Both are reported with `RootKind == Stack`, which makes them look like duplicates.
-
-### How to tell them apart
-
-Register roots have `Address == 0` (they do not point to a memory location), while stack roots have a real non-zero address. This behavior is documented in the ClrMD source code:
-
-> "The address of the stack slot this root is contained in (maybe 0 if the object is enregistered)."
->
-> — `StackRootInfo.Address` property, [`IAbstractThreadHelpers.cs`](https://github.com/microsoft/clrmd/blob/main/src/Microsoft.Diagnostics.Runtime/AbstractDac/IAbstractThreadHelpers.cs)
-
-When the address is zero, `PrintRoots` now labels the root as `"Register"` instead of `"Stack"`.
-
-### `DeduplicateRegisterRoots` option
-
-`DiagnosticAnalyzer` exposes a `DeduplicateRegisterRoots` property (default `false`):
-
-| UI | Default | Behaviour |
-|---|---|---|
-| **DiagnosticWPF** | `false` | Shows **all** roots, including registers. Register roots are labeled `"Register"`. |
-| **DiagnosticServer** | `true` (via `appsettings.json`) | Filters out register roots and deduplicates the remaining paths. |
-
-The server configuration lives in `DiagnosticServer/appsettings.json`:
-
-```json
-{
-  "Diagnostics": {
-    "DeduplicateRegisterRoots": true
-  }
-}
-```
-
-### Why the difference?
-
-- **WPF** is an interactive diagnostic tool — seeing that an object is kept alive by a CPU register is useful debugging information.
-- **DiagnosticServer** (React web UI) streams results to many clients; deduplication reduces noise and bandwidth.
-
----
 ## Notes
 These projects assume running on Windows 10 + x64 CPU. The code can easily be migrated to support the other platforms and architectures.
 

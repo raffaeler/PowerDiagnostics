@@ -134,14 +134,11 @@ public partial class DiagnosticAnalyzer : IDisposable
         return FromProcess(process.Id, cacheObjects);
     }
 
+    internal ClrRuntime ClrRuntime => _clrRuntime;
+    public ClrHeap Heap => _clrRuntime.Heap;
+
     public bool CacheAllObjects { get; }
 
-    /// <summary>
-    /// When true, <see cref="RootPaths(ClrObject)"/> will deduplicate GC root paths
-    /// and filter out register roots (roots whose <see cref="ClrRoot.Address"/> is zero).
-    /// Defaults to <see langword="false"/> so that WPF shows all roots including registers.
-    /// </summary>
-    public bool DeduplicateRegisterRoots { get; set; }
 
     public CancellationToken Token { get; private set; }
 

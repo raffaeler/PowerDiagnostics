@@ -40,8 +40,6 @@ public class DebuggingSessionService : BackgroundService
 
     private TriggerAll? _triggerAll;
 
-    private readonly bool _deduplicateRegisterRoots;
-
     public DebuggingSessionService(
         ILogger<DebuggingSessionService> logger,
         IHostApplicationLifetime applicationLifetime,
@@ -53,7 +51,6 @@ public class DebuggingSessionService : BackgroundService
         applicationLifetime.ApplicationStopping.Register(() => _quit.Set());
         _diagnosticHubContext = diagnosticHubContext;
         _investigationState = investigationState;
-        _deduplicateRegisterRoots = configuration.GetValue<bool>("Diagnostics:DeduplicateRegisterRoots");
         _jsonOptions = SetupConverters.CreateOptions();
         _worker = new(Worker);
         _worker.IsBackground = true;
@@ -174,7 +171,6 @@ public class DebuggingSessionService : BackgroundService
     public async Task<Guid> Snapshot(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromSnapshot(pid);
-        ConfigureAnalyzer(analyzer);
         var sessionId = _investigationState.AddSnapshot(analyzer);
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Snapshot" });
         return sessionId;
@@ -183,7 +179,6 @@ public class DebuggingSessionService : BackgroundService
     public async Task<Guid> Dump(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(pid);
-        ConfigureAnalyzer(analyzer);
         var sessionId = _investigationState.AddDump(analyzer);
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
         return sessionId;
@@ -193,7 +188,6 @@ public class DebuggingSessionService : BackgroundService
     public async Task<Guid> OpenDumpFromFile(string serverPath)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(serverPath, cacheObjects: true);
-        ConfigureAnalyzer(analyzer);
         var sessionId = _investigationState.AddDump(analyzer);
         _logger.LogInformation("Opened dump from {Path}, session {Id}", serverPath, sessionId);
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
@@ -209,16 +203,10 @@ public class DebuggingSessionService : BackgroundService
         await using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
             await stream.CopyToAsync(fs, ct);
         var analyzer = DiagnosticAnalyzer.FromDump(path, cacheObjects: true);
-        ConfigureAnalyzer(analyzer);
         var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(path));
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
         _logger.LogInformation("Uploaded dump {Name}, session {Id}", fileName, sessionId);
         return sessionId;
-    }
-
-    private void ConfigureAnalyzer(DiagnosticAnalyzer analyzer)
-    {
-        analyzer.DeduplicateRegisterRoots = _deduplicateRegisterRoots;
     }
 
     /// <summary>Closes a session, disposing analyzer and temp files.</summary>
@@ -290,7 +278,8 @@ public class DebuggingSessionService : BackgroundService
         var sid = sessionId.ToString();
         var addr = $"0x{address:X16}";
 
-        var result = await scope.DiagnosticAnalyzer.GetAddressPathAsync(resolved.Address, count =>
+        DiagnosticAnalyzerHelper hlp = new(scope.DiagnosticAnalyzer);
+        var result = await hlp.GetAddressPathAsync(resolved.Address, count =>
         {
             if (count - lastSentCount >= 100)
             {

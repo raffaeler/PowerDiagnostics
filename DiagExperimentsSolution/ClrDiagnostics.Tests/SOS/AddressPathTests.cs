@@ -17,7 +17,7 @@ public class AddressPathTestTarget
 
 /// <summary>
 /// Integration tests for <see cref="DiagnosticAnalyzer.FindReferenced"/>
-/// and <see cref="DiagnosticAnalyzer.GetAddressPathAsync"/>.
+/// and <see cref="DiagnosticAnalyzer.GetRootPathsAsync"/>.
 /// These tests attach to the current process and exercise real ClrMD heap walking.
 /// </summary>
 public class AddressPathTests : IDisposable
@@ -74,11 +74,13 @@ public class AddressPathTests : IDisposable
         ulong rootAddress = FindRootTargetAddress();
         rootAddress.Should().NotBe(0);
 
+        var targetObj = _analyzer.Heap.GetObject(rootAddress);
+
         int progressCount = 0;
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
 
-        var result = await _analyzer.GetAddressPathAsync(
-            rootAddress,
+        var result = await _analyzer.GetRootPathsAsync(
+            targetObj,
             _ => Interlocked.Increment(ref progressCount),
             cts.Token,
             maxPaths: 5);
@@ -101,13 +103,15 @@ public class AddressPathTests : IDisposable
             return;
         }
 
+        var targetObj = _analyzer.Heap.GetObject(rootAddress);
+
         var cts = new CancellationTokenSource();
         cts.Cancel();
 
         var ex = await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
         {
-            await _analyzer.GetAddressPathAsync(
-                rootAddress,
+            await _analyzer.GetRootPathsAsync(
+                targetObj,
                 _ => { },
                 cts.Token,
                 maxPaths: 1);

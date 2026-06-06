@@ -9,9 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-#pragma warning disable CS0618 // RootPaths(ulong) is obsolete
-
-
 namespace TestConsole;
 /// <summary>
 /// Diagnosing problems related to LoadeAllocator
@@ -38,17 +35,42 @@ public class UseCase2
             var leakedType = leakedObj.Type!;
             Console.WriteLine($"{leakedType.Name} Addr:0x{leakedObj.Address:X} Size:{leakedObj.Size} MT:0x{leakedType.MethodTable:X}");
 
-            var roots = analyzer.RootPaths(leakedObj.Address);
+            var roots = analyzer.GetRootPaths(leakedObj);
             int i = 0;
             foreach (var tplRoot in roots)
             {
-                var rootKindLabel = tplRoot.Root.Address == 0
-                    ? "Register"
-                    : tplRoot.Root.RootKind.ToString();
-                Console.WriteLine($"Root {rootKindLabel} Addr:{tplRoot.Root.Address} {tplRoot.Root.Object.Type!.Name} Addr:{tplRoot.Root.Address}  alloc:{tplRoot.Root.Object.Type!.LoaderAllocatorHandle:X16}");
+                string rootKindLabel;
+                string rootAddr;
+                string rootTypeName;
+                string rootAlloc;
+
+                if (tplRoot.Root != null)
+                {
+                    rootKindLabel = tplRoot.Root.Address == 0
+                        ? "Register"
+                        : tplRoot.Root.RootKind.ToString();
+                    rootAddr = $"0x{tplRoot.Root.Address:X}";
+                    rootTypeName = tplRoot.Root.Object.Type?.Name ?? "?";
+                    rootAlloc = $"alloc:{tplRoot.Root.Object.Type?.LoaderAllocatorHandle:X16}";
+                }
+                else
+                {
+                    rootKindLabel = tplRoot.StaticField != null
+                        ? $"Static {tplRoot.StaticField.Type?.Name ?? "?"}.{tplRoot.StaticField.Name ?? "?"}"
+                        : "StaticField";
+                    var firstLink = tplRoot.Path;
+                    rootAddr = firstLink != null
+                        ? $"0x{firstLink.Object:X}"
+                        : "?";
+                    rootTypeName = firstLink != null
+                        ? analyzer.GetObjectType(firstLink.Object)?.Name ?? "?"
+                        : "?";
+                    rootAlloc = "alloc:?";
+                }
+
+                Console.WriteLine($"Root {rootKindLabel} Addr:{rootAddr} {rootTypeName} Addr:{rootAddr}  {rootAlloc}");
 
                 // new in v3
-                var root = tplRoot.Root;
                 var path = tplRoot.Path;
 
                 Console.WriteLine($"  Path {i++}");
@@ -118,12 +140,13 @@ public class UseCase2
 
     private static void Search(DiagnosticAnalyzer analyzer, ulong leakedAddress)
     {
-        var roots = analyzer.RootPaths(leakedAddress);
+        var leakedObj = analyzer.Heap.GetObject(leakedAddress);
+        var roots = analyzer.GetRootPaths(leakedObj);
 
         // get the statics being kept by some static field
         // v3: GCRoot.ChainLink is a linked list, walk manually instead of LINQ Skip/Take
         var addressesToSearch = roots
-            .Where(r => r.Root.IsPinned && r.Root.Object.Type!.Name == "System.Object[]")
+            .Where(r => r.Root?.IsPinned == true && r.Root.Object.Type?.Name == "System.Object[]")
             .Select(r => r.Path?.Next)
             .Where(link => link != null)
             .Select(link => link!.Object)

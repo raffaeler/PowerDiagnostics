@@ -17,11 +17,12 @@ class Program
     {
         //var s = new UseCase1();
         //var s = new UseCase2();
-        var s = new UseCase3();
+        //var s = new UseCase3();
         //var s = new UseCase4();
         //var s = new UseCase5();
         //var s = new UseCase6();
         //var s = new UseCase7();
+        var s = new UseCase8();
         s.Analyze();
     }
 }
