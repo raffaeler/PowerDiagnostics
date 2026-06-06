@@ -76,7 +76,7 @@ public static class DiagnosticApiExtensions
             return Results.Ok(sessionId);
         })
         .WithName("SnapshotProcess")
-        .Produces<Guid>();
+        .Produces<string>();
 
         /// <summary>
         /// Creates a dump of the specified process.
@@ -87,7 +87,7 @@ public static class DiagnosticApiExtensions
             return Results.Ok(sessionId);
         })
         .WithName("DumpProcess")
-        .Produces<Guid>();
+        .Produces<string>();
     }
 
     // ──────────────────────────── Session Endpoints ────────────────────────────
@@ -254,18 +254,8 @@ public static class DiagnosticApiExtensions
                 });
             }
 
-            if (!Guid.TryParse(sessionId, out Guid id))
-            {
-                return Results.NotFound(new ProblemDetails
-                {
-                    Title = "Invalid session ID",
-                    Detail = $"'{sessionId}' is not a valid session ID.",
-                    Status = StatusCodes.Status404NotFound,
-                });
-            }
-
             logger.LogInformation("Running query {QueryName} on session {SessionId}", query, sessionId);
-            var result = await debuggingSessionService.GetQueryResultAsync(id, knownQuery, filter, cancellationToken);
+            var result = await debuggingSessionService.GetQueryResultAsync(sessionId, knownQuery, filter, cancellationToken);
 
             if (result is null)
             {
@@ -289,13 +279,10 @@ public static class DiagnosticApiExtensions
         endpoints.MapPost("/api/sessions/{sessionId}/address/{objectAddress}",
             (string sessionId, string objectAddress, DebuggingSessionService svc) =>
         {
-            if (!Guid.TryParse(sessionId, out Guid id))
-                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
-
             if (!TryParseHexAddress(objectAddress, out var addr))
                 return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{objectAddress}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
 
-            var result = svc.GetHexData(id, addr);
+            var result = svc.GetHexData(sessionId, addr);
             if (result is null)
                 return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{objectAddress}' in session.", Status = StatusCodes.Status404NotFound });
 
@@ -312,13 +299,10 @@ public static class DiagnosticApiExtensions
         endpoints.MapPost("/api/sessions/{sessionId}/methodTable/{mt}",
             (string sessionId, string mt, DebuggingSessionService svc) =>
         {
-            if (!Guid.TryParse(sessionId, out Guid id))
-                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
-
             if (!TryParseHexAddress(mt, out var mtAddr))
                 return Results.BadRequest(new ProblemDetails { Title = "Invalid MT address", Detail = $"'{mt}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
 
-            var result = svc.GetMethodTableObjects(id, mtAddr);
+            var result = svc.GetMethodTableObjects(sessionId, mtAddr);
             if (result is null)
                 return Results.NotFound(new ProblemDetails { Title = "MethodTable not found", Detail = $"No objects found for MT '{mt}' in session.", Status = StatusCodes.Status404NotFound });
 
@@ -335,14 +319,11 @@ public static class DiagnosticApiExtensions
         endpoints.MapPost("/api/sessions/{sessionId}/gcroot/{objectAddress}",
             async (string sessionId, string objectAddress, int? maxPaths, DebuggingSessionService svc) =>
         {
-            if (!Guid.TryParse(sessionId, out Guid id))
-                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
-
             if (!TryParseHexAddress(objectAddress, out var addr))
                 return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{objectAddress}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
 
             var result = await svc.GetGcRootPathAsync(
-                id, addr, maxPaths ?? -1);
+                sessionId, addr, maxPaths ?? -1);
             if (result is null)
                 return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{objectAddress}' in session.", Status = StatusCodes.Status404NotFound });
 
@@ -360,14 +341,11 @@ public static class DiagnosticApiExtensions
         endpoints.MapPost("/api/sessions/{sessionId}/addresspath/{objectAddress}",
             async (string sessionId, string objectAddress, int? maxPaths, DebuggingSessionService svc) =>
         {
-            if (!Guid.TryParse(sessionId, out Guid id))
-                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
-
             if (!TryParseHexAddress(objectAddress, out var addr))
                 return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{objectAddress}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
 
             var result = await svc.GetAddressPathAsync(
-                id, addr, maxPaths ?? -1);
+                sessionId, addr, maxPaths ?? -1);
             if (result is null)
                 return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{objectAddress}' in session.", Status = StatusCodes.Status404NotFound });
 
@@ -384,10 +362,7 @@ public static class DiagnosticApiExtensions
         endpoints.MapDelete("/api/sessions/{sessionId}",
             async (string sessionId, DebuggingSessionService svc) =>
         {
-            if (!Guid.TryParse(sessionId, out Guid id))
-                return Results.NotFound(new ProblemDetails { Title = "Invalid session ID", Status = StatusCodes.Status404NotFound });
-
-            await svc.CloseSession(id);
+            await svc.CloseSession(sessionId);
             return Results.Ok();
         })
         .WithName("CloseSession")

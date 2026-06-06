@@ -118,7 +118,7 @@ export default function AddressPage() {
               navigate(`/debug/${sessionId}`)
             }}
           >
-            Debug: {sessionId?.substring(0, 8)}…
+            Debug: {sessionId}
           </Link>
           <Typography color="text.primary">Address View</Typography>
         </Breadcrumbs>

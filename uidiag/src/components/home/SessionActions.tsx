@@ -18,7 +18,7 @@ export default function SessionActions() {
     if (!selectedProcess) return
     const sessionId = await takeSnapshot(selectedProcess.id)
     if (sessionId) {
-      showMessage(`Snapshot created: ${sessionId.substring(0, 8)}…`, 'success')
+      showMessage(`Snapshot created: ${sessionId}`, 'success')
       await fetchSessions()
       navigate('/debug')
     } else {
@@ -30,7 +30,7 @@ export default function SessionActions() {
     if (!selectedProcess) return
     const sessionId = await createDump(selectedProcess.id)
     if (sessionId) {
-      showMessage(`Dump created: ${sessionId.substring(0, 8)}…`, 'success')
+      showMessage(`Dump created: ${sessionId}`, 'success')
       await fetchSessions()
       navigate('/debug')
     } else {

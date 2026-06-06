@@ -19,7 +19,7 @@ public class InvestigationState
     private readonly ILogger<InvestigationState> _logger;
     private readonly GeneralConfiguration _generalConfiguration;
 
-    private ConcurrentDictionary<Guid, InvestigationScope> _scopes = new();
+    private ConcurrentDictionary<string, InvestigationScope> _scopes = new();
     private int _clientRefCount = 0;
     private DateTime? _orphaned = null;
 
@@ -36,23 +36,23 @@ public class InvestigationState
         return _scopes.Values.ToList();
     }
 
-    public InvestigationScope? GetInvestigationScope(Guid sessionId)
+    public InvestigationScope? GetInvestigationScope(string sessionId)
     {
         if(!_scopes.TryGetValue(sessionId, out var scope)) { return null; }
         return scope;
     }
 
-    public Guid AddSnapshot(DiagnosticAnalyzer analyzer)
+    public string AddSnapshot(DiagnosticAnalyzer analyzer)
     {
-        Guid session = Guid.NewGuid();
+        string session = Guid.NewGuid().ToString("N");
         InvestigationScope scope = new(session, InvestigationKind.Snapshot, analyzer);
         _scopes[session] = scope;
         return session;
     }
 
-    public Guid AddDump(DiagnosticAnalyzer analyzer)
+    public string AddDump(DiagnosticAnalyzer analyzer)
     {
-        Guid session = Guid.NewGuid();
+        string session = Guid.NewGuid().ToString("N");
         InvestigationScope scope = new(session, InvestigationKind.Dump, analyzer);
         _scopes[session] = scope;
         return session;
@@ -60,19 +60,39 @@ public class InvestigationState
 
     /// <summary>
     /// Registers a dump session with an associated temporary file (for cleanup on close/expiry).
+    /// The session ID is derived from the filename (without path), with URI-incompatible
+    /// characters replaced to produce a clean URL segment.
     /// </summary>
-    public Guid AddDumpFromFile(DiagnosticAnalyzer analyzer, FileInfo temporaryFile)
+    public string AddDumpFromFile(DiagnosticAnalyzer analyzer, FileInfo temporaryFile)
     {
-        Guid session = Guid.NewGuid();
+        string session = SanitizeFileName(temporaryFile.Name);
         InvestigationScope scope = new(session, InvestigationKind.Dump, analyzer, temporaryFile);
         _scopes[session] = scope;
         return session;
     }
 
     /// <summary>
+    /// Converts a filename into a URI-safe session identifier by keeping only
+    /// alphanumeric characters, hyphens, underscores, and dots.
+    /// Spaces and other separators become hyphens.
+    /// </summary>
+    private static string SanitizeFileName(string fileName)
+    {
+        var sb = new System.Text.StringBuilder(fileName.Length);
+        foreach (char c in fileName)
+        {
+            if (char.IsLetterOrDigit(c) || c == '-' || c == '_' || c == '.')
+                sb.Append(c);
+            else
+                sb.Append('-');
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
     /// Explicitly removes and disposes a session.
     /// </summary>
-    public bool RemoveSession(Guid sessionId)
+    public bool RemoveSession(string sessionId)
     {
         if (!_scopes.TryRemove(sessionId, out var scope))
             return false;

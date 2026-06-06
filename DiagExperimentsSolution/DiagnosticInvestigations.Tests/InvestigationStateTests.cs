@@ -49,7 +49,7 @@ public class InvestigationStateTests
     }
 
     [Fact]
-    public void AddSnapshotAndAddDump_ReturnUniqueGuids()
+    public void AddSnapshotAndAddDump_ReturnUniqueIds()
     {
         var sut = CreateSut();
         var analyzer = Substitute.For<DiagnosticAnalyzer>();
@@ -64,7 +64,7 @@ public class InvestigationStateTests
     public void GetInvestigationScope_ReturnsNull_ForUnknownSession()
     {
         var sut = CreateSut();
-        sut.GetInvestigationScope(Guid.NewGuid()).Should().BeNull();
+        sut.GetInvestigationScope(Guid.NewGuid().ToString("N")).Should().BeNull();
     }
 
     [Fact]

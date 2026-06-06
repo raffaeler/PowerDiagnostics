@@ -47,7 +47,7 @@ export default function Footer() {
 
       {activeSessionId && (
         <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
-          Active: {activeSessionId.substring(0, 8)}…
+          Active: {activeSessionId}
         </Typography>
       )}
 

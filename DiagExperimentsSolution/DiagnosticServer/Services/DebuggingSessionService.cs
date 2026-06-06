@@ -168,34 +168,34 @@ public class DebuggingSessionService : BackgroundService
         }
     }
 
-    public async Task<Guid> Snapshot(int pid)
+    public async Task<string> Snapshot(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromSnapshot(pid);
         var sessionId = _investigationState.AddSnapshot(analyzer);
-        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Snapshot" });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Snapshot" });
         return sessionId;
     }
 
-    public async Task<Guid> Dump(int pid)
+    public async Task<string> Dump(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(pid);
         var sessionId = _investigationState.AddDump(analyzer);
-        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
         return sessionId;
     }
 
-    /// <summary>Opens a dump file from a server-side path.</summary>
-    public async Task<Guid> OpenDumpFromFile(string serverPath)
+    /// <summary>Opens a dump file from a server-side path. The session ID is derived from the filename.</summary>
+    public async Task<string> OpenDumpFromFile(string serverPath)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(serverPath, cacheObjects: true);
-        var sessionId = _investigationState.AddDump(analyzer);
+        var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(serverPath));
         _logger.LogInformation("Opened dump from {Path}, session {Id}", serverPath, sessionId);
-        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
         return sessionId;
     }
 
-    /// <summary>Opens an uploaded dump, saving to temp file first.</summary>
-    public async Task<Guid> OpenDumpFromUploadAsync(Stream stream, string fileName, CancellationToken ct = default)
+    /// <summary>Opens an uploaded dump, saving to temp file first. The session ID is derived from the original filename.</summary>
+    public async Task<string> OpenDumpFromUploadAsync(Stream stream, string fileName, CancellationToken ct = default)
     {
         var dir = Path.Combine(Path.GetTempPath(), "PowerDiagnostics");
         Directory.CreateDirectory(dir);
@@ -203,22 +203,22 @@ public class DebuggingSessionService : BackgroundService
         await using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
             await stream.CopyToAsync(fs, ct);
         var analyzer = DiagnosticAnalyzer.FromDump(path, cacheObjects: true);
-        var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(path));
-        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId = sessionId.ToString(), kind = "Dump" });
+        var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(fileName));
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
         _logger.LogInformation("Uploaded dump {Name}, session {Id}", fileName, sessionId);
         return sessionId;
     }
 
     /// <summary>Closes a session, disposing analyzer and temp files.</summary>
-    public async Task CloseSession(Guid sessionId)
+    public async Task CloseSession(string sessionId)
     {
         _investigationState.RemoveSession(sessionId);
         _logger.LogInformation("Closed session {Id}", sessionId);
-        await _diagnosticHubContext.Clients.All.SendAsync("onSessionClosed", new { sessionId = sessionId.ToString() });
+        await _diagnosticHubContext.Clients.All.SendAsync("onSessionClosed", new { sessionId });
     }
 
     /// <summary>Returns raw bytes for a heap object (hex viewer).</summary>
-    public HexDataResult? GetHexData(Guid sessionId, ulong address)
+    public HexDataResult? GetHexData(string sessionId, ulong address)
     {
         var scope = _investigationState.GetInvestigationScope(sessionId);
         if (scope is null) return null;
@@ -236,7 +236,7 @@ public class DebuggingSessionService : BackgroundService
     }
 
     /// <summary>Returns GC root paths, streaming progress via SignalR.</summary>
-    public async Task<GcRootPathResult?> GetGcRootPathAsync(Guid sessionId, ulong address, int maxPaths = -1)
+    public async Task<GcRootPathResult?> GetGcRootPathAsync(string sessionId, ulong address, int maxPaths = -1)
     {
         var scope = _investigationState.GetInvestigationScope(sessionId);
         if (scope is null) return null;
@@ -245,7 +245,6 @@ public class DebuggingSessionService : BackgroundService
 
         using var cts = new CancellationTokenSource();
         var lastSentCount = 0;
-        var sid = sessionId.ToString();
         var addr = $"0x{address:X16}";
 
         var result = await scope.DiagnosticAnalyzer.GetRootPathsAsync(resolved, count =>
@@ -255,18 +254,18 @@ public class DebuggingSessionService : BackgroundService
                 lastSentCount = count;
                 // Fire-and-forget: progress callback is synchronous, we must not block the trace pipeline.
                 _ = _diagnosticHubContext.Clients.All.SendAsync("onGcRootProgress",
-                    new { sessionId = sid, objectAddress = addr, count = count, status = $"Processing... {count}" });
+                    new { sessionId, objectAddress = addr, count = count, status = $"Processing... {count}" });
             }
         }, cts.Token, maxPaths);
 
         await _diagnosticHubContext.Clients.All.SendAsync("onGcRootComplete",
-            new { sessionId = sid, objectAddress = addr, pathCount = result.TotalReferences });
+            new { sessionId, objectAddress = addr, pathCount = result.TotalReferences });
         return result;
     }
 
     /// <summary>Returns GC root paths passing through a target address, walking up to roots
     /// and down to referenced objects, streaming progress via SignalR.</summary>
-    public async Task<GcRootPathResult?> GetAddressPathAsync(Guid sessionId, ulong address, int maxPaths = -1)
+    public async Task<GcRootPathResult?> GetAddressPathAsync(string sessionId, ulong address, int maxPaths = -1)
     {
         var scope = _investigationState.GetInvestigationScope(sessionId);
         if (scope is null) return null;
@@ -275,7 +274,6 @@ public class DebuggingSessionService : BackgroundService
 
         using var cts = new CancellationTokenSource();
         var lastSentCount = 0;
-        var sid = sessionId.ToString();
         var addr = $"0x{address:X16}";
 
         DiagnosticAnalyzerHelper hlp = new(scope.DiagnosticAnalyzer);
@@ -286,18 +284,18 @@ public class DebuggingSessionService : BackgroundService
                 lastSentCount = count;
                 // Fire-and-forget: progress callback is synchronous, we must not block the trace pipeline.
                 _ = _diagnosticHubContext.Clients.All.SendAsync("onAddressPathProgress",
-                    new { sessionId = sid, objectAddress = addr, count = count, status = $"Processing... {count}" });
+                    new { sessionId, objectAddress = addr, count = count, status = $"Processing... {count}" });
             }
         }, cts.Token, maxPaths);
 
         await _diagnosticHubContext.Clients.All.SendAsync("onAddressPathComplete",
-            new { sessionId = sid, objectAddress = addr, pathCount = result.TotalReferences });
+            new { sessionId, objectAddress = addr, pathCount = result.TotalReferences });
         return result;
     }
 
     /// <summary>Runs a query and returns QueryResult with metadata, streaming progress via SignalR.</summary>
     public async Task<QueryResult?> GetQueryResultAsync(
-        Guid sessionId,
+        string sessionId,
         KnownQuery query,
         string? filter,
         CancellationToken cancellationToken = default)
@@ -306,7 +304,6 @@ public class DebuggingSessionService : BackgroundService
         if (scope is null) return null;
 
         var lastSentCount = 0;
-        var sid = sessionId.ToString();
         var queryName = query.Name ?? "Query";
 
         var result = await query.ToQueryResultAsync(
@@ -319,13 +316,13 @@ public class DebuggingSessionService : BackgroundService
                     lastSentCount = count;
                     // Fire-and-forget: progress callback is synchronous, we must not block.
                     _ = _diagnosticHubContext.Clients.All.SendAsync("onQueryProgress",
-                        new { sessionId = sid, queryName = queryName, count = count, status = $"Processing... {count}" });
+                        new { sessionId, queryName = queryName, count = count, status = $"Processing... {count}" });
                 }
             },
             cancellationToken);
 
         await _diagnosticHubContext.Clients.All.SendAsync("onQueryComplete",
-            new { sessionId = sid, queryName = queryName, rowCount = result.Rows.Cast<object>().Count() });
+            new { sessionId, queryName = queryName, rowCount = result.Rows.Cast<object>().Count() });
         return result;
     }
 
@@ -333,7 +330,7 @@ public class DebuggingSessionService : BackgroundService
     /// Returns all heap objects for a specific MethodTable address.
     /// Runs the DumpHeapStat query internally and locates the matching MT entry.
     /// </summary>
-    public MethodTableResult? GetMethodTableObjects(Guid sessionId, ulong mt)
+    public MethodTableResult? GetMethodTableObjects(string sessionId, ulong mt)
     {
         var scope = _investigationState.GetInvestigationScope(sessionId);
         if (scope is null) return null;
@@ -367,7 +364,7 @@ public class DebuggingSessionService : BackgroundService
     public IList<InvestigationScope> GetActiveSessions()
         => _investigationState.GetActiveSessions();
 
-    public InvestigationScope? GetInvestigationScope(Guid sessionId)
+    public InvestigationScope? GetInvestigationScope(string sessionId)
         => _investigationState.GetInvestigationScope(sessionId);
 }
 

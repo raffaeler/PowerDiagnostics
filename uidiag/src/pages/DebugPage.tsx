@@ -106,7 +106,7 @@ export default function DebugPage() {
               color="text.secondary"
               sx={{ ml: 2, fontFamily: 'monospace' }}
             >
-              Session: {activeSessionId.substring(0, 8)}…
+              Session: {activeSessionId}
             </Typography>
           )}
         </Typography>
@@ -115,7 +115,7 @@ export default function DebugPage() {
       {/* Session expired warning */}
       {sessionExpired && (
         <Alert severity="warning" onClose={() => navigate('/')} sx={{ mb: 2 }}>
-          Session <strong>{sessionId?.substring(0, 8)}…</strong> has expired or was closed. Return to Home to start a new session.
+          Session <strong>{sessionId}</strong> has expired or was closed. Return to Home to start a new session.
         </Alert>
       )}
 

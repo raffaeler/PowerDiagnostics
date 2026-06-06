@@ -14,7 +14,7 @@ namespace DiagnosticInvestigations;
 /// </summary>
 public record class InvestigationScope
 {
-    public InvestigationScope(Guid sessionId,
+    public InvestigationScope(string sessionId,
         InvestigationKind investigationKind,
         DiagnosticAnalyzer diagnosticAnalyzer,
         FileInfo? temporaryFile = null)
@@ -26,7 +26,7 @@ public record class InvestigationScope
         this.TemporaryFile = temporaryFile;
     }
 
-    public Guid SessionId { get; }
+    public string SessionId { get; }
     public DateTime Created { get; }
 
     public InvestigationKind InvestigationKind { get; }

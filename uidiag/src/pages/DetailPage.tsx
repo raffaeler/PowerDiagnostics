@@ -119,7 +119,7 @@ export default function DetailPage() {
               navigate(`/debug/${sessionId}`)
             }}
           >
-            Debug: {sessionId?.substring(0, 8)}…
+            Debug: {sessionId}
           </Link>
           <Typography color="text.primary">
             {queryName} row #{rowIndex}
@@ -132,7 +132,7 @@ export default function DetailPage() {
         <Typography variant="h6">
           Details: {queryName}
           <Typography component="span" variant="body2" color="text.secondary" sx={{ ml: 2 }}>
-            Row {rowIndex} of session {sessionId?.substring(0, 8)}…
+            Row {rowIndex} of session {sessionId}
           </Typography>
         </Typography>
       </Paper>

@@ -106,7 +106,7 @@ export default function MethodTablePage() {
                 navigate(`/debug/${sessionId}`)
               }}
             >
-              Debug: {sessionId?.substring(0, 8)}…
+              Debug: {sessionId}
             </Link>
             <Typography color="text.primary">
               MethodTable {mtDisplay}
@@ -160,7 +160,7 @@ export default function MethodTablePage() {
               navigate(`/debug/${sessionId}`)
             }}
           >
-            Debug: {sessionId?.substring(0, 8)}…
+            Debug: {sessionId}
           </Link>
           <Typography color="text.primary">
             MethodTable {mtDisplay}
