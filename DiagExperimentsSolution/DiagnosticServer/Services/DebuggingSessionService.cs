@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Diagnostics.Runtime;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using ClrDiagnostics.Experimental;
 
 namespace DiagnosticServer.Services;
 public class DebuggingSessionService : BackgroundService

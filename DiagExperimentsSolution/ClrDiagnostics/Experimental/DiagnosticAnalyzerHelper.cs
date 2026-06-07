@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace ClrDiagnostics;
+namespace ClrDiagnostics.Experimental;
 
 public class DiagnosticAnalyzerHelper
 {
