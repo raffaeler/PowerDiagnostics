@@ -7,6 +7,26 @@ While classic debuggers are powerful general-purpose diagnostic tools, writing a
 
 The code in this repository **does not implement any automated task**, but instead shows — with a WPF desktop UI or a React web UI — how the building blocks work so that anyone can write a tailor-made automation for their applications.
 
+## Web app
+The Web application is the most complete GUI for this diagnostic tool. It can be reached on either http or https (a valid certificate installation is needed). Some significant screenshots are provided here.
+
+<img width="1160" height="496" alt="image" src="https://github.com/user-attachments/assets/d1a4cafa-db81-43a6-b805-d5bbcbcfd6aa" />
+
+<img width="1162" height="664" alt="image" src="https://github.com/user-attachments/assets/42fbeb88-8259-441f-99ce-e395b02ddb1e" />
+
+<img width="1145" height="719" alt="image" src="https://github.com/user-attachments/assets/f06bf1f1-d26c-4f31-a595-b811525b2124" />
+
+<img width="1121" height="571" alt="image" src="https://github.com/user-attachments/assets/38dcdf45-62b5-478d-a306-621219d13e6f" />
+
+<img width="1116" height="373" alt="image" src="https://github.com/user-attachments/assets/5331252c-ce76-422f-bc40-174a56f68f6d" />
+
+<img width="1118" height="492" alt="image" src="https://github.com/user-attachments/assets/0b977be5-3763-4cc5-8f5f-1abf8ec63cd8" />
+
+
+
+## WPF App
+This is the older version of the GUI and does not implement the full features. It does not use the DiagnosticServer but directly references the libraries to create or analyze the snapshot and dumps.
+
 ![StressTestWebApp](_images/UI-App.png)
 
 ---
