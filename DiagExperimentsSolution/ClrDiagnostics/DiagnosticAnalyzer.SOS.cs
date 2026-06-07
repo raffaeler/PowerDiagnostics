@@ -119,7 +119,7 @@ public partial class DiagnosticAnalyzer
                 {
                     // Static field root: derive info from the StaticField and first chain link
                     rootKindLabel = path.StaticField != null
-                        ? $"Static {path.StaticField.Type?.Name ?? "?"}.{path.StaticField.Name ?? "?"}"
+                        ? "static"
                         : "StaticField";
                     var firstLink = path.Path;
                     objectAddress = firstLink != null
@@ -220,7 +220,7 @@ public partial class DiagnosticAnalyzer
             else
             {
                 rootKindLabel = tplRoot.StaticField != null
-                    ? $"Static {tplRoot.StaticField.Type?.Name ?? "?"}.{tplRoot.StaticField.Name ?? "?"}"
+                    ? "static"
                     : "StaticField";
                 var firstLink = tplRoot.Path;
                 rootAddr = firstLink != null
