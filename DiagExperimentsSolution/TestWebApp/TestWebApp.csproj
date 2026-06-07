@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+    <!--<ServerGarbageCollection>false</ServerGarbageCollection>-->
   </PropertyGroup>
 
   <ItemGroup>

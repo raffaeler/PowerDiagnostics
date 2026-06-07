@@ -17,7 +17,7 @@ namespace TestConsole;
 
 public class UseCase8
 {
-    private const string _dumpFile = @"H:\_dumps\dump_20260605_202822.dmp";
+    private const string _dumpFile = @"H:\_dumps\dump_20260607_101938.dmp";
 
     public void Analyze()
     {
@@ -151,11 +151,6 @@ public class UseCase8
         PrintRootPahts(analyzer, sampleGrandChild);
         Console.WriteLine();
 
-        var almost = analyzer.Objects.Single(o => o.Address == 0x0000021C7BD21BE0);
-        // forward references:
-        var reffwd = analyzer.ObjectReferencesWithFields(almost);
-
-        //var refback = analyzer.FindReferencing(true, almost.Address);
 
         var collection = analyzer.ObjectsWithInstanceFields
             .Single(x => x.Item1.Type?.Name?.StartsWith("System.Collections.Generic.List<TestWebApp.Services.GraphRoot>") ?? false);
@@ -166,96 +161,6 @@ public class UseCase8
         var unk = analyzer.ObjectReferencesWithFields(arrInList.Object).ToList();
 
         var res = EnumerateRootPathsRaf(analyzer.Heap, sampleGrandChild).ToList();
-
-        var myRoots = //roots
-            analyzer.GetStaticFields().Select(f => (Field: f.field, Object: f.obj))
-            .ToList();
-
-        Console.WriteLine(":::: Alternate");
-        foreach (var root in myRoots)
-        {
-            //GCRoot gcRoot = new(analyzer.Heap, [root.Object.Address]);
-            //var path = gcRoot.FindPathFrom(sampleGrandChild);
-
-            GCRoot gcRoot = new(analyzer.Heap, [sampleGrandChild.Address]);
-            var path = gcRoot.FindPathFrom(root.Object);
-
-            PrintChain(analyzer.Heap, path);
-        }
-
-        Console.WriteLine(":::: EndAlternate");
-
-
-        foreach (var root in myRoots)
-        {
-            if (root.Object.IsArray)
-            {
-                var array = root.Object.AsArray();
-                var len = array.GetLength(0);
-                for (int i = 0; i < len; i++)
-                {
-                    try
-                    {
-                        var item = array.GetObjectValue(i);
-                        if (item.Type?.Name == "System.Collections.Generic.List<TestWebApp.Services.GraphRoot>")
-                        {
-                            Console.WriteLine("Found");
-                        }
-
-                        if (item.Address == 0x0000021C7BD155E8)
-                        {
-                            Console.WriteLine("FoundA");
-                        }
-
-                        var children = analyzer.ObjectReferencesWithFields(item).ToList();
-                        foreach (var child in children)
-                        {
-                            if (child.Object.Type?.Name == "System.Collections.Generic.List<TestWebApp.Services.GraphRoot>")
-                            {
-                                Console.WriteLine("Found");
-                            }
-
-                            if (child.Object.Address == 0x0000021C7BD155E8)
-                            {
-                                Console.WriteLine("FoundA");
-                            }
-                        }
-                    }
-                    catch (Exception) { }
-                }
-            }
-            else
-            {
-                if (root.Object.Type?.Name == "System.Collections.Generic.List<TestWebApp.Services.GraphRoot>")
-                {
-                    Console.WriteLine("Found");
-                }
-
-                if (root.Object.Address == 0x0000021C7BD155E8)
-                {
-                    Console.WriteLine("FoundA");
-                }
-
-
-                var children = analyzer.ObjectReferencesWithFields(root.Object).ToList();
-                foreach (var child in children)
-                {
-                    if (child.Object.Type?.Name == "System.Collections.Generic.List<TestWebApp.Services.GraphRoot>")
-                    {
-                        Console.WriteLine("Found");
-                    }
-
-                    if (child.Object.Address == 0x0000021C7BD155E8)
-                    {
-                        Console.WriteLine("FoundA");
-                    }
-                }
-            }
-            //var children = analyzer.ObjectReferencesWithFields(root.Object).ToList();
-            //var bingo = children
-            //    .Where(c => c.)
-            //    .ToList();
-        }
 
     }
 
@@ -379,63 +284,6 @@ public class UseCase8
                 yield return (root, path);
         }
     }
-
-    //public ChainLink? FindPathFrom(ClrObject start)
-    //{
-    //    return FindPathFrom(start, CancellationToken.None);
-    //}
-
-    //private Dictionary<ulong, ChainLink> _found = new();
-    //private Predicate<ClrObject>? _targetPredicate;
-    //public ChainLink? FindPathFrom(ClrObject start, CancellationToken cancellation)
-    //{
-    //    if (_found.TryGetValue(start, out ChainLink? link))
-    //        return link;
-
-    //    if (_targetPredicate is not null && _targetPredicate(start))
-    //    {
-    //        link = new ChainLink()
-    //        {
-    //            Object = start,
-    //        };
-
-    //        _found.Add(start, link);
-    //        return link;
-    //    }
-
-    //    if (start.Type is null || !start.Type.ContainsPointers)
-    //        return null;
-
-    //    List<byte[]> stack = new();
-    //    link = WalkObject(stack, 0, start, cancellation);
-    //    if (link is not null)
-    //    {
-    //        DrainUnwalkedFromSeen(stack);
-    //        return link;
-    //    }
-
-    //    while (stack.Count > 0)
-    //    {
-    //        cancellation.ThrowIfCancellationRequested();
-
-    //        ReferenceList curr = stack[stack.Count - 1];
-    //        ulong currChild = curr.Next();
-    //        if (currChild == 0)
-    //        {
-    //            stack.RemoveAt(stack.Count - 1);
-    //            curr.Dispose();
-    //            continue;
-    //        }
-
-    //        TraceConsidering(curr.Object, currChild);
-
-    //        link = WalkObject(stack, curr.Object, currChild, cancellation);
-    //        if (link is not null)
-    //            return CleanupAndGetResult(stack, link, curr);
-    //    }
-
-    //    return null;
-    //}
 
     private bool PathExists(ClrHeap heap, ClrObject from, ClrObject to)
     {
