@@ -17,7 +17,7 @@ namespace TestConsole;
 
 public class UseCase8
 {
-    private const string _dumpFile = @"H:\_dumps\dump_20260607_101938.dmp";
+    private const string _dumpFile = @"H:\_dumps\gcworkstation_dump_20260607_101938.dmp";
 
     public void Analyze()
     {
