@@ -357,6 +357,125 @@ public static class DiagnosticApiExtensions
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
         /// <summary>
+        /// Returns the memory segment layout of the GC heap for a session.
+        /// </summary>
+        endpoints.MapGet("/api/sessions/{sessionId}/memorymap",
+            (string sessionId, DebuggingSessionService svc) =>
+        {
+            var result = svc.GetMemoryMap(sessionId);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Session not found", Detail = "No active session found.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetMemoryMap")
+        .Produces<IEnumerable<MemorySegmentInfo>>()
+        .ProducesProblem(StatusCodes.Status404NotFound);
+
+        /// <summary>
+        /// Reads raw bytes at an arbitrary address in the dump, with region
+        /// partitioning showing which object owns each byte range.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/memory/{address}",
+            (string sessionId, string address, int? length, DebuggingSessionService svc) =>
+        {
+            if (!TryParseHexAddress(address, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{address}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetRawMemory(sessionId, addr, length ?? 512);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Session not found", Detail = "No active session found.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetRawMemory")
+        .Produces<RawMemoryResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Returns the field layout of a heap object with reference annotations.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/layout/{address}",
+            (string sessionId, string address, DebuggingSessionService svc) =>
+        {
+            if (!TryParseHexAddress(address, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{address}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetObjectLayout(sessionId, addr);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Object not found", Detail = $"No object at address '{address}'.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetObjectLayout")
+        .Produces<ObjectFieldLayout>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Returns the containing object (data owner) for any address.
+        /// Includes referencing objects when the address is an object start.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/dataowner/{address}",
+            (string sessionId, string address, DebuggingSessionService svc) =>
+        {
+            if (!TryParseHexAddress(address, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{address}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetDataOwner(sessionId, addr);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Session not found", Detail = "No active session found.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetDataOwner")
+        .Produces<DataOwnerResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Returns objects that hold references to the given object address.
+        /// Only meaningful for object-start addresses; returns IsObjectStart=false for interior addresses.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/referencing/{address}",
+            (string sessionId, string address, DebuggingSessionService svc) =>
+        {
+            if (!TryParseHexAddress(address, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{address}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetReferencingObjects(sessionId, addr);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Session not found", Detail = "No active session found.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetReferencingObjects")
+        .Produces<ReferencingObjectsResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Combined address info: data owner + field layout + referencing objects.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/addressinfo/{address}",
+            (string sessionId, string address, DebuggingSessionService svc) =>
+        {
+            if (!TryParseHexAddress(address, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{address}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetAddressInfo(sessionId, addr);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Session not found", Detail = "No active session found.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetAddressInfo")
+        .Produces<AddressInfoResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
         /// Closes a diagnostic session and releases resources.
         /// </summary>
         endpoints.MapDelete("/api/sessions/{sessionId}",

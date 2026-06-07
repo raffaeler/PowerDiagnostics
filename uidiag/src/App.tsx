@@ -9,6 +9,7 @@ import DebugPage from '@/pages/DebugPage'
 import DetailPage from '@/pages/DetailPage'
 import AddressPage from '@/pages/AddressPage'
 import MethodTablePage from '@/pages/MethodTablePage'
+import MemoryMapPage from '@/pages/MemoryMapPage'
 
 function App() {
   const darkMode = useAppStore((s) => s.darkMode)
@@ -26,6 +27,7 @@ function App() {
             <Route path="debug/:sessionId/detail/:queryName/:rowIndex" element={<DetailPage />} />
             <Route path="debug/:sessionId/address/:address" element={<AddressPage />} />
             <Route path="debug/:sessionId/MethodTable/:mt" element={<MethodTablePage />} />
+            <Route path="debug/:sessionId/memorymap" element={<MemoryMapPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

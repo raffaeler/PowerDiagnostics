@@ -355,6 +355,178 @@ public class DebuggingSessionService : BackgroundService
         return null; // MT not found
     }
 
+    // ──────────────────────── Memory Map ────────────────────────
+
+    /// <summary>
+    /// Returns the memory segment layout of the GC heap for a session.
+    /// </summary>
+    public IEnumerable<MemorySegmentInfo>? GetMemoryMap(string sessionId)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        return scope?.DiagnosticAnalyzer.GetMemorySegments();
+    }
+
+    // ──────────────────────── Raw Memory Read ────────────────────────
+
+    /// <summary>
+    /// Reads raw bytes at an arbitrary address, with region partitioning
+    /// showing which object owns each byte range.
+    /// </summary>
+    public RawMemoryResult? GetRawMemory(string sessionId, ulong address, int length = 512)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var analyzer = scope.DiagnosticAnalyzer;
+        var bytes = analyzer.ReadRawMemory(address, length);
+        if (bytes.Length == 0)
+        {
+            return new RawMemoryResult
+            {
+                Address = $"0x{address:X16}",
+                Length = 0,
+                BytesBase64 = string.Empty,
+                RegionKind = "Unmapped",
+            };
+        }
+
+        var regions = analyzer.PartitionMemoryRange(address, bytes.Length);
+        var firstOwner = regions.FirstOrDefault(r => r.ObjectAddress is not null);
+
+        string regionKind = "HeapObject";
+        if (regions.All(r => r.Kind == "FreeBlock")) regionKind = "FreeBlock";
+        else if (regions.All(r => r.Kind == "Unmapped")) regionKind = "Unmapped";
+
+        return new RawMemoryResult
+        {
+            Address = $"0x{address:X16}",
+            Length = bytes.Length,
+            BytesBase64 = Convert.ToBase64String(bytes),
+            RegionKind = regionKind,
+            Regions = regions,
+            ContainingObjectAddress = firstOwner?.ObjectAddress,
+            ContainingObjectTypeName = firstOwner?.ObjectTypeName,
+            OffsetWithinObject = firstOwner?.OffsetWithinObject,
+        };
+    }
+
+    // ──────────────────────── Object Field Layout ────────────────────────
+
+    /// <summary>
+    /// Returns the field layout of a heap object with reference annotations.
+    /// </summary>
+    public ObjectFieldLayout? GetObjectLayout(string sessionId, ulong address)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        return scope?.DiagnosticAnalyzer.GetObjectFieldLayout(address);
+    }
+
+    // ──────────────────────── Data Owner ────────────────────────
+
+    /// <summary>
+    /// Returns the containing object (data owner) for any address, plus
+    /// referencing objects if the address is an object start.
+    /// </summary>
+    public DataOwnerResult? GetDataOwner(string sessionId, ulong address)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var analyzer = scope.DiagnosticAnalyzer;
+        var containing = analyzer.FindContainingObject(address);
+
+        if (containing is not { } c)
+        {
+            // Address is not within any known object
+            return new DataOwnerResult
+            {
+                Address = $"0x{address:X16}",
+                Kind = "Unmapped",
+            };
+        }
+
+        bool isObjectStart = c.ContainingObject.Address == address;
+
+        return new DataOwnerResult
+        {
+            Address = $"0x{address:X16}",
+            Kind = isObjectStart ? "ObjectStart" : "InsideObject",
+            ContainingObjectAddress = $"0x{c.ContainingObject.Address:X16}",
+            ContainingObjectTypeName = c.ContainingObject.Type?.Name ?? "Unknown",
+            OffsetWithinObject = c.OffsetWithinObject,
+            ObjectSize = (long)c.ContainingObject.Size,
+            IsObjectStart = isObjectStart,
+            ReferencingObjects = isObjectStart
+                ? analyzer.GetReferencingObjects(address).ToList()
+                : null,
+        };
+    }
+
+    /// <summary>
+    /// Returns the list of objects that hold references to the given object address.
+    /// Only meaningful for object-start addresses.
+    /// </summary>
+    public ReferencingObjectsResult? GetReferencingObjects(string sessionId, ulong address)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var analyzer = scope.DiagnosticAnalyzer;
+        bool isObjectStart = analyzer.FindContainingObject(address) is { } c
+            && c.ContainingObject.Address == address;
+
+        var refs = isObjectStart
+            ? analyzer.GetReferencingObjects(address).ToList()
+            : new List<GcReferenceInfo>();
+
+        return new ReferencingObjectsResult
+        {
+            TargetAddress = $"0x{address:X16}",
+            IsObjectStart = isObjectStart,
+            ReferencingObjects = refs,
+        };
+    }
+
+    /// <summary>
+    /// Combined address info: data owner + field layout + referencing objects.
+    /// </summary>
+    public AddressInfoResult? GetAddressInfo(string sessionId, ulong address)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var analyzer = scope.DiagnosticAnalyzer;
+        var containing = analyzer.FindContainingObject(address);
+
+        if (containing is not { } c)
+        {
+            return new AddressInfoResult
+            {
+                Address = $"0x{address:X16}",
+                Kind = "Unmapped",
+            };
+        }
+
+        bool isObjectStart = c.ContainingObject.Address == address;
+
+        return new AddressInfoResult
+        {
+            Address = $"0x{address:X16}",
+            Kind = isObjectStart ? "ObjectStart" : "InsideObject",
+            ContainingObjectAddress = $"0x{c.ContainingObject.Address:X16}",
+            ContainingObjectTypeName = c.ContainingObject.Type?.Name ?? "Unknown",
+            OffsetWithinObject = c.OffsetWithinObject,
+            ObjectSize = (long)c.ContainingObject.Size,
+            IsObjectStart = isObjectStart,
+            FieldLayout = isObjectStart
+                ? analyzer.GetObjectFieldLayout(address)
+                : null,
+            ReferencingObjects = isObjectStart
+                ? analyzer.GetReferencingObjects(address).ToList()
+                : null,
+        };
+    }
+
     private static ClrObject? FindClrObject(DiagnosticAnalyzer analyzer, ulong address)
     {
         foreach (var obj in analyzer.Objects)

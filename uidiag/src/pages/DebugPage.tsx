@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Box, Typography, Button, Stack, Paper, Alert, LinearProgress } from '@mui/material'
+import { Box, Typography, Button, Stack, Paper, Alert, LinearProgress, TextField } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
-import CloseIcon from '@mui/icons-material/Close'
+import MapIcon from '@mui/icons-material/Map'
+import SearchIcon from '@mui/icons-material/Search'
 import QueryPicker from '@/components/debug/QueryPicker'
 import FilterBar from '@/components/debug/FilterBar'
 import MasterDetailGrid from '@/components/debug/MasterDetailGrid'
@@ -22,12 +23,13 @@ export default function DebugPage() {
     fetchSessions,
     setActiveSessionId,
     runQuery,
-    closeSession,
     fetchGcRootPath,
     fetchHexData,
+    clearAddressState,
   } = useDiagnosticsStore()
 
   const [hexDialogOpen, setHexDialogOpen] = useState(false)
+  const [addressInput, setAddressInput] = useState('')
 
   // Sync sessionId from URL
   useEffect(() => {
@@ -41,6 +43,13 @@ export default function DebugPage() {
     fetchSessions()
   }, [fetchSessions])
 
+  // Clear any address-specific state (GC root paths, hex data) when entering
+  // the DebugPage context — this stale data belongs to the Address/Detail pages.
+  useEffect(() => {
+    clearAddressState()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Detect expired/missing session (sessionId from URL not in sessions list)
   const sessionExpired = sessionId && sessions.length > 0 && !sessions.some((s) => s.sessionId === sessionId)
 
@@ -50,11 +59,12 @@ export default function DebugPage() {
     runQuery(activeSessionId, selectedQuery)
   }, [activeSessionId, selectedQuery, runQuery])
 
-  const handleCloseSession = useCallback(async () => {
-    if (!activeSessionId) return
-    await closeSession(activeSessionId)
-    navigate('/')
-  }, [activeSessionId, closeSession, navigate])
+  // View object at address
+  const handleAddressView = useCallback(() => {
+    const trimmed = addressInput.trim()
+    if (!trimmed || !activeSessionId) return
+    navigate(`/debug/${activeSessionId}/address/${encodeURIComponent(trimmed)}`)
+  }, [addressInput, activeSessionId, navigate])
 
   // Double-click a row → open hex viewer
   const handleObjectDoubleClick = useCallback(
@@ -134,15 +144,34 @@ export default function DebugPage() {
             {isLoading ? 'Running…' : 'Run'}
           </Button>
           {activeSessionId && (
+            <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
+              <TextField
+                size="small"
+                placeholder="0x00000000..."
+                value={addressInput}
+                onChange={(e) => setAddressInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddressView()}
+                sx={{ width: 220, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 13 } }}
+              />
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<SearchIcon />}
+                onClick={handleAddressView}
+                disabled={!addressInput.trim()}
+              >
+                View
+              </Button>
+            </Stack>
+          )}
+          {activeSessionId && (
             <Button
               variant="outlined"
-              color="error"
-              startIcon={<CloseIcon />}
-              onClick={handleCloseSession}
+              startIcon={<MapIcon />}
+              onClick={() => navigate(`/debug/${activeSessionId}/memorymap`)}
               size="medium"
-              sx={{ ml: 'auto' }}
             >
-              Close Session
+              Memory Map
             </Button>
           )}
         </Stack>
@@ -168,7 +197,7 @@ export default function DebugPage() {
       </Box>
 
       {/* Hex Viewer Dialog */}
-      <HexViewerDialog open={hexDialogOpen} onClose={() => setHexDialogOpen(false)} />
+      <HexViewerDialog open={hexDialogOpen} onClose={() => setHexDialogOpen(false)} sessionId={activeSessionId} />
     </Box>
   )
 }

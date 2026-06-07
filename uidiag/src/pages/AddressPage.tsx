@@ -14,6 +14,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import HexViewer from '@/components/shared/HexViewer'
 import GcRootPanel from '@/components/debug/GcRootPanel'
+import DataOwnerPanel from '@/components/debug/DataOwnerPanel'
 import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
 import type { HexDataResult } from '@/types/api'
 
@@ -33,8 +34,11 @@ export default function AddressPage() {
   const location = useLocation()
 
   const hexData = useDiagnosticsStore((s) => s.hexData)
+  const objectLayout = useDiagnosticsStore((s) => s.objectLayout)
   const fetchHexData = useDiagnosticsStore((s) => s.fetchHexData)
   const fetchGcRootPath = useDiagnosticsStore((s) => s.fetchGcRootPath)
+  const fetchObjectLayout = useDiagnosticsStore((s) => s.fetchObjectLayout)
+  const fetchDataOwner = useDiagnosticsStore((s) => s.fetchDataOwner)
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -54,7 +58,10 @@ export default function AddressPage() {
     // Fetch GC root paths in the background — progress is streamed via SignalR
     // and displayed by GcRootPanel, so we don't block the page on it.
     fetchGcRootPath(sessionId, address)
-  }, [sessionId, address, fetchHexData, fetchGcRootPath])
+    // Fetch field layout and data owner (non-blocking)
+    fetchObjectLayout(sessionId, address)
+    fetchDataOwner(sessionId, address)
+  }, [sessionId, address, fetchHexData, fetchGcRootPath, fetchObjectLayout, fetchDataOwner])
 
   const backTarget =
     typeof location.state === 'object' &&
@@ -138,6 +145,10 @@ export default function AddressPage() {
           <HexViewer
             bytes={bytes}
             baseAddress={parseInt(hexData.objectAddress, 16)}
+            fieldLayout={objectLayout}
+            onAddressClick={(addr) => {
+              if (sessionId) navigate(`/debug/${sessionId}/address/${encodeURIComponent(addr)}`)
+            }}
           />
         ) : (
           <Typography color="text.secondary" sx={{ p: 4 }}>
@@ -145,6 +156,15 @@ export default function AddressPage() {
           </Typography>
         )}
       </Box>
+
+      {/* Data Owner Panel */}
+      {sessionId && (
+        <DataOwnerPanel
+          sessionId={sessionId}
+          objectAddress={address}
+          containingAddress={address}
+        />
+      )}
     </Box>
   )
 }

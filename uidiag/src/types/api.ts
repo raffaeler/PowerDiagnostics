@@ -116,3 +116,100 @@ export interface QueryProgress {
   count: number
   status: string
 }
+
+// ──────────────────────── Memory Map ────────────────────────
+
+/** Heap segment info from GET /api/sessions/{id}/memorymap. */
+export interface MemorySegmentInfo {
+  startAddress: string
+  endAddress: string
+  committedStart: string
+  committedEnd: string
+  reservedStart: string
+  reservedEnd: string
+  segmentKind: string
+  isLargeObject: boolean
+  isPinnedObject: boolean
+  objectCount: number
+  size: number
+}
+
+// ──────────────────────── Raw Memory ────────────────────────
+
+/** Classified sub-range of raw memory (who owns these bytes). */
+export interface MemoryRegion {
+  offset: number
+  length: number
+  kind: string
+  objectAddress?: string | null
+  objectTypeName?: string | null
+  objectSize?: number | null
+  offsetWithinObject?: number | null
+}
+
+/** Raw memory read result from POST /api/sessions/{id}/memory/{addr}. */
+export interface RawMemoryResult {
+  address: string
+  length: number
+  bytesBase64: string
+  regionKind: string
+  regions: MemoryRegion[]
+  containingObjectAddress?: string | null
+  containingObjectTypeName?: string | null
+  offsetWithinObject?: number | null
+}
+
+// ──────────────────────── Field Layout ────────────────────────
+
+/** Single field within an object layout. */
+export interface FieldInfo {
+  offset: number
+  fieldName: string
+  typeName: string
+  isObjectReference: boolean
+  valueHex: string
+  targetAddressHex?: string | null
+}
+
+/** Object field layout from POST /api/sessions/{id}/layout/{addr}. */
+export interface ObjectFieldLayout {
+  objectAddress: string
+  typeName: string
+  mt: string
+  totalSize: number
+  fields: FieldInfo[]
+}
+
+// ──────────────────────── Data Owner ────────────────────────
+
+/** Data owner result from POST /api/sessions/{id}/dataowner/{addr}. */
+export interface DataOwnerResult {
+  address: string
+  kind: string
+  containingObjectAddress?: string | null
+  containingObjectTypeName?: string | null
+  offsetWithinObject?: number | null
+  objectSize?: number | null
+  isObjectStart: boolean
+  referencingObjects?: GcReferenceInfo[] | null
+}
+
+/** Referencing objects result from POST /api/sessions/{id}/referencing/{addr}. */
+export interface ReferencingObjectsResult {
+  targetAddress: string
+  isObjectStart: boolean
+  referencingObjects: GcReferenceInfo[]
+}
+
+/** Combined address info from POST /api/sessions/{id}/addressinfo/{addr}. */
+export interface AddressInfoResult {
+  address: string
+  kind: string
+  containingObjectAddress?: string | null
+  containingObjectTypeName?: string | null
+  offsetWithinObject?: number | null
+  objectSize?: number | null
+  isObjectStart: boolean
+  fieldLayout?: ObjectFieldLayout | null
+  referencingObjects?: GcReferenceInfo[] | null
+}

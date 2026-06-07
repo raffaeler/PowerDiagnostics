@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
+import CloseIcon from '@mui/icons-material/Close'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppStore } from '@/stores/useAppStore'
 import { useDiagnosticsStore } from '@/stores/useDiagnosticsStore'
@@ -25,6 +26,7 @@ export default function Header() {
   const theme = useTheme()
   const { username, isLoggedIn, login, logout, darkMode, toggleDarkMode } = useAppStore()
   const activeSessionId = useDiagnosticsStore((s) => s.activeSessionId)
+  const closeSession = useDiagnosticsStore((s) => s.closeSession)
 
   const [loginOpen, setLoginOpen] = useState(false)
   const [nameInput, setNameInput] = useState('')
@@ -41,8 +43,17 @@ export default function Header() {
     logout()
   }
 
+  const hasActiveSession = !!activeSessionId
+
+  const handleCloseSession = async () => {
+    if (activeSessionId) {
+      await closeSession(activeSessionId)
+      navigate('/')
+    }
+  }
+
   const navItems = [
-    { label: 'Home', path: '/' },
+    { label: 'Home', path: '/', disabled: hasActiveSession },
     { label: 'Debug', path: activeSessionId ? `/debug/${activeSessionId}` : '/debug' },
   ]
 
@@ -62,6 +73,7 @@ export default function Header() {
                 key={item.path}
                 color="inherit"
                 onClick={() => navigate(item.path)}
+                disabled={item.disabled}
                 sx={{
                   textTransform: 'none',
                   fontWeight:
@@ -80,8 +92,20 @@ export default function Header() {
             ))}
           </Box>
 
-          {/* Right: Theme toggle + Username / Login */}
+          {/* Right: Close Session + Theme toggle + Username / Login */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {hasActiveSession && (
+              <Button
+                color="error"
+                variant="outlined"
+                size="small"
+                startIcon={<CloseIcon />}
+                onClick={handleCloseSession}
+                sx={{ textTransform: 'none', borderColor: 'rgba(255,255,255,0.5)', color: 'inherit' }}
+              >
+                Close Session
+              </Button>
+            )}
             <IconButton color="inherit" onClick={toggleDarkMode} size="small" aria-label="toggle dark mode">
               {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>

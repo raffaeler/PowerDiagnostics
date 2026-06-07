@@ -302,6 +302,30 @@ public partial class DiagnosticAnalyzer
     }
 
     /// <summary>
+    /// Returns all objects that hold a reference (instance or static field)
+    /// to the given target object address. Only meaningful when the target
+    /// address is the start of a valid heap object.
+    /// </summary>
+    /// <param name="targetAddress">The start address of a heap object.</param>
+    /// <returns>
+    /// A list of referencing object info (owner address, type, field name,
+    /// and whether the field is static), or an empty list if no references found.
+    /// </returns>
+    public IReadOnlyList<DiagnosticModels.GcReferenceInfo> GetReferencingObjects(ulong targetAddress)
+    {
+        var internalResult = FindReferencing(true, targetAddress);
+        if (internalResult is null) return Array.Empty<DiagnosticModels.GcReferenceInfo>();
+
+        return internalResult.Select(t => new DiagnosticModels.GcReferenceInfo
+        {
+            Address = $"0x{t.address:X16}",
+            TypeName = t.typeName,
+            FieldName = t.fieldName,
+            IsStatic = t.isStatic,
+        }).ToList();
+    }
+
+    /// <summary>
     /// Finds objects directly referenced by the given source addresses (walks forward).
     /// </summary>
     /// <param name="includeStatic">Whether to include static fields of the source object's type.</param>

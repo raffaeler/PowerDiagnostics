@@ -27,6 +27,12 @@ import type {
   MethodTableResult,
   GcRootProgress,
   QueryProgress,
+  MemorySegmentInfo,
+  RawMemoryResult,
+  ObjectFieldLayout,
+  DataOwnerResult,
+  ReferencingObjectsResult,
+  AddressInfoResult,
 } from '@/types/api'
 
 const ACTIVE_SESSION_ID_STORAGE_KEY = 'uidiag_active_session_id'
@@ -69,6 +75,14 @@ interface DiagnosticsState {
   processesFetched: boolean
   availableDumps: string[]
 
+  // Memory map & raw memory
+  memoryMap: MemorySegmentInfo[] | null
+  rawMemory: RawMemoryResult | null
+  objectLayout: ObjectFieldLayout | null
+  dataOwner: DataOwnerResult | null
+  referencingObjects: ReferencingObjectsResult | null
+  addressInfo: AddressInfoResult | null
+
   // Actions
   fetchProcesses: () => Promise<void>
   selectProcess: (p: ProcessInfo | null) => void
@@ -93,6 +107,17 @@ interface DiagnosticsState {
   setMasterPaginationModel: (model: { pageSize: number; page: number }) => void
   setGcRootProgress: (progress: GcRootProgress | null) => void
   setQueryProgress: (progress: QueryProgress | null) => void
+
+  // Memory map & raw memory actions
+  fetchMemoryMap: (sessionId: string) => Promise<void>
+  fetchRawMemory: (sessionId: string, address: string, length?: number) => Promise<void>
+  fetchObjectLayout: (sessionId: string, address: string) => Promise<void>
+  fetchDataOwner: (sessionId: string, address: string) => Promise<void>
+  fetchReferencingObjects: (sessionId: string, address: string) => Promise<void>
+  fetchAddressInfo: (sessionId: string, address: string) => Promise<void>
+
+  // State management
+  clearAddressState: () => void
 }
 
 export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
@@ -117,6 +142,13 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   isLoading: false,
   processesFetched: false,
   availableDumps: [],
+
+  memoryMap: null,
+  rawMemory: null,
+  objectLayout: null,
+  dataOwner: null,
+  referencingObjects: null,
+  addressInfo: null,
 
   fetchProcesses: async () => {
     const res = await apiService.get<ProcessInfo[]>(API_PROCESSES)
@@ -214,6 +246,16 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
       if (sessionId === readStoredActiveSessionId()) {
         writeStoredActiveSessionId(null)
       }
+      set({
+        activeSessionId: null,
+        queryResult: null,
+        detailGridData: null,
+        gcRootResult: null,
+        gcRootProgress: null,
+        hexData: null,
+        objectLayout: null,
+        dataOwner: null,
+      })
       toastSuccess('Session closed')
       return true
     }
@@ -332,4 +374,68 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   setGcRootProgress: (progress) => set({ gcRootProgress: progress }),
 
   setQueryProgress: (progress) => set({ queryProgress: progress }),
+
+  // ── Memory map & raw memory actions ──
+
+  fetchMemoryMap: async (sessionId) => {
+    set({ memoryMap: null })
+    const res = await apiService.get<MemorySegmentInfo[]>(`${API_SESSIONS}/${sessionId}/memorymap`)
+    if (!res.isError && Array.isArray(res.result)) {
+      set({ memoryMap: res.result })
+    }
+  },
+
+  fetchRawMemory: async (sessionId, address, length) => {
+    set({ rawMemory: null })
+    const url = `${API_SESSIONS}/${sessionId}/memory/${encodeURIComponent(address)}${length !== undefined ? `?length=${length}` : ''}`
+    const res = await apiService.post<RawMemoryResult>(url)
+    if (!res.isError) {
+      set({ rawMemory: res.result as RawMemoryResult })
+    }
+  },
+
+  fetchObjectLayout: async (sessionId, address) => {
+    set({ objectLayout: null })
+    const url = `${API_SESSIONS}/${sessionId}/layout/${encodeURIComponent(address)}`
+    const res = await apiService.post<ObjectFieldLayout>(url)
+    if (!res.isError) {
+      set({ objectLayout: res.result as ObjectFieldLayout })
+    }
+  },
+
+  fetchDataOwner: async (sessionId, address) => {
+    set({ dataOwner: null })
+    const url = `${API_SESSIONS}/${sessionId}/dataowner/${encodeURIComponent(address)}`
+    const res = await apiService.post<DataOwnerResult>(url)
+    if (!res.isError) {
+      set({ dataOwner: res.result as DataOwnerResult })
+    }
+  },
+
+  fetchReferencingObjects: async (sessionId, address) => {
+    set({ referencingObjects: null })
+    const url = `${API_SESSIONS}/${sessionId}/referencing/${encodeURIComponent(address)}`
+    const res = await apiService.post<ReferencingObjectsResult>(url)
+    if (!res.isError) {
+      set({ referencingObjects: res.result as ReferencingObjectsResult })
+    }
+  },
+
+  fetchAddressInfo: async (sessionId, address) => {
+    set({ addressInfo: null })
+    const url = `${API_SESSIONS}/${sessionId}/addressinfo/${encodeURIComponent(address)}`
+    const res = await apiService.post<AddressInfoResult>(url)
+    if (!res.isError) {
+      set({ addressInfo: res.result as AddressInfoResult })
+    }
+  },
+
+  clearAddressState: () =>
+    set({
+      gcRootResult: null,
+      gcRootProgress: null,
+      hexData: null,
+      objectLayout: null,
+      dataOwner: null,
+    }),
 }))
