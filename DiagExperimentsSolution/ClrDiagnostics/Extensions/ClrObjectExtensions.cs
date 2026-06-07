@@ -24,7 +24,9 @@ public static class ClrObjectExtensions
 
     public static string? GetStringValue(this ClrObject clrObject, int maxLength = int.MaxValue)
     {
-        return clrObject.Type!.IsString ? clrObject.AsString(maxLength) : null;
+        if (clrObject.Type == null) return null;
+        if(!clrObject.Type.IsString) return null;
+        return clrObject.AsString(maxLength);
     }
 
     public static UInt64 GetGraphSize(this ClrObject clrObject)
