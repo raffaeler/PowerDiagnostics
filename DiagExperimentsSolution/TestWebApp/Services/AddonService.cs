@@ -66,7 +66,7 @@ public class AddonService
 
     private string GetCurrentExecutablePath()
     {
-        return new System.IO.FileInfo(typeof(Startup).Assembly.Location).DirectoryName!;
+        return new System.IO.FileInfo(typeof(AddonService).Assembly.Location).DirectoryName!;
     }
 }
 
