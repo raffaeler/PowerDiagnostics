@@ -24,6 +24,9 @@ public class McpConfiguration
     /// <summary>Maximum number of insight entries (top consumers).</summary>
     public int MaxInsightEntries { get; set; } = 5;
 
+    /// <summary>Default page size for the get_referencing_objects tool.</summary>
+    public int DefaultReferencingObjectsPageSize { get; set; } = 20;
+
     /// <summary>Endpoint path for the Streamable HTTP MCP transport.</summary>
     public string HttpEndpoint { get; set; } = "/mcp";
 }

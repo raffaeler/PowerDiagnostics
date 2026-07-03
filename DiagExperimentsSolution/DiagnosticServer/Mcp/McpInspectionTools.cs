@@ -247,6 +247,79 @@ public class McpInspectionTools
     }
 
     /// <summary>
+    /// List all objects that hold references (instance or static fields) to a target heap object.
+    /// Use to understand which objects point to a given object — essential for walking
+    /// the object graph and understanding memory retention patterns.
+    /// </summary>
+    [McpServerTool(Name = "get_referencing_objects")]
+    [Description("List all objects that hold references (instance or static fields) to a target heap object. Use to understand which objects point to a given object — essential for walking the object graph and understanding memory retention patterns. Returns paginated results.")]
+    public object GetReferencingObjects(
+        [Description("The session ID returned by open_dump.")] string sessionId,
+        [Description("Hex address of the target object (e.g., '0x1a2b3c4d' or '1a2b3c4d').")] string address,
+        [Description("Optional type name filter for referencing objects (case-insensitive substring match).")] string? typeNameFilter = null,
+        [Description("Page number (1-based, default 1).")] int page = 1,
+        [Description("Number of items per page (default 20, max 50).")] int pageSize = 20)
+    {
+        if (!TryParseHexAddress(address, out var addr))
+            throw new ArgumentException($"Invalid hex address: '{address}'");
+
+        page = Math.Max(1, page);
+        pageSize = Math.Clamp(pageSize, 1, _config.MaxPageSize);
+
+        var scope = McpToolRegistry.ValidateSession(_sessionManager, sessionId);
+        var analyzer = scope.DiagnosticAnalyzer;
+
+        // Validate the address is a valid object start
+        ClrObject? clrObj = null;
+        foreach (var obj in analyzer.Objects)
+        {
+            if (obj.Address == addr)
+            {
+                clrObj = obj;
+                break;
+            }
+        }
+
+        if (clrObj is not { } resolved)
+            throw new InvalidOperationException($"No object found at address 0x{addr:X} in session '{sessionId}'.");
+
+        _logger.LogInformation(
+            "MCP: get_referencing_objects on session {SessionId}, address=0x{Address:X}, filter={Filter}",
+            sessionId, addr, typeNameFilter ?? "(none)");
+
+        var allRefs = analyzer.GetReferencingObjects(addr);
+
+        // Apply type name filter if provided
+        if (!string.IsNullOrWhiteSpace(typeNameFilter))
+        {
+            allRefs = allRefs
+                .Where(r => r.TypeName.Contains(typeNameFilter, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+
+        var totalCount = allRefs.Count;
+        var pagedRefs = allRefs
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(r => new
+            {
+                address = $"0x{r.Address:X}",
+                typeName = r.TypeName,
+                fieldName = r.FieldName,
+                isStatic = r.IsStatic,
+            })
+            .ToList();
+
+        return new PaginatedResult<object>
+        {
+            Items = pagedRefs.Cast<object>().ToList(),
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount,
+        };
+    }
+
+    /// <summary>
     /// Get the GC heap segment layout — shows per-generation heap distribution.
     /// </summary>
     [McpServerTool(Name = "get_memory_map")]

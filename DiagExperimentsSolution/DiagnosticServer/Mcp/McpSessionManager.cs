@@ -182,6 +182,16 @@ public class McpSessionManager
 
         catalog.Add(new ToolCatalogEntry
         {
+            Name = "get_referencing_objects",
+            Description = "List all objects that hold references (instance or static fields) to a target heap object. Supports optional type name filtering and pagination.",
+            Category = "inspection",
+            Parameters = new List<string> { "sessionId", "address", "typeNameFilter?", "page?", "pageSize?" },
+            SupportsFilter = true,
+            SupportsPagination = true,
+        });
+
+        catalog.Add(new ToolCatalogEntry
+        {
             Name = "get_gc_roots",
             Description = "Find GC root paths keeping an address alive — reveals why an object is not being garbage collected.",
             Category = "inspection",
