@@ -8,6 +8,7 @@ using DiagnosticServer.Hubs;
 using DiagnosticServer.Services;
 
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 using Scalar.AspNetCore;
@@ -26,6 +27,12 @@ public class Program
         builder.WebHost.ConfigureKestrel(options =>
         {
             options.Limits.MaxRequestBodySize = 2_147_483_648; // 2 GB
+        });
+
+        // FormOptions: allow large multipart form sections for dump file uploads
+        builder.Services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = long.MaxValue; // no practical limit
         });
 
         // Configuration
