@@ -155,12 +155,15 @@ public partial class DiagnosticAnalyzer
                           Path: x.Path))
             .ToList();
 
-        // .NET 10+ static field fallback: when GCRoot returns empty, trace upward
-        // through instance+static field references via FindReferencing.
-        paths.AddRange(FindPathsToStatics(@object, Token)
-            .Select(t => (Root: (ClrRoot?)null,
-                          StaticField: (ClrStaticField?)t.Item1,
-                          Path: t.Item2)));
+        if(ApplyNet10DatasStaticWorkaround)
+        {
+            // .NET 10+ static field fallback: when GCRoot returns empty, trace upward
+            // through instance+static field references via FindReferencing.
+            paths.AddRange(FindPathsToStatics(@object, Token)
+                .Select(t => (Root: (ClrRoot?)null,
+                              StaticField: (ClrStaticField?)t.Item1,
+                              Path: t.Item2)));
+        }
 
         return paths;
     }

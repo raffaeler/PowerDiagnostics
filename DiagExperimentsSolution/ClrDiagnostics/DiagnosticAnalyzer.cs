@@ -89,6 +89,8 @@ public partial class DiagnosticAnalyzer : IDisposable
         _clrRuntime = _clrInfo.CreateRuntime();
     }
 
+    public bool ApplyNet10DatasStaticWorkaround { get; set; } = false;
+
     public static DiagnosticAnalyzer FromDump(int pid, bool cacheObjects = true)
     {
         var temp = Path.GetTempFileName();

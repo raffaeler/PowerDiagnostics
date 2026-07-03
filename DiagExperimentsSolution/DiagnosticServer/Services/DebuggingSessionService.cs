@@ -12,6 +12,7 @@ using ClrDiagnostics.Triggers;
 using CustomEventSource;
 
 using DiagnosticInvestigations;
+using DiagnosticInvestigations.Configurations;
 
 using DiagnosticModels;
 using DiagnosticModels.Converters;
@@ -22,6 +23,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Diagnostics.Runtime;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using ClrDiagnostics.Experimental;
 
 namespace DiagnosticServer.Services;
@@ -30,6 +32,7 @@ public class DebuggingSessionService : BackgroundService
     private readonly ILogger<DebuggingSessionService> _logger;
     private readonly IHubContext<DiagnosticHub> _diagnosticHubContext;
     private readonly InvestigationState _investigationState;
+    private readonly GeneralConfiguration _generalConfiguration;
     private readonly JsonSerializerOptions _jsonOptions;
 
     private AutoResetEvent _quit = new(false);
@@ -46,12 +49,14 @@ public class DebuggingSessionService : BackgroundService
         IHostApplicationLifetime applicationLifetime,
         IHubContext<DiagnosticHub> diagnosticHubContext,
         InvestigationState investigationState,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IOptions<GeneralConfiguration> generalConfigurationOption)
     {
         _logger = logger;
         applicationLifetime.ApplicationStopping.Register(() => _quit.Set());
         _diagnosticHubContext = diagnosticHubContext;
         _investigationState = investigationState;
+        _generalConfiguration = generalConfigurationOption.Value;
         _jsonOptions = SetupConverters.CreateOptions();
         _worker = new(Worker);
         _worker.IsBackground = true;
@@ -172,6 +177,7 @@ public class DebuggingSessionService : BackgroundService
     public async Task<string> Snapshot(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromSnapshot(pid);
+        PrepareDiagnosticAnalyzer(analyzer);
         var sessionId = _investigationState.AddSnapshot(analyzer);
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Snapshot" });
         return sessionId;
@@ -180,6 +186,7 @@ public class DebuggingSessionService : BackgroundService
     public async Task<string> Dump(int pid)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(pid);
+        PrepareDiagnosticAnalyzer(analyzer);
         var sessionId = _investigationState.AddDump(analyzer);
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
         return sessionId;
@@ -189,6 +196,7 @@ public class DebuggingSessionService : BackgroundService
     public async Task<string> OpenDumpFromFile(string serverPath)
     {
         var analyzer = DiagnosticAnalyzer.FromDump(serverPath, cacheObjects: true);
+        PrepareDiagnosticAnalyzer(analyzer);
         var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(serverPath));
         _logger.LogInformation("Opened dump from {Path}, session {Id}", serverPath, sessionId);
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
@@ -204,6 +212,7 @@ public class DebuggingSessionService : BackgroundService
         await using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
             await stream.CopyToAsync(fs, ct);
         var analyzer = DiagnosticAnalyzer.FromDump(path, cacheObjects: true);
+        PrepareDiagnosticAnalyzer(analyzer);
         var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(fileName));
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
         _logger.LogInformation("Uploaded dump {Name}, session {Id}", fileName, sessionId);
@@ -539,5 +548,15 @@ public class DebuggingSessionService : BackgroundService
 
     public InvestigationScope? GetInvestigationScope(string sessionId)
         => _investigationState.GetInvestigationScope(sessionId);
+
+    /// <summary>
+    /// Centralizes setting the settings specific to the DiagnosticAnalyzer
+    /// </summary>
+    /// <param name="diagnosticAnalyzer"></param>
+    private void PrepareDiagnosticAnalyzer(DiagnosticAnalyzer diagnosticAnalyzer)
+    {
+        diagnosticAnalyzer.ApplyNet10DatasStaticWorkaround =
+            _generalConfiguration.AnalyzerSettings.ApplyNet10DatasStaticWorkaround;
+    }
 }
 
