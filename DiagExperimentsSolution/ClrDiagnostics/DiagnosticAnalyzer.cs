@@ -136,7 +136,7 @@ public partial class DiagnosticAnalyzer : IDisposable
         return FromProcess(process.Id, cacheObjects);
     }
 
-    internal ClrRuntime ClrRuntime => _clrRuntime;
+    public ClrRuntime ClrRuntime => _clrRuntime;
     public ClrHeap Heap => _clrRuntime.Heap;
 
     public bool CacheAllObjects { get; }

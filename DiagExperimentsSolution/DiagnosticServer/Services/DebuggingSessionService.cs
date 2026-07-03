@@ -197,7 +197,8 @@ public class DebuggingSessionService : BackgroundService
     {
         var analyzer = DiagnosticAnalyzer.FromDump(serverPath, cacheObjects: true);
         PrepareDiagnosticAnalyzer(analyzer);
-        var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(serverPath));
+        // Pass null for TemporaryFile — the user's original dump must never be deleted.
+        var sessionId = _investigationState.AddDumpFromFile(analyzer, null);
         _logger.LogInformation("Opened dump from {Path}, session {Id}", serverPath, sessionId);
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
         return sessionId;
@@ -213,7 +214,8 @@ public class DebuggingSessionService : BackgroundService
             await stream.CopyToAsync(fs, ct);
         var analyzer = DiagnosticAnalyzer.FromDump(path, cacheObjects: true);
         PrepareDiagnosticAnalyzer(analyzer);
-        var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(fileName));
+        // Track the actual temp file so it gets cleaned up on session close.
+        var sessionId = _investigationState.AddDumpFromFile(analyzer, new FileInfo(path));
         await _diagnosticHubContext.Clients.All.SendAsync("onSessionCreated", new { sessionId, kind = "Dump" });
         _logger.LogInformation("Uploaded dump {Name}, session {Id}", fileName, sessionId);
         return sessionId;

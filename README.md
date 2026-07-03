@@ -223,6 +223,157 @@ Events streamed server→client:
 - `onGcRootProgress` / `onGcRootComplete` — GC root computation progress
 - `onAddressPathProgress` / `onAddressPathComplete` — Address path computation progress
 
+### MCP Server (Streamable HTTP & stdio)
+
+DiagnosticServer also functions as an **MCP (Model Context Protocol)** server, enabling AI agents — Claude Desktop, GitHub Copilot, Continue, Cursor, and others — to inspect .NET memory dumps through natural conversation.
+
+#### Architecture
+
+The MCP server exposes the same diagnostic capabilities as the REST API through a set of AI-friendly tools. All tools are registered at startup:
+
+**Session tools** (always available):
+| Tool | Description |
+|------|-------------|
+| `list_dumps` | List available dump files by name from the configured `DumpsFolder` |
+| `open_dump` | Open a dump by name. Returns session metadata (target framework, heap object count) and a catalog of available diagnostic tools |
+| `list_sessions` | List all active diagnostic sessions |
+| `close_session` | Close a session and release resources |
+
+**Query tools** (one per diagnostic query):
+| Tool | Underlying Query | Description |
+|------|-----------------|-------------|
+| `query_heap_stat` | DumpHeapStat | Type-level heap statistics. **Start here** on any new dump. |
+| `query_static_fields` | GetStaticFieldsWithGraphAndSize | Static field memory analysis |
+| `query_duplicate_strings` | GetDuplicateStrings | Duplicate string instances |
+| `query_strings_by_size` | GetStringsBySize | Largest strings by size |
+| `query_modules` | Modules | All loaded assemblies |
+| `query_thread_stacks` | Threads stacks | Managed thread call stacks |
+| `query_roots` | Roots | All GC roots |
+| `query_objects_by_size` | ObjectsBySize | Largest individual heap objects |
+| `query_non_system_objects` | NonSystemObjectsBySize | Same excluding System.* types |
+| `query_objects_by_allocator` | GetObjectsGroupedByAllocator | Objects grouped by allocating method (.NET5+) |
+
+**Inspection tools**:
+| Tool | Description |
+|------|-------------|
+| `get_query_detail` | Paginated detail rows for a query result |
+| `inspect_object` | Field layout, data owner, and referencing objects for a heap address |
+| `get_gc_roots` | GC root paths keeping an object alive |
+| `get_memory_map` | GC heap segment layout with per-generation summary |
+
+#### Partial Results & Pagination
+
+All query tools return paginated results to avoid overwhelming the AI's context window:
+- **Default page size**: 20 items (configurable, max 100)
+- **GC root paths**: default 3 paths (configurable, max 10)
+- **Insights**: every response includes a `summary`, `topConsumers` list, `anomalies` detected, and `recommendedActions`
+
+#### Configuration (appsettings.json)
+
+```json
+{
+    "General": {
+        "DumpsFolder": "H:\\_dumps"
+    },
+    "Mcp": {
+        "DefaultPageSize": 20,
+        "MaxPageSize": 100,
+        "DefaultMaxPaths": 3,
+        "MaxPaths": 10,
+        "DefaultTopN": 50,
+        "MaxInsightEntries": 5,
+        "HttpEndpoint": "/mcp"
+    }
+}
+```
+
+#### Running as an MCP Server
+
+**Streamable HTTP mode** (co-exists with REST API + Web UI):
+```bash
+cd DiagExperimentsSolution
+dotnet run --project DiagnosticServer
+# MCP endpoint available at http://localhost:5218/mcp
+```
+
+**stdio mode** (for desktop MCP clients):
+```bash
+cd DiagExperimentsSolution
+dotnet run --project DiagnosticServer -- --stdio
+```
+
+#### MCP Client Configuration Examples
+
+**Claude Desktop** (`claude_desktop_config.json`):
+```json
+{
+    "mcpServers": {
+        "powerdiagnostics": {
+            "command": "dotnet",
+            "args": ["run", "--project", "DiagExperimentsSolution/DiagnosticServer", "--", "--stdio"],
+            "cwd": "/path/to/PowerDiagnostics"
+        }
+    }
+}
+```
+
+**GitHub Copilot** (VS Code `.vscode/mcp.json`):
+```json
+{
+    "servers": {
+        "powerdiagnostics": {
+            "type": "stdio",
+            "command": "dotnet",
+            "args": ["run", "--project", "DiagExperimentsSolution/DiagnosticServer", "--", "--stdio"],
+            "cwd": "/path/to/PowerDiagnostics"
+        }
+    }
+}
+```
+
+**Continue** (`config.json`):
+```json
+{
+    "experimental": {
+        "modelContextProtocolServers": [
+            {
+                "transport": {
+                    "type": "stdio",
+                    "command": "dotnet",
+                    "args": ["run", "--project", "DiagExperimentsSolution/DiagnosticServer", "--", "--stdio"],
+                    "cwd": "/path/to/PowerDiagnostics"
+                }
+            }
+        ]
+    }
+}
+```
+
+**Cursor** (`.cursor/mcp.json`):
+```json
+{
+    "mcpServers": {
+        "powerdiagnostics": {
+            "command": "dotnet",
+            "args": ["run", "--project", "DiagExperimentsSolution/DiagnosticServer", "--", "--stdio"],
+            "cwd": "/path/to/PowerDiagnostics"
+        }
+    }
+}
+```
+
+**Streamable HTTP** (for remote/networked MCP clients):
+```json
+{
+    "mcpServers": {
+        "powerdiagnostics-http": {
+            "type": "streamableHttp",
+            "url": "http://localhost:5218/mcp"
+        }
+    }
+}
+```
+
 ---
 
 ## Build & Run

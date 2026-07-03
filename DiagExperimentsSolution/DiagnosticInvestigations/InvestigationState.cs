@@ -59,13 +59,17 @@ public class InvestigationState
     }
 
     /// <summary>
-    /// Registers a dump session with an associated temporary file (for cleanup on close/expiry).
-    /// The session ID is derived from the filename (without path), with URI-incompatible
-    /// characters replaced to produce a clean URL segment.
+    /// Registers a dump session with an optional associated temporary file
+    /// (for cleanup on close/expiry). Pass null when opening a server-side
+    /// dump that must never be deleted.
+    /// The session ID is derived from the filename (without path), or a GUID
+    /// when no file is provided.
     /// </summary>
-    public string AddDumpFromFile(DiagnosticAnalyzer analyzer, FileInfo temporaryFile)
+    public string AddDumpFromFile(DiagnosticAnalyzer analyzer, FileInfo? temporaryFile)
     {
-        string session = SanitizeFileName(temporaryFile.Name);
+        string session = temporaryFile != null 
+            ? SanitizeFileName(temporaryFile.Name) 
+            : Guid.NewGuid().ToString("N");
         InvestigationScope scope = new(session, InvestigationKind.Dump, analyzer, temporaryFile);
         _scopes[session] = scope;
         return session;

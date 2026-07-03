@@ -5,6 +5,7 @@ using DiagnosticModels.Converters;
 
 using DiagnosticServer.Extensions;
 using DiagnosticServer.Hubs;
+using DiagnosticServer.Mcp;
 using DiagnosticServer.Services;
 
 using Microsoft.AspNetCore.Diagnostics;
@@ -17,9 +18,17 @@ namespace DiagnosticServer;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         const string corsPolicy = "CorsPolicy";
+
+        // ── Stdio Mode ──
+        // When --stdio is passed, run as a stdio-only MCP server (no web host).
+        if (args.Contains("--stdio"))
+        {
+            await RunStdioMcpServer(args);
+            return;
+        }
 
         var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +83,10 @@ public class Program
         builder.Services.AddSingleton<QueriesService>();
         builder.Services.AddSingleton<InvestigationState>();
 
+        // ── MCP Services ──
+        builder.Services.AddMcpServices(builder.Configuration);
+        builder.Services.AddMcpHttpServer();
+
         var app = builder.Build();
 
         // Middleware Pipeline
@@ -127,10 +140,50 @@ public class Program
         // SignalR hub for real-time diagnostics notifications
         app.MapHub<DiagnosticHub>("/diagnosticHub");
 
+        // MCP Streamable HTTP endpoint
+        app.MapMcpEndpoint();
+
         // SPA fallback
         // any non-API route serves index.html for client-side routing
         app.MapFallbackToFile("index.html");
 
         app.Run();
+    }
+
+    /// <summary>
+    /// Runs the MCP server in stdio-only mode (for Claude Desktop, Continue, etc.).
+    /// Only Tier 1 tools (list_dumps, open_dump, list_sessions, close_session)
+    /// are registered at startup. Tier 2 tools are registered dynamically when
+    /// a dump is opened.
+    /// </summary>
+    private static async Task RunStdioMcpServer(string[] args)
+    {
+        var builder = Host.CreateApplicationBuilder(args);
+
+        // Load configuration
+        builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+        // MCP configuration
+        builder.Services.Configure<McpConfiguration>(builder.Configuration.GetSection("Mcp"));
+
+        // General configuration (for DumpsFolder, etc.)
+        builder.Services.Configure<GeneralConfiguration>(builder.Configuration.GetSection("General"));
+
+        // Core services needed by MCP tools
+        builder.Services.AddSingleton<QueriesService>();
+        builder.Services.AddSingleton<InvestigationState>();
+        builder.Services.AddSingleton<DebuggingSessionService>();
+        builder.Services.AddSingleton<McpToolRegistry>();
+        builder.Services.AddSingleton<McpSessionManager>();
+        builder.Services.AddSingleton<McpInsightsGenerator>();
+        builder.Services.AddSingleton<McpSessionTools>();
+        builder.Services.AddSingleton<McpQueryTools>();
+        builder.Services.AddSingleton<McpInspectionTools>();
+
+        // Add MCP server with stdio transport
+        builder.Services.AddMcpStdioServer();
+
+        var host = builder.Build();
+        await host.RunAsync();
     }
 }
