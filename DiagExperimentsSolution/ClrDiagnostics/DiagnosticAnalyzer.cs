@@ -20,6 +20,8 @@ public partial class DiagnosticAnalyzer : IDisposable
     private ClrInfo _clrInfo;
     private ClrRuntime _clrRuntime;
     private DebugLibraryInfo _debugLibraryInfo;
+    private DirectoryInfo _dumpDirectory;
+    private FileInfo? _dumpFile;
 
     private IList<ClrObject>? _cachedAllObjects;
     private IList<(ClrObject, ClrInstanceField, ulong)>? _objectsWithInstanceFields;
@@ -31,10 +33,13 @@ public partial class DiagnosticAnalyzer : IDisposable
     protected DiagnosticAnalyzer() { }
 #pragma warning restore CS8618
 
-    internal DiagnosticAnalyzer(DataTarget dataTarget, bool cacheObjects)
+    internal DiagnosticAnalyzer(DataTarget dataTarget, bool cacheObjects,
+        DirectoryInfo dumpDirectory, FileInfo? dumpFile)
     {
         _dataTarget = dataTarget;
         CacheAllObjects = cacheObjects;
+        _dumpDirectory = dumpDirectory;
+        _dumpFile = dumpFile;
         //_dataTarget.BinaryLocator.FindBinary()
 
         if (_dataTarget.ClrVersions.Length == 0)
@@ -98,7 +103,8 @@ public partial class DiagnosticAnalyzer : IDisposable
         client.WriteDump(DumpType.WithHeap, temp);
         var dataTarget = DataTarget.LoadDump(temp);
 
-        return new DiagnosticAnalyzer(dataTarget, cacheObjects);
+        return new DiagnosticAnalyzer(dataTarget, cacheObjects,
+            new DirectoryInfo(Path.GetTempPath()), null);
     }
 
     public static DiagnosticAnalyzer FromDump(string filename, bool cacheObjects,
@@ -106,14 +112,16 @@ public partial class DiagnosticAnalyzer : IDisposable
     {
         var dataTarget = DataTarget.LoadDump(filename);
 
-        return new DiagnosticAnalyzer(dataTarget, cacheObjects);
+        return new DiagnosticAnalyzer(dataTarget, cacheObjects,
+            new DirectoryInfo(Path.GetDirectoryName(filename)!), new FileInfo(filename));
     }
 
     public static DiagnosticAnalyzer FromSnapshot(int pid, bool cacheObjects = true)
     {
         var dataTarget = DataTarget.CreateSnapshotAndAttach(pid);
         //dataTarget.BinaryLocator.FindBinary()
-        return new DiagnosticAnalyzer(dataTarget, cacheObjects);
+        return new DiagnosticAnalyzer(dataTarget, cacheObjects,
+            new DirectoryInfo(Path.GetTempPath()), null);
     }
 
     public static DiagnosticAnalyzer? FromSnapshot(string processName, bool cacheObjects = true)
@@ -126,7 +134,8 @@ public partial class DiagnosticAnalyzer : IDisposable
     public static DiagnosticAnalyzer FromProcess(int pid, bool cacheObjects = true)
     {
         var dataTarget = DataTarget.AttachToProcess(pid, true);
-        return new DiagnosticAnalyzer(dataTarget, cacheObjects);
+        return new DiagnosticAnalyzer(dataTarget, cacheObjects,
+            new DirectoryInfo(Path.GetTempPath()), null);
     }
 
     public static DiagnosticAnalyzer? FromProcess(string processName, bool cacheObjects = true)

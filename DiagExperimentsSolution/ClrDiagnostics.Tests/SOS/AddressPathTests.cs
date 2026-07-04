@@ -39,7 +39,8 @@ public class AddressPathTests : IDisposable
         GC.Collect(2, GCCollectionMode.Forced, blocking: true);
 
         var dataTarget = DataTarget.CreateSnapshotAndAttach(Environment.ProcessId);
-        _analyzer = new DiagnosticAnalyzer(dataTarget, cacheObjects: true);
+        _analyzer = new DiagnosticAnalyzer(dataTarget, cacheObjects: true,
+            new System.IO.DirectoryInfo(System.IO.Path.GetTempPath()), null);
     }
 
     [Fact]
