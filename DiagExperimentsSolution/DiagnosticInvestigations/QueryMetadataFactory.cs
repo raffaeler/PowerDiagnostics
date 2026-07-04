@@ -112,14 +112,14 @@ public static class QueryMetadataFactory
         {
             new() { Header = "IsAlive", Path = "Thread.IsAlive", Tooltip = "Thread.IsAlive" },
             new() { Header = "ManagedThreadId", Path = "Thread.ManagedThreadId", Tooltip = "Thread.ManagedThreadId" },
-            new() { Header = "Address", Path = "Thread.Address", Format = "0:X16", AlignRight = true, Tooltip = "Thread.Address" },
+            new() { Header = "Address", Path = "Thread.Address", Tooltip = "Thread.Address" },
         };
         m.DetailColumns = new List<ColumnDefinition>
         {
             new() { Header = "FrameName", Path = "FrameName", Tooltip = "FrameName" },
             new() { Header = "Method", Path = "Method", Tooltip = "Method" },
             new() { Header = "Kind", Path = "Kind", Tooltip = "Kind" },
-            new() { Header = "StackPointer", Path = "StackPointer", Format = "0:X16", AlignRight = true, Tooltip = "StackPointer" },
+            new() { Header = "StackPointer", Path = "StackPointer", Tooltip = "StackPointer" },
         };
     }
 

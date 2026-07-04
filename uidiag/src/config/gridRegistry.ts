@@ -22,7 +22,7 @@ const stackFrameDetail: ColumnDefinition[] = [
   { header: 'FrameName', path: 'frameName', tooltip: 'FrameName' },
   { header: 'Method', path: 'method', tooltip: 'Method' },
   { header: 'Kind', path: 'kind', tooltip: 'Kind' },
-  { header: 'StackPointer', path: 'stackPointer', format: '0:X16', alignRight: true, tooltip: 'StackPointer' },
+  { header: 'StackPointer', path: 'stackPointer', tooltip: 'StackPointer' },
 ]
 
 const registry: Record<string, GridConfig> = {
@@ -84,7 +84,7 @@ const registry: Record<string, GridConfig> = {
     masterColumns: [
       { header: 'IsAlive', path: 'thread.isAlive', tooltip: 'Thread.IsAlive' },
       { header: 'ManagedThreadId', path: 'thread.managedThreadId', tooltip: 'Thread.ManagedThreadId' },
-      { header: 'Address', path: 'thread.address', format: '0:X16', alignRight: true, tooltip: 'Thread.Address' },
+      { header: 'Address', path: 'thread.address', tooltip: 'Thread.Address' },
     ],
     detailColumns: stackFrameDetail,
   },
