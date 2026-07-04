@@ -23,6 +23,8 @@ internal static class McpResultProjector
         return row switch
         {
             ClrModule m => CompactModule(m),
+            ModuleDataLight md => CompactModuleDataLight(md),
+            ModuleDataDetail dd => CompactModuleDataDetail(dd),
             ClrRoot r => CompactRoot(r),
             ClrStackFrame sf => CompactStackFrame(sf),
             ClrThread t => CompactThread(t),
@@ -69,6 +71,37 @@ internal static class McpResultProjector
         imageBase = $"0x{m.ImageBase:X}",
         size = m.Size,
         isDynamic = m.IsDynamic,
+    };
+
+    private static object CompactModuleDataLight(ModuleDataLight md) => new
+    {
+        assemblyName = md.AssemblyName,
+        name = md.Name,
+        address = md.Address,
+        size = md.Size,
+        isDynamic = md.IsDynamic,
+        isNative = md.IsNative,
+        fileName = md.FileName,
+    };
+
+    private static object CompactModuleDataDetail(ModuleDataDetail dd) => new
+    {
+        assemblyName = dd.AssemblyName,
+        name = dd.Name,
+        address = dd.Address,
+        size = dd.Size,
+        isDynamic = dd.IsDynamic,
+        isNative = dd.IsNative,
+        isManaged = dd.IsManaged,
+        isExtracted = dd.IsExtracted,
+        pdbName = dd.PdbName,
+        pdbGuid = dd.PdbGuid,
+        pdbAge = dd.PdbAge,
+        hasPdb = dd.HasPdb,
+        architecture = dd.TargetArchitecture,
+        moduleVersion = dd.ModuleVersion,
+        indexFileSize = dd.IndexFileSize,
+        indexTimeStamp = dd.IndexTimeStamp,
     };
 
     private static object CompactRoot(ClrRoot r) => new

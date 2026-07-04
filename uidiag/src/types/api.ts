@@ -213,3 +213,44 @@ export interface AddressInfoResult {
   fieldLayout?: ObjectFieldLayout | null
   referencingObjects?: GcReferenceInfo[] | null
 }
+
+// ──────────────────────── Module Data ────────────────────────
+
+/** Lightweight module DTO for list display. No local paths. */
+export interface ModuleDataLight {
+  assemblyName: string
+  name: string
+  address: string
+  size: number
+  isDynamic: boolean
+  isNative: boolean
+  fileName?: string | null
+}
+
+/** Full-detail module DTO for inline detail panel. No local paths. */
+export interface ModuleDataDetail {
+  assemblyName: string
+  name: string
+  address: string
+  size: number
+  isDynamic: boolean
+  isNative: boolean
+  fileName?: string | null
+  imageBase: string
+  pdbName?: string | null
+  pdbGuid?: string | null
+  pdbAge?: number | null
+  hasPdb: boolean
+  targetArchitecture?: string | null
+  isManaged: boolean
+  moduleVersion?: string | null
+  indexFileSize: number
+  indexTimeStamp: number
+  isExtracted: boolean
+}
+
+/** Decompiled source result from POST /api/sessions/{id}/modules/{name}/decompile. */
+export interface ModuleDecompileResult {
+  moduleName: string
+  source: string
+}

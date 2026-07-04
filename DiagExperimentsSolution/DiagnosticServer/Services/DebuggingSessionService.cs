@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 
 using ClrDiagnostics;
+using ClrDiagnostics.Models;
 using ClrDiagnostics.Triggers;
 
 using CustomEventSource;
@@ -559,6 +560,163 @@ public class DebuggingSessionService : BackgroundService
     {
         diagnosticAnalyzer.ApplyNet10DatasStaticWorkaround =
             _generalConfiguration.AnalyzerSettings.ApplyNet10DatasStaticWorkaround;
+    }
+
+    // ──────────────────────── Module Queries ────────────────────────
+
+    /// <summary>
+    /// Returns the lightweight module list for a session.
+    /// </summary>
+    public IReadOnlyList<ModuleDataLight>? GetModules(string sessionId)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var modules = scope.DiagnosticAnalyzer.ExtractModules();
+        return modules.Select(md => new ModuleDataLight
+        {
+            AssemblyName = md.AssemblyName ?? string.Empty,
+            Name = md.Module?.Name ?? Path.GetFileName(md.FileName) ?? md.AssemblyName ?? string.Empty,
+            Address = md.Module != null ? $"0x{md.Module.ImageBase:X16}" : string.Empty,
+            Size = md.FileSize,
+            IsDynamic = md.IsDynamic,
+            IsNative = md.IsNative,
+            FileName = md.FileName,
+        }).ToList();
+    }
+
+    /// <summary>
+    /// Returns full detail for a single module by name.
+    /// Matches on AssemblyName or Name (case-insensitive).
+    /// </summary>
+    public ModuleDataDetail? GetModuleDetail(string sessionId, string moduleName)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var modules = scope.DiagnosticAnalyzer.ExtractModules();
+        var match = modules.FirstOrDefault(md =>
+            string.Equals(md.AssemblyName, moduleName, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(md.Module?.Name, moduleName, StringComparison.OrdinalIgnoreCase));
+
+        if (match is null) return null;
+
+        var clrModule = match.Module;
+
+        return new ModuleDataDetail
+        {
+            AssemblyName = match.AssemblyName ?? string.Empty,
+            Name = clrModule?.Name ?? Path.GetFileName(match.FileName) ?? match.AssemblyName ?? string.Empty,
+            Address = clrModule != null ? $"0x{clrModule.ImageBase:X16}" : string.Empty,
+            Size = match.FileSize,
+            IsDynamic = match.IsDynamic,
+            IsNative = match.IsNative,
+            FileName = match.FileName,
+            ImageBase = clrModule != null ? $"0x{clrModule.ImageBase:X}" : string.Empty,
+            PdbName = clrModule?.Pdb != null ? Path.GetFileName(clrModule.Pdb.Path) : null,
+            PdbGuid = clrModule?.Pdb?.Guid.ToString(),
+            PdbAge = null,
+            HasPdb = clrModule?.Pdb != null,
+            IsManaged = !match.IsNative,
+            IndexFileSize = match.FileSize,
+            IndexTimeStamp = 0,
+            IsExtracted = match.FileSize > 0,
+        };
+    }
+
+    /// <summary>
+    /// Decompiles a managed module using ilspycmd.
+    /// Returns the decompiled C# source text, or null if the module was not found or is not decompilable.
+    /// </summary>
+    public async Task<string?> DecompileModuleAsync(string sessionId, string moduleName)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var modules = scope.DiagnosticAnalyzer.ExtractModules();
+        var match = modules.FirstOrDefault(md =>
+            string.Equals(md.AssemblyName, moduleName, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(md.Module?.Name, moduleName, StringComparison.OrdinalIgnoreCase));
+
+        if (match is null || match.IsNative || match.FileSize == 0)
+            return null;
+
+        var modulePath = Path.Combine(
+            scope.DiagnosticAnalyzer.DumpDirectory.FullName,
+            match.RelativePath);
+
+        if (!File.Exists(modulePath))
+            return null;
+
+        // Check if ilspycmd is available
+        var ilspyCmd = FindIlspyCmd();
+        if (ilspyCmd is null)
+            return null;
+
+        // Build ilspycmd arguments
+        var args = $"\"{modulePath}\" -o /dev/stdout -l CSharp";
+        if (match.Module?.Pdb != null)
+        {
+            // PDB will be automatically discovered by ilspycmd if next to the DLL
+            args += " -p";
+        }
+
+        using var process = new System.Diagnostics.Process
+        {
+            StartInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = ilspyCmd,
+                Arguments = args,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            },
+        };
+
+        try
+        {
+            process.Start();
+            var output = await process.StandardOutput.ReadToEndAsync();
+            await process.WaitForExitAsync();
+
+            if (process.ExitCode == 0 && !string.IsNullOrWhiteSpace(output))
+                return output;
+
+            _logger.LogWarning("ilspycmd exited with code {ExitCode} for {Module}: {Error}",
+                process.ExitCode, moduleName,
+                await process.StandardError.ReadToEndAsync());
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to run ilspycmd for {Module}", moduleName);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Locates ilspycmd on the system PATH or in common install locations.
+    /// Returns the full path or null if not found.
+    /// </summary>
+    private static string? FindIlspyCmd()
+    {
+        // Try PATH first
+        var pathEnv = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+        foreach (var dir in pathEnv.Split(Path.PathSeparator))
+        {
+            var candidate = Path.Combine(dir, "ilspycmd");
+            if (File.Exists(candidate)) return candidate;
+            candidate = Path.Combine(dir, "ilspycmd.exe");
+            if (File.Exists(candidate)) return candidate;
+        }
+
+        // Try common dotnet tool locations
+        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        var dotnetTools = Path.Combine(home, ".dotnet", "tools", "ilspycmd.exe");
+        if (File.Exists(dotnetTools)) return dotnetTools;
+
+        return null;
     }
 }
 

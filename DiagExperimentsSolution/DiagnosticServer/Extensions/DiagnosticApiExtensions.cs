@@ -5,6 +5,7 @@ using ClrDiagnostics.Helpers;
 using DiagnosticInvestigations;
 using DiagnosticInvestigations.Configurations;
 using DiagnosticModels;
+using DiagnosticModels.Converters;
 
 using DiagnosticServer.Services;
 
@@ -472,6 +473,90 @@ public static class DiagnosticApiExtensions
         })
         .WithName("GetAddressInfo")
         .Produces<AddressInfoResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Returns the lightweight module list for a session.
+        /// </summary>
+        endpoints.MapGet("/api/sessions/{sessionId}/modules",
+            (string sessionId, DebuggingSessionService svc) =>
+        {
+            var modules = svc.GetModules(sessionId);
+            if (modules is null)
+                return Results.NotFound(new ProblemDetails
+                {
+                    Title = "Session not found",
+                    Detail = "No active session found.",
+                    Status = StatusCodes.Status404NotFound,
+                });
+
+            return Results.Ok(modules);
+        })
+        .WithName("GetModules")
+        .Produces<IEnumerable<ModuleDataLight>>()
+        .ProducesProblem(StatusCodes.Status404NotFound);
+
+        /// <summary>
+        /// Returns full detail for a single module (includes PDB info, architecture, etc.).
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/modules/{moduleName}/detail",
+            (string sessionId, string moduleName, DebuggingSessionService svc) =>
+        {
+            if (string.IsNullOrWhiteSpace(moduleName))
+                return Results.BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid module name",
+                    Detail = "Module name must not be empty.",
+                    Status = StatusCodes.Status400BadRequest,
+                });
+
+            var detail = svc.GetModuleDetail(sessionId, moduleName);
+            if (detail is null)
+                return Results.NotFound(new ProblemDetails
+                {
+                    Title = "Module not found",
+                    Detail = $"No module matching '{moduleName}' was found in this session.",
+                    Status = StatusCodes.Status404NotFound,
+                });
+
+            return Results.Ok(detail);
+        })
+        .WithName("GetModuleDetail")
+        .Produces<ModuleDataDetail>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
+        /// Decompiles a managed module using ilspycmd and returns C# source.
+        /// Requires ilspycmd to be installed on the server.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/modules/{moduleName}/decompile",
+            async (string sessionId, string moduleName, DebuggingSessionService svc) =>
+        {
+            if (string.IsNullOrWhiteSpace(moduleName))
+                return Results.BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid module name",
+                    Detail = "Module name must not be empty.",
+                    Status = StatusCodes.Status400BadRequest,
+                });
+
+            var source = await svc.DecompileModuleAsync(sessionId, moduleName);
+            if (source is null)
+                return Results.Problem(new ProblemDetails
+                {
+                    Title = "Decompilation failed",
+                    Detail = $"Could not decompile '{moduleName}'. The module may not be managed, may not exist, " +
+                             "or ilspycmd may not be installed on the server.",
+                    Status = StatusCodes.Status501NotImplemented,
+                });
+
+            return Results.Ok(new { moduleName, source });
+        })
+        .WithName("DecompileModule")
+        .Produces<object>()
+        .ProducesProblem(StatusCodes.Status501NotImplemented)
         .ProducesProblem(StatusCodes.Status404NotFound)
         .ProducesProblem(StatusCodes.Status400BadRequest);
 

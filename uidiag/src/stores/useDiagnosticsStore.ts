@@ -15,6 +15,8 @@ import {
   API_SESSIONS_OPEN_DUMP_PATH,
   API_SESSIONS_DUMPS,
   API_SESSIONS_METHODTABLE,
+  API_SESSIONS_MODULE_DETAIL,
+  API_SESSIONS_MODULE_DECOMPILE,
 } from '@/config'
 import type {
   ProcessInfo,
@@ -33,6 +35,8 @@ import type {
   DataOwnerResult,
   ReferencingObjectsResult,
   AddressInfoResult,
+  ModuleDataDetail,
+  ModuleDecompileResult,
 } from '@/types/api'
 
 const ACTIVE_SESSION_ID_STORAGE_KEY = 'uidiag_active_session_id'
@@ -83,6 +87,12 @@ interface DiagnosticsState {
   referencingObjects: ReferencingObjectsResult | null
   addressInfo: AddressInfoResult | null
 
+  // Module detail
+  selectedModuleName: string | null
+  moduleDetail: ModuleDataDetail | null
+  decompiledSource: string | null
+  isModuleDetailLoading: boolean
+
   // Actions
   fetchProcesses: () => Promise<void>
   selectProcess: (p: ProcessInfo | null) => void
@@ -118,6 +128,11 @@ interface DiagnosticsState {
 
   // State management
   clearAddressState: () => void
+
+  // Module actions
+  fetchModuleDetail: (sessionId: string, moduleName: string) => Promise<void>
+  decompileModule: (sessionId: string, moduleName: string) => Promise<void>
+  clearModuleDetail: () => void
 }
 
 export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
@@ -149,6 +164,11 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   dataOwner: null,
   referencingObjects: null,
   addressInfo: null,
+
+  selectedModuleName: null,
+  moduleDetail: null,
+  decompiledSource: null,
+  isModuleDetailLoading: false,
 
   fetchProcesses: async () => {
     const res = await apiService.get<ProcessInfo[]>(API_PROCESSES)
@@ -255,6 +275,9 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
         hexData: null,
         objectLayout: null,
         dataOwner: null,
+        moduleDetail: null,
+        decompiledSource: null,
+        selectedModuleName: null,
       })
       toastSuccess('Session closed')
       return true
@@ -437,5 +460,36 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
       hexData: null,
       objectLayout: null,
       dataOwner: null,
+    }),
+
+  // ── Module actions ──
+
+  fetchModuleDetail: async (sessionId, moduleName) => {
+    set({ isModuleDetailLoading: true, moduleDetail: null, decompiledSource: null, selectedModuleName: moduleName })
+    const url = `${API_SESSIONS_MODULE_DETAIL}/${sessionId}/modules/${encodeURIComponent(moduleName)}/detail`
+    const res = await apiService.post<ModuleDataDetail>(url)
+    if (!res.isError) {
+      set({ moduleDetail: res.result as ModuleDataDetail })
+    }
+    set({ isModuleDetailLoading: false })
+  },
+
+  decompileModule: async (sessionId, moduleName) => {
+    set({ decompiledSource: null, isModuleDetailLoading: true })
+    const url = `${API_SESSIONS_MODULE_DECOMPILE}/${sessionId}/modules/${encodeURIComponent(moduleName)}/decompile`
+    const res = await apiService.post<ModuleDecompileResult>(url)
+    if (!res.isError) {
+      const data = res.result as ModuleDecompileResult
+      set({ decompiledSource: data.source })
+    }
+    set({ isModuleDetailLoading: false })
+  },
+
+  clearModuleDetail: () =>
+    set({
+      selectedModuleName: null,
+      moduleDetail: null,
+      decompiledSource: null,
+      isModuleDetailLoading: false,
     }),
 }))

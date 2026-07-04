@@ -23,6 +23,9 @@ public partial class DiagnosticAnalyzer : IDisposable
     private DirectoryInfo _dumpDirectory;
     private FileInfo? _dumpFile;
 
+    /// <summary>Directory where the dump and extracted modules reside.</summary>
+    public DirectoryInfo DumpDirectory => _dumpDirectory;
+
     private IList<ClrObject>? _cachedAllObjects;
     private IList<(ClrObject, ClrInstanceField, ulong)>? _objectsWithInstanceFields;
     private IList<(ClrObject, ClrStaticField, ulong)>? _objectsWithStaticFields;

@@ -26,6 +26,7 @@ export default function DebugPage() {
     fetchGcRootPath,
     fetchHexData,
     clearAddressState,
+    fetchModuleDetail,
   } = useDiagnosticsStore()
 
   const [hexDialogOpen, setHexDialogOpen] = useState(false)
@@ -83,6 +84,15 @@ export default function DebugPage() {
       fetchGcRootPath(activeSessionId, objectAddress)
     },
     [activeSessionId, fetchGcRootPath],
+  )
+
+  // Single-click a module row → show detail panel
+  const handleModuleSelect = useCallback(
+    (moduleName: string) => {
+      if (!activeSessionId) return
+      fetchModuleDetail(activeSessionId, moduleName)
+    },
+    [activeSessionId, fetchModuleDetail],
   )
 
   // ── Empty state: no session ──
@@ -190,6 +200,7 @@ export default function DebugPage() {
         <MasterDetailGrid
           onObjectDoubleClick={handleObjectDoubleClick}
           onObjectSelect={handleObjectSelect}
+          onModuleSelect={handleModuleSelect}
         />
 
         {/* GC Root Path Panel */}

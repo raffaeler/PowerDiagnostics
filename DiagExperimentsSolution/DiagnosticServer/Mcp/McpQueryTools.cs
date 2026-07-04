@@ -8,6 +8,8 @@ using DiagnosticInvestigations;
 using DiagnosticModels;
 using DiagnosticModels.Converters;
 
+using DiagnosticServer.Services;
+
 using Microsoft.Extensions.Options;
 
 using ModelContextProtocol.Server;
@@ -30,19 +32,22 @@ public class McpQueryTools
     private readonly McpInsightsGenerator _insightsGenerator;
     private readonly McpConfiguration _config;
     private readonly ILogger<McpQueryTools> _logger;
+    private readonly DebuggingSessionService _sessionService;
 
     public McpQueryTools(
         McpSessionManager sessionManager,
         QueriesService queriesService,
         McpInsightsGenerator insightsGenerator,
         IOptions<McpConfiguration> config,
-        ILogger<McpQueryTools> logger)
+        ILogger<McpQueryTools> logger,
+        DebuggingSessionService sessionService)
     {
         _sessionManager = sessionManager;
         _queriesService = queriesService;
         _insightsGenerator = insightsGenerator;
         _config = config.Value;
         _logger = logger;
+        _sessionService = sessionService;
     }
 
     // ──────────── Query tools ────────────
@@ -178,6 +183,36 @@ public class McpQueryTools
         int page = 1, int pageSize = 20)
     {
         return await ExecuteQueryAsync(sessionId, "GetObjectsGroupedByAllocator (.NET5+ dumps)", filter, page, pageSize);
+    }
+
+    // ──────────── Module tools ────────────
+
+    /// <summary>
+    /// Get full detail for a single loaded module, including PDB info and decompilation metadata.
+    /// Use after query_modules to drill into a specific assembly.
+    /// </summary>
+    [McpServerTool(Name = "get_module_detail")]
+    [Description("Get full detail for a single module/assembly by name, including PDB info (name, GUID, age), architecture, version, and whether it's extractable for decompilation. Use after query_modules to drill into a specific assembly.")]
+    public ModuleDataDetail? GetModuleDetail(
+        [Description("The session ID returned by open_dump.")] string sessionId,
+        [Description("The module name or assembly name (case-insensitive, from query_modules results).")] string moduleName)
+    {
+        McpToolRegistry.ValidateSession(_sessionManager, sessionId);
+        return _sessionService.GetModuleDetail(sessionId, moduleName);
+    }
+
+    /// <summary>
+    /// Decompile a managed module using ilspycmd on the server. Returns C# source code.
+    /// Requires ilspycmd to be installed on the server. Only works for managed (.NET) modules.
+    /// </summary>
+    [McpServerTool(Name = "decompile_module")]
+    [Description("Decompile a managed module/assembly to C# source code using ilspycmd on the server. Requires ilspycmd to be installed server-side. Only works for managed (.NET) modules that were successfully extracted. Returns null if decompilation fails.")]
+    public async Task<string?> DecompileModule(
+        [Description("The session ID returned by open_dump.")] string sessionId,
+        [Description("The module name or assembly name (case-insensitive).")] string moduleName)
+    {
+        McpToolRegistry.ValidateSession(_sessionManager, sessionId);
+        return await _sessionService.DecompileModuleAsync(sessionId, moduleName);
     }
 
     // ──────────── Helpers ────────────

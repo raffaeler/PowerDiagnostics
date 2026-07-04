@@ -19,4 +19,8 @@ export const API_SESSIONS_OPEN_DUMP_PATH = '/api/sessions/open-dump-path'
 export const API_SESSIONS_DUMPS = '/api/sessions/dumps'
 export const API_SESSIONS_METHODTABLE = '/api/sessions'
 
+export const API_SESSIONS_MODULES = '/api/sessions'  // + /{sessionId}/modules
+export const API_SESSIONS_MODULE_DETAIL = '/api/sessions'  // + /{sessionId}/modules/{name}/detail
+export const API_SESSIONS_MODULE_DECOMPILE = '/api/sessions'  // + /{sessionId}/modules/{name}/decompile
+
 export const HUB_PATH = '/diagnosticHub'

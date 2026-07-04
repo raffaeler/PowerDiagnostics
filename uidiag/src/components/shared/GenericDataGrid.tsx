@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react'
 import { Box, Typography } from '@mui/material'
-import { DataGrid, useGridApiRef, type GridColDef, type GridRowParams, type GridPaginationModel } from '@mui/x-data-grid'
+import { DataGrid, useGridApiRef, type GridColDef, type GridCellParams, type GridPaginationModel } from '@mui/x-data-grid'
 import { extractAddress } from '@/utils/gridUtils'
 
 export interface GenericDataGridProps {
@@ -110,7 +110,7 @@ export default function GenericDataGrid({
   )
 
   const handleRowClick = useCallback(
-    (params: GridRowParams) => {
+    (params: GridCellParams) => {
       if (!onRowClick) return
       const row = params.row as Record<string, unknown>
       const address = extractAddress(row)
@@ -120,7 +120,7 @@ export default function GenericDataGrid({
   )
 
   const handleRowDoubleClick = useCallback(
-    (params: GridRowParams) => {
+    (params: GridCellParams) => {
       if (!onRowDoubleClick) return
       const row = params.row as Record<string, unknown>
       const address = extractAddress(row)
@@ -166,8 +166,8 @@ export default function GenericDataGrid({
           rows={rows as Record<string, unknown>[]}
           columns={columns}
           getRowId={getRowId}
-          onRowClick={handleRowClick}
-          onRowDoubleClick={handleRowDoubleClick}
+          onCellClick={handleRowClick}
+          onCellDoubleClick={handleRowDoubleClick}
           density={density}
           disableColumnMenu
           pageSizeOptions={pageSizeOptions}

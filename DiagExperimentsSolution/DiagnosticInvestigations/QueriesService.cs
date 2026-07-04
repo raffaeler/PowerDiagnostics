@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClrDiagnostics.Models;
 using DiagnosticInvestigations.Helpers;
 using DiagnosticModels;
 
@@ -101,10 +102,23 @@ public class QueriesService
 
         queries.Add(new()
         {
-            Type = typeof(ClrModule),
+            Type = typeof(ModuleDataLight),
             Name = "Modules",
-            Populate = a => a.Modules.ToList(),
-            Filter = (o, f) => ((ClrModule)o)?.Name?.FilterBy(f)
+            Populate = a => a.ExtractModules()
+                            .Select(md => new ModuleDataLight()
+                            {
+                                AssemblyName = md.AssemblyName ?? string.Empty,
+                                Name = Path.GetFileName(md.FileName) ?? md.AssemblyName ?? string.Empty,
+                                Address = md.Module != null ? $"0x{md.Module.ImageBase:X16}" : string.Empty,
+                                Size = md.FileSize,
+                                IsDynamic = md.IsDynamic,
+                                IsNative = md.IsNative,
+                                FileName = md.FileName,
+                            })
+                            .ToList(),
+            Filter = (o, f) => ((ModuleDataLight)o)?.Name?.FilterBy(f),
+            HasDetails = true,
+            DetailType = typeof(ModuleDataDetail),
         });
 
         queries.Add(new()

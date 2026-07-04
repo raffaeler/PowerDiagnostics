@@ -27,8 +27,8 @@ public static class QueryMetadataFactory
             case var t when t.Contains(nameof(DbmStringsBySize)):
                 PopulateDbmStringsBySize(metadata);
                 break;
-            case var t when t.Contains(nameof(ClrModule)):
-                PopulateClrModule(metadata);
+            case var t when t.Contains(nameof(ModuleDataLight)):
+                PopulateModuleDataLight(metadata);
                 break;
             case var t when t.Contains(nameof(DbmStackFrame)):
                 PopulateDbmStackFrame(metadata);
@@ -90,15 +90,18 @@ public static class QueryMetadataFactory
         };
     }
 
-    // §5.7 ClrModule — no details
-    private static void PopulateClrModule(QueryMetadata m)
+    // §5.7 ModuleDataLight — inline detail panel for ModuleDataDetail
+    private static void PopulateModuleDataLight(QueryMetadata m)
     {
         m.Columns = new List<ColumnDefinition>
         {
             new() { Header = "AssemblyName", Path = "AssemblyName", Tooltip = "AssemblyName" },
             new() { Header = "Name", Path = "Name", Tooltip = "Name" },
-            new() { Header = "Address", Path = "Address", Format = "0:X16", AlignRight = true, Tooltip = "Address" },
+            new() { Header = "Address", Path = "Address", Tooltip = "Address" },
             new() { Header = "Size", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "Size" },
+            new() { Header = "IsDynamic", Path = "IsDynamic", Tooltip = "IsDynamic" },
+            new() { Header = "IsNative", Path = "IsNative", Tooltip = "IsNative" },
+            new() { Header = "FileName", Path = "FileName", Tooltip = "FileName" },
         };
     }
 

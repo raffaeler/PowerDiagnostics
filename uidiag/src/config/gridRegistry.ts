@@ -61,14 +61,22 @@ const registry: Record<string, GridConfig> = {
     ],
     detailColumns: [],
   },
-  // §5.7 ClrModule — no details
-  ClrModule: {
+  // §5.7 ModuleDataLight — inline detail panel for ModuleDataDetail
+  ModuleDataLight: {
     masterColumns: [
       { header: 'AssemblyName', path: 'assemblyName', tooltip: 'AssemblyName' },
       { header: 'Name', path: 'name', tooltip: 'Name' },
-      { header: 'Address', path: 'address', format: '0:X16', alignRight: true, tooltip: 'Address' },
+      { header: 'Address', path: 'address', tooltip: 'Address' },
       { header: 'Size', path: 'size', format: '0:N0', alignRight: true, tooltip: 'Size' },
+      { header: 'Dynamic', path: 'isDynamic', tooltip: 'IsDynamic' },
+      { header: 'Native', path: 'isNative', tooltip: 'IsNative' },
+      { header: 'File', path: 'fileName', tooltip: 'FileName' },
     ],
+    detailColumns: [],
+  },
+  // ModuleDataDetail — for the inline detail panel (not grid details)
+  ModuleDataDetail: {
+    masterColumns: [],
     detailColumns: [],
   },
   // §5.8–5.9 DbmStackFrame → ClrStackFrame details
