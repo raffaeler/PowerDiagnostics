@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 using Microsoft.Diagnostics.Runtime;
@@ -88,12 +89,16 @@ public partial class DiagnosticAnalyzer
                 }
             }
 
+            string assemblyName = GetFullAssemblyName(clrModule)
+                ?? clrModule?.AssemblyName
+                ?? Path.GetFileNameWithoutExtension(sourceFileName);
+
             result.Add(new Models.ModuleData
             {
                 RelativePath = relativePath,
                 IsNative = !isManaged,
                 Module = clrModule,
-                AssemblyName = clrModule?.AssemblyName ?? Path.GetFileNameWithoutExtension(sourceFileName),
+                AssemblyName = assemblyName,
                 FileSize = fileSize,
                 IsDynamic = isDynamic,
                 FileName = sourceFileName,
@@ -137,6 +142,69 @@ public partial class DiagnosticAnalyzer
         {
             usedFileNames[fileName] = 1;
             return fileName;
+        }
+    }
+
+    /// <summary>
+    /// Reads the PE assembly metadata from the dump and returns the full assembly display name
+    /// (e.g., "myTypes, Version=1.0.1234.0, Culture=en-US, PublicKeyToken=b77a5c561934e089").
+    /// Falls back to <see langword="null"/> if the metadata cannot be read or parsed.
+    /// </summary>
+    private string? GetFullAssemblyName(ClrModule? module)
+    {
+        if (module is null) return null;
+        if (module.MetadataAddress == 0 || module.MetadataLength == 0) return null;
+
+        // Limit read size to avoid excessive memory (max 512 KB for metadata)
+        int length = (int)Math.Min(module.MetadataLength, 512 * 1024);
+        byte[] buffer = new byte[length];
+        int bytesRead = _dataTarget.DataReader.Read(module.MetadataAddress, buffer);
+        if (bytesRead <= 4) return null;
+
+        try
+        {
+            unsafe
+            {
+                fixed (byte* pBuf = buffer)
+                {
+                    var reader = new System.Reflection.Metadata.MetadataReader(pBuf, bytesRead);
+                    var assemblyDef = reader.GetAssemblyDefinition();
+
+                    string name = reader.GetString(assemblyDef.Name);
+                    var version = assemblyDef.Version;
+
+                    string culture = assemblyDef.Culture.IsNil
+                        ? "neutral"
+                        : reader.GetString(assemblyDef.Culture);
+
+                    // Public key token: last 8 bytes of SHA1 of the full public key
+                    string publicKeyToken = "null";
+                    if (!assemblyDef.PublicKey.IsNil)
+                    {
+                        byte[] pkBlob = reader.GetBlobBytes(assemblyDef.PublicKey);
+                        byte[] hash = SHA1.HashData(pkBlob);
+                        byte[] tokenBytes = hash[^8..];
+                        publicKeyToken = Convert.ToHexString(tokenBytes).ToLowerInvariant();
+                    }
+
+                    // Processor architecture from AssemblyFlags bits 4-6
+                    int archBits = ((int)assemblyDef.Flags & 0x70) >> 4;
+                    string archStr = archBits switch
+                    {
+                        1 => "x86",
+                        2 => "Itanium",
+                        3 => "amd64",
+                        4 => "arm",
+                        _ => "msil",
+                    };
+
+                    return $"{name}, Version={version.Major}.{version.Minor}.{version.Build}.{version.Revision}, Culture={culture}, PublicKeyToken={publicKeyToken}, ProcessorArchitecture={archStr}";
+                }
+            }
+        }
+        catch
+        {
+            return null;
         }
     }
 }

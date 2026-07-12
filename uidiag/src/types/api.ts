@@ -225,6 +225,7 @@ export interface ModuleDataLight {
   isDynamic: boolean
   isNative: boolean
   fileName?: string | null
+  filePath?: string | null
 }
 
 /** Full-detail module DTO for inline detail panel. No local paths. */
@@ -236,6 +237,7 @@ export interface ModuleDataDetail {
   isDynamic: boolean
   isNative: boolean
   fileName?: string | null
+  filePath?: string | null
   imageBase: string
   pdbName?: string | null
   pdbGuid?: string | null

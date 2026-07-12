@@ -30,6 +30,9 @@ public class ModuleDataDetail
     /// <summary>Original module filename from the dump metadata.</summary>
     public string? FileName { get; set; }
 
+    /// <summary>Directory path of the module file, without the filename.</summary>
+    public string? FilePath { get; set; }
+
     // ── Decompilation metadata ──
 
     /// <summary>Image base as raw hex string (e.g., "7FFA12340000").</summary>

@@ -114,6 +114,7 @@ public class QueriesService
                                 IsDynamic = md.IsDynamic,
                                 IsNative = md.IsNative,
                                 FileName = md.FileName,
+                                FilePath = string.IsNullOrEmpty(md.FileName) ? null : Path.GetDirectoryName(md.FileName),
                             })
                             .ToList(),
             Filter = (o, f) => ((ModuleDataLight)o)?.Name?.FilterBy(f),

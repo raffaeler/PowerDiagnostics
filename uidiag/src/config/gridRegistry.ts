@@ -68,13 +68,13 @@ const registry: Record<string, GridConfig> = {
   // §5.7 ModuleDataLight — inline detail panel for ModuleDataDetail
   ModuleDataLight: {
     masterColumns: [
-      { header: 'AssemblyName', path: 'assemblyName', tooltip: 'AssemblyName' },
-      { header: 'Name', path: 'name', tooltip: 'Name' },
       { header: 'Address', path: 'address', tooltip: 'Address' },
       { header: 'Size', path: 'size', format: '0:N0', alignRight: true, tooltip: 'Size' },
       { header: 'Dynamic', path: 'isDynamic', tooltip: 'IsDynamic' },
       { header: 'Native', path: 'isNative', tooltip: 'IsNative' },
-      { header: 'File', path: 'fileName', tooltip: 'FileName' },
+      { header: 'AssemblyName', path: 'assemblyName', tooltip: 'AssemblyName' },
+      { header: 'FileName', path: 'name', tooltip: 'FileName' },
+      { header: 'FilePath', path: 'filePath', tooltip: 'FilePath' },
     ],
     detailColumns: [],
   },
@@ -93,11 +93,20 @@ const registry: Record<string, GridConfig> = {
     detailColumns: stackFrameDetail,
   },
   // §5.10 ClrRoot — no details
+  // Columns: Root Kind, IsPinned, Object Address (clickable ↗), Object Type, Object Size,
+  //          Object MT (MethodTable), Assembly, Module File, IsFree, ALC
   ClrRoot: {
     masterColumns: [
-      { header: 'IsPinned', path: 'isPinned', tooltip: 'IsPinned' },
-      { header: 'Address', path: 'object.address', format: '0:X16', alignRight: true, tooltip: 'Object Address' },
-      { header: 'Object', path: 'object', tooltip: 'Object' },
+      { header: 'Root Kind', path: 'rootKind', tooltip: 'Type of GC root (StaticVar, StackLocal, Handle, Finalizer, etc.)' },
+      { header: 'IsPinned', path: 'isPinned', tooltip: 'Whether this root reference is pinned' },
+      { header: 'Object Address', path: 'object.address', format: '0:X16', alignRight: true, tooltip: 'Managed heap object address — click to inspect' },
+      { header: 'Object Type', path: 'object.type.name', tooltip: 'Type name of the managed object this root points to' },
+      { header: 'Object Size', path: 'object.size', format: '0:N0', alignRight: true, tooltip: 'Size of the managed object in bytes' },
+      { header: 'Object MT', path: 'object.type.address', format: '0:X16', alignRight: true, tooltip: 'MethodTable address of the object\'s type — click to inspect' },
+      { header: 'Assembly', path: 'object.type.module.assemblyName', tooltip: 'Assembly that defines this type' },
+      { header: 'Module', path: 'object.type.module.name', tooltip: 'Module file path' },
+      { header: 'IsFree', path: 'object.type.isFree', tooltip: 'Whether this is a free (unused) object' },
+      { header: 'ALC', path: 'object.type.assemblyLoadContextAddress', format: '0:X16', alignRight: true, tooltip: 'AssemblyLoadContext that loaded this type — useful for ALC leak diagnosis' },
     ],
     detailColumns: [],
   },
@@ -124,9 +133,16 @@ const registry: Record<string, GridConfig> = {
  */
 export function getGridConfig(resultType: string): GridConfig {
   // Try exact match first
-  if (registry[resultType]) return registry[resultType]
+  if (registry[resultType]) {
+    console.warn(`[DIAG] getGridConfig exact match for "${resultType}": ${registry[resultType].masterColumns.length} cols`)
+    return registry[resultType]
+  }
   // Try partial match (resultType may include namespace)
   const key = Object.keys(registry).find((k) => resultType.endsWith(k) || resultType.includes(k))
-  if (key) return registry[key]
+  if (key) {
+    console.warn(`[DIAG] getGridConfig partial match: "${resultType}" → key "${key}": ${registry[key].masterColumns.length} cols`)
+    return registry[key]
+  }
+  console.warn(`[DIAG] getGridConfig NO MATCH for "${resultType}" — returning empty config`)
   return { masterColumns: [], detailColumns: [] }
 }

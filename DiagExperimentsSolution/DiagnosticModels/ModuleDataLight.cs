@@ -29,4 +29,11 @@ public class ModuleDataLight
     /// (e.g., "C:\Windows\System32\ntdll.dll").
     /// </summary>
     public string? FileName { get; set; }
+
+    /// <summary>
+    /// Directory path of the module file, without the filename
+    /// (e.g., "C:\Windows\System32").
+    /// Null for in-memory (dynamic) modules with no backing file.
+    /// </summary>
+    public string? FilePath { get; set; }
 }

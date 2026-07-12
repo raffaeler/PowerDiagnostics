@@ -576,12 +576,13 @@ public class DebuggingSessionService : BackgroundService
         return modules.Select(md => new ModuleDataLight
         {
             AssemblyName = md.AssemblyName ?? string.Empty,
-            Name = md.Module?.Name ?? Path.GetFileName(md.FileName) ?? md.AssemblyName ?? string.Empty,
+            Name = Path.GetFileName(md.FileName) ?? md.AssemblyName ?? string.Empty,
             Address = md.Module != null ? $"0x{md.Module.ImageBase:X16}" : string.Empty,
             Size = md.FileSize,
             IsDynamic = md.IsDynamic,
             IsNative = md.IsNative,
             FileName = md.FileName,
+            FilePath = string.IsNullOrEmpty(md.FileName) ? null : Path.GetDirectoryName(md.FileName),
         }).ToList();
     }
 
@@ -606,12 +607,13 @@ public class DebuggingSessionService : BackgroundService
         return new ModuleDataDetail
         {
             AssemblyName = match.AssemblyName ?? string.Empty,
-            Name = clrModule?.Name ?? Path.GetFileName(match.FileName) ?? match.AssemblyName ?? string.Empty,
+            Name = Path.GetFileName(match.FileName) ?? match.AssemblyName ?? string.Empty,
             Address = clrModule != null ? $"0x{clrModule.ImageBase:X16}" : string.Empty,
             Size = match.FileSize,
             IsDynamic = match.IsDynamic,
             IsNative = match.IsNative,
             FileName = match.FileName,
+            FilePath = string.IsNullOrEmpty(match.FileName) ? null : Path.GetDirectoryName(match.FileName),
             ImageBase = clrModule != null ? $"0x{clrModule.ImageBase:X}" : string.Empty,
             PdbName = clrModule?.Pdb != null ? Path.GetFileName(clrModule.Pdb.Path) : null,
             PdbGuid = clrModule?.Pdb?.Guid.ToString(),

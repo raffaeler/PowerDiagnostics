@@ -99,13 +99,13 @@ public static class QueryMetadataFactory
     {
         m.Columns = new List<ColumnDefinition>
         {
-            new() { Header = "AssemblyName", Path = "AssemblyName", Tooltip = "AssemblyName" },
-            new() { Header = "Name", Path = "Name", Tooltip = "Name" },
             new() { Header = "Address", Path = "Address", Tooltip = "Address" },
             new() { Header = "Size", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "Size" },
             new() { Header = "IsDynamic", Path = "IsDynamic", Tooltip = "IsDynamic" },
             new() { Header = "IsNative", Path = "IsNative", Tooltip = "IsNative" },
-            new() { Header = "FileName", Path = "FileName", Tooltip = "FileName" },
+            new() { Header = "AssemblyName", Path = "AssemblyName", Tooltip = "AssemblyName" },
+            new() { Header = "FileName", Path = "Name", Tooltip = "FileName" },
+            new() { Header = "FilePath", Path = "FilePath", Tooltip = "FilePath" },
         };
     }
 
@@ -128,13 +128,22 @@ public static class QueryMetadataFactory
     }
 
     // §5.10 ClrRoot — no details
+    // Columns: Root Kind, IsPinned, Object Address (clickable hex), Object Type, Object Size,
+    //          Object MT (MethodTable), Assembly, Module File, IsFree, ALC
     private static void PopulateClrRoot(QueryMetadata m)
     {
         m.Columns = new List<ColumnDefinition>
         {
-            new() { Header = "IsPinned", Path = "IsPinned", Tooltip = "IsPinned" },
-            new() { Header = "Address", Path = "Object.Address", Format = "0:X16", AlignRight = true, Tooltip = "Object Address" },
-            new() { Header = "Object", Path = "Object", Tooltip = "Object" },
+            new() { Header = "Root Kind", Path = "RootKind", Tooltip = "Type of GC root (StaticVar, StackLocal, Handle, Finalizer, etc.)" },
+            new() { Header = "IsPinned", Path = "IsPinned", Tooltip = "Whether this root reference is pinned" },
+            new() { Header = "Object Address", Path = "Object.Address", Format = "0:X16", AlignRight = true, Tooltip = "Managed heap object address — click to inspect" },
+            new() { Header = "Object Type", Path = "Object.Type.Name", Tooltip = "Type name of the managed object this root points to" },
+            new() { Header = "Object Size", Path = "Object.Size", Format = "0:N0", AlignRight = true, Tooltip = "Size of the managed object in bytes" },
+            new() { Header = "Object MT", Path = "Object.Type.Address", Format = "0:X16", AlignRight = true, Tooltip = "MethodTable address of the object's type — click to inspect" },
+            new() { Header = "Assembly", Path = "Object.Type.Module.AssemblyName", Tooltip = "Assembly that defines this type" },
+            new() { Header = "Module", Path = "Object.Type.Module.Name", Tooltip = "Module file path" },
+            new() { Header = "IsFree", Path = "Object.Type.IsFree", Tooltip = "Whether this is a free (unused) object" },
+            new() { Header = "ALC", Path = "Object.Type.AssemblyLoadContextAddress", Format = "0:X16", AlignRight = true, Tooltip = "AssemblyLoadContext that loaded this type — useful for ALC leak diagnosis" },
         };
     }
 
