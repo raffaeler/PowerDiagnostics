@@ -39,8 +39,11 @@ public static class KnownGrids
 
         g = UIGrid.Create<DbmStaticFields>(null,
             new UIGridColumn("Static field name", "Field.Name", null, null, "Field.Name", 200),
-            new UIGridColumn("Size", "Size", "0:N0", null, "Size", DataGridLength.Auto, true),
-            new UIGridColumn("Object", "Obj", null, null, "Obj", 300));
+            new UIGridColumn("Field Type", "Field.Type.Name", null, null, "Field.Type.Name", DataGridLength.Auto),
+            new UIGridColumn("Graph Size", "Size", "0:N0", null, "Graph Size", DataGridLength.Auto, true),
+            new UIGridColumn("Obj Address", "Obj.Address", "0:X16", null, "Obj.Address", DataGridLength.Auto, true),
+            new UIGridColumn("Obj Type", "Obj.Type.Name", null, null, "Obj.Type.Name", DataGridLength.Auto),
+            new UIGridColumn("Obj Size", "Obj.Size", "0:N0", null, "Obj.Size", DataGridLength.Auto, true));
         _store[g.MasterType!] = g;
 
         g = UIGrid.Create<DbmDupStrings>(null,

@@ -26,7 +26,7 @@ public class KnownQueryMetadataTests
     [InlineData("GetStaticFieldsWithGraphAndSize", true, "Obj")]
     [InlineData("GetDuplicateStrings", false, null)]
     [InlineData("GetStringsBySize", false, null)]
-    [InlineData("Modules", false, null)]
+    [InlineData("Modules", true, null)]
     [InlineData("Threads stacks", true, "StackFrames")]
     [InlineData("Roots", false, null)]
     [InlineData("ObjectsBySize", false, null)]
@@ -45,6 +45,8 @@ public class KnownQueryMetadataTests
             query.DetailType.Should().NotBeNull($"{queryName} should have DetailType");
             if (queryName == "Threads stacks")
                 query.DetailType.Should().Be(typeof(ClrStackFrame));
+            else if (queryName == "Modules")
+                query.DetailType.Should().Be(typeof(DiagnosticModels.ModuleDataDetail));
             else
                 query.DetailType.Should().Be(typeof(ClrObject));
         }

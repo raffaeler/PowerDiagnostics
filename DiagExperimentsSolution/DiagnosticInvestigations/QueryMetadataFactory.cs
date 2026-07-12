@@ -63,8 +63,11 @@ public static class QueryMetadataFactory
         m.Columns = new List<ColumnDefinition>
         {
             new() { Header = "Static field name", Path = "Field.Name", Tooltip = "Field.Name" },
-            new() { Header = "Size", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "Size" },
-            new() { Header = "Object", Path = "Obj", Tooltip = "Obj" },
+            new() { Header = "Field Type", Path = "Field.Type.Name", Tooltip = "Field.Type.Name" },
+            new() { Header = "Graph Size", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "Graph size (includes referenced objects)" },
+            new() { Header = "Obj Address", Path = "Obj.Address", Format = "0:X16", AlignRight = true, Tooltip = "Object address — click to inspect" },
+            new() { Header = "Obj Type", Path = "Obj.Type.Name", Tooltip = "Object type name" },
+            new() { Header = "Obj Size", Path = "Obj.Size", Format = "0:N0", AlignRight = true, Tooltip = "Object size (individual)" },
         };
         m.DetailColumns = ClrObjectDetailColumns();
     }

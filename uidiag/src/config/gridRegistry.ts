@@ -39,8 +39,11 @@ const registry: Record<string, GridConfig> = {
   DbmStaticFields: {
     masterColumns: [
       { header: 'Static field name', path: 'field.name', tooltip: 'Field.Name' },
-      { header: 'Size', path: 'size', format: '0:N0', alignRight: true, tooltip: 'Size' },
-      { header: 'Object', path: 'obj', tooltip: 'Obj' },
+      { header: 'Field Type', path: 'field.type.name', tooltip: 'Field.Type.Name' },
+      { header: 'Graph Size', path: 'size', format: '0:N0', alignRight: true, tooltip: 'Graph size (includes referenced objects)' },
+      { header: 'Obj Address', path: 'obj.address', format: '0:X16', alignRight: true, tooltip: 'Object address — click to inspect' },
+      { header: 'Obj Type', path: 'obj.type.name', tooltip: 'Object type name' },
+      { header: 'Obj Size', path: 'obj.size', format: '0:N0', alignRight: true, tooltip: 'Object size (individual)' },
     ],
     detailColumns: clrObjectDetail,
   },

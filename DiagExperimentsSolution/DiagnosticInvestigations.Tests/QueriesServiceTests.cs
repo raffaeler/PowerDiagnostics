@@ -16,7 +16,7 @@ public class QueriesServiceTests
     [InlineData("GetStaticFieldsWithGraphAndSize", typeof(DiagnosticModels.DbmStaticFields))]
     [InlineData("GetDuplicateStrings", typeof(DiagnosticModels.DbmDupStrings))]
     [InlineData("GetStringsBySize", typeof(DiagnosticModels.DbmStringsBySize))]
-    [InlineData("Modules", typeof(Microsoft.Diagnostics.Runtime.ClrModule))]
+    [InlineData("Modules", typeof(DiagnosticModels.ModuleDataLight))]
     [InlineData("Threads stacks", typeof(DiagnosticModels.DbmStackFrame))]
     [InlineData("Roots", typeof(Microsoft.Diagnostics.Runtime.ClrRoot))]
     [InlineData("ObjectsBySize", typeof(Microsoft.Diagnostics.Runtime.ClrObject))]
