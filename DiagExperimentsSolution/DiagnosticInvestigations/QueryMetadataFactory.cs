@@ -166,11 +166,12 @@ public static class QueryMetadataFactory
         m.DetailColumns = ClrObjectDetailColumns();
     }
 
-    /// <summary>Standard ClrObject columns used in detail grids (Address, Size, Type).</summary>
+    /// <summary>Standard ClrObject columns used in detail grids (Address, Size, MT, Type).</summary>
     private static List<ColumnDefinition> ClrObjectDetailColumns() => new()
     {
         new() { Header = "Address", Path = "Address", Format = "0:X16", AlignRight = true, Tooltip = "Address" },
         new() { Header = "Size", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "Size" },
+        new() { Header = "MT", Path = "Type.Address", Format = "0:X16", AlignRight = true, Tooltip = "MethodTable — click to see all objects of this type" },
         new() { Header = "Type", Path = "Type", Tooltip = "Type" },
     };
 }

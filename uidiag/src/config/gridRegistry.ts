@@ -14,6 +14,7 @@ interface GridConfig {
 const clrObjectDetail: ColumnDefinition[] = [
   { header: 'Address', path: 'address', format: '0:X16', alignRight: true, tooltip: 'Address' },
   { header: 'Size', path: 'size', format: '0:N0', alignRight: true, tooltip: 'Size' },
+  { header: 'MT', path: 'type.address', format: '0:X16', alignRight: true, tooltip: 'MethodTable — click to see all objects of this type' },
   { header: 'Type', path: 'type', tooltip: 'Type' },
 ]
 
