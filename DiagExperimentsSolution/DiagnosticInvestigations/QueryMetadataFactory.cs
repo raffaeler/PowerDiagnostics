@@ -84,9 +84,10 @@ public static class QueryMetadataFactory
     {
         m.Columns = new List<ColumnDefinition>
         {
-            new() { Header = "Object", Path = "Obj", Tooltip = "Obj" },
-            new() { Header = "String", Path = "Text", Tooltip = "Text" },
-            new() { Header = "Size", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "Size" },
+            new() { Header = "Address", Path = "Obj.Address", Format = "0:X16", AlignRight = true, Tooltip = "Object address — click to inspect" },
+            new() { Header = "Type", Path = "Obj.Type.Name", Tooltip = "Type" },
+            new() { Header = "Text", Path = "Text", Tooltip = "The string content" },
+            new() { Header = "Length", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "String length in bytes" },
         };
     }
 

@@ -1,7 +1,50 @@
 import { useCallback, useRef, useEffect } from 'react'
-import { Box, Typography } from '@mui/material'
-import { DataGrid, useGridApiRef, type GridColDef, type GridCellParams, type GridPaginationModel } from '@mui/x-data-grid'
+import { Box, Typography, IconButton, Tooltip, MenuItem, ListItemIcon, ListItemText } from '@mui/material'
+import ViewColumnIcon from '@mui/icons-material/ViewColumn'
+import TextFieldsIcon from '@mui/icons-material/TextFields'
+import { DataGrid, useGridApiRef, useGridApiContext, GridColumnMenu, type GridColDef, type GridCellParams, type GridPaginationModel, type GridColumnMenuProps } from '@mui/x-data-grid'
 import { extractAddress } from '@/utils/gridUtils'
+
+/** Column menu item: resizes the current column to fill the remaining viewport width. */
+function MenuItemFitColumn({ colDef, onClick }: { colDef: GridColDef; onClick: (e: React.MouseEvent) => void }) {
+  const apiRef = useGridApiContext()
+  const handleClick = (e: React.MouseEvent) => {
+    onClick(e) // close the column menu
+    const api = apiRef.current
+    const dims = api.getRootDimensions()
+    if (!dims) return
+    const viewportWidth = dims.viewportInnerSize.width
+    const otherCols = api.getVisibleColumns().filter((c) => c.field !== colDef.field)
+    const otherWidth = otherCols.reduce((sum, c) => sum + (c.computedWidth ?? 100), 0)
+    const fitWidth = Math.max(120, viewportWidth - otherWidth)
+    api.setColumnWidth(colDef.field, fitWidth)
+  }
+  return (
+    <MenuItem onClick={handleClick}>
+      <ListItemIcon>
+        <TextFieldsIcon fontSize="small" />
+      </ListItemIcon>
+      <ListItemText>Fit to view</ListItemText>
+    </MenuItem>
+  )
+}
+
+/** Wraps the default column menu to add our "Fit this column" item. */
+function DefaultColumnMenu(props: GridColumnMenuProps) {
+  return (
+    <GridColumnMenu
+      {...props}
+      slots={{
+        ...props.slots,
+        columnMenuFitItem: MenuItemFitColumn,
+      }}
+      slotProps={{
+        ...props.slotProps,
+        columnMenuFitItem: { displayOrder: 70 },
+      }}
+    />
+  )
+}
 
 export interface GenericDataGridProps {
   /** Row data */
@@ -47,7 +90,7 @@ export default function GenericDataGrid({
   paginationModel,
   onPaginationModelChange,
   density = 'compact',
-  pageSizeOptions = [25, 50, 100],
+  pageSizeOptions = [10, 25, 50, 100],
   defaultPageSize = 50,
   emptyMessage = 'No data.',
 }: GenericDataGridProps) {
@@ -129,6 +172,25 @@ export default function GenericDataGrid({
     [onRowDoubleClick],
   )
 
+  /** Resize all visible columns to share the available viewport width equally. */
+  const fitColumnsToView = useCallback(() => {
+    const api = apiRef.current
+    if (!api) return
+    const dims = api.getRootDimensions()
+    if (!dims) return
+    const availableWidth = dims.viewportInnerSize.width
+    const visible = api.getVisibleColumns()
+    if (visible.length === 0) return
+
+    const equalWidth = Math.floor(availableWidth / visible.length)
+    const MIN_WIDTH = 80
+    const finalWidth = Math.max(MIN_WIDTH, equalWidth)
+
+    visible.forEach((col) => {
+      api.setColumnWidth(col.field, finalWidth)
+    })
+  }, [apiRef])
+
   if (rows.length === 0) {
     return (
       <Box
@@ -151,13 +213,20 @@ export default function GenericDataGrid({
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
       {(title || subtitle) && (
-        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, px: 0.5 }}>
-          {title && <Typography variant="subtitle2">{title}</Typography>}
-          {subtitle && (
-            <Typography variant="caption" color="text.secondary">
-              {subtitle}
-            </Typography>
-          )}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 0.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, flex: 1 }}>
+            {title && <Typography variant="subtitle2">{title}</Typography>}
+            {subtitle && (
+              <Typography variant="caption" color="text.secondary">
+                {subtitle}
+              </Typography>
+            )}
+          </Box>
+          <Tooltip title="Fit columns to view width">
+            <IconButton size="small" onClick={fitColumnsToView} sx={{ opacity: 0.5, '&:hover': { opacity: 1 } }}>
+              <ViewColumnIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </Box>
       )}
       <Box sx={{ width: '100%' }}>
@@ -169,7 +238,7 @@ export default function GenericDataGrid({
           onCellClick={handleRowClick}
           onCellDoubleClick={handleRowDoubleClick}
           density={density}
-          disableColumnMenu
+          slots={{ columnMenu: DefaultColumnMenu }}
           pageSizeOptions={pageSizeOptions}
           paginationModel={paginationModel}
           onPaginationModelChange={onPaginationModelChange}
@@ -182,6 +251,9 @@ export default function GenericDataGrid({
             '& .MuiDataGrid-row:hover': { cursor: 'pointer' },
             '& .MuiDataGrid-cell': { fontFamily: "'Segoe UI', sans-serif", fontSize: 13 },
             '& .monospace-cell': { fontFamily: "'Cascadia Code', 'Consolas', monospace" },
+            // Move the column menu (three-dots) icon to the left side so users
+            // don't need to scroll horizontally to find it on wide columns.
+            '& .MuiDataGrid-menuIcon': { order: -1, marginRight: '2px', marginLeft: 0 },
           }}
         />
       </Box>

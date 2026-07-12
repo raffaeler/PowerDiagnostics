@@ -55,9 +55,10 @@ const registry: Record<string, GridConfig> = {
   // §5.6 DbmStringsBySize — no details
   DbmStringsBySize: {
     masterColumns: [
-      { header: 'Object', path: 'obj', tooltip: 'Obj' },
-      { header: 'String', path: 'text', tooltip: 'Text' },
-      { header: 'Size', path: 'size', format: '0:N0', alignRight: true, tooltip: 'Size' },
+      { header: 'Address', path: 'obj.address', format: '0:X16', alignRight: true, tooltip: 'Object address — click to inspect' },
+      { header: 'Type', path: 'obj.type.name', tooltip: 'Type' },
+      { header: 'Text', path: 'text', tooltip: 'The string content' },
+      { header: 'Length', path: 'size', format: '0:N0', alignRight: true, tooltip: 'String length in bytes' },
     ],
     detailColumns: [],
   },
