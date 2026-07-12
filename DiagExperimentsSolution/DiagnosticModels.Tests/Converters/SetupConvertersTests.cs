@@ -27,13 +27,14 @@ public class SetupConvertersTests
         options.Converters.Should().Contain(c => c is ClrStaticFieldConverter);
         options.Converters.Should().Contain(c => c is ClrThreadConverter);
         options.Converters.Should().Contain(c => c is ClrExceptionConverter);
+        options.Converters.Should().Contain(c => c is DbmAssemblyLoadContextConverter);
     }
 
     [Fact]
-    public void CreateOptions_HasNineConverters()
+    public void CreateOptions_HasTenConverters()
     {
         var options = SetupConverters.CreateOptions();
-        options.Converters.Count.Should().Be(9);
+        options.Converters.Count.Should().Be(10);
     }
 
     [Fact]
@@ -51,7 +52,7 @@ public class SetupConvertersTests
         options.Converters.Add(new ClrObjectConverter());
         SetupConverters.ConfigureOptions(options);
 
-        options.Converters.Count.Should().Be(9);
+        options.Converters.Count.Should().Be(10);
         options.Converters[0].Should().BeOfType<ClrExceptionConverter>();
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Diagnostics.Runtime;
 using ClrDiagnostics.Extensions;
 using ClrDiagnostics.Models;
+using DiagnosticModels;
 using Microsoft.Diagnostics.Symbols;
 using System.IO;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ public partial class DiagnosticAnalyzer
     public IEnumerable<(ClrObject allocator, IEnumerable<ClrObject> objects)> GetObjectsGroupedByAllocator(IEnumerable<ClrObject> objects)
     {
         return objects
-            .Where(o => !o.IsFree && o.Type!.LoaderAllocatorHandle != 0)
+            .Where(o => !o.IsFree && o.Type!.AssemblyLoadContextAddress != 0)
             .Select(o => (allocator: GetAllocatorObject(o), obj: o))
             .Where(t => t.allocator != 0)
             .GroupBy(g => g.allocator, g => g.obj)
@@ -42,6 +43,49 @@ public partial class DiagnosticAnalyzer
         //if (assemblyLoadContextAddress != 0) Debugger.Break();
         var alc = _clrRuntime.Heap.GetObject(assemblyLoadContextAddress);
         return alc;
+    }
+
+    /// <summary>
+    /// Resolves AssemblyLoadContext info (address + name) for a given ClrType.
+    /// Returns null for types with zero ALC address (native/free objects, old CLRs).
+    /// For old CLRs where ALC is unavailable (address == 0), returns null.
+    /// </summary>
+    public DbmAssemblyLoadContext? GetAssemblyLoadContext(ClrType? type)
+    {
+        if (type is null) return null;
+        var alcAddress = type.AssemblyLoadContextAddress;
+        if (alcAddress == 0) return null;
+
+        var address = alcAddress.ToString("X16");
+        try
+        {
+            var alcObject = _clrRuntime.Heap.GetObject(alcAddress);
+            if (!alcObject.IsNull && alcObject.Type is not null)
+            {
+                var nameValue = alcObject.ReadObjectField("_name");
+                var name = nameValue.GetStringValue();
+
+                // The default ALC has an empty name — normalize to "Default"
+                if (string.IsNullOrEmpty(name))
+                    name = "Default";
+
+                return new DbmAssemblyLoadContext
+                {
+                    Address = address,
+                    Name = name,
+                };
+            }
+        }
+        catch
+        {
+            // If we can't read the ALC object (invalid address, etc.), fall through
+        }
+
+        return new DbmAssemblyLoadContext
+        {
+            Address = address,
+            Name = null,
+        };
     }
 
     /// <summary>

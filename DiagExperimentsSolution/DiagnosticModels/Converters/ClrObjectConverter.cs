@@ -52,7 +52,11 @@ public class ClrObjectConverter : JsonConverter<ClrObject>
                 writer.WriteString("Name", $"(error: {ex.Message})");
                 writer.WriteString("Address", "0000000000000000");
                 writer.WriteBoolean("IsFree", false);
-                writer.WriteString("AssemblyLoadContextAddress", "0000000000000000");
+                writer.WriteStartObject("AssemblyLoadContext");
+                writer.WriteString("Address", "0000000000000000");
+                writer.WriteString("Name", (string?)null);
+                writer.WriteBoolean("IsDefault", false);
+                writer.WriteEndObject();
                 writer.WriteEndObject();
             }
         }

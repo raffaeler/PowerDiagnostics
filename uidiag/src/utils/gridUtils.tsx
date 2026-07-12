@@ -156,6 +156,33 @@ export function buildGridColumns(
             )
           }
 
+          // ALC columns: bold when the ALC is NOT the default ALC.
+          // Model-based queries (DbmDumpHeapStat, DbmStaticFields, DbmStringsBySize)
+          // have resolved ALC info at row.assemblyLoadContext.isDefault.
+          // Raw ClrType serialization doesn't have resolved names — show normal weight.
+          if (col.header === 'ALC') {
+            const alcIsDefault = resolvePath(params.row, 'assemblyLoadContext.isDefault') ??
+                                  resolvePath(params.row, 'assemblyLoadContext.IsDefault')
+            const isNonDefault = alcIsDefault !== null && alcIsDefault !== undefined && !alcIsDefault
+            return (
+              <RouterLink
+                to={`/debug/${sessionId}/address/${addr}`}
+                state={returnToPath ? { from: returnToPath } : undefined}
+                style={{
+                  color: 'var(--mui-palette-primary-main, #1976d2)',
+                  textDecoration: 'none',
+                  fontFamily: 'monospace',
+                  cursor: 'pointer',
+                  fontWeight: isNonDefault ? 700 : 400,
+                }}
+                onClick={(e) => e.stopPropagation()}
+                title={`AssemblyLoadContext at 0x${addr}${isNonDefault ? ' — custom (non-default) ALC, potential leak source' : ''}`}
+              >
+                {`0x${addr.toUpperCase().padStart(16, '0')}`}
+              </RouterLink>
+            )
+          }
+
           // Use router navigation (instead of <a href>) to preserve in-memory session and detail state.
           return (
             <RouterLink

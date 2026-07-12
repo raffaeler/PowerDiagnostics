@@ -53,6 +53,8 @@ public static class QueryMetadataFactory
             new() { Header = "Type", Path = "TypeName", Tooltip = "Type" },
             new() { Header = "MT", Path = "MT", Format = "0:X16", Tooltip = "MethodTable" },
             new() { Header = "Graph Size", Path = "GraphSize", Format = "0:N0", AlignRight = true, Tooltip = "GraphSize" },
+            new() { Header = "ALC", Path = "AssemblyLoadContext.Address", Format = "0:X16", AlignRight = true, Tooltip = "AssemblyLoadContext address — click to inspect the ALC object" },
+            new() { Header = "ALC Name", Path = "AssemblyLoadContext.Name", Tooltip = "AssemblyLoadContext name — 'Default' for the default ALC, custom name for collectible ALCs" },
         };
         m.DetailColumns = ClrObjectDetailColumns();
     }
@@ -68,6 +70,8 @@ public static class QueryMetadataFactory
             new() { Header = "Obj Address", Path = "Obj.Address", Format = "0:X16", AlignRight = true, Tooltip = "Object address — click to inspect" },
             new() { Header = "Obj Type", Path = "Obj.Type.Name", Tooltip = "Object type name" },
             new() { Header = "Obj Size", Path = "Obj.Size", Format = "0:N0", AlignRight = true, Tooltip = "Object size (individual)" },
+            new() { Header = "ALC", Path = "AssemblyLoadContext.Address", Format = "0:X16", AlignRight = true, Tooltip = "AssemblyLoadContext address — click to inspect the ALC object" },
+            new() { Header = "ALC Name", Path = "AssemblyLoadContext.Name", Tooltip = "AssemblyLoadContext name — 'Default' for the default ALC, custom name for collectible ALCs" },
         };
         m.DetailColumns = ClrObjectDetailColumns();
     }
@@ -91,6 +95,8 @@ public static class QueryMetadataFactory
             new() { Header = "Type", Path = "Obj.Type.Name", Tooltip = "Type" },
             new() { Header = "Text", Path = "Text", Tooltip = "The string content" },
             new() { Header = "Length", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "String length in bytes" },
+            new() { Header = "ALC", Path = "AssemblyLoadContext.Address", Format = "0:X16", AlignRight = true, Tooltip = "AssemblyLoadContext address — click to inspect the ALC object" },
+            new() { Header = "ALC Name", Path = "AssemblyLoadContext.Name", Tooltip = "AssemblyLoadContext name — 'Default' for the default ALC, custom name for collectible ALCs" },
         };
     }
 
@@ -143,7 +149,7 @@ public static class QueryMetadataFactory
             new() { Header = "Assembly", Path = "Object.Type.Module.AssemblyName", Tooltip = "Assembly that defines this type" },
             new() { Header = "Module", Path = "Object.Type.Module.Name", Tooltip = "Module file path" },
             new() { Header = "IsFree", Path = "Object.Type.IsFree", Tooltip = "Whether this is a free (unused) object" },
-            new() { Header = "ALC", Path = "Object.Type.AssemblyLoadContextAddress", Format = "0:X16", AlignRight = true, Tooltip = "AssemblyLoadContext that loaded this type — useful for ALC leak diagnosis" },
+            new() { Header = "ALC", Path = "Object.Type.AssemblyLoadContext.Address", Format = "0:X16", AlignRight = true, Tooltip = "AssemblyLoadContext that loaded this type — useful for ALC leak diagnosis" },
         };
     }
 
@@ -166,12 +172,13 @@ public static class QueryMetadataFactory
         m.DetailColumns = ClrObjectDetailColumns();
     }
 
-    /// <summary>Standard ClrObject columns used in detail grids (Address, Size, MT, Type).</summary>
+    /// <summary>Standard ClrObject columns used in detail grids (Address, Size, MT, Type, ALC).</summary>
     private static List<ColumnDefinition> ClrObjectDetailColumns() => new()
     {
         new() { Header = "Address", Path = "Address", Format = "0:X16", AlignRight = true, Tooltip = "Address" },
         new() { Header = "Size", Path = "Size", Format = "0:N0", AlignRight = true, Tooltip = "Size" },
         new() { Header = "MT", Path = "Type.Address", Format = "0:X16", AlignRight = true, Tooltip = "MethodTable — click to see all objects of this type" },
         new() { Header = "Type", Path = "Type", Tooltip = "Type" },
+        new() { Header = "ALC", Path = "Type.AssemblyLoadContext.Address", Format = "0:X16", AlignRight = true, Tooltip = "AssemblyLoadContext that loaded this type" },
     };
 }

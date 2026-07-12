@@ -27,6 +27,7 @@ public static class SetupConverters
                 new ClrStaticFieldConverter(),
                 new ClrThreadConverter(),
                 new ClrTypeConverter(),
+                new DbmAssemblyLoadContextConverter(),
             }
         };
 
@@ -45,5 +46,6 @@ public static class SetupConverters
         options.Converters.Add(new ClrStaticFieldConverter());
         options.Converters.Add(new ClrThreadConverter());
         options.Converters.Add(new ClrTypeConverter());
+        options.Converters.Add(new DbmAssemblyLoadContextConverter());
     }
 }

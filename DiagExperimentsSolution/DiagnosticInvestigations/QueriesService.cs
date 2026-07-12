@@ -36,6 +36,7 @@ public class QueriesService
                                 MT = t.type?.MethodTable ?? 0,
                                 Objects = t.objects,
                                 GraphSize = t.size,
+                                AssemblyLoadContext = a.GetAssemblyLoadContext(t.type),
                             })
                             .ToList(),
             Filter = (o, f) => ((DbmDumpHeapStat)o)?.TypeName?.FilterBy(f),
@@ -54,6 +55,7 @@ public class QueriesService
                                 Field = t.field,
                                 Obj = t.obj,
                                 Size = (long)t.size,
+                                AssemblyLoadContext = a.GetAssemblyLoadContext(t.obj.Type),
                             })
                             .ToList(),
             PopulateAsync = async (a, onProgress, cancellationToken) =>
@@ -64,6 +66,7 @@ public class QueriesService
                     Field = t.field,
                     Obj = t.obj,
                     Size = (long)t.size,
+                    AssemblyLoadContext = a.GetAssemblyLoadContext(t.obj.Type),
                 }).ToList();
             },
             Filter = (o, f) => ((DbmStaticFields)o)?.Obj.Type?.Name?.FilterBy(f),
@@ -95,6 +98,7 @@ public class QueriesService
                             {
                                 Obj = t.obj,
                                 Text = t.text,
+                                AssemblyLoadContext = a.GetAssemblyLoadContext(t.obj.Type),
                             })
                             .ToList(),
             Filter = (o, f) => ((DbmStringsBySize)o)?.Text?.FilterBy(f),

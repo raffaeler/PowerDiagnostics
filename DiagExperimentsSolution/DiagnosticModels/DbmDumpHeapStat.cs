@@ -15,4 +15,7 @@ public class DbmDumpHeapStat
     public ulong MT { get; set; }
     public List<ClrObject> Objects { get; set; } = new List<ClrObject>();
     public long GraphSize { get; set; }
+
+    /// <summary>AssemblyLoadContext that loaded this type, resolved with name.</summary>
+    public DbmAssemblyLoadContext? AssemblyLoadContext { get; set; }
 }

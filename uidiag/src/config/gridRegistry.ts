@@ -10,12 +10,13 @@ interface GridConfig {
   detailColumns: ColumnDefinition[]
 }
 
-/** Standard ClrObject detail columns. */
+/** Standard ClrObject detail columns (Address, Size, MT, Type, ALC). */
 const clrObjectDetail: ColumnDefinition[] = [
   { header: 'Address', path: 'address', format: '0:X16', alignRight: true, tooltip: 'Address' },
   { header: 'Size', path: 'size', format: '0:N0', alignRight: true, tooltip: 'Size' },
   { header: 'MT', path: 'type.address', format: '0:X16', alignRight: true, tooltip: 'MethodTable — click to see all objects of this type' },
   { header: 'Type', path: 'type', tooltip: 'Type' },
+  { header: 'ALC', path: 'type.assemblyLoadContext.address', format: '0:X16', alignRight: true, tooltip: 'AssemblyLoadContext that loaded this type' },
 ]
 
 /** StackFrame detail columns. */
@@ -33,6 +34,8 @@ const registry: Record<string, GridConfig> = {
       { header: 'Type', path: 'typeName', tooltip: 'Type' },
       { header: 'MT', path: 'mt', format: '0:X16', tooltip: 'MethodTable — click to see all objects with this MT' },
       { header: 'Graph Size', path: 'graphSize', format: '0:N0', alignRight: true, tooltip: 'GraphSize' },
+      { header: 'ALC', path: 'assemblyLoadContext.address', format: '0:X16', alignRight: true, tooltip: 'AssemblyLoadContext address — click to inspect the ALC object' },
+      { header: 'ALC Name', path: 'assemblyLoadContext.name', tooltip: "AssemblyLoadContext name — 'Default' for the default ALC, custom name for collectible ALCs" },
     ],
     detailColumns: clrObjectDetail,
   },
@@ -45,6 +48,8 @@ const registry: Record<string, GridConfig> = {
       { header: 'Obj Address', path: 'obj.address', format: '0:X16', alignRight: true, tooltip: 'Object address — click to inspect' },
       { header: 'Obj Type', path: 'obj.type.name', tooltip: 'Object type name' },
       { header: 'Obj Size', path: 'obj.size', format: '0:N0', alignRight: true, tooltip: 'Object size (individual)' },
+      { header: 'ALC', path: 'assemblyLoadContext.address', format: '0:X16', alignRight: true, tooltip: 'AssemblyLoadContext address — click to inspect the ALC object' },
+      { header: 'ALC Name', path: 'assemblyLoadContext.name', tooltip: "AssemblyLoadContext name — 'Default' for the default ALC, custom name for collectible ALCs" },
     ],
     detailColumns: clrObjectDetail,
   },
@@ -63,6 +68,8 @@ const registry: Record<string, GridConfig> = {
       { header: 'Type', path: 'obj.type.name', tooltip: 'Type' },
       { header: 'Text', path: 'text', tooltip: 'The string content' },
       { header: 'Length', path: 'size', format: '0:N0', alignRight: true, tooltip: 'String length in bytes' },
+      { header: 'ALC', path: 'assemblyLoadContext.address', format: '0:X16', alignRight: true, tooltip: 'AssemblyLoadContext address — click to inspect the ALC object' },
+      { header: 'ALC Name', path: 'assemblyLoadContext.name', tooltip: "AssemblyLoadContext name — 'Default' for the default ALC, custom name for collectible ALCs" },
     ],
     detailColumns: [],
   },
@@ -107,7 +114,7 @@ const registry: Record<string, GridConfig> = {
       { header: 'Assembly', path: 'object.type.module.assemblyName', tooltip: 'Assembly that defines this type' },
       { header: 'Module', path: 'object.type.module.name', tooltip: 'Module file path' },
       { header: 'IsFree', path: 'object.type.isFree', tooltip: 'Whether this is a free (unused) object' },
-      { header: 'ALC', path: 'object.type.assemblyLoadContextAddress', format: '0:X16', alignRight: true, tooltip: 'AssemblyLoadContext that loaded this type — useful for ALC leak diagnosis' },
+      { header: 'ALC', path: 'object.type.assemblyLoadContext.address', format: '0:X16', alignRight: true, tooltip: 'AssemblyLoadContext that loaded this type — useful for ALC leak diagnosis' },
     ],
     detailColumns: [],
   },

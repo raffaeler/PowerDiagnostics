@@ -63,6 +63,7 @@ internal static class McpResultProjector
         address = $"0x{o.Address:X}",
         size = o.Size,
         typeName = o.Type?.Name ?? "(unknown)",
+        alcAddress = o.Type?.AssemblyLoadContextAddress is ulong alc && alc != 0 ? $"0x{alc:X}" : null,
     };
 
     private static object CompactModule(ClrModule m) => new
@@ -111,6 +112,7 @@ internal static class McpResultProjector
         objectAddress = $"0x{r.Object.Address:X}",
         objectTypeName = r.Object.Type?.Name ?? "(unknown)",
         objectSize = r.Object.Size,
+        alcAddress = r.Object.Type?.AssemblyLoadContextAddress is ulong alc && alc != 0 ? $"0x{alc:X}" : null,
     };
 
     private static object CompactStackFrame(ClrStackFrame sf) => new
@@ -133,6 +135,7 @@ internal static class McpResultProjector
         methodTable = $"0x{t.MethodTable:X}",
         isFree = t.IsFree,
         isArray = t.IsArray,
+        alcAddress = t.AssemblyLoadContextAddress != 0 ? $"0x{t.AssemblyLoadContextAddress:X}" : null,
     };
 
     private static object CompactInstanceField(ClrInstanceField f) => new
@@ -173,8 +176,10 @@ internal static class McpResultProjector
     private static object CompactHeapStat(DbmDumpHeapStat hs) => new
     {
         typeName = hs.TypeName,
-        mt = hs.MT > 0 ? $"0x{hs.MT:X}" : null,        objectCount = hs.Objects?.Count ?? 0,
+        mt = hs.MT > 0 ? $"0x{hs.MT:X}" : null,
+        objectCount = hs.Objects?.Count ?? 0,
         graphSize = hs.GraphSize,
+        alcAddress = hs.Type?.AssemblyLoadContextAddress is ulong alc && alc != 0 ? $"0x{alc:X}" : null,
         sampleAddresses = hs.Objects?.Take(3).Select(o => $"0x{o.Address:X}").ToList(),
     };
 
@@ -186,6 +191,7 @@ internal static class McpResultProjector
         objAddress = sf.Obj.Address > 0 ? $"0x{sf.Obj.Address:X}" : null,
         objTypeName = sf.Obj.Type?.Name,
         objSize = sf.Obj.Size,
+        alcAddress = sf.Obj.Type?.AssemblyLoadContextAddress is ulong alc && alc != 0 ? $"0x{alc:X}" : null,
     };
 
     private static object CompactStringsBySize(DbmStringsBySize ss) => new
@@ -194,6 +200,7 @@ internal static class McpResultProjector
         size = ss.Obj.Size,
         address = ss.Obj.Address > 0 ? $"0x{ss.Obj.Address:X}" : null,
         typeName = ss.Obj.Type?.Name,
+        alcAddress = ss.Obj.Type?.AssemblyLoadContextAddress is ulong alc && alc != 0 ? $"0x{alc:X}" : null,
     };
 
     private static object CompactThreadStack(DbmStackFrame tsf)

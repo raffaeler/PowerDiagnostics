@@ -61,15 +61,21 @@ public class KnownQueryMetadataTests
     {
         var meta = _queriesService.Queries["DumpHeapStat"].GetMetadata();
 
-        meta.Columns.Should().HaveCount(3);
+        meta.Columns.Should().HaveCount(5); // Type, MT, Graph Size, ALC, ALC Name
         meta.Columns[0].Header.Should().Be("Type");
         meta.Columns[1].Header.Should().Be("MT");
         meta.Columns[2].Header.Should().Be("Graph Size");
-        meta.DetailColumns.Should().HaveCount(4); // Address, Size, MT, Type
+        meta.Columns[3].Header.Should().Be("ALC");
+        meta.Columns[3].Path.Should().Be("AssemblyLoadContext.Address");
+        meta.Columns[4].Header.Should().Be("ALC Name");
+        meta.Columns[4].Path.Should().Be("AssemblyLoadContext.Name");
+        meta.DetailColumns.Should().HaveCount(5); // Address, Size, MT, Type, ALC
         meta.DetailColumns[0].Header.Should().Be("Address");
         meta.DetailColumns[1].Header.Should().Be("Size");
         meta.DetailColumns[2].Header.Should().Be("MT");
         meta.DetailColumns[3].Header.Should().Be("Type");
+        meta.DetailColumns[4].Header.Should().Be("ALC");
+        meta.DetailColumns[4].Path.Should().Be("Type.AssemblyLoadContext.Address");
     }
 
     [Fact]
@@ -90,10 +96,11 @@ public class KnownQueryMetadataTests
 
         meta.Columns.Should().HaveCount(4);
         meta.Columns[0].Header.Should().Be("Allocator Address");
-        meta.DetailColumns.Should().HaveCount(4); // Address, Size, MT, Type
+        meta.DetailColumns.Should().HaveCount(5); // Address, Size, MT, Type, ALC
         meta.DetailColumns[0].Header.Should().Be("Address");
         meta.DetailColumns[1].Header.Should().Be("Size");
         meta.DetailColumns[2].Header.Should().Be("MT");
         meta.DetailColumns[3].Header.Should().Be("Type");
+        meta.DetailColumns[4].Header.Should().Be("ALC");
     }
 }
