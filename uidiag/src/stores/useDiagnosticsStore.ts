@@ -86,6 +86,7 @@ interface DiagnosticsState {
   dataOwner: DataOwnerResult | null
   referencingObjects: ReferencingObjectsResult | null
   addressInfo: AddressInfoResult | null
+  referencedResult: GcRootPathResult | null
 
   // Module detail
   selectedModuleName: string | null
@@ -126,6 +127,8 @@ interface DiagnosticsState {
   fetchReferencingObjects: (sessionId: string, address: string) => Promise<void>
   fetchAddressInfo: (sessionId: string, address: string) => Promise<void>
 
+  fetchReferencedTree: (sessionId: string, objectAddress: string) => Promise<void>
+
   // State management
   clearAddressState: () => void
 
@@ -164,6 +167,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
   dataOwner: null,
   referencingObjects: null,
   addressInfo: null,
+  referencedResult: null,
 
   selectedModuleName: null,
   moduleDetail: null,
@@ -366,6 +370,15 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
     }
   },
 
+  fetchReferencedTree: async (sessionId, objectAddress) => {
+    const url = `${API_SESSIONS}/${sessionId}/referenced/${encodeURIComponent(objectAddress)}`
+    const res = await apiService.post<GcRootPathResult>(url)
+    if (!res.isError) {
+      const result = res.result as GcRootPathResult
+      set({ referencedResult: result })
+    }
+  },
+
   fetchHexData: async (sessionId, objectAddress) => {
     set({ hexData: null })
     const url = `${API_SESSIONS}/${sessionId}/address/${encodeURIComponent(objectAddress)}`
@@ -460,6 +473,7 @@ export const useDiagnosticsStore = create<DiagnosticsState>((set) => ({
       hexData: null,
       objectLayout: null,
       dataOwner: null,
+      referencedResult: null,
     }),
 
   // ── Module actions ──

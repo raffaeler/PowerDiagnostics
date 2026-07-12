@@ -500,6 +500,22 @@ public class DebuggingSessionService : BackgroundService
     }
 
     /// <summary>
+    /// Returns the objects directly referenced by the given object (1 level forward walk).
+    /// Each result node carries the field name that references it.
+    /// </summary>
+    public GcRootPathResult? GetForwardReferences(string sessionId, ulong address)
+    {
+        var scope = _investigationState.GetInvestigationScope(sessionId);
+        if (scope is null) return null;
+
+        var obj = FindClrObject(scope.DiagnosticAnalyzer, address);
+        if (obj is not { } resolved) return null;
+
+        var hlp = new DiagnosticAnalyzerHelper(scope.DiagnosticAnalyzer);
+        return hlp.GetForwardReferences(resolved.Address);
+    }
+
+    /// <summary>
     /// Combined address info: data owner + field layout + referencing objects.
     /// </summary>
     public AddressInfoResult? GetAddressInfo(string sessionId, ulong address)

@@ -457,6 +457,27 @@ public static class DiagnosticApiExtensions
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
         /// <summary>
+        /// Returns objects directly referenced by the given object (1 level forward walk).
+        /// Each result node includes the field name that references it.
+        /// </summary>
+        endpoints.MapPost("/api/sessions/{sessionId}/referenced/{address}",
+            (string sessionId, string address, DebuggingSessionService svc) =>
+        {
+            if (!TryParseHexAddress(address, out var addr))
+                return Results.BadRequest(new ProblemDetails { Title = "Invalid address", Detail = $"'{address}' is not a valid hex address.", Status = StatusCodes.Status400BadRequest });
+
+            var result = svc.GetForwardReferences(sessionId, addr);
+            if (result is null)
+                return Results.NotFound(new ProblemDetails { Title = "Session not found", Detail = "No active session found.", Status = StatusCodes.Status404NotFound });
+
+            return Results.Ok(result);
+        })
+        .WithName("GetForwardReferences")
+        .Produces<GcRootPathResult>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+
+        /// <summary>
         /// Combined address info: data owner + field layout + referencing objects.
         /// </summary>
         endpoints.MapPost("/api/sessions/{sessionId}/addressinfo/{address}",

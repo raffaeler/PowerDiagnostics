@@ -609,4 +609,65 @@ public class DiagnosticAnalyzerHelper
         }
     }
 
+    /// <summary>
+    /// Gets the objects directly referenced by the given target address (1 level only).
+    /// Returns a single-path tree: target node → its direct children.
+    /// Each child carries its field name in <see cref="GcRootPathNode.ReferencingObjects"/>.
+    /// </summary>
+    /// <param name="targetAddress">The object address to find forward references for.</param>
+    /// <param name="maxRefs">Maximum number of references to return (default 5000).
+    /// Prevents browser hangs when an object has thousands of field references.</param>
+    /// <returns>A <see cref="GcRootPathResult"/> with a single path containing the target
+    /// and its direct children, or an empty result if the address is invalid.</returns>
+    public GcRootPathResult GetForwardReferences(ulong targetAddress, int maxRefs = 5000)
+    {
+        var result = new GcRootPathResult();
+        var targetObj = Analyzer.ClrRuntime.Heap.GetObject(targetAddress);
+        if (targetObj.IsNull || targetObj.Type is null)
+            return result;
+
+        var rootNode = new GcRootPathNode
+        {
+            ObjectAddress = $"0x{targetAddress:X16}",
+            TypeName = targetObj.Type?.Name ?? "?",
+            RootKind = "",
+            Depth = 0,
+        };
+
+        var refs = Analyzer.FindReferenced(false, targetAddress);
+        if (refs != null)
+        {
+            int count = 0;
+            foreach (var res in refs)
+            {
+                if (count >= maxRefs)
+                    break;
+
+                var childNode = new GcRootPathNode
+                {
+                    ObjectAddress = $"0x{res.address:X16}",
+                    TypeName = res.typeName,
+                    RootKind = "",
+                    Depth = 1,
+                };
+
+                // Embed the field name as a back-reference so GcRootTree can display it
+                childNode.ReferencingObjects.Add(new GcReferenceInfo
+                {
+                    Address = $"0x{targetAddress:X16}",
+                    TypeName = rootNode.TypeName,
+                    FieldName = res.fieldName,
+                    IsStatic = false,
+                });
+
+                rootNode.Children.Add(childNode);
+                count++;
+            }
+        }
+
+        result.Paths.Add(rootNode);
+        result.TotalPaths = 1;
+        result.TotalReferences = rootNode.Children.Count;
+        return result;
+    }
 }
