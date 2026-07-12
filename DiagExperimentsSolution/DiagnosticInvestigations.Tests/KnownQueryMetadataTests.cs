@@ -65,7 +65,11 @@ public class KnownQueryMetadataTests
         meta.Columns[0].Header.Should().Be("Type");
         meta.Columns[1].Header.Should().Be("MT");
         meta.Columns[2].Header.Should().Be("Graph Size");
-        meta.DetailColumns.Should().HaveCount(3); // Address, Size, Type
+        meta.DetailColumns.Should().HaveCount(4); // Address, Size, MT, Type
+        meta.DetailColumns[0].Header.Should().Be("Address");
+        meta.DetailColumns[1].Header.Should().Be("Size");
+        meta.DetailColumns[2].Header.Should().Be("MT");
+        meta.DetailColumns[3].Header.Should().Be("Type");
     }
 
     [Fact]
@@ -86,6 +90,10 @@ public class KnownQueryMetadataTests
 
         meta.Columns.Should().HaveCount(4);
         meta.Columns[0].Header.Should().Be("Allocator Address");
-        meta.DetailColumns.Should().HaveCount(3); // Address, Size, Type
+        meta.DetailColumns.Should().HaveCount(4); // Address, Size, MT, Type
+        meta.DetailColumns[0].Header.Should().Be("Address");
+        meta.DetailColumns[1].Header.Should().Be("Size");
+        meta.DetailColumns[2].Header.Should().Be("MT");
+        meta.DetailColumns[3].Header.Should().Be("Type");
     }
 }
