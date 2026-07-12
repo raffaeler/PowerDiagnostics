@@ -229,7 +229,7 @@ export default function GenericDataGrid({
           </Tooltip>
         </Box>
       )}
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', maxHeight: 'calc(100vh - 210px)', overflowX: 'auto', overflowY: 'auto', position: 'relative' }}>
         <DataGrid
           apiRef={apiRef}
           rows={rows as Record<string, unknown>[]}
@@ -248,7 +248,11 @@ export default function GenericDataGrid({
           autoHeight
           sx={{
             border: 'none',
-            '& .MuiDataGrid-row:hover': { cursor: 'pointer' },
+            '& .MuiDataGrid-virtualScroller': {
+              overflowX: 'visible',
+              overflowY: 'visible',
+            },
+            '& .MuiDataGrid-row': { '&:hover': { cursor: 'pointer' } },
             '& .MuiDataGrid-cell': { fontFamily: "'Segoe UI', sans-serif", fontSize: 13 },
             '& .monospace-cell': { fontFamily: "'Cascadia Code', 'Consolas', monospace" },
             // Move the column menu (three-dots) icon to the left side so users

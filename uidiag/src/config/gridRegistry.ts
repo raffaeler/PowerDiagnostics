@@ -133,16 +133,9 @@ const registry: Record<string, GridConfig> = {
  */
 export function getGridConfig(resultType: string): GridConfig {
   // Try exact match first
-  if (registry[resultType]) {
-    console.warn(`[DIAG] getGridConfig exact match for "${resultType}": ${registry[resultType].masterColumns.length} cols`)
-    return registry[resultType]
-  }
+  if (registry[resultType]) return registry[resultType]
   // Try partial match (resultType may include namespace)
   const key = Object.keys(registry).find((k) => resultType.endsWith(k) || resultType.includes(k))
-  if (key) {
-    console.warn(`[DIAG] getGridConfig partial match: "${resultType}" → key "${key}": ${registry[key].masterColumns.length} cols`)
-    return registry[key]
-  }
-  console.warn(`[DIAG] getGridConfig NO MATCH for "${resultType}" — returning empty config`)
+  if (key) return registry[key]
   return { masterColumns: [], detailColumns: [] }
 }
