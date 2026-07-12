@@ -201,6 +201,14 @@ public class McpSessionManager
 
         catalog.Add(new ToolCatalogEntry
         {
+            Name = "get_referenced_objects",
+            Description = "Get objects directly referenced by a heap object (1 level forward walk through instance fields). Shows what objects the given address points to. Call again with a child address to drill deeper.",
+            Category = "inspection",
+            Parameters = new List<string> { "sessionId", "address" },
+        });
+
+        catalog.Add(new ToolCatalogEntry
+        {
             Name = "get_memory_map",
             Description = "Get the GC heap segment layout overview — shows per-generation heap distribution.",
             Category = "inspection",

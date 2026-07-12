@@ -247,6 +247,58 @@ public class McpInspectionTools
     }
 
     /// <summary>
+    /// Get the objects directly referenced by the given object (1 level forward walk).
+    /// Unlike get_gc_roots (which walks upward to roots), this walks forward through
+    /// the object's instance fields to find what objects it references.
+    /// Loads one level at a time — call again with a child address to drill deeper.
+    /// </summary>
+    [McpServerTool(Name = "get_referenced_objects")]
+    [Description("Get objects directly referenced by a heap object (1 level forward walk through instance fields). Shows what objects the given address points to. Call again with a child address to drill deeper. Returns the target with its direct children.")]
+    public object GetReferencedObjects(
+        [Description("The session ID returned by open_dump.")] string sessionId,
+        [Description("Hex address of the object to find forward references for (e.g., '0x1a2b3c4d').")] string address)
+    {
+        if (!TryParseHexAddress(address, out var addr))
+            throw new ArgumentException($"Invalid hex address: '{address}'");
+
+        var scope = McpToolRegistry.ValidateSession(_sessionManager, sessionId);
+        var analyzer = scope.DiagnosticAnalyzer;
+
+        // Find the ClrObject at the given address
+        ClrObject? clrObj = null;
+        foreach (var obj in analyzer.Objects)
+        {
+            if (obj.Address == addr)
+            {
+                clrObj = obj;
+                break;
+            }
+        }
+
+        if (clrObj is not { } resolved)
+            throw new InvalidOperationException($"No object found at address 0x{addr:X} in session '{sessionId}'.");
+
+        _logger.LogInformation("MCP: get_referenced_objects on session {SessionId}, address=0x{Address:X}",
+            sessionId, addr);
+
+        var hlp = new ClrDiagnostics.Experimental.DiagnosticAnalyzerHelper(analyzer);
+        var result = hlp.GetForwardReferences(resolved.Address);
+
+        return new
+        {
+            targetAddress = $"0x{addr:X}",
+            targetTypeName = result.Paths?.FirstOrDefault()?.TypeName ?? "?",
+            references = result.Paths?.FirstOrDefault()?.Children?.Select(c => new
+            {
+                address = c.ObjectAddress,
+                typeName = c.TypeName,
+                fieldName = c.ReferencingObjects?.FirstOrDefault()?.FieldName ?? "?",
+            }).ToList(),
+            totalReferences = result.TotalReferences,
+        };
+    }
+
+    /// <summary>
     /// List all objects that hold references (instance or static fields) to a target heap object.
     /// Use to understand which objects point to a given object — essential for walking
     /// the object graph and understanding memory retention patterns.
