@@ -229,7 +229,7 @@ export default function GenericDataGrid({
           </Tooltip>
         </Box>
       )}
-      <Box sx={{ width: '100%', maxHeight: 'calc(100vh - 210px)', overflowX: 'auto', overflowY: 'auto', position: 'relative' }}>
+      <Box sx={{ width: '100%', position: 'relative' }}>
         <DataGrid
           apiRef={apiRef}
           rows={rows as Record<string, unknown>[]}
@@ -245,12 +245,11 @@ export default function GenericDataGrid({
           initialState={{
             pagination: { paginationModel: { pageSize: defaultPageSize, page: 0 } },
           }}
-          autoHeight
           sx={{
             border: 'none',
+            height: 'calc(100vh - 210px)',
             '& .MuiDataGrid-virtualScroller': {
               overflowX: 'visible',
-              overflowY: 'visible',
             },
             '& .MuiDataGrid-row': { '&:hover': { cursor: 'pointer' } },
             '& .MuiDataGrid-cell': { fontFamily: "'Segoe UI', sans-serif", fontSize: 13 },
